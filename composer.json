@@ -1,0 +1,41 @@
+{
+    "name": "srcehr/simplesamlphp-module-accounting",
+    "description": "The SimpleSAMLphp accounting module",
+    "type": "simplesamlphp-module",
+    "license": "LGPL-2.1-or-later",
+    "authors": [
+        {
+            "name": "Marko Ivančić",
+            "email": "marko.ivancic@srce.hr"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "simplesamlphp/composer-module-installer": true
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "SimpleSAML\\Module\\accounting\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SimpleSAML\\Test\\Module\\accounting\\": "tests/src/"
+        }
+    },
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-pdo_sqlite": "*",
+        "simplesamlphp/composer-module-installer": "^1"
+    },
+    "require-dev": {
+        "vimeo/psalm": "^4",
+        "phpunit/phpunit": "^9",
+        "squizlabs/php_codesniffer": "^3",
+        "simplesamlphp/simplesamlphp": "^2@beta",
+        "simplesamlphp/simplesamlphp-test-framework": "^1"
+    }
+}

@@ -1,0 +1,4 @@
+
+accounting-test:
+    path:       /test
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Controller\Test::test' }
