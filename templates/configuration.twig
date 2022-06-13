@@ -1,0 +1,18 @@
+{% set pagetitle = 'Accounting configuration page'|trans %}
+{% set frontpage_section = 'main' %}
+
+{% extends "base.twig" %}
+
+{% block preload %}
+    <link rel="stylesheet" href="{{ asset('css/accounting.css', 'accounting') }}">
+{% endblock %}
+
+{% block content %}
+
+    <h2>{{ pagetitle }} </h2>
+
+    <p>
+        {{ test }}
+    </p>
+
+{% endblock %}
