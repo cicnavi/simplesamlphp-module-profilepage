@@ -3,7 +3,7 @@
 namespace SimpleSAML\Module\accounting;
 
 use SimpleSAML\Configuration;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationNameException;
+use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationNameException;
 
 class ModuleConfiguration
 {

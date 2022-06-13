@@ -13,6 +13,7 @@ class ModuleConfigurationTest extends TestCase
 {
     public function testSample(): void
     {
+        // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
         $moduleConfiguration = new ModuleConfiguration('module_accounting_basic.php');
 
         $this->assertInstanceOf(Configuration::class, $moduleConfiguration->getConfiguration());
