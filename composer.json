@@ -19,6 +19,11 @@
             "SimpleSAML\\Module\\accounting\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "SimpleSAML\\Test\\Module\\accounting\\": "tests/"
+        }
+    },
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-pdo": "*",
