@@ -37,14 +37,14 @@ $config = [
      * Store connection for particular store. Can be used to set different connections for different stores.
      */
     ModuleConfiguration::OPTION_STORE_TO_CONNECTION_MAP => [
-        MySqlJobsStore::class => 'mysql',
+        MySqlJobsStore::class => PdoConnection::class,
     ],
 
     /**
-     * Store connections and their settings.
+     * Store connection settings.
      */
     ModuleConfiguration::OPTION_CONNECTION_SETTINGS => [
-        'mysql' => [
+        PdoConnection::class => [
             PdoConnection::OPTION_DSN => 'mysql:host=localhost;dbname=accounting;charset=utf8',
             PdoConnection::OPTION_USERNAME => 'user',
             PdoConnection::OPTION_PASSWORD => 'pass',
