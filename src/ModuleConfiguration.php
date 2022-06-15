@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting;
 
+use Exception;
 use SimpleSAML\Configuration;
 use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\ModuleConfiguration\AccountingProcessingType;
 
 class ModuleConfiguration
 {
@@ -18,8 +18,8 @@ class ModuleConfiguration
     public const OPTION_USER_ID_ATTRIBUTE = 'user_id_attribute';
     public const OPTION_ACCOUNTING_PROCESSING_TYPE = 'accounting_processing_type';
     public const OPTION_JOBS_STORE = 'jobs_store';
-    public const OPTION_CONNECTION_SETTINGS = 'store_connection_settings';
-    public const OPTION_STORE_TO_CONNECTION_MAP = 'store_to_connection_map';
+    public const OPTION_ALL_STORE_CONNECTIONS_AND_SETTINGS = 'all_store_connection_and_settings';
+    public const OPTION_STORE_TO_CONNECTION_KEY_MAP = 'store_to_connection_key_map';
 
     /**
      * Contains configuration from module configuration file.
@@ -27,7 +27,7 @@ class ModuleConfiguration
     protected Configuration $configuration;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(string $fileName = null)
     {
@@ -78,19 +78,19 @@ class ModuleConfiguration
 
     public function getStoreToConnectionMap(): array
     {
-        return $this->getConfiguration()->getArray(self::OPTION_STORE_TO_CONNECTION_MAP);
+        return $this->getConfiguration()->getArray(self::OPTION_STORE_TO_CONNECTION_KEY_MAP);
     }
 
-    public function getAllConnectionsAndTheirSettings(): array
+    public function getAllStoreConnectionsAndSettings(): array
     {
-        return $this->getConfiguration()->getArray(self::OPTION_CONNECTION_SETTINGS);
+        return $this->getConfiguration()->getArray(self::OPTION_ALL_STORE_CONNECTIONS_AND_SETTINGS);
     }
 
-    public function getConnectionSettins(string $connection): array
+    public function getStoreConnectionSettings(string $connection): array
     {
-        $connections = $this->getAllConnectionsAndTheirSettings();
+        $connections = $this->getAllStoreConnectionsAndSettings();
 
-        if (! is_array($connections[$connection])) {
+        if (! isset($connections[$connection]) || ! is_array($connections[$connection])) {
             throw new InvalidConfigurationException(
                 sprintf('Settings for connection %s not set', $connection)
             );

@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Stores\Connections\PdoConnection;
-use SimpleSAML\Module\accounting\Stores\Jobs\MySqlJobsStore;
+use SimpleSAML\Module\accounting\Stores\Connections\Pdo\PdoConnection;
+use SimpleSAML\Module\accounting\Stores\Jobs\Pdo\MySql\MySqlPdoJobsStore;
 
 $config = [
     /**
@@ -31,25 +31,36 @@ $config = [
      * Jobs store. Determines which of the available stores will be used to store jobs in case the 'asynchronous'
      * accounting processing type was set.
      */
-    ModuleConfiguration::OPTION_JOBS_STORE => MySqlJobsStore::class,
+    ModuleConfiguration::OPTION_JOBS_STORE => MySqlPdoJobsStore::class,
 
     /**
      * Store connection for particular store. Can be used to set different connections for different stores.
      */
-    ModuleConfiguration::OPTION_STORE_TO_CONNECTION_MAP => [
-        MySqlJobsStore::class => 'mysql',
+    ModuleConfiguration::OPTION_STORE_TO_CONNECTION_KEY_MAP => [
+        MySqlPdoJobsStore::class => 'mysql',
     ],
 
     /**
      * Store connections and their settings.
      */
-    ModuleConfiguration::OPTION_CONNECTION_SETTINGS => [
+    ModuleConfiguration::OPTION_ALL_STORE_CONNECTIONS_AND_SETTINGS => [
         'mysql' => [
-            PdoConnection::OPTION_DSN => 'mysql:host=localhost;dbname=accounting;charset=utf8',
+            PdoConnection::OPTION_DSN => 'mysql:host=localhost;port=3306;dbname=accounting;charset=utf8',
             PdoConnection::OPTION_USERNAME => 'user',
             PdoConnection::OPTION_PASSWORD => 'pass',
             PdoConnection::OPTION_DRIVER_OPTIONS => [
-                \PDO::ATTR_PERSISTENT => false,
+                PDO::ATTR_PERSISTENT => false,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ],
+            PdoConnection::OPTION_TABLE_PREFIX => '',
+        ],
+        'sqlite' => [
+            PdoConnection::OPTION_DSN => 'sqlite:/path/to/db_file.sqlite3', // file database (folder must be writable)
+            //PdoConnection::OPTION_DSN => 'sqlite::memory:', // in memory database
+            //PdoConnection::OPTION_DSN => 'sqlite:', // temporary database
+            PdoConnection::OPTION_DRIVER_OPTIONS => [
+                PDO::ATTR_PERSISTENT => false,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             ],
             PdoConnection::OPTION_TABLE_PREFIX => '',
         ],

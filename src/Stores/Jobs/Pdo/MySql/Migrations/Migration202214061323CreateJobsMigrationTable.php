@@ -1,6 +1,8 @@
 <?php
 
-namespace SimpleSAML\Module\accounting\Stores\Jobs\MySql\JobsStoreMigrations;
+declare(strict_types=1);
+
+namespace SimpleSAML\Module\accounting\Stores\Jobs\Pdo\MySql\Migrations;
 
 use SimpleSAML\Module\accounting\Stores\Jobs\Interfaces\JobsStoreMigrationInterface;
 
