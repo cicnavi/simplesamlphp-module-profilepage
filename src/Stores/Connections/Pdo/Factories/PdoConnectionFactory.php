@@ -19,7 +19,7 @@ class PdoConnectionFactory
 
     public function build(string $connection): PdoConnection
     {
-        $settings = $this->moduleConfiguration->getStoreConnectionSettings($connection);
+        $settings = $this->moduleConfiguration->getStoreConnectionParameters($connection);
 
         $dsn = $this->getDsnFromSettings($settings);
         $username = $this->getUsernameFromSettings($settings);

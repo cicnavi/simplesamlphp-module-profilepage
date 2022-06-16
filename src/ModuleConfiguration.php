@@ -18,7 +18,7 @@ class ModuleConfiguration
     public const OPTION_USER_ID_ATTRIBUTE = 'user_id_attribute';
     public const OPTION_ACCOUNTING_PROCESSING_TYPE = 'accounting_processing_type';
     public const OPTION_JOBS_STORE = 'jobs_store';
-    public const OPTION_ALL_STORE_CONNECTIONS_AND_SETTINGS = 'all_store_connection_and_settings';
+    public const OPTION_ALL_STORE_CONNECTIONS_AND_PARAMETERS = 'all_store_connection_and_parameters';
     public const OPTION_STORE_TO_CONNECTION_KEY_MAP = 'store_to_connection_key_map';
 
     /**
@@ -81,14 +81,14 @@ class ModuleConfiguration
         return $this->getConfiguration()->getArray(self::OPTION_STORE_TO_CONNECTION_KEY_MAP);
     }
 
-    public function getAllStoreConnectionsAndSettings(): array
+    public function getAllStoreConnectionsAndParameters(): array
     {
-        return $this->getConfiguration()->getArray(self::OPTION_ALL_STORE_CONNECTIONS_AND_SETTINGS);
+        return $this->getConfiguration()->getArray(self::OPTION_ALL_STORE_CONNECTIONS_AND_PARAMETERS);
     }
 
-    public function getStoreConnectionSettings(string $connection): array
+    public function getStoreConnectionParameters(string $connection): array
     {
-        $connections = $this->getAllStoreConnectionsAndSettings();
+        $connections = $this->getAllStoreConnectionsAndParameters();
 
         if (! isset($connections[$connection]) || ! is_array($connections[$connection])) {
             throw new InvalidConfigurationException(

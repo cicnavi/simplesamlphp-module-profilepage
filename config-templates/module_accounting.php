@@ -43,7 +43,7 @@ $config = [
     /**
      * Store connections and their settings.
      */
-    ModuleConfiguration::OPTION_ALL_STORE_CONNECTIONS_AND_SETTINGS => [
+    ModuleConfiguration::OPTION_ALL_STORE_CONNECTIONS_AND_PARAMETERS => [
         'mysql' => [
             PdoConnection::OPTION_DSN => 'mysql:host=localhost;port=3306;dbname=accounting;charset=utf8',
             PdoConnection::OPTION_USERNAME => 'user',

@@ -53,17 +53,17 @@ class ModuleConfigurationTest extends TestCase
 
     public function testCanGetDefinedConnections(): void
     {
-        $this->assertArrayHasKey('mysql', $this->moduleConfiguration->getAllStoreConnectionsAndSettings());
+        $this->assertArrayHasKey('mysql', $this->moduleConfiguration->getAllStoreConnectionsAndParameters());
     }
 
     public function testCanGetSettingsForSpecificConnection(): void
     {
-        $this->assertIsArray($this->moduleConfiguration->getStoreConnectionSettings('mysql'));
+        $this->assertIsArray($this->moduleConfiguration->getStoreConnectionParameters('mysql'));
     }
 
     public function testGettingSettingsForInvalidConnectionThrows(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $this->moduleConfiguration->getStoreConnectionSettings('invalid');
+        $this->moduleConfiguration->getStoreConnectionParameters('invalid');
     }
 }
