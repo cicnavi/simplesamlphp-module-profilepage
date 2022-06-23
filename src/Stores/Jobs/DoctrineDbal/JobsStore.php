@@ -6,9 +6,9 @@ namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal;
 
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Jobs\Interfaces\JobsStoreInterface;
-use SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
-use SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
+use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
+use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 
 class JobsStore implements JobsStoreInterface
 {
@@ -27,6 +27,7 @@ class JobsStore implements JobsStoreInterface
 
         $this->setTableName(self::DEFAULT_TABLE_NAME);
     }
+
     public function needsSetUp(): bool
     {
         // TODO mivanci dovrši

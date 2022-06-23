@@ -1,11 +1,12 @@
 <?php
 
-namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal;
+declare(strict_types=1);
+
+namespace SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;
 use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\Stores\Connections\Pdo\PdoConnection;
 use SimpleSAML\Module\accounting\Stores\Interfaces\StoreConnectionInterface;
 
 class Connection implements StoreConnectionInterface
@@ -13,13 +14,17 @@ class Connection implements StoreConnectionInterface
     public const PARAMETER_TABLE_PREFIX = 'table_prefix';
 
     protected \Doctrine\DBAL\Connection $dbal;
+    protected ?string $tablePrefix;
 
     public function __construct(array $parameters)
     {
         try {
+            /** @psalm-suppress MixedArgumentTypeCoercion */
             $this->dbal = DriverManager::getConnection($parameters);
         } catch (Exception $e) {
-            throw new InvalidConfigurationException('Could not initiate Doctrine DBAL connection with given parameters.');
+            throw new InvalidConfigurationException(
+                'Could not initiate Doctrine DBAL connection with given parameters.'
+            );
         }
 
         $this->tablePrefix = $this->getTablePrefixFromParameters($parameters);
@@ -48,4 +53,8 @@ class Connection implements StoreConnectionInterface
         return $settings[self::PARAMETER_TABLE_PREFIX];
     }
 
+    public function preparePrefixedTableName(string $tableName): string
+    {
+        return $this->getTablePrefix() . $tableName;
+    }
 }

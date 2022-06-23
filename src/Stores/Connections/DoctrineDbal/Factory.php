@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal;
+namespace SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 

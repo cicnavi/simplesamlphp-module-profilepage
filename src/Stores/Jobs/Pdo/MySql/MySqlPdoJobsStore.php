@@ -27,9 +27,10 @@ class MySqlPdoJobsStore implements JobsStoreInterface
 
     public function needsSetUp(): bool
     {
-        $migrator = new MySqlPdoMigrator($this->pdoConnection);
+//        $migrator = new MySqlPdoMigrator($this->pdoConnection);
 
-        $implementedMigrations = $migrator->getImplementedMigrations(self::class);
+//        $implementedMigrations = $migrator->getImplementedMigrations(self::class);
+//        var_dump($implementedMigrations);
 
         // TODO mivanci prebaci sve na doctrine/dbal
         //https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/introduction.html#introduction
