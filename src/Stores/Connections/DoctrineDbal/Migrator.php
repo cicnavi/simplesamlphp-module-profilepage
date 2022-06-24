@@ -5,6 +5,7 @@ namespace SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
+use SimpleSAML\Module\accounting\Services\LoggerService;
 
 class Migrator
 {
@@ -15,24 +16,29 @@ class Migrator
     public const COLUMN_NAME_VERSION = 'version';
 
     protected Connection $connection;
+    protected LoggerService $loggerService;
+
     protected AbstractSchemaManager $schemaManager;
     protected string $prefixedTableName;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, LoggerService $loggerService)
     {
         $this->connection = $connection;
+        $this->loggerService = $loggerService;
+
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
         $this->prefixedTableName = $this->connection->preparePrefixedTableName(self::TABLE_NAME);
     }
 
-    public function needsSetUp(): bool
+    public function needsSetup(): bool
     {
-        return ! $this->schemaManager->tablesExist($this->prefixedTableName);
+        return ! $this->schemaManager->tablesExist([$this->prefixedTableName]);
     }
 
-    public function runSetUp(): void
+    public function runSetup(): void
     {
-        if (! $this->needsSetUp()) {
+        if (! $this->needsSetup()) {
+            $this->loggerService->warning('Migrator setup has been called, however setup is not needed.');
             return;
         }
 

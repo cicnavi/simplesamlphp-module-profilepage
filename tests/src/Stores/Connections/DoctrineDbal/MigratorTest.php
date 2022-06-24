@@ -3,36 +3,64 @@
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Module\accounting\Services\LoggerService;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  */
 class MigratorTest extends TestCase
 {
     protected Connection $connection;
+    protected \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager;
+    protected string $tableName;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $loggerServiceMock;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
+
+        $this->schemaManager = $this->connection->dbal()->createSchemaManager();
+        $this->tableName = $this->connection->preparePrefixedTableName(Migrator::TABLE_NAME);
+
+        $this->loggerServiceMock = $this->createMock(LoggerService::class);
     }
 
     public function testMigratorCanCreateMigrationsTable(): void
     {
-        $schemaManager = $this->connection->dbal()->createSchemaManager();
+        $this->assertFalse($this->schemaManager->tablesExist([$this->tableName]));
 
-        $this->assertFalse($schemaManager->tablesExist(Migrator::TABLE_NAME));
+        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
-        $migrator = new Migrator($this->connection);
+        $this->assertTrue($migrator->needsSetup());
 
-        $this->assertTrue($migrator->needsSetUp());
+        $migrator->runSetup();
 
-        $migrator->runSetUp();
+        $this->assertFalse($migrator->needsSetup());
+        $this->assertTrue($this->schemaManager->tablesExist([$this->tableName]));
+    }
 
-        $this->assertFalse($migrator->needsSetUp());
+    public function testRunningMigratiorSetupMultipleTimesLogsWarning(): void
+    {
+        $this->loggerServiceMock
+            ->expects($this->once())
+            ->method('warning')
+            ->with($this->stringContains('setup is not needed'));
 
-        $this->assertTrue($schemaManager->tablesExist(Migrator::TABLE_NAME));
+        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
+
+        $this->assertTrue($migrator->needsSetup());
+
+        $migrator->runSetup();
+        $migrator->runSetup();
     }
 }
