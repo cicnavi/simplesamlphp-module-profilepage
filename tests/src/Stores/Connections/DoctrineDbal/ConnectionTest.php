@@ -3,6 +3,7 @@
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 
 /**
@@ -22,6 +23,12 @@ class ConnectionTest extends TestCase
         $this->assertInstanceOf(\Doctrine\DBAL\Connection::class, $connection->dbal());
     }
 
+    public function testInvalidConnectionParametersThrow(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        (new Connection(['invalid' => 'parameter']));
+    }
+
     public function testCanSetTablePrefix(): void
     {
         $prefix = 'test_';
@@ -31,5 +38,18 @@ class ConnectionTest extends TestCase
         $connection = new Connection($parameters);
 
         $this->assertEquals($prefix, $connection->getTablePrefix());
+
+        $this->assertSame('test_test', $connection->preparePrefixedTableName('test'));
+    }
+
+    public function testTablePrefixParameterThrowsIfNotString(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $parameters = $this->parameters;
+        $parameters['table_prefix'] = new class () {
+        };
+
+        (new Connection($parameters));
     }
 }

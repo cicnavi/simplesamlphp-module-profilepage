@@ -3,9 +3,10 @@
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use PHPUnit\Framework\TestCase;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use SimpleSAML\Module\accounting\Services\LoggerService;
-use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
+use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
@@ -14,7 +15,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 class MigratorTest extends TestCase
 {
     protected Connection $connection;
-    protected \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager;
+    protected AbstractSchemaManager $schemaManager;
     protected string $tableName;
 
     /**
