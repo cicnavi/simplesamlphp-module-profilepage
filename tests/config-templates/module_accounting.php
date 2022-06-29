@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Stores\Connections\Pdo\PdoConnection;
-use SimpleSAML\Module\accounting\Stores\Jobs\Pdo\MySql\MySqlPdoJobsStore;
+use SimpleSAML\Module\accounting\Stores;
 
 $config = [
     /**
@@ -31,38 +30,47 @@ $config = [
      * Jobs store. Determines which of the available stores will be used to store jobs in case the 'asynchronous'
      * accounting processing type was set.
      */
-    ModuleConfiguration::OPTION_JOBS_STORE => MySqlPdoJobsStore::class,
+    ModuleConfiguration::OPTION_JOBS_STORE => Stores\Jobs\DoctrineDbal\JobsStore::class,
 
     /**
      * Store connection for particular store. Can be used to set different connections for different stores.
      */
     ModuleConfiguration::OPTION_STORE_TO_CONNECTION_KEY_MAP => [
-        MySqlPdoJobsStore::class => 'mysql',
+        Stores\Jobs\DoctrineDbal\JobsStore::class => 'doctrine_dbal_pdo_mysql',
     ],
 
     /**
-     * Store connections and their settings.
+     * Store connections and their parameters.
+     *
+     * Any compatible Doctrine DBAL implementation can be used:
+     * https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html
+     * There are additional parameters for: table prefix.
+     * Examples for mysql and sqlite are provided below.
      */
     ModuleConfiguration::OPTION_ALL_STORE_CONNECTIONS_AND_PARAMETERS => [
-        'mysql' => [
-            PdoConnection::OPTION_DSN => 'mysql:host=localhost;port=3306;dbname=accounting;charset=utf8',
-            PdoConnection::OPTION_USERNAME => 'user',
-            PdoConnection::OPTION_PASSWORD => 'pass',
-            PdoConnection::OPTION_DRIVER_OPTIONS => [
-                PDO::ATTR_PERSISTENT => false,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            ],
-            PdoConnection::OPTION_TABLE_PREFIX => '',
+        'doctrine_dbal_pdo_mysql' => [
+            'driver' => 'pdo_mysql', // (string): The built-in driver implementation to use
+            'user' => 'user', // (string): Username to use when connecting to the database.
+            'password' => 'password', // (string): Password to use when connecting to the database.
+            'host' => 'host', // (string): Hostname of the database to connect to.
+            'port' => 3306, // (integer): Port of the database to connect to.
+            'dbname' => 'dbname', // (string): Name of the database/schema to connect to.
+            //'unix_socket' => 'unix_socket', // (string): Name of the socket used to connect to the database.
+            'charset' => 'utf8', // (string): The charset used when connecting to the database.
+            //'url' => 'mysql://user:secret@localhost/mydb?charset=utf8', // ...alternative way of providing parameters.
+            // Additional parameters not originally available in Doctrine DBAL
+            'table_prefix' => '', // (string): Prefix for each table.
         ],
-        'sqlite' => [
-            PdoConnection::OPTION_DSN => 'sqlite:/path/to/db_file.sqlite3', // file database (folder must be writable)
-            //PdoConnection::OPTION_DSN => 'sqlite::memory:', // in memory database
-            //PdoConnection::OPTION_DSN => 'sqlite:', // temporary database
-            PdoConnection::OPTION_DRIVER_OPTIONS => [
-                PDO::ATTR_PERSISTENT => false,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            ],
-            PdoConnection::OPTION_TABLE_PREFIX => '',
+        'doctrine_dbal_pdo_sqlite' => [
+            'driver' => 'pdo_sqlite', // (string): The built-in driver implementation to use
+            'path' => '/path/to/db.sqlite', // (string): The filesystem path to the database file.
+            // Mutually exclusive with memory. path takes precedence.
+            'memory' => false, // (boolean): True if the SQLite database should be in-memory (non-persistent).
+            // Mutually exclusive with path. path takes precedence.
+            //'url' => 'sqlite:////path/to/db.sqlite // ...alternative way of providing path parameter.
+            //'url' => 'sqlite:///:memory:' // ...alternative way of providing memory parameter.
+            // Additional parameters not originally available in Doctrine DBAL
+            'table_prefix' => '', // (string): Prefix for each table.
         ],
     ],
 ];

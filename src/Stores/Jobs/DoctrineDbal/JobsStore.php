@@ -12,11 +12,11 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 
 class JobsStore implements JobsStoreInterface
 {
-    public const DEFAULT_TABLE_NAME = 'jobs';
+    public const TABLE_NAME = 'jobs';
 
     protected ModuleConfiguration $moduleConfiguration;
     protected Connection $connection;
-    protected string $tableName;
+    protected string $prefixedTableName;
     protected Migrator $migrator;
 
     public function __construct(ModuleConfiguration $moduleConfiguration, Factory $factory)
@@ -25,7 +25,7 @@ class JobsStore implements JobsStoreInterface
         $this->connection = $factory->buildConnection($moduleConfiguration->getStoreConnection(self::class));
         $this->migrator = $factory->buildMigrator($this->connection);
 
-        $this->setTableName(self::DEFAULT_TABLE_NAME);
+        $this->prefixedTableName = $this->connection->preparePrefixedTableName(self::TABLE_NAME);
     }
 
     public function needsSetUp(): bool
@@ -34,13 +34,8 @@ class JobsStore implements JobsStoreInterface
         return true;
     }
 
-    public function setTableName(string $tableName): void
+    public function getPrefixedTableName(): string
     {
-        $this->tableName = $this->connection->getTablePrefix() . $tableName;
-    }
-
-    public function getTableName(): string
-    {
-        return $this->tableName;
+        return $this->prefixedTableName;
     }
 }

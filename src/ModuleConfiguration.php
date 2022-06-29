@@ -98,4 +98,14 @@ class ModuleConfiguration
 
         return $connections[$connection];
     }
+
+    public function getModuleSourceDirectory(): string
+    {
+        return __DIR__;
+    }
+
+    public function getModuleRootDirectory(): string
+    {
+        return dirname(__DIR__);
+    }
 }

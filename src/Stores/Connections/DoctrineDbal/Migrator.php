@@ -6,14 +6,17 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Services\LoggerService;
+use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
+use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
 
-class Migrator
+class Migrator extends AbstractMigrator
 {
     public const TABLE_NAME = 'migrations';
 
     public const COLUMN_NAME_ID = 'id';
     public const COLUMN_NAME_SCOPE = 'scope';
     public const COLUMN_NAME_VERSION = 'version';
+    public const COLUMN_NAME_CREATED_AT = 'created_at';
 
     protected Connection $connection;
     protected LoggerService $loggerService;
@@ -47,18 +50,25 @@ class Migrator
 
     protected function createMigrationsTable(): void
     {
-        $migrationsTable = new Table($this->prefixedTableName);
+        $table = new Table($this->prefixedTableName);
 
-        $idColumn = $migrationsTable->addColumn(self::COLUMN_NAME_ID, Types::BIGINT);
-        $idColumn->setAutoincrement(true);
-        $idColumn->setUnsigned(true);
+        $table->addColumn(self::COLUMN_NAME_ID, Types::BIGINT)
+            ->setAutoincrement(true)
+            ->setUnsigned(true);
+        $table->addColumn(self::COLUMN_NAME_SCOPE, Types::STRING);
+        $table->addColumn(self::COLUMN_NAME_VERSION, Types::STRING);
+        $table->addColumn(self::COLUMN_NAME_CREATED_AT, Types::DATETIMETZ_IMMUTABLE);
 
-        $migrationsTable->addColumn(self::COLUMN_NAME_SCOPE, Types::STRING);
+        $table->setPrimaryKey(['id']);
 
-        $migrationsTable->addColumn(self::COLUMN_NAME_VERSION, Types::STRING);
+        $this->schemaManager->createTable($table);
+    }
 
-        $migrationsTable->setPrimaryKey(['id']);
-
-        $this->schemaManager->createTable($migrationsTable);
+    /**
+     * @param array<MigrationInterface> $migrations
+     * @return void
+     */
+    public function migrate(array $migrations): void
+    {
     }
 }

@@ -2,6 +2,6 @@
 
 namespace SimpleSAML\Module\accounting\Stores\Interfaces;
 
-interface StoreConnectionInterface
+interface ConnectionInterface
 {
 }

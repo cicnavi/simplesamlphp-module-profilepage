@@ -6,10 +6,10 @@ namespace SimpleSAML\Module\accounting\Stores\Connections\Pdo;
 
 use PDO;
 use PDOException;
-use SimpleSAML\Module\accounting\Stores\Interfaces\StoreConnectionInterface;
+use SimpleSAML\Module\accounting\Stores\Interfaces\ConnectionInterface;
 use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationException;
 
-class PdoConnection implements StoreConnectionInterface
+class PdoConnection implements ConnectionInterface
 {
     public const OPTION_DSN = 'dsn';
     public const OPTION_USERNAME = 'username';
