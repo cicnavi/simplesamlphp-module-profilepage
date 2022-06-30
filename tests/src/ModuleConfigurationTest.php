@@ -4,7 +4,7 @@ namespace SimpleSAML\Test\Module\accounting;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Configuration;
-use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationException;
+use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores;
 

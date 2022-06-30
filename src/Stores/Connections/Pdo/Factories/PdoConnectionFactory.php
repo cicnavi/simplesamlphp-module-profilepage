@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Connections\Pdo\Factories;
 
-use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationException;
+use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Connections\Pdo\PdoConnection;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Migrations;
+namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations;
 
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
@@ -9,7 +9,7 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
 
 class Version20220601000000CreateJobsTable extends AbstractMigration
 {
-    public function up(): void
+    public function run(): void
     {
         $tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME);
         $table = new Table($tableName);
@@ -22,9 +22,13 @@ class Version20220601000000CreateJobsTable extends AbstractMigration
         $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
         $table->addColumn('reserved_at', Types::DATETIMETZ_IMMUTABLE)->setNotnull(false);
         $table->addColumn('attempts', Types::INTEGER)->setNotnull(false);
+
+        $table->setPrimaryKey(['id']);
+
+        $this->schemaManager->createTable($table);
     }
 
-    public function down(): void
+    public function revert(): void
     {
         $tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME);
 

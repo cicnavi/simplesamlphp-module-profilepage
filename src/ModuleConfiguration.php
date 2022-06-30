@@ -6,7 +6,7 @@ namespace SimpleSAML\Module\accounting;
 
 use Exception;
 use SimpleSAML\Configuration;
-use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationException;
+use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 
 class ModuleConfiguration
 {

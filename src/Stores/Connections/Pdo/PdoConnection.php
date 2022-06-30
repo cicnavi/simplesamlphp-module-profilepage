@@ -6,8 +6,8 @@ namespace SimpleSAML\Module\accounting\Stores\Connections\Pdo;
 
 use PDO;
 use PDOException;
+use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Stores\Interfaces\ConnectionInterface;
-use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationException;
 
 class PdoConnection implements ConnectionInterface
 {

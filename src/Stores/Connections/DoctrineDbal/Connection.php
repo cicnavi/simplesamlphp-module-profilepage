@@ -6,7 +6,7 @@ namespace SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;
-use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationException;
+use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Stores\Interfaces\ConnectionInterface;
 
 class Connection implements ConnectionInterface

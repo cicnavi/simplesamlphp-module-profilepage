@@ -9,12 +9,12 @@ interface MigrationInterface
      *
      * @return void
      */
-    public function up(): void;
+    public function run(): void;
 
     /**
      * Run migration backward.
      *
      * @return void
      */
-    public function down(): void;
+    public function revert(): void;
 }

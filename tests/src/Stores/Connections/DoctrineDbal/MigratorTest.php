@@ -8,13 +8,13 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\LoggerService;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
+ * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
  */
 class MigratorTest extends TestCase
 {
@@ -80,21 +80,5 @@ class MigratorTest extends TestCase
 
         $migrator->runSetup();
         $migrator->runSetup();
-    }
-
-    public function testCanGatherMigrationClassesFromDirectory(): void
-    {
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
-        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
-
-        $directory = $this->moduleConfiguration->getModuleSourceDirectory() . DIRECTORY_SEPARATOR .
-            'Stores' . DIRECTORY_SEPARATOR . 'Jobs' . DIRECTORY_SEPARATOR . 'DoctrineDbal' . DIRECTORY_SEPARATOR .
-            'Migrations';
-
-        $namespace = 'SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Migrations';
-
-        $result = $migrator->gatherMigrationClassesFromDirectory($directory, $namespace);
-
-        $this->assertTrue(in_array($namespace . '\Version20220601000000CreateJobsTable', $result));
     }
 }

@@ -3,7 +3,7 @@
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Exceptions\ModuleConfiguration\InvalidConfigurationException;
+use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 
 /**
