@@ -59,7 +59,6 @@ abstract class AbstractMigrator
 
             try {
                 $migration->run();
-                $this->markImplementedMigration($migrationClass);
             } catch (\Throwable $exception) {
                 $message = sprintf(
                     'Could not run migration class %s. Error was: %s',
@@ -69,7 +68,35 @@ abstract class AbstractMigrator
 
                 throw new MigrationException($message);
             }
+
+            $this->markImplementedMigrationClass($migrationClass);
         }
+    }
+
+    /**
+     * @return class-string[]
+     */
+    public function getNonImplementedMigrationClasses(string $directory, string $namespace): array
+    {
+        return array_diff(
+            $this->gatherMigrationClassesFromDirectory($directory, $namespace),
+            $this->getImplementedMigrationClasses()
+        );
+    }
+
+    /**
+     * @param string $directory
+     * @param string $namespace
+     * @return bool
+     */
+    public function hasNonImplementedMigrationClasses(string $directory, string $namespace): bool
+    {
+        return ! empty($this->getNonImplementedMigrationClasses($directory, $namespace));
+    }
+
+    public function runNonImplementedMigrationClasses(string $directory, string $namespace): void
+    {
+        $this->runMigrationClasses($this->getNonImplementedMigrationClasses($directory, $namespace));
     }
 
     public function validateMigrationClass(string $migrationClass): void
@@ -91,5 +118,10 @@ abstract class AbstractMigrator
      * @param class-string $migrationClass
      * @return void
      */
-    abstract protected function markImplementedMigration(string $migrationClass): void;
+    abstract protected function markImplementedMigrationClass(string $migrationClass): void;
+
+    /**
+     * @return class-string[]
+     */
+    abstract public function getImplementedMigrationClasses(): array;
 }

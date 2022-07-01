@@ -7,11 +7,11 @@ use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
 
-class Version20220601000000CreateJobsTable extends AbstractMigration
+class Version20220601000100CreateFailedJobsTable extends AbstractMigration
 {
     public function run(): void
     {
-        $tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
+        $tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_FAILED_JOBS);
         $table = new Table($tableName);
 
         $table->addColumn('id', Types::BIGINT)
@@ -20,8 +20,6 @@ class Version20220601000000CreateJobsTable extends AbstractMigration
 
         $table->addColumn('payload', Types::TEXT);
         $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
-        $table->addColumn('reserved_at', Types::DATETIMETZ_IMMUTABLE)->setNotnull(false);
-        $table->addColumn('attempts', Types::INTEGER)->setNotnull(false);
 
         $table->setPrimaryKey(['id']);
 
@@ -30,7 +28,7 @@ class Version20220601000000CreateJobsTable extends AbstractMigration
 
     public function revert(): void
     {
-        $tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
+        $tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_FAILED_JOBS);
 
         $this->schemaManager->dropTable($tableName);
     }

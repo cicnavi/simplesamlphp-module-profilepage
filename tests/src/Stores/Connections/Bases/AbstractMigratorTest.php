@@ -3,10 +3,12 @@
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\Bases;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use SimpleSAML\Module\accounting\Exceptions\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\LoggerService;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
@@ -18,6 +20,7 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000000CreateJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000100CreateFailedJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
  */
 class AbstractMigratorTest extends TestCase
@@ -82,13 +85,94 @@ class AbstractMigratorTest extends TestCase
 
         $migrationClasses = $migrator->gatherMigrationClassesFromDirectory($directory, $namespace);
 
-        $jobsTableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME);
+        $jobsTableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
 
         $this->assertFalse($this->schemaManager->tablesExist($jobsTableName));
 
         $migrator->runMigrationClasses($migrationClasses);
 
         $this->assertTrue($this->schemaManager->tablesExist($jobsTableName));
+    }
+
+    public function testCanGatherOnlyMigrationClasses(): void
+    {
+        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
+
+        $directory = __DIR__;
+        $namespace = __NAMESPACE__;
+
+        $this->assertEmpty($migrator->gatherMigrationClassesFromDirectory($directory, $namespace));
+    }
+
+    public function testMigrationExceptionHaltsExecution(): void
+    {
+        $migration = new class ($this->connection) extends AbstractMigration
+        {
+            public function run(): void
+            {
+                throw new \Exception('Something went wrong.');
+            }
+
+            public function revert(): void
+            {
+            }
+        };
+
+        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
+
+        $this->expectException(MigrationException::class);
+
+        $migrator->runMigrationClasses([get_class($migration)]);
+    }
+
+    public function testCanGetNonImplementedMigrationClasses(): void
+    {
+        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
+
+        $migrator->runSetup();
+
+        $nonImplementedMigrationClasses = $migrator->getNonImplementedMigrationClasses(
+            $this->getSampleMigrationsDirectory(),
+            $this->getSampleNameSpace()
+        );
+
+        $this->assertTrue(in_array(
+            JobsStore\Migrations\Version20220601000000CreateJobsTable::class,
+            $nonImplementedMigrationClasses
+        ));
+    }
+
+    public function testCanFindOutIfNonImplementedMigrationClassesExist(): void
+    {
+        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
+
+        $migrator->runSetup();
+
+        $this->assertTrue($migrator->hasNonImplementedMigrationClasses(
+            $this->getSampleMigrationsDirectory(),
+            $this->getSampleNameSpace()
+        ));
+    }
+
+    public function testCanRunNonImplementedMigrationClasses(): void
+    {
+/** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
+
+        $migrator->runSetup();
+
+        $directory = $this->getSampleMigrationsDirectory();
+        $namespace = $this->getSampleNameSpace();
+
+        $this->assertTrue($migrator->hasNonImplementedMigrationClasses($directory, $namespace));
+
+        $migrator->runNonImplementedMigrationClasses($directory, $namespace);
+
+        $this->assertFalse($migrator->hasNonImplementedMigrationClasses($directory, $namespace));
     }
 
     protected function getSampleMigrationsDirectory(): string

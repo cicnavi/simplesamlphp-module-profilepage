@@ -65,14 +65,6 @@ class Migrator extends AbstractMigrator
         $this->schemaManager->createTable($table);
     }
 
-    /**
-     * @param array<MigrationInterface> $migrations
-     * @return void
-     */
-    public function migrate(array $migrations): void
-    {
-    }
-
     protected function buildMigrationClassInstance(string $migrationClass): MigrationInterface
     {
         $this->validateDoctrineDbalMigrationClass($migrationClass);
@@ -90,7 +82,7 @@ class Migrator extends AbstractMigrator
         }
     }
 
-    protected function markImplementedMigration(string $migrationClass): void
+    protected function markImplementedMigrationClass(string $migrationClass): void
     {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
@@ -113,5 +105,18 @@ class Migrator extends AbstractMigrator
             );
 
         $queryBuilder->executeStatement();
+    }
+
+    public function getImplementedMigrationClasses(): array
+    {
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        $queryBuilder->select(self::COLUMN_NAME_VERSION)
+            ->from($this->prefixedTableName);
+
+        /** @var class-string[] $migrationClasses */
+        $migrationClasses = $queryBuilder->executeQuery()->fetchFirstColumn();
+
+        return $migrationClasses;
     }
 }

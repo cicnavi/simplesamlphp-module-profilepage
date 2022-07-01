@@ -4,15 +4,24 @@ namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use PHPUnit\Framework\TestCase;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\LoggerService;
+use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+
+use function PHPUnit\Framework\assertFalse;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000000CreateJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000100CreateFailedJobsTable
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
  */
@@ -51,7 +60,7 @@ class MigratorTest extends TestCase
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
     }
 
-    public function testMigratorCanCreateMigrationsTable(): void
+    public function testCanCreateMigrationsTable(): void
     {
         $this->assertFalse($this->schemaManager->tablesExist([$this->tableName]));
 
@@ -80,5 +89,70 @@ class MigratorTest extends TestCase
 
         $migrator->runSetup();
         $migrator->runSetup();
+    }
+
+    public function testCanRunMigrationClasses(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
+
+        $migrator->runSetup();
+
+        $tableNameJobs = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
+        $this > assertFalse($this->schemaManager->tablesExist($tableNameJobs));
+
+        $migrator->runMigrationClasses([JobsStore\Migrations\Version20220601000000CreateJobsTable::class]);
+
+        $this->assertTrue($this->schemaManager->tablesExist($tableNameJobs));
+    }
+
+    public function testCanOnlyRunDoctrineDbalMigrationClasses(): void
+    {
+        $migration = new class implements MigrationInterface {
+            public function run(): void
+            {
+            }
+            public function revert(): void
+            {
+            }
+        };
+
+        /** @psalm-suppress InvalidArgument */
+        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
+
+        $migrator->runSetup();
+
+        $this->expectException(InvalidValueException::class);
+
+        $migrator->runMigrationClasses([get_class($migration)]);
+    }
+
+    public function testCanGetImplementedMigrationClasses(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $migrator = new Migrator($this->connection, $this->loggerServiceMock);
+
+        $migrator->runSetup();
+
+        $this->assertEmpty($migrator->getImplementedMigrationClasses());
+
+        $migrator->runNonImplementedMigrationClasses(
+            $this->getSampleMigrationsDirectory(),
+            $this->getSampleNameSpace()
+        );
+
+        $this->assertNotEmpty($migrator->getImplementedMigrationClasses());
+    }
+
+    protected function getSampleMigrationsDirectory(): string
+    {
+        return $this->moduleConfiguration->getModuleSourceDirectory() . DIRECTORY_SEPARATOR .
+            'Stores' . DIRECTORY_SEPARATOR . 'Jobs' . DIRECTORY_SEPARATOR . 'DoctrineDbal' . DIRECTORY_SEPARATOR .
+            'JobsStore' . DIRECTORY_SEPARATOR . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
+    }
+
+    protected function getSampleNameSpace(): string
+    {
+        return JobsStore::class . '\\' . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 }
