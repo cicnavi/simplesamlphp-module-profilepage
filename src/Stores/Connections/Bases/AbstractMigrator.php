@@ -49,6 +49,7 @@ abstract class AbstractMigrator
     /**
      * @param class-string[] $migrationClasses
      * @return void
+     * @throws MigrationException
      */
     public function runMigrationClasses(array $migrationClasses): void
     {

@@ -10,12 +10,12 @@ class FilesystemHelper
 {
     public static function getRealPath(string $path): string
     {
-        $path = realpath($path);
+        $realpath = realpath($path);
 
-        if ($path === false || ! (is_dir($path) || is_file($path))) {
-            throw new InvalidValueException('Given path can not be translated to real path.');
+        if ($realpath === false || ! (is_dir($realpath) || is_file($realpath))) {
+            throw new InvalidValueException(sprintf('Given path can not be translated to real path (%s).', $path));
         }
 
-        return $path;
+        return $realpath;
     }
 }
