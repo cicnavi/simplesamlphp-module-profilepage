@@ -160,7 +160,7 @@ class AbstractMigratorTest extends TestCase
 
     public function testCanRunNonImplementedMigrationClasses(): void
     {
-/** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
