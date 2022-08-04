@@ -5,8 +5,8 @@ namespace SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
+use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
-use SimpleSAML\Module\accounting\Services\LoggerService;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
@@ -20,15 +20,15 @@ class Migrator extends AbstractMigrator
     public const COLUMN_NAME_CREATED_AT = 'created_at';
 
     protected Connection $connection;
-    protected LoggerService $loggerService;
+    protected LoggerInterface $logger;
 
     protected AbstractSchemaManager $schemaManager;
     protected string $prefixedTableName;
 
-    public function __construct(Connection $connection, LoggerService $loggerService)
+    public function __construct(Connection $connection, LoggerInterface $logger)
     {
         $this->connection = $connection;
-        $this->loggerService = $loggerService;
+        $this->logger = $logger;
 
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
         $this->prefixedTableName = $this->connection->preparePrefixedTableName(self::TABLE_NAME);
@@ -42,7 +42,7 @@ class Migrator extends AbstractMigrator
     public function runSetup(): void
     {
         if (! $this->needsSetup()) {
-            $this->loggerService->warning('Migrator setup has been called, however setup is not needed.');
+            $this->logger->warning('Migrator setup has been called, however setup is not needed.');
             return;
         }
 

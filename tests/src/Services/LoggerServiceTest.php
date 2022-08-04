@@ -24,6 +24,8 @@ class LoggerServiceTest extends TestCase
         $loggerService->critical('test');
         $loggerService->emergency('test');
 
+        $loggerService->emergency('test', ['sample' => 'context']);
+
         $this->assertTrue(true); // Nothing to evaluate
     }
 }

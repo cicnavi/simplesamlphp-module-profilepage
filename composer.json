@@ -30,6 +30,7 @@
         "ext-pdo_mysql": "*",
         "ext-pdo_sqlite": "*",
         "doctrine/dbal": "^3",
+        "psr/log": "^1|^2|^3",
         "simplesamlphp/composer-module-installer": "^1"
     },
     "require-dev": {

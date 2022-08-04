@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\accounting\Stores\Connections\Bases;
 
 use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
-use SimpleSAML\Module\accounting\Exceptions\MigrationException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Helpers\FilesystemHelper;
 use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
 
@@ -67,7 +67,7 @@ abstract class AbstractMigrator
                     $exception->getMessage()
                 );
 
-                throw new MigrationException($message);
+                throw new MigrationException($message, (int) $exception->getCode(), $exception);
             }
 
             $this->markImplementedMigrationClass($migrationClass);

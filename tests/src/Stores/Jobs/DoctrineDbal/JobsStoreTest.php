@@ -3,6 +3,10 @@
 namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
+use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
+use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\LoggerService;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
@@ -50,7 +54,7 @@ class JobsStoreTest extends TestCase
     public function testSetupDependsOnMigratorSetup(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub);
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
 
         $this->assertTrue($this->migrator->needsSetup());
         $this->assertTrue($jobsStore->needsSetup());
@@ -64,7 +68,7 @@ class JobsStoreTest extends TestCase
     public function testSetupDependsOnMigrations(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub);
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
 
         // Run migrator setup beforehand, so it only depends on JobsStore migrations setup
         $this->migrator->runSetup();
@@ -78,12 +82,53 @@ class JobsStoreTest extends TestCase
     public function testCanGetPrefixedTableNames(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub);
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
 
         $tableNameJobs = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
         $tableNameFailedJobs = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_FAILED_JOBS);
 
         $this->assertSame($tableNameJobs, $jobsStore->getPrefixedTableNameJobs());
         $this->assertSame($tableNameFailedJobs, $jobsStore->getPrefixedTableNameFailedJobs());
+    }
+
+    public function testCanEnqueueJob(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore->runSetup();
+
+        $payloadStub = $this->createStub(AbstractPayload::class);
+        $jobStub = $this->createStub(AbstractJob::class);
+        $jobStub->method('getPayload')->willReturn($payloadStub);
+
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $queryBuilder->select('COUNT(id) as jobsCount')->from($jobsStore->getPrefixedTableNameJobs())->fetchOne();
+
+        $this->assertSame(0, (int) $queryBuilder->executeQuery()->fetchOne());
+
+        $jobsStore->enqueue($jobStub);
+
+        $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
+
+        $jobsStore->enqueue($jobStub);
+        $jobsStore->enqueue($jobStub);
+
+        $this->assertSame(3, (int) $queryBuilder->executeQuery()->fetchOne());
+    }
+
+    public function testEnqueueThrowsStoreException(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        // Don't run setup, so we get exception
+        //$jobsStore->runSetup();
+
+        $payloadStub = $this->createStub(AbstractPayload::class);
+        $jobStub = $this->createStub(AbstractJob::class);
+        $jobStub->method('getPayload')->willReturn($payloadStub);
+
+        $this->expectException(StoreException::class);
+
+        $jobsStore->enqueue($jobStub);
     }
 }
