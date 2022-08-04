@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
 
 use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
-use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 
 class Job extends AbstractJob

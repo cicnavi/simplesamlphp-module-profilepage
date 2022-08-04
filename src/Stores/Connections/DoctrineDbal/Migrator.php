@@ -1,15 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
+use ReflectionClass;
+use ReflectionException;
 use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
+use Throwable;
 
 class Migrator extends AbstractMigrator
 {
@@ -25,20 +32,39 @@ class Migrator extends AbstractMigrator
     protected AbstractSchemaManager $schemaManager;
     protected string $prefixedTableName;
 
+    /**
+     * @throws StoreException
+     */
     public function __construct(Connection $connection, LoggerInterface $logger)
     {
         $this->connection = $connection;
         $this->logger = $logger;
 
-        $this->schemaManager = $this->connection->dbal()->createSchemaManager();
+        try {
+            $this->schemaManager = $this->connection->dbal()->createSchemaManager();
+        } catch (Throwable $exception) {
+            $message = 'Could not create DBAL schema manager.';
+            throw new StoreException($message, (int) $exception->getCode(), $exception);
+        }
         $this->prefixedTableName = $this->connection->preparePrefixedTableName(self::TABLE_NAME);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function needsSetup(): bool
     {
-        return ! $this->schemaManager->tablesExist([$this->prefixedTableName]);
+        try {
+            return ! $this->schemaManager->tablesExist([$this->prefixedTableName]);
+        } catch (Throwable $exception) {
+            $message = sprintf('Could not check table %s existence using schema manager.', $this->prefixedTableName);
+            throw new StoreException($message, (int) $exception->getCode(), $exception);
+        }
     }
 
+    /**
+     * @throws StoreException
+     */
     public function runSetup(): void
     {
         if (! $this->needsSetup()) {
@@ -49,28 +75,39 @@ class Migrator extends AbstractMigrator
         $this->createMigrationsTable();
     }
 
+    /**
+     * @throws StoreException
+     */
     protected function createMigrationsTable(): void
     {
-        $table = new Table($this->prefixedTableName);
+        try {
+            $table = new Table($this->prefixedTableName);
 
-        $table->addColumn(self::COLUMN_NAME_ID, Types::BIGINT)
-            ->setAutoincrement(true)
-            ->setUnsigned(true);
-        $table->addColumn(self::COLUMN_NAME_VERSION, Types::STRING);
-        $table->addColumn(self::COLUMN_NAME_CREATED_AT, Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn(self::COLUMN_NAME_ID, Types::BIGINT)
+                ->setAutoincrement(true)
+                ->setUnsigned(true);
+            $table->addColumn(self::COLUMN_NAME_VERSION, Types::STRING);
+            $table->addColumn(self::COLUMN_NAME_CREATED_AT, Types::DATETIMETZ_IMMUTABLE);
 
-        $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex([self::COLUMN_NAME_VERSION]);
+            $table->setPrimaryKey(['id']);
+            $table->addUniqueIndex([self::COLUMN_NAME_VERSION]);
 
-        $this->schemaManager->createTable($table);
+            $this->schemaManager->createTable($table);
+        } catch (Throwable $exception) {
+            $message = sprintf('Error creating migrations table %s.', $this->prefixedTableName);
+            throw new StoreException($message, (int) $exception->getCode(), $exception);
+        }
     }
 
+    /**
+     * @throws ReflectionException
+     */
     protected function buildMigrationClassInstance(string $migrationClass): MigrationInterface
     {
         $this->validateDoctrineDbalMigrationClass($migrationClass);
 
         /** @var MigrationInterface $migration */
-        $migration = (new \ReflectionClass($migrationClass))->newInstance($this->connection);
+        $migration = (new ReflectionClass($migrationClass))->newInstance($this->connection);
 
         return $migration;
     }
@@ -82,40 +119,56 @@ class Migrator extends AbstractMigrator
         }
     }
 
+    /**
+     * @throws StoreException
+     */
     protected function markImplementedMigrationClass(string $migrationClass): void
     {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $queryBuilder->insert($this->prefixedTableName)
-            ->values(
-                [
-                    self::COLUMN_NAME_VERSION => ':' . self::COLUMN_NAME_VERSION,
-                    self::COLUMN_NAME_CREATED_AT => ':' . self::COLUMN_NAME_CREATED_AT,
-                ]
-            )
-            ->setParameters(
-                [
-                    self::COLUMN_NAME_VERSION => $migrationClass,
-                    self::COLUMN_NAME_CREATED_AT => new \DateTimeImmutable(),
-                ],
-                [
-                    self::COLUMN_NAME_VERSION => Types::STRING,
-                    self::COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
-                ]
-            );
+        try {
+            $queryBuilder->insert($this->prefixedTableName)
+                ->values(
+                    [
+                        self::COLUMN_NAME_VERSION => ':' . self::COLUMN_NAME_VERSION,
+                        self::COLUMN_NAME_CREATED_AT => ':' . self::COLUMN_NAME_CREATED_AT,
+                    ]
+                )
+                ->setParameters(
+                    [
+                        self::COLUMN_NAME_VERSION => $migrationClass,
+                        self::COLUMN_NAME_CREATED_AT => new DateTimeImmutable(),
+                    ],
+                    [
+                        self::COLUMN_NAME_VERSION => Types::STRING,
+                        self::COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
+                    ]
+                );
 
-        $queryBuilder->executeStatement();
+            $queryBuilder->executeStatement();
+        } catch (Throwable $exception) {
+            $message = sprintf('Error marking implemented migrations class %s.', $migrationClass);
+            throw new StoreException($message, (int) $exception->getCode(), $exception);
+        }
     }
 
+    /**
+     * @throws StoreException
+     */
     public function getImplementedMigrationClasses(): array
     {
-        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+        try {
+            $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $queryBuilder->select(self::COLUMN_NAME_VERSION)
-            ->from($this->prefixedTableName);
+            $queryBuilder->select(self::COLUMN_NAME_VERSION)
+                ->from($this->prefixedTableName);
 
-        /** @var class-string[] $migrationClasses */
-        $migrationClasses = $queryBuilder->executeQuery()->fetchFirstColumn();
+            /** @var class-string[] $migrationClasses */
+            $migrationClasses = $queryBuilder->executeQuery()->fetchFirstColumn();
+        } catch (Throwable $exception) {
+            $message = 'Error getting implemented migration classes.';
+            throw new StoreException($message, (int) $exception->getCode(), $exception);
+        }
 
         return $migrationClasses;
     }

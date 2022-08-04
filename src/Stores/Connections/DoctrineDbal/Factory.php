@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\LoggerService;
 
 class Factory
 {

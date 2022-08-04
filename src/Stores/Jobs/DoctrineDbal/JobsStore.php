@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
+use ReflectionClass;
 use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
 use SimpleSAML\Module\accounting\Entities\AuthenticationEvent\Job;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
+use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\LoggerService;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
-use SimpleSAML\Module\accounting\Stores\Jobs\Interfaces\JobsStoreInterface;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
+use SimpleSAML\Module\accounting\Stores\Interfaces\JobsStoreInterface;
+use Throwable;
 
 class JobsStore implements JobsStoreInterface
 {
@@ -51,7 +55,7 @@ class JobsStore implements JobsStoreInterface
     /**
      * @throws StoreException
      */
-    public function enqueue(AbstractJob $job): void
+    public function enqueue(JobInterface $job): void
     {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
@@ -65,7 +69,7 @@ class JobsStore implements JobsStoreInterface
             ->setParameters(
                 [
                     self::COLUMN_NAME_PAYLOAD => serialize($job->getPayload()),
-                    self::COLUMN_NAME_CREATED_AT => new \DateTimeImmutable(),
+                    self::COLUMN_NAME_CREATED_AT => new DateTimeImmutable(),
                 ],
                 [
                     self::COLUMN_NAME_PAYLOAD => Types::TEXT,
@@ -75,7 +79,7 @@ class JobsStore implements JobsStoreInterface
 
         try {
             $queryBuilder->executeStatement();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Could not enqueue job (%s)', $exception->getMessage());
             throw new StoreException($message, (int) $exception->getCode(), $exception);
         }
@@ -84,6 +88,7 @@ class JobsStore implements JobsStoreInterface
     public function dequeue(): AbstractJob
     {
         // TODO: Implement dequeue() method.
+        // Treba li dodati tip joba u kao kolonu u db?
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
         /**
@@ -99,6 +104,10 @@ class JobsStore implements JobsStoreInterface
         return new Job(new AuthenticationEvent([]));
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function runSetup(): void
     {
         if ($this->migrator->needsSetup()) {
@@ -113,6 +122,9 @@ class JobsStore implements JobsStoreInterface
         }
     }
 
+    /**
+     * @throws StoreException
+     */
     public function needsSetup(): bool
     {
         // ... if the migrator itself needs setup.
@@ -139,7 +151,7 @@ class JobsStore implements JobsStoreInterface
     protected function getMigrationsDirectory(): string
     {
         return __DIR__ . DIRECTORY_SEPARATOR .
-            (new \ReflectionClass($this))->getShortName() . DIRECTORY_SEPARATOR .
+            (new ReflectionClass($this))->getShortName() . DIRECTORY_SEPARATOR .
             AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 

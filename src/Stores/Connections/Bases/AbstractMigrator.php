@@ -8,6 +8,7 @@ use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Helpers\FilesystemHelper;
 use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
+use Throwable;
 
 abstract class AbstractMigrator
 {
@@ -60,7 +61,7 @@ abstract class AbstractMigrator
 
             try {
                 $migration->run();
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 $message = sprintf(
                     'Could not run migration class %s. Error was: %s',
                     $migrationClass,
@@ -95,6 +96,9 @@ abstract class AbstractMigrator
         return ! empty($this->getNonImplementedMigrationClasses($directory, $namespace));
     }
 
+    /**
+     * @throws MigrationException
+     */
     public function runNonImplementedMigrationClasses(string $directory, string $namespace): void
     {
         $this->runMigrationClasses($this->getNonImplementedMigrationClasses($directory, $namespace));

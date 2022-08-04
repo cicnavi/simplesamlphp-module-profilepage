@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Exceptions;
 
-class StoreException extends \Exception
+use Exception;
+
+class StoreException extends Exception
 {
 }
