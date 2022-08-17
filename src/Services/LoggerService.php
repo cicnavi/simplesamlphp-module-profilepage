@@ -1,93 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Services;
 
+use Psr\Log\AbstractLogger;
+use Psr\Log\LogLevel;
 use SimpleSAML\Logger;
 
-class LoggerService
+class LoggerService extends AbstractLogger
 {
-    /**
-     * Log an emergency message.
-     *
-     * @param string $message The message to log.
-     */
-    public function emergency(string $message): void
+    public function log($level, $message, array $context = [])
     {
-        Logger::emergency($message);
+        if (! empty($context)) {
+            $message .= ' Context: ' . var_export($context, true);
+        }
+
+        switch ($level) {
+            case LogLevel::EMERGENCY:
+                Logger::emergency($message);
+                break;
+            case LogLevel::CRITICAL:
+                Logger::critical($message);
+                break;
+            case LogLevel::ALERT:
+                Logger::alert($message);
+                break;
+            case LogLevel::ERROR:
+                Logger::error($message);
+                break;
+            case LogLevel::WARNING:
+                Logger::warning($message);
+                break;
+            case LogLevel::NOTICE:
+                Logger::notice($message);
+                break;
+            case LogLevel::INFO:
+                Logger::info($message);
+                break;
+            case LogLevel::DEBUG:
+                Logger::debug($message);
+                break;
+        }
     }
 
     /**
-     * Log a critical message.
-     *
-     * @param string $message The message to log.
-     */
-    public function critical(string $message): void
-    {
-        Logger::critical($message);
-    }
-
-    /**
-     * Log an alert message.
-     *
-     * @param string $message The message to log.
-     */
-    public function alert(string $message): void
-    {
-        Logger::alert($message);
-    }
-
-    /**
-     * Log an error message.
-     *
-     * @param string $message The message to log.
-     */
-    public function error(string $message): void
-    {
-        Logger::error($message);
-    }
-
-    /**
-     * Log a warning message.
-     *
-     * @param string $message The message to log.
-     */
-    public function warning(string $message): void
-    {
-        Logger::warning($message);
-    }
-
-    /**
-     * Log a notice message.
-     *
-     * @param string $message The message to log.
-     */
-    public function notice(string $message): void
-    {
-        Logger::notice($message);
-    }
-
-    /**
-     * Log an info message (a bit less verbose than debug messages).
-     *
-     * @param string $message The message to log.
-     */
-    public function info(string $message): void
-    {
-        Logger::info($message);
-    }
-
-    /**
-     * Log a debug message (very verbose messages).
-     *
-     * @param string $message The message to log.
-     */
-    public function debug(string $message): void
-    {
-        Logger::debug($message);
-    }
-
-    /**
-     * Log a statistics message.
+     * Log an SSP statistics message.
      *
      * @param string $message The message to log.
      */

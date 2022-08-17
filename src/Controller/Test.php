@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Controller;
 
+use Exception;
 use SimpleSAML\Configuration;
 use SimpleSAML\Locale\Translate;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
@@ -35,7 +36,7 @@ class Test
     /**
      * @param Request $request
      * @return Template
-     * @throws \Exception
+     * @throws Exception
      */
     public function test(Request $request): Template
     {

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Exceptions;
 
-class InvalidValueException extends \ValueError
+use ValueError;
+
+class InvalidValueException extends ValueError
 {
 }

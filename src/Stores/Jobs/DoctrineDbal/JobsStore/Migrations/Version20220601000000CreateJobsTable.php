@@ -1,37 +1,59 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations;
 
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
+use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+use Throwable;
 
 class Version20220601000000CreateJobsTable extends AbstractMigration
 {
+    /**
+     * @throws MigrationException
+     */
     public function run(): void
     {
         $tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
-        $table = new Table($tableName);
 
-        $table->addColumn('id', Types::BIGINT)
-            ->setUnsigned(true)
-            ->setAutoincrement(true);
+        try {
+            $table = new Table($tableName);
 
-        $table->addColumn('payload', Types::TEXT);
-        $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
-        $table->addColumn('reserved_at', Types::DATETIMETZ_IMMUTABLE)->setNotnull(false);
-        $table->addColumn('attempts', Types::INTEGER)->setNotnull(false);
+            $table->addColumn(JobsStore::COLUMN_NAME_ID, Types::BIGINT)
+                ->setUnsigned(true)
+                ->setAutoincrement(true);
 
-        $table->setPrimaryKey(['id']);
+            $table->addColumn(JobsStore::COLUMN_NAME_TYPE, Types::STRING)
+                ->setLength(JobsStore::COLUMN_LENGTH_TYPE);
 
-        $this->schemaManager->createTable($table);
+            $table->addColumn(JobsStore::COLUMN_NAME_PAYLOAD, Types::TEXT);
+            $table->addColumn(JobsStore::COLUMN_NAME_CREATED_AT, Types::DATETIMETZ_IMMUTABLE);
+
+            $table->setPrimaryKey([JobsStore::COLUMN_NAME_ID]);
+
+            $this->schemaManager->createTable($table);
+        } catch (Throwable $exception) {
+            $contextDetails = sprintf('Could not create table %s.', $tableName);
+            $this->throwGenericMigrationException($contextDetails, $exception);
+        }
     }
 
+    /**
+     * @throws MigrationException
+     */
     public function revert(): void
     {
         $tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
 
-        $this->schemaManager->dropTable($tableName);
+        try {
+            $this->schemaManager->dropTable($tableName);
+        } catch (Throwable $exception) {
+            $contextDetails = sprintf('Could not drop table %s.', $tableName);
+            $this->throwGenericMigrationException($contextDetails, $exception);
+        }
     }
 }

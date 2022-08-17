@@ -3,7 +3,7 @@
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\Bases;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
-use SimpleSAML\Module\accounting\Exceptions\MigrationException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\LoggerService;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
@@ -160,7 +160,7 @@ class AbstractMigratorTest extends TestCase
 
     public function testCanRunNonImplementedMigrationClasses(): void
     {
-/** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
