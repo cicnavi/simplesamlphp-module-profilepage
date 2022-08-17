@@ -2,10 +2,10 @@
 
 namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
+use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\LoggerService;
@@ -26,6 +26,10 @@ use PHPUnit\Framework\TestCase;
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000000CreateJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000100CreateFailedJobsTable
+ * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\RawJob
+ * @uses \SimpleSAML\Module\accounting\Entities\AuthenticationEvent
+ * @uses \SimpleSAML\Module\accounting\Entities\AuthenticationEvent\Job
  */
 class JobsStoreTest extends TestCase
 {
@@ -116,7 +120,7 @@ class JobsStoreTest extends TestCase
         $this->assertSame(3, (int) $queryBuilder->executeQuery()->fetchOne());
     }
 
-    public function testEnqueueThrowsStoreException(): void
+    public function testEnqueueThrowsStoreExceptionOnNonSetupRun(): void
     {
         /** @psalm-suppress InvalidArgument */
         $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
@@ -130,5 +134,141 @@ class JobsStoreTest extends TestCase
         $this->expectException(StoreException::class);
 
         $jobsStore->enqueue($jobStub);
+    }
+
+    public function testEnqueueThrowsStoreExceptionOnInvalidType(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        // Don't run setup, so we get exception
+        $jobsStore->runSetup();
+
+        $payloadStub = $this->createStub(AbstractPayload::class);
+        $jobStub = $this->createStub(AbstractJob::class);
+        $jobStub->method('getPayload')->willReturn($payloadStub);
+        $invalidType = str_pad('invalid-type', JobsStore::COLUMN_LENGTH_TYPE + 1);
+
+        $this->expectException(StoreException::class);
+
+        $jobsStore->enqueue($jobStub, $invalidType);
+    }
+
+    public function testCanGetNextJob(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore->runSetup();
+
+        $payloadStub = $this->createStub(AbstractPayload::class);
+        $jobStub = $this->createStub(AbstractJob::class);
+        $jobStub->method('getPayload')->willReturn($payloadStub);
+
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $queryBuilder->select('COUNT(id) as jobsCount')->from($jobsStore->getPrefixedTableNameJobs())->fetchOne();
+
+        $this->assertSame(0, (int) $queryBuilder->executeQuery()->fetchOne());
+
+        $jobsStore->enqueue($jobStub);
+
+        $this->assertNotEmpty($jobsStore->getNext()->fetchOne());
+        $this->assertNotEmpty($jobsStore->getNext(get_class($jobStub))->fetchOne());
+
+
+        $jobsStore->enqueue($jobStub, 'sample-type');
+        $this->assertNotEmpty($jobsStore->getNext('sample-type')->fetchOne());
+    }
+
+    public function testGetNextThrowsOnNonSetupRun(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        // Don't run setup, so we get exception
+        //$jobsStore->runSetup();
+
+        $payloadStub = $this->createStub(AbstractPayload::class);
+        $jobStub = $this->createStub(AbstractJob::class);
+        $jobStub->method('getPayload')->willReturn($payloadStub);
+
+        $this->expectException(StoreException::class);
+
+        $jobsStore->getNext();
+    }
+
+    public function testCanDequeueJob(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore->runSetup();
+
+        $payloadStub = $this->createStub(AbstractPayload::class);
+        $jobStub = $this->createStub(AbstractJob::class);
+        $jobStub->method('getPayload')->willReturn($payloadStub);
+
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $queryBuilder->select('COUNT(id) as jobsCount')->from($jobsStore->getPrefixedTableNameJobs())->fetchOne();
+
+        $this->assertSame(0, (int) $queryBuilder->executeQuery()->fetchOne());
+
+        $jobsStore->enqueue($jobStub);
+        $jobsStore->enqueue($jobStub);
+
+        $this->assertSame(2, (int) $queryBuilder->executeQuery()->fetchOne());
+
+        $jobsStore->dequeue();
+
+        $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
+    }
+
+    public function testCanDequeueSpecificJobType(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore->runSetup();
+
+        $payloadStub = $this->createStub(AbstractPayload::class);
+        $jobStub = $this->createStub(AbstractJob::class);
+        $jobStub->method('getPayload')->willReturn($payloadStub);
+
+        $authenticationEvent = new AuthenticationEvent(['sample-state']);
+        $authenticationEventJob = new AuthenticationEvent\Job($authenticationEvent);
+
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $queryBuilder->select('COUNT(id) as jobsCount')->from($jobsStore->getPrefixedTableNameJobs())->fetchOne();
+
+        $this->assertSame(0, (int) $queryBuilder->executeQuery()->fetchOne());
+
+        $jobsStore->enqueue($jobStub, 'test-type');
+        $jobsStore->enqueue($authenticationEventJob);
+
+        $this->assertSame(2, (int) $queryBuilder->executeQuery()->fetchOne());
+
+        $this->assertInstanceOf(AuthenticationEvent\Job::class, $jobsStore->dequeue(AuthenticationEvent\Job::class));
+
+        $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
+
+        $this->assertNull($jobsStore->dequeue(AuthenticationEvent::class));
+
+        $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
+    }
+
+    public function testDequeueThrowsWhenSetupNotRun(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+//        $jobsStore->runSetup();
+
+        $payloadStub = $this->createStub(AbstractPayload::class);
+        $jobStub = $this->createStub(AbstractJob::class);
+        $jobStub->method('getPayload')->willReturn($payloadStub);
+
+        $this->expectException(StoreException::class);
+
+        $jobsStore->dequeue('test-type');
+    }
+
+    public function testCanContinueSearchingInCaseOfJobDeletion(): void
+    {
+        // TODO try to simulate job deletion
+        $this->markTestIncomplete();
     }
 }

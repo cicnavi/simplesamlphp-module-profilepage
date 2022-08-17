@@ -5,17 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
 
 use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
+use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 
-class Job extends AbstractJob
+class Job extends GenericJob
 {
-    public function run(): void
-    {
-        // TODO: Implement run() method.
-    }
-
     public function getPayload(): AuthenticationEvent
     {
         return $this->validatePayload($this->payload);

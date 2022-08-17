@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
-use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
-use SimpleSAML\Module\accounting\Entities\AuthenticationEvent\Job;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
+use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
@@ -29,7 +28,10 @@ class JobsStore implements JobsStoreInterface
 
     public const COLUMN_NAME_ID = 'id';
     public const COLUMN_NAME_PAYLOAD = 'payload';
+    public const COLUMN_NAME_TYPE = 'type';
     public const COLUMN_NAME_CREATED_AT = 'created_at';
+
+    public const COLUMN_LENGTH_TYPE = 1024;
 
     protected ModuleConfiguration $moduleConfiguration;
     protected Connection $connection;
@@ -55,24 +57,30 @@ class JobsStore implements JobsStoreInterface
     /**
      * @throws StoreException
      */
-    public function enqueue(JobInterface $job): void
+    public function enqueue(JobInterface $job, string $type = null): void
     {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        $payload = $job->getPayload();
+        $type = $this->validateType($type ?? get_class($job));
 
         $queryBuilder->insert($this->prefixedTableNameJobs)
             ->values(
                 [
                     self::COLUMN_NAME_PAYLOAD => ':' . self::COLUMN_NAME_PAYLOAD,
+                    self::COLUMN_NAME_TYPE => ':' . self::COLUMN_NAME_TYPE,
                     self::COLUMN_NAME_CREATED_AT => ':' . self::COLUMN_NAME_CREATED_AT,
                 ]
             )
             ->setParameters(
                 [
-                    self::COLUMN_NAME_PAYLOAD => serialize($job->getPayload()),
+                    self::COLUMN_NAME_PAYLOAD => serialize($payload),
+                    self::COLUMN_NAME_TYPE => $type,
                     self::COLUMN_NAME_CREATED_AT => new DateTimeImmutable(),
                 ],
                 [
                     self::COLUMN_NAME_PAYLOAD => Types::TEXT,
+                    self::COLUMN_NAME_TYPE => Types::STRING,
                     self::COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
                 ]
             );
@@ -81,27 +89,108 @@ class JobsStore implements JobsStoreInterface
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
             $message = sprintf('Could not enqueue job (%s)', $exception->getMessage());
-            throw new StoreException($message, (int) $exception->getCode(), $exception);
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
 
-    public function dequeue(): AbstractJob
+    /**
+     * @throws StoreException
+     */
+    protected function validateType(string $type): string
     {
-        // TODO: Implement dequeue() method.
-        // Treba li dodati tip joba u kao kolonu u db?
+        if (mb_strlen($type) > self::COLUMN_LENGTH_TYPE) {
+            throw new StoreException(
+                sprintf('String length for type column exceeds %s limit.', self::COLUMN_LENGTH_TYPE)
+            );
+        }
+
+        return $type;
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function dequeue(string $type = null): ?JobInterface
+    {
+        $job = null;
+
+        try {
+            // Check if there are any jobs in the store...
+            while ($row = $this->getNext($type)->fetchAssociative()) {
+                // We have a row. Let's create a row job instance, which will take care of validation and make it easier
+                // to work with instead of array.
+                $rawJob = new RawJob($row, $this->connection->dbal()->getDatabasePlatform());
+                // Let's try to delete this job from the store, so it can't be fetched again.
+                $numberOfAffectedRows = $this->delete($rawJob->getId());
+                if ($numberOfAffectedRows === 0) {
+                    // It seems that this job has already been dequeued in the meantime. Try to get next job again.
+                    continue;
+                }
+                // Job is deleted, meaning it is now dequeued and we can return a new job instance.
+                // If a valid type is declared, let's try to instantiate a job of that specific type.
+                if ($type !== null && class_exists($type) && is_subclass_of($type, JobInterface::class)) {
+                    $job = (new ReflectionClass($type))->newInstance($rawJob->getPayload());
+                } else {
+                    // No (valid) job type, so generic job will do...
+                    $job = new GenericJob($rawJob->getPayload());
+                }
+
+                // We have found and dequeued a job, so finish with the search.
+                break;
+            }
+        } catch (Throwable $exception) {
+            throw new StoreException(
+                'Error while trying to dequeue a job.',
+                (int) $exception->getCode(),
+                $exception
+            );
+        }
+
+        return $job;
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function getNext(string $type = null): Result
+    {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
         /**
-         * @psalm-suppress TooManyArguments providing array or null is deprecated
+         * @psalm-suppress TooManyArguments - providing array or null is deprecated
          */
         $queryBuilder->select(
             self::COLUMN_NAME_ID,
             self::COLUMN_NAME_PAYLOAD,
+            self::COLUMN_NAME_TYPE,
             self::COLUMN_NAME_CREATED_AT
         )
             ->from($this->prefixedTableNameJobs)
+            ->orderBy(self::COLUMN_NAME_ID)
             ->setMaxResults(1);
-        return new Job(new AuthenticationEvent([]));
+
+        if ($type !== null) {
+            $queryBuilder->where(self::COLUMN_NAME_TYPE . ' = ' . $queryBuilder->createNamedParameter($type));
+        }
+
+        try {
+            $result = $queryBuilder->executeQuery();
+        } catch (Throwable $exception) {
+            $message = 'Error while trying to execute query to get next available job.';
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+
+        return $result;
+    }
+
+    protected function delete(int $id): int
+    {
+        return (int)$this->connection->dbal()
+            ->delete(
+                $this->prefixedTableNameJobs,
+                [self::COLUMN_NAME_ID => $id],
+                [self::COLUMN_NAME_ID => Types::BIGINT]
+            );
     }
 
     /**

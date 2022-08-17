@@ -27,6 +27,9 @@ class Version20220601000000CreateJobsTable extends AbstractMigration
                 ->setUnsigned(true)
                 ->setAutoincrement(true);
 
+            $table->addColumn(JobsStore::COLUMN_NAME_TYPE, Types::STRING)
+                ->setLength(JobsStore::COLUMN_LENGTH_TYPE);
+
             $table->addColumn(JobsStore::COLUMN_NAME_PAYLOAD, Types::TEXT);
             $table->addColumn(JobsStore::COLUMN_NAME_CREATED_AT, Types::DATETIMETZ_IMMUTABLE);
 
