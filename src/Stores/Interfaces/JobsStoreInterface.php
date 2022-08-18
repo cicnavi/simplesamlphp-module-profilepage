@@ -11,10 +11,9 @@ interface JobsStoreInterface extends StoreInterface
     /**
      * Add job to queue
      * @param JobInterface $job
-     * @param string|null $type Optional job type designation. If not null, payload class FQN will be used.
      * @return void
      */
-    public function enqueue(JobInterface $job, string $type = null): void;
+    public function enqueue(JobInterface $job): void;
 
     /**
      * Get job from queue

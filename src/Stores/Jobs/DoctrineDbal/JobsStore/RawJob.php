@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal;
+namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
 
 class RawJob
 {

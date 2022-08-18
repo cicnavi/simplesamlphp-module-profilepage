@@ -9,10 +9,22 @@ use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 abstract class AbstractJob implements JobInterface
 {
     protected AbstractPayload $payload;
+    protected ?int $id;
+    protected \DateTimeImmutable $createdAt;
 
-    public function __construct(AbstractPayload $payload)
-    {
+    public function __construct(
+        AbstractPayload $payload,
+        int $id = null,
+        \DateTimeImmutable $createdAt = null
+    ) {
         $this->setPayload($payload);
+        $this->id = $id;
+        $this->createdAt = $createdAt ?? new \DateTimeImmutable();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getPayload(): AbstractPayload
@@ -24,4 +36,11 @@ abstract class AbstractJob implements JobInterface
     {
         $this->payload = $payload;
     }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    abstract public function getType(): string;
 }
