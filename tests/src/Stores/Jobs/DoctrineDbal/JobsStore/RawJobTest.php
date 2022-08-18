@@ -1,17 +1,17 @@
 <?php
 
-namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal;
+namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
+use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\RawJob;
-use PHPUnit\Framework\TestCase;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\RawJob;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\RawJob
+ * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\RawJob
  * @uses \SimpleSAML\Module\accounting\Entities\AuthenticationEvent
  */
 class RawJobTest extends TestCase
@@ -35,7 +35,7 @@ class RawJobTest extends TestCase
     public function testCanInstantiateValidRawJob(): void
     {
         $abstractPlatform = new SqlitePlatform();
-        $rawJob = new RawJob($this->validRawRow, $abstractPlatform);
+        $rawJob = new JobsStore\RawJob($this->validRawRow, $abstractPlatform);
         $this->assertSame($rawJob->getId(), $this->validRawRow[JobsStore::COLUMN_NAME_ID]);
         $this->assertEquals($rawJob->getPayload(), $this->authenticationEvent);
         $this->assertSame($rawJob->getType(), $this->validRawRow[JobsStore::COLUMN_NAME_TYPE]);
@@ -83,7 +83,7 @@ class RawJobTest extends TestCase
         $this->expectException(UnexpectedValueException::class);
 
         /** @psalm-suppress InvalidArgument */
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
+        new JobsStore\RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 
     public function testThrowsOnNonStringType(): void
@@ -94,7 +94,7 @@ class RawJobTest extends TestCase
         $this->expectException(UnexpectedValueException::class);
 
         /** @psalm-suppress InvalidArgument */
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
+        new JobsStore\RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 
     public function testThrowsOnNonStringCreatedAt(): void
@@ -116,6 +116,6 @@ class RawJobTest extends TestCase
         $this->expectException(UnexpectedValueException::class);
 
         /** @psalm-suppress InvalidArgument */
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
+        new JobsStore\RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 }

@@ -23,14 +23,20 @@ class AbstractJobTest extends TestCase
         };
     }
 
-    public function testCanSetAndGetPayload(): void
+    public function testCanInitializeProperties(): void
     {
-        $job = new class ($this->payload) extends AbstractJob  {
-            public function run(): void
+        $id = 1;
+        $createdAt = new \DateTimeImmutable();
+        $job = new class ($this->payload, $id, $createdAt) extends AbstractJob  {
+            public function getType(): string
             {
+                return self::class;
             }
         };
 
+        $this->assertSame($id, $job->getId());
+        $this->assertSame($createdAt, $job->getCreatedAt());
+        $this->assertSame(get_class($job), $job->getType());
         $this->assertInstanceOf(AbstractPayload::class, $job->getPayload());
     }
 }

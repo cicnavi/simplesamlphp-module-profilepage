@@ -31,4 +31,11 @@ class JobTest extends TestCase
 
         (new Job($payload));
     }
+
+    public function testCanGetProperType(): void
+    {
+        $job = new Job(new AuthenticationEvent(['sample' => 'state']));
+
+        $this->assertSame(Job::class, $job->getType());
+    }
 }
