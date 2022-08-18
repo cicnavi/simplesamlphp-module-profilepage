@@ -29,9 +29,9 @@ $config = [
     /**
      * Jobs store. Determines which of the available stores will be used to store jobs in case the 'asynchronous'
      * accounting processing type was set.
-     * This class must implement Stores\Interfaces\JobsStoreInterface.
+     * Provided class must implement Stores\Interfaces\JobsStoreInterface.
      */
-    ModuleConfiguration::OPTION_JOBS_STORE => Stores\Jobs\DoctrineDbal\JobsStore::class,
+    ModuleConfiguration::OPTION_JOBS_STORE => 'invalid',
 
     /**
      * Store connection for particular store. Can be used to set different connections for different stores.

@@ -7,6 +7,7 @@ namespace SimpleSAML\Module\accounting;
 use Exception;
 use SimpleSAML\Configuration;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\accounting\Stores\Interfaces\JobsStoreInterface;
 
 class ModuleConfiguration
 {
@@ -61,6 +62,17 @@ class ModuleConfiguration
     public function getConfiguration(): Configuration
     {
         return $this->configuration;
+    }
+
+    public function getJobsStore(): string
+    {
+        $jobsStore = $this->getConfiguration()->getString(self::OPTION_JOBS_STORE);
+
+        if (! class_exists($jobsStore) || ! is_subclass_of($jobsStore, JobsStoreInterface::class)) {
+            throw new InvalidConfigurationException('Provided jobs store class does not implement JobsStoreInterface.');
+        }
+
+        return $jobsStore;
     }
 
     public function getStoreConnection(string $store): string

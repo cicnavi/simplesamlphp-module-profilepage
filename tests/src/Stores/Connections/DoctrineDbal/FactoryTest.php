@@ -3,7 +3,7 @@
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\LoggerService;
+use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +28,7 @@ class FactoryTest extends TestCase
     {
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
-        $this->loggerServiceMock = $this->createMock(LoggerService::class);
+        $this->loggerServiceMock = $this->createMock(Logger::class);
     }
 
     public function testCanBuildConnection(): void

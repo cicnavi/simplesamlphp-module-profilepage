@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\LoggerService;
+use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
@@ -56,7 +56,7 @@ class MigratorTest extends TestCase
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
         $this->tableName = $this->connection->preparePrefixedTableName(Migrator::TABLE_NAME);
 
-        $this->loggerServiceMock = $this->createMock(LoggerService::class);
+        $this->loggerServiceMock = $this->createMock(Logger::class);
 
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
@@ -66,7 +66,7 @@ class MigratorTest extends TestCase
     {
         $this->assertFalse($this->schemaManager->tablesExist([$this->tableName]));
 
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $this->assertTrue($migrator->needsSetup());
@@ -84,7 +84,7 @@ class MigratorTest extends TestCase
             ->method('warning')
             ->with($this->stringContains('setup is not needed'));
 
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $this->assertTrue($migrator->needsSetup());

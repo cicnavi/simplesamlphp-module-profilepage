@@ -2,17 +2,17 @@
 
 namespace SimpleSAML\Test\Module\accounting\Services;
 
-use SimpleSAML\Module\accounting\Services\LoggerService;
+use SimpleSAML\Module\accounting\Services\Logger;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\LoggerService
+ * @covers \SimpleSAML\Module\accounting\Services\Logger
  */
 class LoggerServiceTest extends TestCase
 {
     public function testCanCallAllMethods(): void
     {
-        $loggerService = new LoggerService();
+        $loggerService = new Logger();
 
         $loggerService->stats('test');
         $loggerService->debug('test');

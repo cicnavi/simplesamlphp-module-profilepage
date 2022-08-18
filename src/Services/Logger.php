@@ -6,9 +6,9 @@ namespace SimpleSAML\Module\accounting\Services;
 
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
-use SimpleSAML\Logger;
+use SimpleSAML\Logger as SspLogger;
 
-class LoggerService extends AbstractLogger
+class Logger extends AbstractLogger
 {
     public function log($level, $message, array $context = [])
     {
@@ -18,28 +18,28 @@ class LoggerService extends AbstractLogger
 
         switch ($level) {
             case LogLevel::EMERGENCY:
-                Logger::emergency($message);
+                SspLogger::emergency($message);
                 break;
             case LogLevel::CRITICAL:
-                Logger::critical($message);
+                SspLogger::critical($message);
                 break;
             case LogLevel::ALERT:
-                Logger::alert($message);
+                SspLogger::alert($message);
                 break;
             case LogLevel::ERROR:
-                Logger::error($message);
+                SspLogger::error($message);
                 break;
             case LogLevel::WARNING:
-                Logger::warning($message);
+                SspLogger::warning($message);
                 break;
             case LogLevel::NOTICE:
-                Logger::notice($message);
+                SspLogger::notice($message);
                 break;
             case LogLevel::INFO:
-                Logger::info($message);
+                SspLogger::info($message);
                 break;
             case LogLevel::DEBUG:
-                Logger::debug($message);
+                SspLogger::debug($message);
                 break;
         }
     }
@@ -51,6 +51,6 @@ class LoggerService extends AbstractLogger
      */
     public function stats(string $message): void
     {
-        Logger::stats($message);
+        SspLogger::stats($message);
     }
 }

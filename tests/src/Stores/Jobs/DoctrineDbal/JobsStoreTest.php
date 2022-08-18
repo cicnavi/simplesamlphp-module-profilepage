@@ -9,7 +9,7 @@ use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\LoggerService;
+use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
@@ -48,7 +48,7 @@ class JobsStoreTest extends TestCase
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
         $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
 
-        $this->loggerServiceStub = $this->createStub(LoggerService::class);
+        $this->loggerServiceStub = $this->createStub(Logger::class);
 
         /** @psalm-suppress InvalidArgument */
         $this->migrator = new Migrator($this->connection, $this->loggerServiceStub);

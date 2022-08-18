@@ -11,11 +11,13 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Interfaces\JobsStoreInterface;
+use SimpleSAML\Module\accounting\Stores\Interfaces\StoreInterface;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Repository;
 use Throwable;
 
@@ -178,5 +180,14 @@ class JobsStore implements JobsStoreInterface
     public function getPrefixedTableNameFailedJobs(): string
     {
         return $this->prefixedTableNameFailedJobs;
+    }
+
+    public static function build(ModuleConfiguration $moduleConfiguration): self
+    {
+        return new self(
+            $moduleConfiguration,
+            new Factory($moduleConfiguration, new Logger()),
+            new Logger()
+        );
     }
 }
