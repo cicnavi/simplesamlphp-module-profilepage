@@ -3,6 +3,11 @@ services:
   _defaults:
     autowire: true
     public: false
+    bind:
+# it doesn't work...
+      Psr\Log\LoggerInterface $loggerkita: '@accounting.logger'
 
   SimpleSAML\Module\accounting\:
     resource: '../../src/*'
+  accounting.logger:
+    class: SimpleSAML\Module\accounting\Services\Logger

@@ -4,6 +4,7 @@ namespace SimpleSAML\Module\accounting\Auth\Process;
 
 use SimpleSAML\Auth\ProcessingFilter;
 use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 
@@ -41,7 +42,8 @@ class Accounting extends ProcessingFilter
             return;
         }
 
-        // TODO Do the processing synchronously...
+        // TODO Do the processing right away...
+        // Since LoggerInterface doesn't bind to SimpleSAML\Module\accounting\Services\Logger, move to implementation
     }
 
     protected function isAccountingProcessingTypeAsynchronous(): bool
@@ -50,9 +52,11 @@ class Accounting extends ProcessingFilter
             ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS;
     }
 
+    /**
+     * @throws StoreException
+     */
     protected function createAuthenticationEventJob(AuthenticationEvent $authenticationEvent): void
     {
-        ($this->jobsStoreBuilder->build($this->moduleConfiguration->getJobsStore()))
-            ->enqueue(new AuthenticationEvent\Job($authenticationEvent));
+        ($this->jobsStoreBuilder->build())->enqueue(new AuthenticationEvent\Job($authenticationEvent));
     }
 }

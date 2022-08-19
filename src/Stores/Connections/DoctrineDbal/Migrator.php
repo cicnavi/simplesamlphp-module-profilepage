@@ -43,7 +43,7 @@ class Migrator extends AbstractMigrator
         try {
             $this->schemaManager = ($this->connection->dbal())->createSchemaManager();
         } catch (Throwable $exception) {
-            $message = sprintf('Could not create DBAL schema manager. Error was %s.', $exception->getMessage());
+            $message = sprintf("Could not create DBAL schema manager. Error was:\n%s", $exception->getMessage());
             throw new StoreException($message, (int) $exception->getCode(), $exception);
         }
         $this->prefixedTableName = $this->connection->preparePrefixedTableName(self::TABLE_NAME);
@@ -57,7 +57,11 @@ class Migrator extends AbstractMigrator
         try {
             return ! $this->schemaManager->tablesExist([$this->prefixedTableName]);
         } catch (Throwable $exception) {
-            $message = sprintf('Could not check table %s existence using schema manager.', $this->prefixedTableName);
+            $message = sprintf(
+                "Could not check table '%s' existence using schema manager. Error was:\n%s",
+                $this->prefixedTableName,
+                $exception->getMessage()
+            );
             throw new StoreException($message, (int) $exception->getCode(), $exception);
         }
     }
