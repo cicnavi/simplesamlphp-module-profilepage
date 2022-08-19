@@ -1,7 +1,8 @@
 services:
   # default configuration for services in *this* file
   _defaults:
+    autowire: true
     public: false
 
-  SimpleSAML\Module\accounting\ModuleConfiguration:
-    class: SimpleSAML\Module\accounting\ModuleConfiguration
+  SimpleSAML\Module\accounting\:
+    resource: '../../src/*'

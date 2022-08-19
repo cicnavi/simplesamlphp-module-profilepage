@@ -7,6 +7,7 @@ namespace SimpleSAML\Module\accounting;
 use Exception;
 use SimpleSAML\Configuration;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\accounting\ModuleConfiguration\AccountingProcessingType;
 use SimpleSAML\Module\accounting\Stores\Interfaces\JobsStoreInterface;
 
 class ModuleConfiguration
@@ -35,6 +36,8 @@ class ModuleConfiguration
         $fileName = $fileName ?? self::FILE_NAME;
 
         $this->configuration = Configuration::getConfig($fileName);
+
+        $this->validate();
     }
 
     /**
@@ -54,6 +57,16 @@ class ModuleConfiguration
         return $this->configuration->getValue($option);
     }
 
+    public function getUserIdAttribute(): string
+    {
+        return $this->getConfiguration()->getString(self::OPTION_USER_ID_ATTRIBUTE);
+    }
+
+    public function getAccountingProcessingType(): string
+    {
+        return $this->getConfiguration()->getString(self::OPTION_ACCOUNTING_PROCESSING_TYPE);
+    }
+
     /**
      * Get underlying SimpleSAMLphp Configuration instance.
      *
@@ -66,13 +79,7 @@ class ModuleConfiguration
 
     public function getJobsStore(): string
     {
-        $jobsStore = $this->getConfiguration()->getString(self::OPTION_JOBS_STORE);
-
-        if (! class_exists($jobsStore) || ! is_subclass_of($jobsStore, JobsStoreInterface::class)) {
-            throw new InvalidConfigurationException('Provided jobs store class does not implement JobsStoreInterface.');
-        }
-
-        return $jobsStore;
+        return $this->getConfiguration()->getString(self::OPTION_JOBS_STORE);
     }
 
     public function getStoreConnection(string $store): string
@@ -119,5 +126,29 @@ class ModuleConfiguration
     public function getModuleRootDirectory(): string
     {
         return dirname(__DIR__);
+    }
+
+    protected function validate()
+    {
+        $errors = [];
+
+        // Only defined accounting processing types are allowed.
+        if (! in_array($this->getAccountingProcessingType(), AccountingProcessingType::VALID_OPTIONS)) {
+            $errors[] = sprintf(
+                'Accounting processing type is not valid. Possible values are: %s.',
+                implode(', ', AccountingProcessingType::VALID_OPTIONS)
+            );
+        }
+
+        // Jobs store class must implement JobsStoreInterface
+        $jobsStore = $this->getConfiguration()->getString(self::OPTION_JOBS_STORE);
+        if (! class_exists($jobsStore) || ! is_subclass_of($jobsStore, JobsStoreInterface::class)) {
+            throw new InvalidConfigurationException('Provided jobs store class does not implement JobsStoreInterface.');
+        }
+
+        if (! empty($errors)) {
+            $message = sprintf('Module configuration validation failed. Errors were: %s.', implode('; '));
+            throw new InvalidConfigurationException($message);
+        }
     }
 }

@@ -3,8 +3,8 @@
 namespace SimpleSAML\Module\accounting\Auth\Process;
 
 use SimpleSAML\Auth\ProcessingFilter;
+use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 
 class Accounting extends ProcessingFilter
@@ -33,6 +33,26 @@ class Accounting extends ProcessingFilter
 
     public function process(array &$state): void
     {
-        // TODO: Implement process() method.
+        $authenticationEvent = new AuthenticationEvent($state);
+
+        if ($this->isAccountingProcessingTypeAsynchronous()) {
+            // Only create authentication event job for later processing...
+            $this->createAuthenticationEventJob($authenticationEvent);
+            return;
+        }
+
+        // TODO Do the processing synchronously...
+    }
+
+    protected function isAccountingProcessingTypeAsynchronous(): bool
+    {
+        return $this->moduleConfiguration->getAccountingProcessingType() ===
+            ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS;
+    }
+
+    protected function createAuthenticationEventJob(AuthenticationEvent $authenticationEvent): void
+    {
+        ($this->jobsStoreBuilder->build($this->moduleConfiguration->getJobsStore()))
+            ->enqueue(new AuthenticationEvent\Job($authenticationEvent));
     }
 }

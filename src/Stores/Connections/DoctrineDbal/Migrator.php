@@ -41,9 +41,9 @@ class Migrator extends AbstractMigrator
         $this->logger = $logger;
 
         try {
-            $this->schemaManager = $this->connection->dbal()->createSchemaManager();
+            $this->schemaManager = ($this->connection->dbal())->createSchemaManager();
         } catch (Throwable $exception) {
-            $message = 'Could not create DBAL schema manager.';
+            $message = sprintf('Could not create DBAL schema manager. Error was %s.', $exception->getMessage());
             throw new StoreException($message, (int) $exception->getCode(), $exception);
         }
         $this->prefixedTableName = $this->connection->preparePrefixedTableName(self::TABLE_NAME);

@@ -8,13 +8,18 @@ use SimpleSAML\Module\accounting\Stores\Interfaces\JobsStoreInterface;
 
 class JobsStoreBuilder extends AbstractStoreBuilder
 {
-    public function build(string $class): JobsStoreInterface
+    /**
+     * @throws StoreException
+     */
+    public function build(): JobsStoreInterface
     {
-        $store = parent::build($class);
+        $jobsStoreClass = $this->moduleConfiguration->getJobsStore();
+
+        $store = $this->buildGenericStore($jobsStoreClass);
 
         /** @noinspection PhpConditionAlreadyCheckedInspection */
         if (! $store instanceof JobsStoreInterface) {
-            throw new StoreException(\sprintf('Class %s does not implement JobsStoreInterface.', $class));
+            throw new StoreException(\sprintf('Class %s does not implement JobsStoreInterface.', $jobsStoreClass));
         }
 
         return $store;

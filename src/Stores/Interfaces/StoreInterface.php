@@ -8,7 +8,7 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 interface StoreInterface
 {
-    public function needsSetUp(): bool;
+    public function needsSetup(): bool;
     public function runSetup(): void;
 
     public static function build(ModuleConfiguration $moduleConfiguration): self;

@@ -8,6 +8,7 @@ use Exception;
 use SimpleSAML\Configuration;
 use SimpleSAML\Locale\Translate;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Session;
 use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,9 +43,12 @@ class Test
     {
         $template = new Template($this->configuration, 'accounting:configuration.twig');
 
+        $jobsStore = (new JobsStoreBuilder($this->moduleConfiguration))->build();
+
         $template->data = [
             'test' => Translate::noop('Accounting'),
-            'test_config' => $this->moduleConfiguration->getConfiguration()->getString('test_config'),
+            'jobs_store' => $this->moduleConfiguration->getJobsStore(),
+//            'jobs_store_needs_setup' => $jobsStore->needsSetup()
         ];
 
         return $template;

@@ -59,7 +59,7 @@ $config = [
             //'unix_socket' => 'unix_socet', // (string): Name of the socket used to connect to the database.
             'charset' => 'utf8', // (string): The charset used when connecting to the database.
             //'url' => 'mysql://user:secret@localhost/mydb?charset=utf8', // ...alternative way of providing parameters.
-            // Additional parameters not originaly avaliable in Doctrine DBAL
+            // Additional parameters not originally available in Doctrine DBAL
             'table_prefix' => '', // (string): Prefix for each table.
         ],
         'doctrine_dbal_pdo_sqlite' => [
@@ -70,7 +70,7 @@ $config = [
             // Mutually exclusive with path. path takes precedence.
             //'url' => 'sqlite:////path/to/db.sqlite // ...alternative way of providing path parameter.
             //'url' => 'sqlite:///:memory:' // ...alternative way of providing memory parameter.
-            // Additional parameters not originaly avaliable in Doctrine DBAL
+            // Additional parameters not originally available in Doctrine DBAL
             'table_prefix' => '', // (string): Prefix for each table.
         ],
     ],

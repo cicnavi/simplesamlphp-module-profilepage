@@ -22,7 +22,7 @@ class AbstractStoreBuilder
     /**
      * @throws StoreException
      */
-    public function build(string $class): StoreInterface
+    protected function buildGenericStore(string $class): StoreInterface
     {
         // Make sure that the class implements StoreInterface
         if (!is_subclass_of($class, StoreInterface::class)) {
@@ -34,7 +34,8 @@ class AbstractStoreBuilder
             /** @var StoreInterface $store */
             $store = $reflectionMethod->invoke(null, $this->moduleConfiguration);
         } catch (Throwable $exception) {
-            $message = 'Error building store for class %s.';
+            throw $exception;
+            $message = sprintf('Error building store for class %s. Error was: %s', $class, $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
 

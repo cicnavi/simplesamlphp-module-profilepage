@@ -72,7 +72,7 @@ class JobsStoreBuilderTest extends TestCase
     public function testJobsStoreBuilderOnlyReturnsJobsStores(): void
     {
         $sampleStore = new class implements StoreInterface {
-            public function needsSetUp(): bool
+            public function needsSetup(): bool
             {
                 return false;
             }
