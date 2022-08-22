@@ -24,6 +24,7 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\JobsTableHelper
  */
 class AbstractMigratorTest extends TestCase
 {

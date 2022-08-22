@@ -20,17 +20,7 @@ class Version20220601000100CreateFailedJobsTable extends AbstractMigration
     {
         $tableName = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_FAILED_JOBS);
         try {
-            $table = new Table($tableName);
-
-            $table->addColumn('id', Types::BIGINT)
-                ->setUnsigned(true)
-                ->setAutoincrement(true);
-
-            $table->addColumn('payload', Types::TEXT);
-            $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
-
-            $table->setPrimaryKey(['id']);
-
+            $table = Store\JobsTableHelper::prepareJobsTable($tableName);
             $this->schemaManager->createTable($table);
         } catch (Throwable $exception) {
             $contextDetails = sprintf('Could not create table %s.', $tableName);

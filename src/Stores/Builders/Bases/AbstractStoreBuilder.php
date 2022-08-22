@@ -17,9 +17,9 @@ class AbstractStoreBuilder
 {
     protected ModuleConfiguration $moduleConfiguration;
 
-    public function __construct(ModuleConfiguration $moduleConfiguration = null)
+    public function __construct(ModuleConfiguration $moduleConfiguration)
     {
-        $this->moduleConfiguration = $moduleConfiguration ?? new ModuleConfiguration();
+        $this->moduleConfiguration = $moduleConfiguration;
     }
 
     /**

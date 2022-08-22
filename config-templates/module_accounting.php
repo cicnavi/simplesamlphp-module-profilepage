@@ -28,21 +28,27 @@ $config = [
         ModuleConfiguration\AccountingProcessingType::VALUE_SYNCHRONOUS,
 
     /**
-     * Jobs store. Determines which of the available stores will be used to store jobs in case the 'asynchronous'
-     * accounting processing type was set.
-     * This class must implement Stores\Interfaces\JobsStoreInterface.
+     * Jobs store class. In case of case the 'asynchronous' accounting processing type was set, this determines
+     * which class will be used to store jobs. The class must implement Stores\Interfaces\JobsStoreInterface.
      */
     ModuleConfiguration::OPTION_JOBS_STORE_CLASS => Stores\Jobs\DoctrineDbal\Store::class,
 
     /**
+     * Jobs store connection key. Determines which connection will be used for job persistence. The key must
+     * be present in the "connections and their parameters" configuration option below.
+     */
+    ModuleConfiguration::OPTION_JOBS_STORE_CONNECTION_KEY => 'doctrine_dbal_pdo_mysql',
+
+    /**
      * Store connection for particular store. Can be used to set different connections for different stores.
+     * TODO mivanci convert this to tracker to connection key map
      */
     ModuleConfiguration::OPTION_STORE_TO_CONNECTION_KEY_MAP => [
         Stores\Jobs\DoctrineDbal\Store::class => 'doctrine_dbal_pdo_mysql',
     ],
 
     /**
-     * Store connections and their parameters.
+     * Connections and their parameters.
      *
      * Any compatible Doctrine DBAL implementation can be used:
      * https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html

@@ -26,6 +26,7 @@ use function PHPUnit\Framework\assertFalse;
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\JobsTableHelper
  */
 class MigratorTest extends TestCase
 {

@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\JobsTableHelper
  */
 class Version20220601000000CreateJobsTableTest extends TestCase
 {

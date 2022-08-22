@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal;
 
+use Doctrine\DBAL\Schema\Table;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
@@ -40,6 +41,9 @@ class Store implements JobsStoreInterface
     protected LoggerInterface $logger;
     protected Repository $jobsRepository;
 
+    /**
+     * @throws StoreException
+     */
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
         Factory $factory,
@@ -181,6 +185,9 @@ class Store implements JobsStoreInterface
         return $this->prefixedTableNameFailedJobs;
     }
 
+    /**
+     * @throws StoreException
+     */
     public static function build(ModuleConfiguration $moduleConfiguration): self
     {
         return new self(

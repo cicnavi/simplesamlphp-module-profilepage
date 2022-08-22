@@ -21,20 +21,7 @@ class Version20220601000000CreateJobsTable extends AbstractMigration
         $tableName = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
 
         try {
-            $table = new Table($tableName);
-
-            $table->addColumn(Store::COLUMN_NAME_ID, Types::BIGINT)
-                ->setUnsigned(true)
-                ->setAutoincrement(true);
-
-            $table->addColumn(Store::COLUMN_NAME_TYPE, Types::STRING)
-                ->setLength(Store::COLUMN_LENGTH_TYPE);
-
-            $table->addColumn(Store::COLUMN_NAME_PAYLOAD, Types::TEXT);
-            $table->addColumn(Store::COLUMN_NAME_CREATED_AT, Types::DATETIMETZ_IMMUTABLE);
-
-            $table->setPrimaryKey([Store::COLUMN_NAME_ID]);
-
+            $table = Store\JobsTableHelper::prepareJobsTable($tableName);
             $this->schemaManager->createTable($table);
         } catch (Throwable $exception) {
             $contextDetails = sprintf('Could not create table %s.', $tableName);

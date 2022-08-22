@@ -31,6 +31,7 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\JobsTableHelper
  */
 class StoreTest extends TestCase
 {

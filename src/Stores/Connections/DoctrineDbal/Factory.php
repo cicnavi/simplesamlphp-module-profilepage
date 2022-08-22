@@ -27,8 +27,8 @@ class Factory
     /**
      * @throws StoreException
      */
-    public function buildMigrator(Connection $connection, LoggerInterface $loggerService = null): Migrator
+    public function buildMigrator(Connection $connection): Migrator
     {
-        return new Migrator($connection, $loggerService ?? $this->loggerService);
+        return new Migrator($connection, $this->loggerService);
     }
 }

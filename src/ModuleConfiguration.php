@@ -20,6 +20,7 @@ class ModuleConfiguration
     public const OPTION_USER_ID_ATTRIBUTE_NAME = 'user_id_attribute_name';
     public const OPTION_ACCOUNTING_PROCESSING_TYPE = 'accounting_processing_type';
     public const OPTION_JOBS_STORE_CLASS = 'jobs_store';
+    public const OPTION_JOBS_STORE_CONNECTION_KEY = 'jobs_store_connection_key';
     public const OPTION_ALL_STORE_CONNECTIONS_AND_PARAMETERS = 'all_store_connection_and_parameters';
     public const OPTION_STORE_TO_CONNECTION_KEY_MAP = 'store_to_connection_key_map';
 
