@@ -1,20 +1,21 @@
 <?php
 
-namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations;
+namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000000CreateJobsTable;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000000CreateJobsTable
+ * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
+ *
  */
-class Version20220601000000CreateJobsTableTest extends TestCase
+class Version20220601000100CreateFailedJobsTableTest extends TestCase
 {
     protected Connection $connection;
     protected \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager;
@@ -24,13 +25,13 @@ class Version20220601000000CreateJobsTableTest extends TestCase
     {
         $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
-        $this->tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
+        $this->tableName = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_FAILED_JOBS);
     }
 
     public function testCanRunMigration(): void
     {
         $this->assertFalse($this->schemaManager->tablesExist($this->tableName));
-        $migration = new Version20220601000000CreateJobsTable($this->connection);
+        $migration = new Migrations\Version20220601000100CreateFailedJobsTable($this->connection);
         $migration->run();
         $this->assertTrue($this->schemaManager->tablesExist($this->tableName));
         $migration->revert();
@@ -48,7 +49,7 @@ class Version20220601000000CreateJobsTableTest extends TestCase
         $schemaManagerStub->method('createTable')
             ->willThrowException(new \Doctrine\DBAL\Exception('test'));
 
-        $migration = new Version20220601000000CreateJobsTable($connectionStub);
+        $migration = new Migrations\Version20220601000100CreateFailedJobsTable($connectionStub);
         $this->expectException(MigrationException::class);
         $migration->run();
     }
@@ -64,7 +65,7 @@ class Version20220601000000CreateJobsTableTest extends TestCase
         $schemaManagerStub->method('dropTable')
             ->willThrowException(new \Doctrine\DBAL\Exception('test'));
 
-        $migration = new Version20220601000000CreateJobsTable($connectionStub);
+        $migration = new Migrations\Version20220601000100CreateFailedJobsTable($connectionStub);
         $this->expectException(MigrationException::class);
         $migration->revert();
     }

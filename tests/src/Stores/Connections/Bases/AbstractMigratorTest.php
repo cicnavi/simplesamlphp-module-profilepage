@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\Bases;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
@@ -19,8 +21,8 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000000CreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000100CreateFailedJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
  */
 class AbstractMigratorTest extends TestCase
@@ -85,7 +87,7 @@ class AbstractMigratorTest extends TestCase
 
         $migrationClasses = $migrator->gatherMigrationClassesFromDirectory($directory, $namespace);
 
-        $jobsTableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
+        $jobsTableName = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
 
         $this->assertFalse($this->schemaManager->tablesExist($jobsTableName));
 
@@ -140,7 +142,7 @@ class AbstractMigratorTest extends TestCase
         );
 
         $this->assertTrue(in_array(
-            JobsStore\Migrations\Version20220601000000CreateJobsTable::class,
+            Store\Migrations\Version20220601000000CreateJobsTable::class,
             $nonImplementedMigrationClasses
         ));
     }
@@ -179,11 +181,11 @@ class AbstractMigratorTest extends TestCase
     {
         return $this->moduleConfiguration->getModuleSourceDirectory() . DIRECTORY_SEPARATOR .
             'Stores' . DIRECTORY_SEPARATOR . 'Jobs' . DIRECTORY_SEPARATOR . 'DoctrineDbal' . DIRECTORY_SEPARATOR .
-            'JobsStore' . DIRECTORY_SEPARATOR . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
+            'Store' . DIRECTORY_SEPARATOR . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 
     protected function getSampleNameSpace(): string
     {
-        return JobsStore::class . '\\' . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
+        return Store::class . '\\' . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 }

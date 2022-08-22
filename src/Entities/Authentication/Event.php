@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities;
+namespace SimpleSAML\Module\accounting\Entities\Authentication;
 
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 
-class AuthenticationEvent extends AbstractPayload
+class Event extends AbstractPayload
 {
     protected array $state;
 

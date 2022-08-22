@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
+namespace SimpleSAML\Module\accounting\Entities\Authentication\Event;
 
-use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
+use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 
 class Job extends AbstractJob
 {
-    public function getPayload(): AuthenticationEvent
+    public function getPayload(): Event
     {
         return $this->validatePayload($this->payload);
     }
@@ -21,10 +21,10 @@ class Job extends AbstractJob
         $this->payload = $this->validatePayload($payload);
     }
 
-    protected function validatePayload(AbstractPayload $payload): AuthenticationEvent
+    protected function validatePayload(AbstractPayload $payload): Event
     {
-        if (! ($payload instanceof AuthenticationEvent)) {
-            throw new UnexpectedValueException('AuthenticationEvent Job payload must be of type AuthenticationEvent.');
+        if (! ($payload instanceof Event)) {
+            throw new UnexpectedValueException('Event Job payload must be of type Event.');
         }
 
         return $payload;

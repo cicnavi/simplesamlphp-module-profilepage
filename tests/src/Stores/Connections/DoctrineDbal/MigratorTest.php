@@ -13,7 +13,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
 use function PHPUnit\Framework\assertFalse;
 
@@ -22,8 +22,8 @@ use function PHPUnit\Framework\assertFalse;
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000000CreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000100CreateFailedJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
  */
@@ -100,10 +100,10 @@ class MigratorTest extends TestCase
 
         $migrator->runSetup();
 
-        $tableNameJobs = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
+        $tableNameJobs = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
         $this > assertFalse($this->schemaManager->tablesExist($tableNameJobs));
 
-        $migrator->runMigrationClasses([JobsStore\Migrations\Version20220601000000CreateJobsTable::class]);
+        $migrator->runMigrationClasses([Store\Migrations\Version20220601000000CreateJobsTable::class]);
 
         $this->assertTrue($this->schemaManager->tablesExist($tableNameJobs));
     }
@@ -212,7 +212,7 @@ class MigratorTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        $migrator->runMigrationClasses([JobsStore\Migrations\Version20220601000000CreateJobsTable::class]);
+        $migrator->runMigrationClasses([Store\Migrations\Version20220601000000CreateJobsTable::class]);
     }
 
     public function testThrowsStoreExceptionOnGetImplementedMigrationClasses(): void
@@ -234,11 +234,11 @@ class MigratorTest extends TestCase
     {
         return $this->moduleConfiguration->getModuleSourceDirectory() . DIRECTORY_SEPARATOR .
             'Stores' . DIRECTORY_SEPARATOR . 'Jobs' . DIRECTORY_SEPARATOR . 'DoctrineDbal' . DIRECTORY_SEPARATOR .
-            'JobsStore' . DIRECTORY_SEPARATOR . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
+            'Store' . DIRECTORY_SEPARATOR . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 
     protected function getSampleNameSpace(): string
     {
-        return JobsStore::class . '\\' . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
+        return Store::class . '\\' . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 }

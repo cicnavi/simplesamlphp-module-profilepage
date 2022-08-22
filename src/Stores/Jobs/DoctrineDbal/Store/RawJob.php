@@ -2,21 +2,25 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
+use Throwable;
+
+use function sprintf;
 
 class RawJob
 {
     protected int $id;
     protected AbstractPayload $payload;
     protected string $type;
-    protected \DateTimeImmutable $createdAt;
+    protected DateTimeImmutable $createdAt;
     protected AbstractPlatform $abstractPlatform;
 
     public function __construct(array $rawRow, AbstractPlatform $abstractPlatform)
@@ -25,19 +29,19 @@ class RawJob
 
         $this->validate($rawRow);
 
-        $this->id = (int)$rawRow[JobsStore::COLUMN_NAME_ID];
-        $this->payload = $this->resolvePayload((string)$rawRow[JobsStore::COLUMN_NAME_PAYLOAD]);
-        $this->type = (string)$rawRow[JobsStore::COLUMN_NAME_TYPE];
+        $this->id = (int)$rawRow[Store::COLUMN_NAME_ID];
+        $this->payload = $this->resolvePayload((string)$rawRow[Store::COLUMN_NAME_PAYLOAD]);
+        $this->type = (string)$rawRow[Store::COLUMN_NAME_TYPE];
         $this->createdAt = $this->resolveCreatedAt($rawRow);
     }
 
     protected function validate(array $rawRow): void
     {
         $columnsToCheck = [
-            JobsStore::COLUMN_NAME_ID,
-            JobsStore::COLUMN_NAME_PAYLOAD,
-            JobsStore::COLUMN_NAME_TYPE,
-            JobsStore::COLUMN_NAME_CREATED_AT,
+            Store::COLUMN_NAME_ID,
+            Store::COLUMN_NAME_PAYLOAD,
+            Store::COLUMN_NAME_TYPE,
+            Store::COLUMN_NAME_CREATED_AT,
         ];
 
         foreach ($columnsToCheck as $column) {
@@ -46,20 +50,20 @@ class RawJob
             }
         }
 
-        if (! is_numeric($rawRow[JobsStore::COLUMN_NAME_ID])) {
-            throw new UnexpectedValueException(sprintf('Column %s must be numeric.', JobsStore::COLUMN_NAME_ID));
+        if (! is_numeric($rawRow[Store::COLUMN_NAME_ID])) {
+            throw new UnexpectedValueException(sprintf('Column %s must be numeric.', Store::COLUMN_NAME_ID));
         }
 
-        if (! is_string($rawRow[JobsStore::COLUMN_NAME_PAYLOAD])) {
-            throw new UnexpectedValueException(sprintf('Column %s must be string.', JobsStore::COLUMN_NAME_PAYLOAD));
+        if (! is_string($rawRow[Store::COLUMN_NAME_PAYLOAD])) {
+            throw new UnexpectedValueException(sprintf('Column %s must be string.', Store::COLUMN_NAME_PAYLOAD));
         }
 
-        if (! is_string($rawRow[JobsStore::COLUMN_NAME_TYPE])) {
-            throw new UnexpectedValueException(sprintf('Column %s must be string.', JobsStore::COLUMN_NAME_TYPE));
+        if (! is_string($rawRow[Store::COLUMN_NAME_TYPE])) {
+            throw new UnexpectedValueException(sprintf('Column %s must be string.', Store::COLUMN_NAME_TYPE));
         }
 
-        if (! is_string($rawRow[JobsStore::COLUMN_NAME_CREATED_AT])) {
-            throw new UnexpectedValueException(sprintf('Column %s must be string.', JobsStore::COLUMN_NAME_CREATED_AT));
+        if (! is_string($rawRow[Store::COLUMN_NAME_CREATED_AT])) {
+            throw new UnexpectedValueException(sprintf('Column %s must be string.', Store::COLUMN_NAME_CREATED_AT));
         }
     }
 
@@ -99,18 +103,18 @@ class RawJob
         return $this->type;
     }
 
-    protected function resolveCreatedAt(array $rawRow): \DateTimeImmutable
+    protected function resolveCreatedAt(array $rawRow): DateTimeImmutable
     {
         try {
-            /** @var \DateTimeImmutable $createdAt */
+            /** @var DateTimeImmutable $createdAt */
             $createdAt = (Type::getType(Types::DATETIME_IMMUTABLE))
-                ->convertToPHPValue($rawRow[JobsStore::COLUMN_NAME_CREATED_AT], $this->abstractPlatform);
-        } catch (\Throwable $exception) {
+                ->convertToPHPValue($rawRow[Store::COLUMN_NAME_CREATED_AT], $this->abstractPlatform);
+        } catch (Throwable $exception) {
             throw new UnexpectedValueException(
                 sprintf(
                     'Could not create instance of DateTimeImmutable using value %s for column %s.',
-                    var_export($rawRow[JobsStore::COLUMN_NAME_CREATED_AT], true),
-                    JobsStore::COLUMN_NAME_CREATED_AT
+                    var_export($rawRow[Store::COLUMN_NAME_CREATED_AT], true),
+                    Store::COLUMN_NAME_CREATED_AT
                 ),
                 (int)$exception->getCode(),
                 $exception
@@ -121,9 +125,9 @@ class RawJob
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return DateTimeImmutable
      */
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }

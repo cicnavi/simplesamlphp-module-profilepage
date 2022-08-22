@@ -3,7 +3,7 @@
 namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Entities\AuthenticationEvent;
+use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
@@ -13,10 +13,10 @@ use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore
+ * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory
@@ -24,15 +24,15 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000000CreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000100CreateFailedJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
  * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\RawJob
- * @uses \SimpleSAML\Module\accounting\Entities\AuthenticationEvent
- * @uses \SimpleSAML\Module\accounting\Entities\AuthenticationEvent\Job
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Repository
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\RawJob
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
  */
-class JobsStoreTest extends TestCase
+class StoreTest extends TestCase
 {
     protected ModuleConfiguration $moduleConfiguration;
     protected \PHPUnit\Framework\MockObject\Stub $factoryStub;
@@ -68,7 +68,7 @@ class JobsStoreTest extends TestCase
     public function testSetupDependsOnMigratorSetup(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
 
         $this->assertTrue($this->migrator->needsSetup());
         $this->assertTrue($jobsStore->needsSetup());
@@ -82,9 +82,9 @@ class JobsStoreTest extends TestCase
     public function testSetupDependsOnMigrations(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
 
-        // Run migrator setup beforehand, so it only depends on JobsStore migrations setup
+        // Run migrator setup beforehand, so it only depends on Store migrations setup
         $this->migrator->runSetup();
         $this->assertTrue($jobsStore->needsSetup());
 
@@ -96,19 +96,28 @@ class JobsStoreTest extends TestCase
     public function testCanGetPrefixedTableNames(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
 
-        $tableNameJobs = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
-        $tableNameFailedJobs = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_FAILED_JOBS);
+        $tableNameJobs = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
+        $tableNameFailedJobs = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_FAILED_JOBS);
 
         $this->assertSame($tableNameJobs, $jobsStore->getPrefixedTableNameJobs());
         $this->assertSame($tableNameFailedJobs, $jobsStore->getPrefixedTableNameFailedJobs());
     }
 
+    public function testCanBuildInstanceStatically(): void
+    {
+        $moduleConfiguration = $this->createStub(ModuleConfiguration::class);
+        $moduleConfiguration->method('getStoreConnectionParameters')
+            ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
+        /** @psalm-suppress InvalidArgument */
+        $this->assertInstanceOf(Store::class, Store::build($moduleConfiguration));
+    }
+
     public function testCanEnqueueJob(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
         $jobsStore->runSetup();
 
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -132,7 +141,7 @@ class JobsStoreTest extends TestCase
     public function testEnqueueThrowsStoreExceptionOnNonSetupRun(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
         // Don't run setup, so we get exception
         //$jobsStore->runSetup();
 
@@ -148,7 +157,7 @@ class JobsStoreTest extends TestCase
     public function testCanDequeueJob(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
         $jobsStore->runSetup();
 
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -171,11 +180,11 @@ class JobsStoreTest extends TestCase
     public function testCanDequeueSpecificJobType(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
         $jobsStore->runSetup();
 
-        $authenticationEvent = new AuthenticationEvent(['sample-state']);
-        $authenticationEventJob = new AuthenticationEvent\Job($authenticationEvent);
+        $authenticationEvent = new Event(['sample-state']);
+        $authenticationEventJob = new Event\Job($authenticationEvent);
 
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
         $queryBuilder->select('COUNT(id) as jobsCount')->from($jobsStore->getPrefixedTableNameJobs())->fetchOne();
@@ -188,11 +197,11 @@ class JobsStoreTest extends TestCase
 
         $this->assertSame(2, (int) $queryBuilder->executeQuery()->fetchOne());
 
-        $this->assertInstanceOf(AuthenticationEvent\Job::class, $jobsStore->dequeue(AuthenticationEvent\Job::class));
+        $this->assertInstanceOf(Event\Job::class, $jobsStore->dequeue(Event\Job::class));
 
         $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
 
-        $this->assertNull($jobsStore->dequeue(AuthenticationEvent::class));
+        $this->assertNull($jobsStore->dequeue(Event::class));
 
         $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
     }
@@ -200,7 +209,7 @@ class JobsStoreTest extends TestCase
     public function testDequeueThrowsWhenSetupNotRun(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
 //        $jobsStore->runSetup();
 
         $payloadStub = $this->createStub(AbstractPayload::class);
@@ -214,7 +223,7 @@ class JobsStoreTest extends TestCase
 
     public function testDequeueThrowsForJobWithInvalidId(): void
     {
-        $repositoryStub = $this->createStub(JobsStore\Repository::class);
+        $repositoryStub = $this->createStub(Store\Repository::class);
         $jobStub = $this->createStub(GenericJob::class);
         $jobStub->method('getPayload')->willReturn($this->payloadStub);
         $jobStub->method('getCreatedAt')->willReturn(new \DateTimeImmutable());
@@ -224,7 +233,7 @@ class JobsStoreTest extends TestCase
         $repositoryStub->method('getNext')->willReturn($jobStub);
 
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore(
+        $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->factoryStub,
             $this->loggerServiceStub,
@@ -239,12 +248,12 @@ class JobsStoreTest extends TestCase
 
     public function testDequeThrowsAfterMaxDeleteAttempts(): void
     {
-        $repositoryStub = $this->createStub(JobsStore\Repository::class);
+        $repositoryStub = $this->createStub(Store\Repository::class);
         $repositoryStub->method('getNext')->willReturn($this->jobStub);
         $repositoryStub->method('delete')->willReturn(false);
 
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore(
+        $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->factoryStub,
             $this->loggerServiceStub,
@@ -259,12 +268,12 @@ class JobsStoreTest extends TestCase
 
     public function testCanContinueSearchingInCaseOfJobDeletion(): void
     {
-        $repositoryStub = $this->createStub(JobsStore\Repository::class);
+        $repositoryStub = $this->createStub(Store\Repository::class);
         $repositoryStub->method('getNext')->willReturn($this->jobStub);
         $repositoryStub->method('delete')->willReturnOnConsecutiveCalls(false, true);
 
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new JobsStore(
+        $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->factoryStub,
             $this->loggerServiceStub,

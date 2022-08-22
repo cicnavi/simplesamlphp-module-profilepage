@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting;
 
 use PHPUnit\Framework\TestCase;
@@ -14,14 +16,12 @@ use SimpleSAML\Module\accounting\Stores;
 class ModuleConfigurationTest extends TestCase
 {
     protected ModuleConfiguration $moduleConfiguration;
-    protected ModuleConfiguration $invalidModuleConfiguration;
 
     protected function setUp(): void
     {
         parent::setUp();
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
-        $this->invalidModuleConfiguration = new ModuleConfiguration('invalid_module_accounting.php');
     }
 
     public function testCanGetUnderlyingConfigurationInstance(): void
@@ -38,13 +38,18 @@ class ModuleConfigurationTest extends TestCase
 
     public function testCanGetValidOption(): void
     {
-        $this->assertIsString($this->moduleConfiguration->get(ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE));
+        $this->assertIsString($this->moduleConfiguration->get(ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE_NAME));
+    }
+
+    public function testCanGetUserIdAttribute(): void
+    {
+        $this->assertIsString($this->moduleConfiguration->getUserIdAttributeName());
     }
 
     public function testCanGetJobsStore(): void
     {
         $this->assertTrue(
-            is_subclass_of($this->moduleConfiguration->getJobsStore(), Stores\Interfaces\JobsStoreInterface::class)
+            is_subclass_of($this->moduleConfiguration->getJobsStoreClass(), Stores\Interfaces\JobsStoreInterface::class)
         );
     }
 
@@ -52,14 +57,15 @@ class ModuleConfigurationTest extends TestCase
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        $this->invalidModuleConfiguration->getJobsStore();
+        $invalidModuleConfiguration = new ModuleConfiguration('invalid_module_accounting.php');
+        $invalidModuleConfiguration->getJobsStoreClass();
     }
 
     public function testProperConnectionKeyIsReturned(): void
     {
         $this->assertSame(
             'doctrine_dbal_pdo_mysql',
-            $this->moduleConfiguration->getStoreConnection(Stores\Jobs\DoctrineDbal\JobsStore::class)
+            $this->moduleConfiguration->getStoreConnection(Stores\Jobs\DoctrineDbal\Store::class)
         );
     }
 

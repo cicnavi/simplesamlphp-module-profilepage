@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations;
+namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations;
 
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 use Throwable;
 
 class Version20220601000100CreateFailedJobsTable extends AbstractMigration
@@ -18,7 +18,7 @@ class Version20220601000100CreateFailedJobsTable extends AbstractMigration
      */
     public function run(): void
     {
-        $tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_FAILED_JOBS);
+        $tableName = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_FAILED_JOBS);
         try {
             $table = new Table($tableName);
 
@@ -43,7 +43,7 @@ class Version20220601000100CreateFailedJobsTable extends AbstractMigration
      */
     public function revert(): void
     {
-        $tableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_FAILED_JOBS);
+        $tableName = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_FAILED_JOBS);
 
         try {
             $this->schemaManager->dropTable($tableName);

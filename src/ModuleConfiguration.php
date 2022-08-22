@@ -17,9 +17,9 @@ class ModuleConfiguration
      */
     public const FILE_NAME = 'module_accounting.php';
 
-    public const OPTION_USER_ID_ATTRIBUTE = 'user_id_attribute';
+    public const OPTION_USER_ID_ATTRIBUTE_NAME = 'user_id_attribute_name';
     public const OPTION_ACCOUNTING_PROCESSING_TYPE = 'accounting_processing_type';
-    public const OPTION_JOBS_STORE = 'jobs_store';
+    public const OPTION_JOBS_STORE_CLASS = 'jobs_store';
     public const OPTION_ALL_STORE_CONNECTIONS_AND_PARAMETERS = 'all_store_connection_and_parameters';
     public const OPTION_STORE_TO_CONNECTION_KEY_MAP = 'store_to_connection_key_map';
 
@@ -57,9 +57,9 @@ class ModuleConfiguration
         return $this->configuration->getValue($option);
     }
 
-    public function getUserIdAttribute(): string
+    public function getUserIdAttributeName(): string
     {
-        return $this->getConfiguration()->getString(self::OPTION_USER_ID_ATTRIBUTE);
+        return $this->getConfiguration()->getString(self::OPTION_USER_ID_ATTRIBUTE_NAME);
     }
 
     public function getAccountingProcessingType(): string
@@ -77,9 +77,9 @@ class ModuleConfiguration
         return $this->configuration;
     }
 
-    public function getJobsStore(): string
+    public function getJobsStoreClass(): string
     {
-        return $this->getConfiguration()->getString(self::OPTION_JOBS_STORE);
+        return $this->getConfiguration()->getString(self::OPTION_JOBS_STORE_CLASS);
     }
 
     public function getStoreConnection(string $store): string
@@ -128,26 +128,30 @@ class ModuleConfiguration
         return dirname(__DIR__);
     }
 
-    protected function validate()
+    protected function validate(): void
     {
         $errors = [];
 
         // Only defined accounting processing types are allowed.
         if (! in_array($this->getAccountingProcessingType(), AccountingProcessingType::VALID_OPTIONS)) {
             $errors[] = sprintf(
-                'Accounting processing type is not valid. Possible values are: %s.',
+                'Accounting processing type is not valid; possible values are: %s.',
                 implode(', ', AccountingProcessingType::VALID_OPTIONS)
             );
         }
 
         // Jobs store class must implement JobsStoreInterface
-        $jobsStore = $this->getConfiguration()->getString(self::OPTION_JOBS_STORE);
+        $jobsStore = $this->getJobsStoreClass();
         if (! class_exists($jobsStore) || ! is_subclass_of($jobsStore, JobsStoreInterface::class)) {
-            throw new InvalidConfigurationException('Provided jobs store class does not implement JobsStoreInterface.');
+            $errors[] = sprintf(
+                'Provided jobs store class \'%s\' does not implement %s.',
+                $jobsStore,
+                JobsStoreInterface::class
+            );
         }
 
         if (! empty($errors)) {
-            $message = sprintf('Module configuration validation failed. Errors were: %s.', implode('; '));
+            $message = sprintf('Module configuration validation failed with errors: %s', implode(' ', $errors));
             throw new InvalidConfigurationException($message);
         }
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
 use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
@@ -10,9 +10,8 @@ use ReflectionClass;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 use Throwable;
 
 class Repository
@@ -24,6 +23,9 @@ class Repository
     protected string $tableName;
     protected LoggerInterface $logger;
 
+    /**
+     * @throws StoreException
+     */
     public function __construct(Connection $connection, string $tableName, LoggerInterface $logger)
     {
         $this->connection = $connection;
@@ -39,9 +41,9 @@ class Repository
     protected function prepareValidJobsTableNames(): void
     {
         $this->validJobsTableNames[] = $this->connection
-            ->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
+            ->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
         $this->validJobsTableNames[] = $this->connection
-            ->preparePrefixedTableName(JobsStore::TABLE_NAME_FAILED_JOBS);
+            ->preparePrefixedTableName(Store::TABLE_NAME_FAILED_JOBS);
     }
 
     /**
@@ -56,21 +58,21 @@ class Repository
         $queryBuilder->insert($this->tableName)
             ->values(
                 [
-                    JobsStore::COLUMN_NAME_PAYLOAD => ':' . JobsStore::COLUMN_NAME_PAYLOAD,
-                    JobsStore::COLUMN_NAME_TYPE => ':' . JobsStore::COLUMN_NAME_TYPE,
-                    JobsStore::COLUMN_NAME_CREATED_AT => ':' . JobsStore::COLUMN_NAME_CREATED_AT,
+                    Store::COLUMN_NAME_PAYLOAD => ':' . Store::COLUMN_NAME_PAYLOAD,
+                    Store::COLUMN_NAME_TYPE => ':' . Store::COLUMN_NAME_TYPE,
+                    Store::COLUMN_NAME_CREATED_AT => ':' . Store::COLUMN_NAME_CREATED_AT,
                 ]
             )
             ->setParameters(
                 [
-                    JobsStore::COLUMN_NAME_PAYLOAD => serialize($job->getPayload()),
-                    JobsStore::COLUMN_NAME_TYPE => $job->getType(),
-                    JobsStore::COLUMN_NAME_CREATED_AT => $job->getCreatedAt(),
+                    Store::COLUMN_NAME_PAYLOAD => serialize($job->getPayload()),
+                    Store::COLUMN_NAME_TYPE => $job->getType(),
+                    Store::COLUMN_NAME_CREATED_AT => $job->getCreatedAt(),
                 ],
                 [
-                    JobsStore::COLUMN_NAME_PAYLOAD => Types::TEXT,
-                    JobsStore::COLUMN_NAME_TYPE => Types::STRING,
-                    JobsStore::COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
+                    Store::COLUMN_NAME_PAYLOAD => Types::TEXT,
+                    Store::COLUMN_NAME_TYPE => Types::STRING,
+                    Store::COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
                 ]
             );
 
@@ -95,17 +97,17 @@ class Repository
          * @psalm-suppress TooManyArguments - providing array or null is deprecated
          */
         $queryBuilder->select(
-            JobsStore::COLUMN_NAME_ID,
-            JobsStore::COLUMN_NAME_PAYLOAD,
-            JobsStore::COLUMN_NAME_TYPE,
-            JobsStore::COLUMN_NAME_CREATED_AT
+            Store::COLUMN_NAME_ID,
+            Store::COLUMN_NAME_PAYLOAD,
+            Store::COLUMN_NAME_TYPE,
+            Store::COLUMN_NAME_CREATED_AT
         )
             ->from($this->tableName)
-            ->orderBy(JobsStore::COLUMN_NAME_ID)
+            ->orderBy(Store::COLUMN_NAME_ID)
             ->setMaxResults(1);
 
         if ($type !== null) {
-            $queryBuilder->where(JobsStore::COLUMN_NAME_TYPE . ' = ' . $queryBuilder->createNamedParameter($type));
+            $queryBuilder->where(Store::COLUMN_NAME_TYPE . ' = ' . $queryBuilder->createNamedParameter($type));
         }
 
         try {
@@ -149,8 +151,8 @@ class Repository
             $numberOfAffectedRows = (int)$this->connection->dbal()
                 ->delete(
                     $this->tableName,
-                    [JobsStore::COLUMN_NAME_ID => $id],
-                    [JobsStore::COLUMN_NAME_ID => Types::BIGINT]
+                    [Store::COLUMN_NAME_ID => $id],
+                    [Store::COLUMN_NAME_ID => Types::BIGINT]
                 );
         } catch (Throwable $exception) {
             $message = sprintf('Error while trying to delete a job with ID %s.', $id);
@@ -181,9 +183,9 @@ class Repository
      */
     protected function validateType(string $type): void
     {
-        if (mb_strlen($type) > JobsStore::COLUMN_LENGTH_TYPE) {
+        if (mb_strlen($type) > Store::COLUMN_LENGTH_TYPE) {
             throw new StoreException(
-                sprintf('String length for type column exceeds %s limit.', JobsStore::COLUMN_LENGTH_TYPE)
+                sprintf('String length for type column exceeds %s limit.', Store::COLUMN_LENGTH_TYPE)
             );
         }
     }

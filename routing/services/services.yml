@@ -4,10 +4,16 @@ services:
     autowire: true
     public: false
     bind:
-# it doesn't work...
-      Psr\Log\LoggerInterface $loggerkita: '@accounting.logger'
+      Psr\Log\LoggerInterface: '@accounting.logger'
 
+  # Services
   SimpleSAML\Module\accounting\:
     resource: '../../src/*'
+    exclude: '../../src/{Http/Controllers}'
+  # Service aliases
   accounting.logger:
     class: SimpleSAML\Module\accounting\Services\Logger
+  # Controllers
+  SimpleSAML\Module\accounting\Http\Controllers\:
+    resource: '../../src/Http/Controllers/*'
+    tags: ['controller.service_arguments']

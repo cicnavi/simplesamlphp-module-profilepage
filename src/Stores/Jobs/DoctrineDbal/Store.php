@@ -17,11 +17,10 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Interfaces\JobsStoreInterface;
-use SimpleSAML\Module\accounting\Stores\Interfaces\StoreInterface;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Repository;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository;
 use Throwable;
 
-class JobsStore implements JobsStoreInterface
+class Store implements JobsStoreInterface
 {
     public const TABLE_NAME_JOBS = 'jobs';
     public const TABLE_NAME_FAILED_JOBS = 'failed_jobs';
@@ -144,7 +143,7 @@ class JobsStore implements JobsStoreInterface
             return true;
         }
 
-        // ... if JobsStore migrations need to run
+        // ... if Store migrations need to run
         if (!$this->areAllMigrationsImplemented()) {
             return true;
         }

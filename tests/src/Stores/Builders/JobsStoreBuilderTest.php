@@ -8,21 +8,20 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Interfaces\StoreInterface;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder
  * @covers \SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder
- * @uses   \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore
+ * @uses   \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Repository
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
  */
 class JobsStoreBuilderTest extends TestCase
 {
     protected \PHPUnit\Framework\MockObject\Stub $moduleConfigurationStub;
-    protected AbstractStoreBuilder $storeBuilder;
     protected JobsStoreBuilder $jobsStoreBuilder;
 
     protected function setUp(): void
@@ -31,42 +30,28 @@ class JobsStoreBuilderTest extends TestCase
         $this->moduleConfigurationStub->method('getStoreConnectionParameters')
             ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
 
-        /** @psalm-suppress InvalidArgument */
-        $this->storeBuilder = new class ($this->moduleConfigurationStub) extends AbstractStoreBuilder {
-        };
+        $this->moduleConfigurationStub->method('getJobsStoreClass')->willReturn(Store::class);
 
         /** @psalm-suppress InvalidArgument */
         $this->jobsStoreBuilder = new JobsStoreBuilder($this->moduleConfigurationStub);
     }
 
-    public function testCanBuildStore(): void
-    {
-        $this->assertInstanceOf(StoreInterface::class, $this->storeBuilder->build(JobsStore::class));
-    }
-
-    public function testBuildThrowsForInvalidStore(): void
-    {
-        $this->expectException(StoreException::class);
-
-        $this->storeBuilder->build('invalid-class');
-    }
-
-    public function testBuildThrowsForInvalidConfiguration(): void
-    {
-        $moduleConfiguration = $this->createStub(ModuleConfiguration::class);
-        $moduleConfiguration->method('getStoreConnectionParameters')->willReturn(['invalid']);
-
-        $storeBuilder = new class ($moduleConfiguration) extends AbstractStoreBuilder {
-        };
-
-        $this->expectException(StoreException::class);
-
-        $storeBuilder->build(JobsStore::class);
-    }
-
     public function testCanBuildJobsStore(): void
     {
-        $this->assertInstanceOf(JobsStore::class, $this->jobsStoreBuilder->build(JobsStore::class));
+        $this->assertInstanceOf(Store::class, $this->jobsStoreBuilder->build());
+    }
+
+    public function testThrowsForInvalidStoreClass(): void
+    {
+        $moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
+        $moduleConfigurationStub->method('getStoreConnectionParameters')
+            ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
+
+        $moduleConfigurationStub->method('getJobsStoreClass')->willReturn('invalid');
+
+        $this->expectException(StoreException::class);
+
+        (new JobsStoreBuilder($moduleConfigurationStub))->build();
     }
 
     public function testJobsStoreBuilderOnlyReturnsJobsStores(): void
@@ -87,8 +72,13 @@ class JobsStoreBuilderTest extends TestCase
             }
         };
 
+        $moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
+        $moduleConfigurationStub->method('getStoreConnectionParameters')
+            ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
+        $moduleConfigurationStub->method('getJobsStoreClass')->willReturn(get_class($sampleStore));
+
         $this->expectException(StoreException::class);
 
-        $this->jobsStoreBuilder->build(get_class($sampleStore));
+        (new JobsStoreBuilder($moduleConfigurationStub))->build();
     }
 }

@@ -15,7 +15,7 @@ $config = [
      * eduPersonUniqueId
      * eduPersonPrincipalName
      */
-    ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE => 'urn:oasis:names:tc:SAML:attribute:subject-id',
+    ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE_NAME => 'urn:oasis:names:tc:SAML:attribute:subject-id',
 
     /**
      * Accounting processing type. There are two possible types: 'synchronous' and 'asynchronous'.
@@ -31,13 +31,13 @@ $config = [
      * accounting processing type was set.
      * This class must implement Stores\Interfaces\JobsStoreInterface.
      */
-    ModuleConfiguration::OPTION_JOBS_STORE => Stores\Jobs\DoctrineDbal\JobsStore::class,
+    ModuleConfiguration::OPTION_JOBS_STORE_CLASS => Stores\Jobs\DoctrineDbal\Store::class,
 
     /**
      * Store connection for particular store. Can be used to set different connections for different stores.
      */
     ModuleConfiguration::OPTION_STORE_TO_CONNECTION_KEY_MAP => [
-        Stores\Jobs\DoctrineDbal\JobsStore::class => 'doctrine_dbal_pdo_mysql',
+        Stores\Jobs\DoctrineDbal\Store::class => 'doctrine_dbal_pdo_mysql',
     ],
 
     /**

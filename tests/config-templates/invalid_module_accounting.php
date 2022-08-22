@@ -15,7 +15,7 @@ $config = [
      * eduPersonUniqueId
      * eduPersonPrincipalName
      */
-    ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE => 'urn:oasis:names:tc:SAML:attribute:subject-id',
+    ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE_NAME => 'urn:oasis:names:tc:SAML:attribute:subject-id',
 
     /**
      * Accounting processing type. There are two possible types: 'synchronous' and 'asynchronous'.
@@ -23,21 +23,20 @@ $config = [
      * - 'asynchronous': for each authentication event a new job will be created for later processing (faster,
      *   but requires setting up job storage and a cron entry).
      */
-    ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
-        ModuleConfiguration\AccountingProcessingType::VALUE_SYNCHRONOUS,
+    ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE => 'invalid',
 
     /**
      * Jobs store. Determines which of the available stores will be used to store jobs in case the 'asynchronous'
      * accounting processing type was set.
      * Provided class must implement Stores\Interfaces\JobsStoreInterface.
      */
-    ModuleConfiguration::OPTION_JOBS_STORE => 'invalid',
+    ModuleConfiguration::OPTION_JOBS_STORE_CLASS => 'invalid',
 
     /**
      * Store connection for particular store. Can be used to set different connections for different stores.
      */
     ModuleConfiguration::OPTION_STORE_TO_CONNECTION_KEY_MAP => [
-        Stores\Jobs\DoctrineDbal\JobsStore::class => 'doctrine_dbal_pdo_mysql',
+        Stores\Jobs\DoctrineDbal\Store::class => 'doctrine_dbal_pdo_mysql',
     ],
 
     /**

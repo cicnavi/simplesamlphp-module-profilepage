@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Entities\Interfaces;
 
+use DateTimeImmutable;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 
 interface JobInterface
@@ -15,5 +16,5 @@ interface JobInterface
 
     public function getType(): string;
 
-    public function getCreatedAt(): \DateTimeImmutable;
+    public function getCreatedAt(): DateTimeImmutable;
 }

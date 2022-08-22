@@ -2,6 +2,6 @@
 SimpleSAMLphp module providing user accounting functionality
 
 ## TODO
-- [ ] MySQL store
-- [ ] MySQL Job Store
+- [ ] Data stores
 - [ ] Cron hooks
+- [ ] Translation

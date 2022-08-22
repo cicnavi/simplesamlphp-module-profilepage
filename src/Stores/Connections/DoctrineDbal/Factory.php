@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal;
 
 use Psr\Log\LoggerInterface;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 class Factory
@@ -23,6 +24,9 @@ class Factory
         return new Connection($this->moduleConfiguration->getStoreConnectionParameters($connectionKey));
     }
 
+    /**
+     * @throws StoreException
+     */
     public function buildMigrator(Connection $connection, LoggerInterface $loggerService = null): Migrator
     {
         return new Migrator($connection, $loggerService ?? $this->loggerService);
