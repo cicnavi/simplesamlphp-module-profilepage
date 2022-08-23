@@ -27,7 +27,7 @@ class JobsStoreBuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
-        $this->moduleConfigurationStub->method('getStoreConnectionParameters')
+        $this->moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
 
         $this->moduleConfigurationStub->method('getJobsStoreClass')->willReturn(Store::class);
@@ -44,7 +44,7 @@ class JobsStoreBuilderTest extends TestCase
     public function testThrowsForInvalidStoreClass(): void
     {
         $moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
-        $moduleConfigurationStub->method('getStoreConnectionParameters')
+        $moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
 
         $moduleConfigurationStub->method('getJobsStoreClass')->willReturn('invalid');
@@ -73,7 +73,7 @@ class JobsStoreBuilderTest extends TestCase
         };
 
         $moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
-        $moduleConfigurationStub->method('getStoreConnectionParameters')
+        $moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
         $moduleConfigurationStub->method('getJobsStoreClass')->willReturn(get_class($sampleStore));
 

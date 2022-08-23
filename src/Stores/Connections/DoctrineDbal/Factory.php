@@ -21,7 +21,7 @@ class Factory
 
     public function buildConnection(string $connectionKey): Connection
     {
-        return new Connection($this->moduleConfiguration->getStoreConnectionParameters($connectionKey));
+        return new Connection($this->moduleConfiguration->getConnectionParameters($connectionKey));
     }
 
     /**

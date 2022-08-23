@@ -8,7 +8,8 @@ use SimpleSAML\Module\accounting\Stores;
 $config = [
     ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE_NAME => 'urn:oasis:names:tc:SAML:attribute:subject-id',
 
-    ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE => 'invalid',
+    ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
+        ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS,
 
     ModuleConfiguration::OPTION_JOBS_STORE_CLASS => 'invalid',
 

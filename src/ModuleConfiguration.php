@@ -19,10 +19,11 @@ class ModuleConfiguration
 
     public const OPTION_USER_ID_ATTRIBUTE_NAME = 'user_id_attribute_name';
     public const OPTION_ACCOUNTING_PROCESSING_TYPE = 'accounting_processing_type';
-    public const OPTION_JOBS_STORE_CLASS = 'jobs_store';
-    public const OPTION_JOBS_STORE_CONNECTION_KEY = 'jobs_store_connection_key';
-    public const OPTION_ALL_STORE_CONNECTIONS_AND_PARAMETERS = 'all_store_connection_and_parameters';
-    public const OPTION_STORE_TO_CONNECTION_KEY_MAP = 'store_to_connection_key_map';
+    public const OPTION_JOBS_STORE_CLASS = 'jobs_store_class';
+    public const OPTION_CONNECTIONS_AND_PARAMETERS = 'connections_and_parameters';
+    public const OPTION_CLASS_TO_CONNECTION_MAP = 'class_to_connection_map';
+    public const OPTION_ENABLED_TRACKERS = 'enabled_trackers';
+    public const OPTION_AUTHENTICATION_DATA_PROVIDER_CLASS = 'authentication_data_provider_class';
 
     /**
      * Contains configuration from module configuration file.
@@ -83,40 +84,40 @@ class ModuleConfiguration
         return $this->getConfiguration()->getString(self::OPTION_JOBS_STORE_CLASS);
     }
 
-    public function getStoreConnection(string $store): string
+    public function getClassConnectionParameters(string $class): string
     {
-        $connectionMap = $this->getStoreToConnectionMap();
+        $connectionMap = $this->getClassToConnectionMap();
 
-        if (! isset($connectionMap[$store])) {
+        if (! isset($connectionMap[$class])) {
             throw new InvalidConfigurationException(
-                sprintf('Connection for store %s is not set.', $store)
+                sprintf('Connection for class %s is not set.', $class)
             );
         }
 
-        return (string) $connectionMap[$store];
+        return (string) $connectionMap[$class];
     }
 
-    public function getStoreToConnectionMap(): array
+    public function getClassToConnectionMap(): array
     {
-        return $this->getConfiguration()->getArray(self::OPTION_STORE_TO_CONNECTION_KEY_MAP);
+        return $this->getConfiguration()->getArray(self::OPTION_CLASS_TO_CONNECTION_MAP);
     }
 
-    public function getAllStoreConnectionsAndParameters(): array
+    public function getConnectionsAndParameters(): array
     {
-        return $this->getConfiguration()->getArray(self::OPTION_ALL_STORE_CONNECTIONS_AND_PARAMETERS);
+        return $this->getConfiguration()->getArray(self::OPTION_CONNECTIONS_AND_PARAMETERS);
     }
 
-    public function getStoreConnectionParameters(string $connection): array
+    public function getConnectionParameters(string $connectionKey): array
     {
-        $connections = $this->getAllStoreConnectionsAndParameters();
+        $connections = $this->getConnectionsAndParameters();
 
-        if (! isset($connections[$connection]) || ! is_array($connections[$connection])) {
+        if (! isset($connections[$connectionKey]) || ! is_array($connections[$connectionKey])) {
             throw new InvalidConfigurationException(
-                sprintf('Settings for connection %s not set', $connection)
+                sprintf('Connection parameters not set for key \'%s\'.', $connectionKey)
             );
         }
 
-        return $connections[$connection];
+        return $connections[$connectionKey];
     }
 
     public function getModuleSourceDirectory(): string
@@ -141,14 +142,17 @@ class ModuleConfiguration
             );
         }
 
-        // Jobs store class must implement JobsStoreInterface
-        $jobsStore = $this->getJobsStoreClass();
-        if (! class_exists($jobsStore) || ! is_subclass_of($jobsStore, JobsStoreInterface::class)) {
-            $errors[] = sprintf(
-                'Provided jobs store class \'%s\' does not implement %s.',
-                $jobsStore,
-                JobsStoreInterface::class
-            );
+        // If accounting processing type is async, check if proper jobs store class was provided.
+        if ($this->getAccountingProcessingType() === AccountingProcessingType::VALUE_ASYNCHRONOUS) {
+            // Jobs store class must implement JobsStoreInterface
+            $jobsStore = $this->getJobsStoreClass();
+            if (! class_exists($jobsStore) || ! is_subclass_of($jobsStore, JobsStoreInterface::class)) {
+                $errors[] = sprintf(
+                    'Provided jobs store class \'%s\' does not implement %s.',
+                    $jobsStore,
+                    JobsStoreInterface::class
+                );
+            }
         }
 
         if (! empty($errors)) {

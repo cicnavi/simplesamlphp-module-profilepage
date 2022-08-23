@@ -65,7 +65,7 @@ class ModuleConfigurationTest extends TestCase
     {
         $this->assertSame(
             'doctrine_dbal_pdo_mysql',
-            $this->moduleConfiguration->getStoreConnection(Stores\Jobs\DoctrineDbal\Store::class)
+            $this->moduleConfiguration->getClassConnectionParameters(Stores\Jobs\DoctrineDbal\Store::class)
         );
     }
 
@@ -73,26 +73,26 @@ class ModuleConfigurationTest extends TestCase
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        $this->moduleConfiguration->getStoreConnection('invalid');
+        $this->moduleConfiguration->getClassConnectionParameters('invalid');
     }
 
     public function testCanGetDefinedConnections(): void
     {
         $this->assertArrayHasKey(
             'doctrine_dbal_pdo_mysql',
-            $this->moduleConfiguration->getAllStoreConnectionsAndParameters()
+            $this->moduleConfiguration->getConnectionsAndParameters()
         );
     }
 
     public function testCanGetSettingsForSpecificConnection(): void
     {
-        $this->assertIsArray($this->moduleConfiguration->getStoreConnectionParameters('doctrine_dbal_pdo_mysql'));
+        $this->assertIsArray($this->moduleConfiguration->getConnectionParameters('doctrine_dbal_pdo_mysql'));
     }
 
     public function testGettingSettingsForInvalidConnectionThrows(): void
     {
         $this->expectException(InvalidConfigurationException::class);
-        $this->moduleConfiguration->getStoreConnectionParameters('invalid');
+        $this->moduleConfiguration->getConnectionParameters('invalid');
     }
 
     public function testCanGetModuleSourceDirectory(): void

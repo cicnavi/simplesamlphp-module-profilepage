@@ -109,7 +109,7 @@ class StoreTest extends TestCase
     public function testCanBuildInstanceStatically(): void
     {
         $moduleConfiguration = $this->createStub(ModuleConfiguration::class);
-        $moduleConfiguration->method('getStoreConnectionParameters')
+        $moduleConfiguration->method('getConnectionParameters')
             ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
         /** @psalm-suppress InvalidArgument */
         $this->assertInstanceOf(Store::class, Store::build($moduleConfiguration));

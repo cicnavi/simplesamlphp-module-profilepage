@@ -51,7 +51,7 @@ class Store implements JobsStoreInterface
         Repository $jobsRepository = null
     ) {
         $this->moduleConfiguration = $moduleConfiguration;
-        $this->connection = $factory->buildConnection($moduleConfiguration->getStoreConnection(self::class));
+        $this->connection = $factory->buildConnection($moduleConfiguration->getClassConnectionParameters(self::class));
         $this->migrator = $factory->buildMigrator($this->connection);
         $this->logger = $logger;
 
