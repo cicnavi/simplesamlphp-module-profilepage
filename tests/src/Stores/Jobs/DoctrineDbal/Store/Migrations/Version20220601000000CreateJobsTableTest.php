@@ -11,9 +11,9 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
+ * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\JobsTableHelper
  */
 class Version20220601000000CreateJobsTableTest extends TestCase
 {
@@ -25,7 +25,7 @@ class Version20220601000000CreateJobsTableTest extends TestCase
     {
         $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
-        $this->tableName = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
+        $this->tableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
     }
 
     public function testCanRunMigration(): void

@@ -29,19 +29,19 @@ class RawJob
 
         $this->validate($rawRow);
 
-        $this->id = (int)$rawRow[Store::COLUMN_NAME_ID];
-        $this->payload = $this->resolvePayload((string)$rawRow[Store::COLUMN_NAME_PAYLOAD]);
-        $this->type = (string)$rawRow[Store::COLUMN_NAME_TYPE];
+        $this->id = (int)$rawRow[Store\TableConstants::COLUMN_NAME_ID];
+        $this->payload = $this->resolvePayload((string)$rawRow[Store\TableConstants::COLUMN_NAME_PAYLOAD]);
+        $this->type = (string)$rawRow[Store\TableConstants::COLUMN_NAME_TYPE];
         $this->createdAt = $this->resolveCreatedAt($rawRow);
     }
 
     protected function validate(array $rawRow): void
     {
         $columnsToCheck = [
-            Store::COLUMN_NAME_ID,
-            Store::COLUMN_NAME_PAYLOAD,
-            Store::COLUMN_NAME_TYPE,
-            Store::COLUMN_NAME_CREATED_AT,
+            Store\TableConstants::COLUMN_NAME_ID,
+            Store\TableConstants::COLUMN_NAME_PAYLOAD,
+            Store\TableConstants::COLUMN_NAME_TYPE,
+            Store\TableConstants::COLUMN_NAME_CREATED_AT,
         ];
 
         foreach ($columnsToCheck as $column) {
@@ -50,20 +50,28 @@ class RawJob
             }
         }
 
-        if (! is_numeric($rawRow[Store::COLUMN_NAME_ID])) {
-            throw new UnexpectedValueException(sprintf('Column %s must be numeric.', Store::COLUMN_NAME_ID));
+        if (! is_numeric($rawRow[Store\TableConstants::COLUMN_NAME_ID])) {
+            throw new UnexpectedValueException(
+                sprintf('Column %s must be numeric.', Store\TableConstants::COLUMN_NAME_ID)
+            );
         }
 
-        if (! is_string($rawRow[Store::COLUMN_NAME_PAYLOAD])) {
-            throw new UnexpectedValueException(sprintf('Column %s must be string.', Store::COLUMN_NAME_PAYLOAD));
+        if (! is_string($rawRow[Store\TableConstants::COLUMN_NAME_PAYLOAD])) {
+            throw new UnexpectedValueException(
+                sprintf('Column %s must be string.', Store\TableConstants::COLUMN_NAME_PAYLOAD)
+            );
         }
 
-        if (! is_string($rawRow[Store::COLUMN_NAME_TYPE])) {
-            throw new UnexpectedValueException(sprintf('Column %s must be string.', Store::COLUMN_NAME_TYPE));
+        if (! is_string($rawRow[Store\TableConstants::COLUMN_NAME_TYPE])) {
+            throw new UnexpectedValueException(
+                sprintf('Column %s must be string.', Store\TableConstants::COLUMN_NAME_TYPE)
+            );
         }
 
-        if (! is_string($rawRow[Store::COLUMN_NAME_CREATED_AT])) {
-            throw new UnexpectedValueException(sprintf('Column %s must be string.', Store::COLUMN_NAME_CREATED_AT));
+        if (! is_string($rawRow[Store\TableConstants::COLUMN_NAME_CREATED_AT])) {
+            throw new UnexpectedValueException(
+                sprintf('Column %s must be string.', Store\TableConstants::COLUMN_NAME_CREATED_AT)
+            );
         }
     }
 
@@ -108,13 +116,13 @@ class RawJob
         try {
             /** @var DateTimeImmutable $createdAt */
             $createdAt = (Type::getType(Types::DATETIME_IMMUTABLE))
-                ->convertToPHPValue($rawRow[Store::COLUMN_NAME_CREATED_AT], $this->abstractPlatform);
+                ->convertToPHPValue($rawRow[Store\TableConstants::COLUMN_NAME_CREATED_AT], $this->abstractPlatform);
         } catch (Throwable $exception) {
             throw new UnexpectedValueException(
                 sprintf(
                     'Could not create instance of DateTimeImmutable using value %s for column %s.',
-                    var_export($rawRow[Store::COLUMN_NAME_CREATED_AT], true),
-                    Store::COLUMN_NAME_CREATED_AT
+                    var_export($rawRow[Store\TableConstants::COLUMN_NAME_CREATED_AT], true),
+                    Store\TableConstants::COLUMN_NAME_CREATED_AT
                 ),
                 (int)$exception->getCode(),
                 $exception

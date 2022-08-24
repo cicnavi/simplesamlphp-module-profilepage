@@ -49,7 +49,7 @@ class AbstractMigrationTest extends TestCase
         $migration = new class ($this->connection) extends AbstractMigration {
             public function run(): void
             {
-                $this->throwGenericMigrationException('test', new \Exception('test'));
+                throw $this->prepareGenericMigrationException('test', new \Exception('test'));
             }
 
             public function revert(): void
@@ -60,5 +60,55 @@ class AbstractMigrationTest extends TestCase
         $this->expectException(StoreException\MigrationException::class);
 
         $migration->run();
+    }
+
+    public function testCanUseTableNamePrefix(): void
+    {
+        $connectionStub = $this->createStub(Connection::class);
+        $connectionStub->method('dbal')->willReturn($this->connection->dbal());
+        $connectionStub->method('preparePrefixedTableName')->willReturn('prefix-connection');
+
+        $migration = new class ($connectionStub) extends AbstractMigration {
+            public function run(): void
+            {
+                throw new \Exception($this->preparePrefixedTableName('table-name'));
+            }
+            public function revert(): void
+            {
+            }
+            protected function getLocalTablePrefix(): string
+            {
+                return 'prefix-local';
+            }
+        };
+
+        try {
+            $migration->run();
+        } catch (\Exception $exception) {
+            $this->assertStringContainsString('prefix-connection', $exception->getMessage());
+        }
+    }
+
+    public function testCanUseLocalTableNamePrefix(): void
+    {
+        $connectionStub = $this->createStub(Connection::class);
+        $connectionStub->method('dbal')->willReturn($this->connection->dbal());
+        $connectionStub->method('preparePrefixedTableName')->willReturn('prefix-connection');
+
+        $migration = new class ($connectionStub) extends AbstractMigration {
+            public function run(): void
+            {
+                throw new \Exception($this->getLocalTablePrefix());
+            }
+            public function revert(): void
+            {
+            }
+        };
+
+        try {
+            $migration->run();
+        } catch (\Exception $exception) {
+            $this->assertEmpty($exception->getMessage());
+        }
     }
 }

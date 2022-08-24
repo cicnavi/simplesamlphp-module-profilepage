@@ -148,7 +148,7 @@ class ModuleConfiguration
             $jobsStore = $this->getJobsStoreClass();
             if (! class_exists($jobsStore) || ! is_subclass_of($jobsStore, JobsStoreInterface::class)) {
                 $errors[] = sprintf(
-                    'Provided jobs store class \'%s\' does not implement %s.',
+                    'Provided jobs store class \'%s\' does not implement interface \'%s\'.',
                     $jobsStore,
                     JobsStoreInterface::class
                 );

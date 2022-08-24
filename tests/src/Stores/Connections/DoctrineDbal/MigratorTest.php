@@ -26,7 +26,7 @@ use function PHPUnit\Framework\assertFalse;
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\JobsTableHelper
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  */
 class MigratorTest extends TestCase
 {
@@ -101,7 +101,7 @@ class MigratorTest extends TestCase
 
         $migrator->runSetup();
 
-        $tableNameJobs = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
+        $tableNameJobs = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
         $this > assertFalse($this->schemaManager->tablesExist($tableNameJobs));
 
         $migrator->runMigrationClasses([Store\Migrations\Version20220601000000CreateJobsTable::class]);

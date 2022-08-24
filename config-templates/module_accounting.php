@@ -45,9 +45,11 @@ $config = [
         /**
          * Track each authentication event for idp / sp / user combination, and any change in idp / sp metadata or
          * released user attributes. Each authentication event record will have data used and released at the
-         * time of the authentication event (versioned data). It can also be used as an authentication data
-         * provider. This tracker expects Doctrine DBAL compatible connection to be set in
-         * "class-to-connection map" setting.
+         * time of the authentication event (versioned data). This tracker can also be used as an
+         * authentication data provider. This tracker internally uses store class
+         * Stores\Data\Authentication\DoctrineDbal\Versioned\Store::class, so
+         * make sure to set its Doctrine DBAL compatible connection in
+         * "class-to-connection map" setting, if you use it.
          */
         Trackers\DoctrineDbal\VersionedAuthentication::class,
     ],
@@ -59,18 +61,23 @@ $config = [
      */
     ModuleConfiguration::OPTION_AUTHENTICATION_DATA_PROVIDER_CLASS =>
         /**
-         * In addition to tracking data, this class can also serve as authentication data provider. This tracker
-         * expects Doctrine DBAL compatible connection to be set in "class-to-connection map" setting.
+         * In addition to tracking data, this class can also serve as authentication data provider.
          */
         Trackers\DoctrineDbal\VersionedAuthentication::class,
 
     /**
      * Class-to-connection map. Can be used to set different connections for different classes (stores, trackers,
-     * data providers...).
+     * data providers...). By default, here are Doctrine DBAL compatible stores and their connections.
      */
     ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [
+        /**
+         * Used when accounting is asynchronous and this class is used as jobs store class.
+         */
         Stores\Jobs\DoctrineDbal\Store::class => 'doctrine_dbal_pdo_mysql',
-        Trackers\DoctrineDbal\VersionedAuthentication::class => 'doctrine_dbal_pdo_mysql',
+        /**
+         * Used when tracker Trackers\DoctrineDbal\VersionedAuthentication::class is used.
+         */
+        Stores\Data\Authentication\DoctrineDbal\Versioned\Store::class => 'doctrine_dbal_pdo_mysql',
     ],
 
     /**

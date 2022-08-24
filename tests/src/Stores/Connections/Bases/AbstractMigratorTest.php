@@ -24,7 +24,7 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\JobsTableHelper
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  */
 class AbstractMigratorTest extends TestCase
 {
@@ -88,7 +88,7 @@ class AbstractMigratorTest extends TestCase
 
         $migrationClasses = $migrator->gatherMigrationClassesFromDirectory($directory, $namespace);
 
-        $jobsTableName = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
+        $jobsTableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
 
         $this->assertFalse($this->schemaManager->tablesExist($jobsTableName));
 

@@ -4,41 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal;
 
-use Doctrine\DBAL\Schema\Table;
 use Psr\Log\LoggerInterface;
-use ReflectionClass;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
-use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
-use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
-use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Interfaces\JobsStoreInterface;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\TableConstants;
 use Throwable;
 
-class Store implements JobsStoreInterface
+class Store extends AbstractStore implements JobsStoreInterface
 {
-    public const TABLE_NAME_JOBS = 'jobs';
-    public const TABLE_NAME_FAILED_JOBS = 'failed_jobs';
-
-    public const COLUMN_NAME_ID = 'id';
-    public const COLUMN_NAME_PAYLOAD = 'payload';
-    public const COLUMN_NAME_TYPE = 'type';
-    public const COLUMN_NAME_CREATED_AT = 'created_at';
-
-    public const COLUMN_LENGTH_TYPE = 1024;
-
-    protected ModuleConfiguration $moduleConfiguration;
-    protected Connection $connection;
     protected string $prefixedTableNameJobs;
     protected string $prefixedTableNameFailedJobs;
-    protected Migrator $migrator;
-    protected LoggerInterface $logger;
     protected Repository $jobsRepository;
 
     /**
@@ -50,13 +32,11 @@ class Store implements JobsStoreInterface
         LoggerInterface $logger,
         Repository $jobsRepository = null
     ) {
-        $this->moduleConfiguration = $moduleConfiguration;
-        $this->connection = $factory->buildConnection($moduleConfiguration->getClassConnectionParameters(self::class));
-        $this->migrator = $factory->buildMigrator($this->connection);
-        $this->logger = $logger;
+        parent::__construct($moduleConfiguration, $factory, $logger);
 
-        $this->prefixedTableNameJobs = $this->connection->preparePrefixedTableName(self::TABLE_NAME_JOBS);
-        $this->prefixedTableNameFailedJobs = $this->connection->preparePrefixedTableName(self::TABLE_NAME_FAILED_JOBS);
+        $this->prefixedTableNameJobs = $this->connection->preparePrefixedTableName(TableConstants::TABLE_NAME_JOBS);
+        $this->prefixedTableNameFailedJobs = $this->connection
+            ->preparePrefixedTableName(TableConstants::TABLE_NAME_FAILED_JOBS);
 
         $this->jobsRepository = $jobsRepository ??
             new Repository($this->connection, $this->prefixedTableNameJobs, $this->logger);
@@ -117,62 +97,6 @@ class Store implements JobsStoreInterface
         }
 
         return $job;
-    }
-
-    /**
-     * @throws StoreException
-     * @throws MigrationException
-     */
-    public function runSetup(): void
-    {
-        if ($this->migrator->needsSetup()) {
-            $this->migrator->runSetup();
-        }
-
-        if (!$this->areAllMigrationsImplemented()) {
-            $this->migrator->runNonImplementedMigrationClasses(
-                $this->getMigrationsDirectory(),
-                $this->getMigrationsNamespace()
-            );
-        }
-    }
-
-    /**
-     * @throws StoreException
-     */
-    public function needsSetup(): bool
-    {
-        // ... if the migrator itself needs setup.
-        if ($this->migrator->needsSetup()) {
-            return true;
-        }
-
-        // ... if Store migrations need to run
-        if (!$this->areAllMigrationsImplemented()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function areAllMigrationsImplemented(): bool
-    {
-        return !$this->migrator->hasNonImplementedMigrationClasses(
-            $this->getMigrationsDirectory(),
-            $this->getMigrationsNamespace()
-        );
-    }
-
-    protected function getMigrationsDirectory(): string
-    {
-        return __DIR__ . DIRECTORY_SEPARATOR .
-            (new ReflectionClass($this))->getShortName() . DIRECTORY_SEPARATOR .
-            AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
-    }
-
-    protected function getMigrationsNamespace(): string
-    {
-        return self::class . '\\' . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 
     public function getPrefixedTableNameJobs(): string

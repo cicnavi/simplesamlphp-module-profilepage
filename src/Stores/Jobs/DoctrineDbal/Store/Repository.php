@@ -41,9 +41,9 @@ class Repository
     protected function prepareValidJobsTableNames(): void
     {
         $this->validJobsTableNames[] = $this->connection
-            ->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
+            ->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
         $this->validJobsTableNames[] = $this->connection
-            ->preparePrefixedTableName(Store::TABLE_NAME_FAILED_JOBS);
+            ->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_FAILED_JOBS);
     }
 
     /**
@@ -58,21 +58,21 @@ class Repository
         $queryBuilder->insert($this->tableName)
             ->values(
                 [
-                    Store::COLUMN_NAME_PAYLOAD => ':' . Store::COLUMN_NAME_PAYLOAD,
-                    Store::COLUMN_NAME_TYPE => ':' . Store::COLUMN_NAME_TYPE,
-                    Store::COLUMN_NAME_CREATED_AT => ':' . Store::COLUMN_NAME_CREATED_AT,
+                    Store\TableConstants::COLUMN_NAME_PAYLOAD => ':' . Store\TableConstants::COLUMN_NAME_PAYLOAD,
+                    Store\TableConstants::COLUMN_NAME_TYPE => ':' . Store\TableConstants::COLUMN_NAME_TYPE,
+                    Store\TableConstants::COLUMN_NAME_CREATED_AT => ':' . Store\TableConstants::COLUMN_NAME_CREATED_AT,
                 ]
             )
             ->setParameters(
                 [
-                    Store::COLUMN_NAME_PAYLOAD => serialize($job->getPayload()),
-                    Store::COLUMN_NAME_TYPE => $job->getType(),
-                    Store::COLUMN_NAME_CREATED_AT => $job->getCreatedAt(),
+                    Store\TableConstants::COLUMN_NAME_PAYLOAD => serialize($job->getPayload()),
+                    Store\TableConstants::COLUMN_NAME_TYPE => $job->getType(),
+                    Store\TableConstants::COLUMN_NAME_CREATED_AT => $job->getCreatedAt(),
                 ],
                 [
-                    Store::COLUMN_NAME_PAYLOAD => Types::TEXT,
-                    Store::COLUMN_NAME_TYPE => Types::STRING,
-                    Store::COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
+                    Store\TableConstants::COLUMN_NAME_PAYLOAD => Types::TEXT,
+                    Store\TableConstants::COLUMN_NAME_TYPE => Types::STRING,
+                    Store\TableConstants::COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
                 ]
             );
 
@@ -97,17 +97,19 @@ class Repository
          * @psalm-suppress TooManyArguments - providing array or null is deprecated
          */
         $queryBuilder->select(
-            Store::COLUMN_NAME_ID,
-            Store::COLUMN_NAME_PAYLOAD,
-            Store::COLUMN_NAME_TYPE,
-            Store::COLUMN_NAME_CREATED_AT
+            Store\TableConstants::COLUMN_NAME_ID,
+            Store\TableConstants::COLUMN_NAME_PAYLOAD,
+            Store\TableConstants::COLUMN_NAME_TYPE,
+            Store\TableConstants::COLUMN_NAME_CREATED_AT
         )
             ->from($this->tableName)
-            ->orderBy(Store::COLUMN_NAME_ID)
+            ->orderBy(Store\TableConstants::COLUMN_NAME_ID)
             ->setMaxResults(1);
 
         if ($type !== null) {
-            $queryBuilder->where(Store::COLUMN_NAME_TYPE . ' = ' . $queryBuilder->createNamedParameter($type));
+            $queryBuilder->where(
+                Store\TableConstants::COLUMN_NAME_TYPE . ' = ' . $queryBuilder->createNamedParameter($type)
+            );
         }
 
         try {
@@ -151,8 +153,8 @@ class Repository
             $numberOfAffectedRows = (int)$this->connection->dbal()
                 ->delete(
                     $this->tableName,
-                    [Store::COLUMN_NAME_ID => $id],
-                    [Store::COLUMN_NAME_ID => Types::BIGINT]
+                    [Store\TableConstants::COLUMN_NAME_ID => $id],
+                    [Store\TableConstants::COLUMN_NAME_ID => Types::BIGINT]
                 );
         } catch (Throwable $exception) {
             $message = sprintf('Error while trying to delete a job with ID %s.', $id);
@@ -183,9 +185,9 @@ class Repository
      */
     protected function validateType(string $type): void
     {
-        if (mb_strlen($type) > Store::COLUMN_LENGTH_TYPE) {
+        if (mb_strlen($type) > Store\TableConstants::COLUMN_TYPE_LENGTH) {
             throw new StoreException(
-                sprintf('String length for type column exceeds %s limit.', Store::COLUMN_LENGTH_TYPE)
+                sprintf('String length for type column exceeds %s limit.', Store\TableConstants::COLUMN_TYPE_LENGTH)
             );
         }
     }

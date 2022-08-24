@@ -17,6 +17,7 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store
+ * @covers \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory
@@ -31,7 +32,7 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\JobsTableHelper
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  */
 class StoreTest extends TestCase
 {
@@ -99,8 +100,10 @@ class StoreTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
 
-        $tableNameJobs = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
-        $tableNameFailedJobs = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_FAILED_JOBS);
+        $tableNameJobs = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
+        $tableNameFailedJobs = $this->connection->preparePrefixedTableName(
+            Store\TableConstants::TABLE_NAME_FAILED_JOBS
+        );
 
         $this->assertSame($tableNameJobs, $jobsStore->getPrefixedTableNameJobs());
         $this->assertSame($tableNameFailedJobs, $jobsStore->getPrefixedTableNameFailedJobs());

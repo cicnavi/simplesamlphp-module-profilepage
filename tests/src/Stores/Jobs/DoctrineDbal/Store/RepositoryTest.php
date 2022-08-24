@@ -33,7 +33,8 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository;
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\RawJob
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\JobsTableHelper
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
  */
 class RepositoryTest extends TestCase
 {
@@ -71,7 +72,7 @@ class RepositoryTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $this->jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
 
-        $this->jobsTableName = $this->connection->preparePrefixedTableName(Store::TABLE_NAME_JOBS);
+        $this->jobsTableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
     }
 
     public function testCanInsertAndGetJob(): void
@@ -111,7 +112,7 @@ class RepositoryTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        $invalidType = str_pad('abc', Store::COLUMN_LENGTH_TYPE + 1);
+        $invalidType = str_pad('abc', Store\TableConstants::COLUMN_TYPE_LENGTH + 1);
         $jobStub = $this->createStub(GenericJob::class);
         $jobStub->method('getPayload')->willReturn($this->payloadStub);
         $jobStub->method('getType')->willReturn($invalidType);

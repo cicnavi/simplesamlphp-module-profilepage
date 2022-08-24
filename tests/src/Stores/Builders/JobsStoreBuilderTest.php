@@ -5,7 +5,6 @@ namespace SimpleSAML\Test\Module\accounting\Stores\Builders;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Interfaces\StoreInterface;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
@@ -18,6 +17,7 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
+ * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
  */
 class JobsStoreBuilderTest extends TestCase
 {

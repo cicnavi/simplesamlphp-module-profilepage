@@ -53,12 +53,18 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
-    public function testGetJobsStoreThrowsForInvalidConfig(): void
+    public function testThrowsForInvalidConfig(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        $invalidModuleConfiguration = new ModuleConfiguration('invalid_module_accounting.php');
-        $invalidModuleConfiguration->getJobsStoreClass();
+        new ModuleConfiguration('invalid_module_accounting.php');
+    }
+
+    public function testThrowsForInvalidJobsStore(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new ModuleConfiguration('invalid_async_module_accounting.php');
     }
 
     public function testProperConnectionKeyIsReturned(): void
