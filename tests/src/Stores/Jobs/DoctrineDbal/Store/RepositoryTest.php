@@ -70,7 +70,7 @@ class RepositoryTest extends TestCase
         $this->jobStub->method('getCreatedAt')->willReturn(new \DateTimeImmutable());
 
         /** @psalm-suppress InvalidArgument */
-        $this->jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $this->jobsStore = new Store($this->moduleConfiguration, $this->loggerServiceStub, $this->factoryStub);
 
         $this->jobsTableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
     }

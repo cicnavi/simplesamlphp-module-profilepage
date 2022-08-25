@@ -39,7 +39,7 @@ class StoreTest extends TestCase
     protected ModuleConfiguration $moduleConfiguration;
     protected \PHPUnit\Framework\MockObject\Stub $factoryStub;
     protected Connection $connection;
-    protected \PHPUnit\Framework\MockObject\Stub $loggerServiceStub;
+    protected \PHPUnit\Framework\MockObject\Stub $loggerStub;
     protected Migrator $migrator;
     protected \PHPUnit\Framework\MockObject\Stub $payloadStub;
     protected \PHPUnit\Framework\MockObject\Stub $jobStub;
@@ -50,10 +50,10 @@ class StoreTest extends TestCase
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
         $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
 
-        $this->loggerServiceStub = $this->createStub(Logger::class);
+        $this->loggerStub = $this->createStub(Logger::class);
 
         /** @psalm-suppress InvalidArgument */
-        $this->migrator = new Migrator($this->connection, $this->loggerServiceStub);
+        $this->migrator = new Migrator($this->connection, $this->loggerStub);
 
         $this->factoryStub = $this->createStub(Factory::class);
         $this->factoryStub->method('buildConnection')->willReturn($this->connection);
@@ -70,7 +70,7 @@ class StoreTest extends TestCase
     public function testSetupDependsOnMigratorSetup(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->loggerStub, $this->factoryStub);
 
         $this->assertTrue($this->migrator->needsSetup());
         $this->assertTrue($jobsStore->needsSetup());
@@ -84,7 +84,7 @@ class StoreTest extends TestCase
     public function testSetupDependsOnMigrations(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->loggerStub, $this->factoryStub);
 
         // Run migrator setup beforehand, so it only depends on Store migrations setup
         $this->migrator->runSetup();
@@ -98,7 +98,7 @@ class StoreTest extends TestCase
     public function testCanGetPrefixedTableNames(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->loggerStub, $this->factoryStub);
 
         $tableNameJobs = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
         $tableNameFailedJobs = $this->connection->preparePrefixedTableName(
@@ -115,13 +115,13 @@ class StoreTest extends TestCase
         $moduleConfiguration->method('getConnectionParameters')
             ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
         /** @psalm-suppress InvalidArgument */
-        $this->assertInstanceOf(Store::class, Store::build($moduleConfiguration));
+        $this->assertInstanceOf(Store::class, Store::build($moduleConfiguration, $this->loggerStub));
     }
 
     public function testCanEnqueueJob(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->loggerStub, $this->factoryStub);
         $jobsStore->runSetup();
 
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -145,7 +145,7 @@ class StoreTest extends TestCase
     public function testEnqueueThrowsStoreExceptionOnNonSetupRun(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->loggerStub, $this->factoryStub);
         // Don't run setup, so we get exception
         //$jobsStore->runSetup();
 
@@ -161,7 +161,7 @@ class StoreTest extends TestCase
     public function testCanDequeueJob(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->loggerStub, $this->factoryStub);
         $jobsStore->runSetup();
 
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -184,7 +184,7 @@ class StoreTest extends TestCase
     public function testCanDequeueSpecificJobType(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->loggerStub, $this->factoryStub);
         $jobsStore->runSetup();
 
         $authenticationEvent = new Event(['sample-state']);
@@ -213,7 +213,7 @@ class StoreTest extends TestCase
     public function testDequeueThrowsWhenSetupNotRun(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $jobsStore = new Store($this->moduleConfiguration, $this->factoryStub, $this->loggerServiceStub);
+        $jobsStore = new Store($this->moduleConfiguration, $this->loggerStub, $this->factoryStub);
 //        $jobsStore->runSetup();
 
         $payloadStub = $this->createStub(AbstractPayload::class);
@@ -239,8 +239,9 @@ class StoreTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
+            $this->loggerStub,
             $this->factoryStub,
-            $this->loggerServiceStub,
+            null,
             $repositoryStub
         );
         $jobsStore->runSetup();
@@ -259,8 +260,9 @@ class StoreTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
+            $this->loggerStub,
             $this->factoryStub,
-            $this->loggerServiceStub,
+            null,
             $repositoryStub
         );
         $jobsStore->runSetup();
@@ -279,8 +281,9 @@ class StoreTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
+            $this->loggerStub,
             $this->factoryStub,
-            $this->loggerServiceStub,
+            null,
             $repositoryStub
         );
         $jobsStore->runSetup();

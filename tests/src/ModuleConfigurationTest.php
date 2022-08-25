@@ -70,7 +70,7 @@ class ModuleConfigurationTest extends TestCase
     public function testProperConnectionKeyIsReturned(): void
     {
         $this->assertSame(
-            'doctrine_dbal_pdo_mysql',
+            'doctrine_dbal_pdo_sqlite',
             $this->moduleConfiguration->getClassConnectionParameters(Stores\Jobs\DoctrineDbal\Store::class)
         );
     }
@@ -85,14 +85,14 @@ class ModuleConfigurationTest extends TestCase
     public function testCanGetDefinedConnections(): void
     {
         $this->assertArrayHasKey(
-            'doctrine_dbal_pdo_mysql',
+            'doctrine_dbal_pdo_sqlite',
             $this->moduleConfiguration->getConnectionsAndParameters()
         );
     }
 
     public function testCanGetSettingsForSpecificConnection(): void
     {
-        $this->assertIsArray($this->moduleConfiguration->getConnectionParameters('doctrine_dbal_pdo_mysql'));
+        $this->assertIsArray($this->moduleConfiguration->getConnectionParameters('doctrine_dbal_pdo_sqlite'));
     }
 
     public function testGettingSettingsForInvalidConnectionThrows(): void

@@ -9,7 +9,6 @@ use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Interfaces\JobsStoreInterface;
@@ -28,11 +27,12 @@ class Store extends AbstractStore implements JobsStoreInterface
      */
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
-        Factory $factory,
         LoggerInterface $logger,
+        Factory $connectionFactory,
+        string $connectionKey = null,
         Repository $jobsRepository = null
     ) {
-        parent::__construct($moduleConfiguration, $factory, $logger);
+        parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey);
 
         $this->prefixedTableNameJobs = $this->connection->preparePrefixedTableName(TableConstants::TABLE_NAME_JOBS);
         $this->prefixedTableNameFailedJobs = $this->connection
@@ -59,7 +59,10 @@ class Store extends AbstractStore implements JobsStoreInterface
         $job = null;
         $attempts = 0;
         $maxDeleteAttempts = 3;
+        $this->connection->dbal()->getTransactionIsolation();
 
+        // Do the dequeue without using transactions, since the underlying database engine might not support it
+        // (for example, MyISAM engine in MySQL database).
         try {
             // Check if there are any jobs in the store...
             while (($job = $this->jobsRepository->getNext($type)) !== null) {
@@ -77,8 +80,12 @@ class Store extends AbstractStore implements JobsStoreInterface
                     // It seems that this job has already been deleted in the meantime.
                     // Check if this happened before. If threshold is reached, throw.
                     // Otherwise, try to get next job again.
+                    $message = sprintf(
+                        'Job retrieval was successful, however it was deleted in the meantime. Attempt: %s',
+                        $attempts
+                    );
+                    $this->logger->warning($message, ['jobId' => $jobId]);
                     if ($attempts > $maxDeleteAttempts) {
-                        $message = 'Job retrieval was successful, however it was deleted in the meantime.';
                         throw new StoreException($message);
                     }
 
@@ -110,14 +117,23 @@ class Store extends AbstractStore implements JobsStoreInterface
     }
 
     /**
+     * Build store instance.
+     * @param ModuleConfiguration $moduleConfiguration
+     * @param LoggerInterface $logger
+     * @param string|null $connectionKey
+     * @return self
      * @throws StoreException
      */
-    public static function build(ModuleConfiguration $moduleConfiguration): self
-    {
+    public static function build(
+        ModuleConfiguration $moduleConfiguration,
+        LoggerInterface $logger,
+        string $connectionKey = null
+    ): self {
         return new self(
             $moduleConfiguration,
-            new Factory($moduleConfiguration, new Logger()),
-            new Logger()
+            $logger,
+            new Factory($moduleConfiguration, $logger),
+            $connectionKey
         );
     }
 }

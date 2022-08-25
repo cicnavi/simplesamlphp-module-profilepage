@@ -7,7 +7,6 @@ namespace SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\V
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Interfaces\DataStoreInterface;
@@ -19,21 +18,27 @@ class Store extends AbstractStore implements DataStoreInterface
      */
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
-        Factory $factory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Factory $connectionFactory,
+        string $connectionKey = null
     ) {
-        parent::__construct($moduleConfiguration, $factory, $logger);
+        parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey);
     }
 
     /**
+     * Build store instance.
      * @throws StoreException
      */
-    public static function build(ModuleConfiguration $moduleConfiguration): self
-    {
+    public static function build(
+        ModuleConfiguration $moduleConfiguration,
+        LoggerInterface $logger,
+        string $connectionKey = null
+    ): self {
         return new self(
             $moduleConfiguration,
-            new Factory($moduleConfiguration, new Logger()),
-            new Logger()
+            $logger,
+            new Factory($moduleConfiguration, $logger),
+            $connectionKey
         );
     }
 }

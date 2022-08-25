@@ -28,15 +28,18 @@ abstract class AbstractStore implements BuildableUsingModuleConfigurationInterfa
      */
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
-        Factory $factory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Factory $connectionFactory,
+        string $connectionKey = null
     ) {
         $this->moduleConfiguration = $moduleConfiguration;
-        $this->connection = $factory->buildConnection(
-            $moduleConfiguration->getClassConnectionParameters($this->getSelfClass())
-        );
-        $this->migrator = $factory->buildMigrator($this->connection);
         $this->logger = $logger;
+
+        $connectionKey = $connectionKey ?? $this->getSelfClass();
+        $this->connection = $connectionFactory->buildConnection(
+            $moduleConfiguration->getClassConnectionParameters($connectionKey)
+        );
+        $this->migrator = $connectionFactory->buildMigrator($this->connection);
     }
 
     /**
@@ -122,6 +125,16 @@ abstract class AbstractStore implements BuildableUsingModuleConfigurationInterfa
             AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 
-    // From interfaces
-    abstract public static function build(ModuleConfiguration $moduleConfiguration): self;
+    /**
+     * Build store instance. Must be implemented in child classes for proper return store type.
+     * @param ModuleConfiguration $moduleConfiguration
+     * @param LoggerInterface $logger
+     * @param string|null $connectionKey
+     * @return self
+     */
+    abstract public static function build(
+        ModuleConfiguration $moduleConfiguration,
+        LoggerInterface $logger,
+        string $connectionKey = null
+    ): self;
 }

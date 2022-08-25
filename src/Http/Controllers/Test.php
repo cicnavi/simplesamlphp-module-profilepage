@@ -52,9 +52,10 @@ class Test
     {
         $template = new Template($this->sspConfiguration, 'accounting:test.twig');
 
-        $jobsStore = (new JobsStoreBuilder($this->moduleConfiguration))->build();
+        $jobsStore = (new JobsStoreBuilder($this->moduleConfiguration, $this->logger))
+            ->build($this->moduleConfiguration->getJobsStoreClass());
 
-        $dataStore = Store::build($this->moduleConfiguration);
+        $dataStore = Store::build($this->moduleConfiguration, $this->logger);
 
         $jobsStoreNeedsSetup = $jobsStore->needsSetup();
         $jobsStoreSetupRan = false;

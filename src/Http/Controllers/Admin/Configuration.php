@@ -42,6 +42,7 @@ class Configuration
      */
     public function status(Request $request): Template
     {
+        // Instantiate ModuleConfiguration here (instead in constructor) so we can check for validation errors.
         $moduleConfiguration = null;
         $configurationValidationErrors = null;
         $jobsStore = null;
@@ -53,7 +54,8 @@ class Configuration
                 $moduleConfiguration->getAccountingProcessingType() ===
                 ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS
             ) {
-                $jobsStore = (new JobsStoreBuilder($moduleConfiguration))->build();
+                $jobsStore = (new JobsStoreBuilder($moduleConfiguration, $this->logger))
+                    ->build($moduleConfiguration->getJobsStoreClass());
             }
         } catch (Throwable $exception) {
             $configurationValidationErrors = $exception->getMessage();

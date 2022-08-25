@@ -22,21 +22,22 @@ class Accounting extends ProcessingFilter
      * @param array $config
      * @param mixed $reserved
      * @param ModuleConfiguration|null $moduleConfiguration
-     * @param JobsStoreBuilder|null $jobsStoreBuilder
      * @param LoggerInterface|null $logger
+     * @param JobsStoreBuilder|null $jobsStoreBuilder
      */
     public function __construct(
         array &$config,
         $reserved,
         ModuleConfiguration $moduleConfiguration = null,
-        JobsStoreBuilder $jobsStoreBuilder = null,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        JobsStoreBuilder $jobsStoreBuilder = null
     ) {
         parent::__construct($config, $reserved);
 
+        // TODO mivanci check if authproc works when params are not nullable.
         $this->moduleConfiguration = $moduleConfiguration ?? new ModuleConfiguration();
-        $this->jobsStoreBuilder = $jobsStoreBuilder ?? new JobsStoreBuilder($this->moduleConfiguration);
         $this->logger = $logger ?? new Logger();
+        $this->jobsStoreBuilder = $jobsStoreBuilder ?? new JobsStoreBuilder($this->moduleConfiguration, $this->logger);
     }
 
     /**
@@ -67,6 +68,7 @@ class Accounting extends ProcessingFilter
      */
     protected function createAuthenticationEventJob(Event $authenticationEvent): void
     {
-        ($this->jobsStoreBuilder->build())->enqueue(new Event\Job($authenticationEvent));
+        ($this->jobsStoreBuilder->build($this->moduleConfiguration->getJobsStoreClass()))
+            ->enqueue(new Event\Job($authenticationEvent));
     }
 }

@@ -39,11 +39,12 @@ class Version20220801000000CreateVersionedDataStoreTables extends AbstractMigrat
 //
         $tablesToCreate = [
             $this->prepareTableIdp(),
+            $this->prepareTableIdpVersion(),
         ];
 
         foreach ($tablesToCreate as $table) {
             try {
-                    $this->schemaManager->createTable($table);
+                $this->schemaManager->createTable($table);
             } catch (\Throwable $exception) {
                 throw $this->prepareGenericMigrationException(
                     \sprintf('Erorr creating table \'%s', $table->getName()),
@@ -65,7 +66,7 @@ class Version20220801000000CreateVersionedDataStoreTables extends AbstractMigrat
 
         foreach ($tablesToDrop as $table) {
             try {
-                    $this->schemaManager->dropTable($table);
+                $this->schemaManager->dropTable($table);
             } catch (\Throwable $exception) {
                 throw $this->prepareGenericMigrationException(\sprintf('Could not drop table %s.', $table), $exception);
             }
@@ -99,6 +100,39 @@ class Version20220801000000CreateVersionedDataStoreTables extends AbstractMigrat
             $table->setPrimaryKey(['id']);
 
             $table->addUniqueConstraint(['entity_id']);
+
+            return $table;
+        } catch (\Throwable $exception) {
+            throw $this->prepareGenericMigrationException(
+                \sprintf('Error preparing Table instance for \'%s\'.', $tableName),
+                $exception
+            );
+        }
+    }
+
+    protected function prepareTableIdpVersion(): Table
+    {
+        $tableName = $this->preparePrefixedTableName('idp_version');
+
+        try {
+            $table = new Table($tableName);
+
+            $table->addColumn('id', Types::BIGINT)
+                ->setUnsigned(true)
+                ->setAutoincrement(true);
+
+            $table->addColumn('idp_id', Types::BIGINT)
+                ->setUnsigned(true);
+
+
+//            $table->addColumn('entity_id', Types::STRING)
+//                ->setLength(TableConstants::TABLE_IDP_COLUMN_ENTITY_ID_LENGTH);
+//
+//            $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
+//
+//            $table->setPrimaryKey(['id']);
+//
+//            $table->add(['entity_id']);
 
             return $table;
         } catch (\Throwable $exception) {
