@@ -9,7 +9,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
 
-class Version20220801000100CreateIdpVersionTable extends AbstractMigration
+class Version20220801000400CreateUserTable extends AbstractMigration
 {
     protected function getLocalTablePrefix(): string
     {
@@ -22,7 +22,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
      */
     public function run(): void
     {
-        $tableName = $this->preparePrefixedTableName('idp_version');
+        $tableName = $this->preparePrefixedTableName('user');
 
         try {
             $table = new Table($tableName);
@@ -31,12 +31,10 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
                 ->setUnsigned(true)
                 ->setAutoincrement(true);
 
-            $table->addColumn('idp_id', Types::BIGINT)
-                ->setUnsigned(true);
+            $table->addColumn('identifier', Types::TEXT)
+                ->setLength(65535);
 
-            $table->addColumn('payload', Types::TEXT);
-
-            $table->addColumn('payload_hash_sha256', Types::STRING)
+            $table->addColumn('identifier_hash_sha256', Types::STRING)
                 ->setLength(TableConstants::COLUMN_HASH_SHA265_HEXITS_LENGTH)
                 ->setFixed(true);
 
@@ -44,9 +42,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
 
             $table->setPrimaryKey(['id']);
 
-            $table->addForeignKeyConstraint($this->preparePrefixedTableName('idp'), ['idp_id'], ['id']);
-
-            $table->addUniqueConstraint(['payload_hash_sha256']);
+            $table->addUniqueConstraint(['identifier_hash_sha256']);
 
             $this->schemaManager->createTable($table);
         } catch (\Throwable $exception) {
@@ -63,7 +59,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
      */
     public function revert(): void
     {
-        $tableName = $this->preparePrefixedTableName('idp_version');
+        $tableName = $this->preparePrefixedTableName('user');
 
         try {
             $this->schemaManager->dropTable($tableName);

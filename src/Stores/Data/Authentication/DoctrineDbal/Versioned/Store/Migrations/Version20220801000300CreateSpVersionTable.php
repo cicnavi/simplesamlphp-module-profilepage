@@ -9,7 +9,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
 
-class Version20220801000100CreateIdpVersionTable extends AbstractMigration
+class Version20220801000300CreateSpVersionTable extends AbstractMigration
 {
     protected function getLocalTablePrefix(): string
     {
@@ -22,7 +22,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
      */
     public function run(): void
     {
-        $tableName = $this->preparePrefixedTableName('idp_version');
+        $tableName = $this->preparePrefixedTableName('sp_version');
 
         try {
             $table = new Table($tableName);
@@ -31,7 +31,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
                 ->setUnsigned(true)
                 ->setAutoincrement(true);
 
-            $table->addColumn('idp_id', Types::BIGINT)
+            $table->addColumn('sp_id', Types::BIGINT)
                 ->setUnsigned(true);
 
             $table->addColumn('payload', Types::TEXT);
@@ -44,7 +44,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
 
             $table->setPrimaryKey(['id']);
 
-            $table->addForeignKeyConstraint($this->preparePrefixedTableName('idp'), ['idp_id'], ['id']);
+            $table->addForeignKeyConstraint($this->preparePrefixedTableName('sp'), ['sp_id'], ['id']);
 
             $table->addUniqueConstraint(['payload_hash_sha256']);
 
@@ -63,7 +63,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
      */
     public function revert(): void
     {
-        $tableName = $this->preparePrefixedTableName('idp_version');
+        $tableName = $this->preparePrefixedTableName('sp_version');
 
         try {
             $this->schemaManager->dropTable($tableName);

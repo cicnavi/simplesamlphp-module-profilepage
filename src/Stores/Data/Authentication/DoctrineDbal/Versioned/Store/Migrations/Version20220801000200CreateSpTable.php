@@ -3,13 +3,12 @@
 namespace SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations;
 
 use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
 
-class Version20220801000100CreateIdpVersionTable extends AbstractMigration
+class Version20220801000200CreateSpTable extends AbstractMigration
 {
     protected function getLocalTablePrefix(): string
     {
@@ -22,7 +21,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
      */
     public function run(): void
     {
-        $tableName = $this->preparePrefixedTableName('idp_version');
+        $tableName = $this->preparePrefixedTableName('sp');
 
         try {
             $table = new Table($tableName);
@@ -31,12 +30,10 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
                 ->setUnsigned(true)
                 ->setAutoincrement(true);
 
-            $table->addColumn('idp_id', Types::BIGINT)
-                ->setUnsigned(true);
+            $table->addColumn('entity_id', Types::STRING)
+                ->setLength(TableConstants::COLUMN_ENTITY_ID_LENGTH);
 
-            $table->addColumn('payload', Types::TEXT);
-
-            $table->addColumn('payload_hash_sha256', Types::STRING)
+            $table->addColumn('entity_id_hash_sha256', Types::STRING)
                 ->setLength(TableConstants::COLUMN_HASH_SHA265_HEXITS_LENGTH)
                 ->setFixed(true);
 
@@ -44,9 +41,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
 
             $table->setPrimaryKey(['id']);
 
-            $table->addForeignKeyConstraint($this->preparePrefixedTableName('idp'), ['idp_id'], ['id']);
-
-            $table->addUniqueConstraint(['payload_hash_sha256']);
+            $table->addUniqueConstraint(['entity_id_hash_sha256']);
 
             $this->schemaManager->createTable($table);
         } catch (\Throwable $exception) {
@@ -63,7 +58,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
      */
     public function revert(): void
     {
-        $tableName = $this->preparePrefixedTableName('idp_version');
+        $tableName = $this->preparePrefixedTableName('sp');
 
         try {
             $this->schemaManager->dropTable($tableName);

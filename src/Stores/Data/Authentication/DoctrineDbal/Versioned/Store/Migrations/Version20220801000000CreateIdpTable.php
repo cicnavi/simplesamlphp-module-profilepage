@@ -26,15 +26,22 @@ class Version20220801000000CreateIdpTable extends AbstractMigration
         try {
             $table = new Table($tableName);
 
-            $table->addColumn('id', Types::STRING)
+            $table->addColumn('id', Types::BIGINT)
+                ->setUnsigned(true)
+                ->setAutoincrement(true);
+
+            $table->addColumn('entity_id', Types::STRING)
+                ->setLength(TableConstants::COLUMN_ENTITY_ID_LENGTH);
+
+            $table->addColumn('entity_id_hash_sha256', Types::STRING)
                 ->setLength(TableConstants::COLUMN_HASH_SHA265_HEXITS_LENGTH)
                 ->setFixed(true);
-
-            $table->addColumn('entity_id', Types::STRING);
 
             $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
 
             $table->setPrimaryKey(['id']);
+
+            $table->addUniqueConstraint(['entity_id_hash_sha256']);
 
             $this->schemaManager->createTable($table);
         } catch (\Throwable $exception) {

@@ -16,25 +16,40 @@ class TableConstants
 
     // Table 'idp'
     public const TABLE_NAME_IDP = 'idp';
-    public const TABLE_IDP_COLUMN_NAME_ID = 'id'; // sha256 hashed entity ID, hexits, char(64)
+    public const TABLE_IDP_COLUMN_NAME_ID = 'id'; // int
     public const TABLE_IDP_COLUMN_NAME_ENTITY_ID = 'entity_id'; // Entity ID value, string, varchar(1024)
-    //public const TABLE_IDP_COLUMN_NAME_PAYLOAD = 'payload'; // Current IdP metadata can be fetched from metadata
+    public const TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 = 'entity_id_hash_sha256'; // ha256 hash hexits, char(64)
     public const TABLE_IDP_COLUMN_NAME_CREATED_AT = 'created_at'; // First time IdP usage, datetime
 
     // Table 'idp_version'
     public const TABLE_NAME_IDP_VERSION = 'idp_version';
-    // The ID is int despite the fact that the payload has unique hash. The reason is huge difference in storage
-    // for int (4 bytes) vs char (64 chars/bytes) when using the ID in child table(s), primarily in table
-    // 'authentication'.
     public const TABLE_IDP_VERSION_COLUMN_NAME_ID = 'id'; // int ID
-    public const TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID = 'idp_id'; // FK, sha256 hashed IdP entity ID
+    public const TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID = 'idp_id'; // FK
     public const TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD = 'payload'; // Serialized IdP metadata version
-    public const TABLE_IDP_VERSION_COLUMN_NAME_HASH_SHA256_PAYLOAD = 'payload_hash_sha256'; // Payload sha256 hash, unq
+    public const TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 = 'payload_hash_sha256'; // Payload sha256 hash, unq
+    public const TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT = 'created_at';
 
+    // Table 'sp', same structure as in 'idp'
     public const TABLE_NAME_SP = 'sp';
-    public const TABLE_NAME_SP_VERSION = 'sp_version';
+    public const TABLE_SP_COLUMN_NAME_ID = 'id';
+    public const TABLE_SP_COLUMN_NAME_ENTITY_ID = 'entity_id';
+    public const TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 = 'entity_id_hash_sha256';
+    public const TABLE_SP_COLUMN_NAME_CREATED_AT = 'created_at';
 
+    // Table 'sp_version', same structure as in 'idp_version'
+    public const TABLE_NAME_SP_VERSION = 'sp_version';
+    public const TABLE_SP_VERSION_COLUMN_NAME_ID = 'sp';
+    public const TABLE_SP_VERSION_COLUMN_NAME_IDP_ID = 'sp_id';
+    public const TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD = 'payload';
+    public const TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 = 'payload_hash_sha256';
+    public const TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT = 'created_at';
+
+    // Table 'user'
     public const TABLE_NAME_USER = 'user';
+    public const TABLE_USER_COLUMN_ID = 'id'; // int
+    public const TABLE_USER_COLUMN_IDENTIFIER = 'identifier'; // text, varies... (can be ePTID, which is long XML).
+    public const TABLE_USER_COLUMN_IDENTIFIER_HASH_SHA256 = 'identifier_hash_sha256';
+    public const TABLE_USER_COLUMN_NAME_CREATED_AT = 'created_at';
 
     public const TABLE_NAME_USER_ATTRIBUTE_VERSION = 'user_attribute_version';
 
