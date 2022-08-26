@@ -41,9 +41,9 @@ class Repository
     protected function prepareValidJobsTableNames(): void
     {
         $this->validJobsTableNames[] = $this->connection
-            ->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
+            ->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOB);
         $this->validJobsTableNames[] = $this->connection
-            ->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_FAILED_JOBS);
+            ->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOB_FAILED);
     }
 
     /**

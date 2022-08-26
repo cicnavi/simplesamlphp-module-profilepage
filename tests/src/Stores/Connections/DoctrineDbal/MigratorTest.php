@@ -22,8 +22,8 @@ use function PHPUnit\Framework\assertFalse;
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
@@ -101,10 +101,10 @@ class MigratorTest extends TestCase
 
         $migrator->runSetup();
 
-        $tableNameJobs = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
+        $tableNameJobs = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOB);
         $this > assertFalse($this->schemaManager->tablesExist($tableNameJobs));
 
-        $migrator->runMigrationClasses([Store\Migrations\Version20220601000000CreateJobsTable::class]);
+        $migrator->runMigrationClasses([Store\Migrations\Version20220601000000CreateJobTable::class]);
 
         $this->assertTrue($this->schemaManager->tablesExist($tableNameJobs));
     }
@@ -213,7 +213,7 @@ class MigratorTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        $migrator->runMigrationClasses([Store\Migrations\Version20220601000000CreateJobsTable::class]);
+        $migrator->runMigrationClasses([Store\Migrations\Version20220601000000CreateJobTable::class]);
     }
 
     public function testThrowsStoreExceptionOnGetImplementedMigrationClasses(): void

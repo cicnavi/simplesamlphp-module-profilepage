@@ -34,9 +34,9 @@ class Store extends AbstractStore implements JobsStoreInterface
     ) {
         parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey);
 
-        $this->prefixedTableNameJobs = $this->connection->preparePrefixedTableName(TableConstants::TABLE_NAME_JOBS);
+        $this->prefixedTableNameJobs = $this->connection->preparePrefixedTableName(TableConstants::TABLE_NAME_JOB);
         $this->prefixedTableNameFailedJobs = $this->connection
-            ->preparePrefixedTableName(TableConstants::TABLE_NAME_FAILED_JOBS);
+            ->preparePrefixedTableName(TableConstants::TABLE_NAME_JOB_FAILED);
 
         $this->jobsRepository = $jobsRepository ??
             new Repository($this->connection, $this->prefixedTableNameJobs, $this->logger);

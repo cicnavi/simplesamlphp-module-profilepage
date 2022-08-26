@@ -28,8 +28,8 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository;
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\RawJob
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
@@ -72,7 +72,7 @@ class RepositoryTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $this->jobsStore = new Store($this->moduleConfiguration, $this->loggerServiceStub, $this->factoryStub);
 
-        $this->jobsTableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
+        $this->jobsTableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOB);
     }
 
     public function testCanInsertAndGetJob(): void

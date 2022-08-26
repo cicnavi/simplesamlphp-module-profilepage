@@ -21,8 +21,8 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateFailedJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  */
@@ -72,7 +72,7 @@ class AbstractMigratorTest extends TestCase
 
         $migrationClasses = $migrator->gatherMigrationClassesFromDirectory($directory, $namespace);
 
-        $this->assertTrue(in_array($namespace . '\Version20220601000000CreateJobsTable', $migrationClasses));
+        $this->assertTrue(in_array($namespace . '\Version20220601000000CreateJobTable', $migrationClasses));
     }
 
     public function testCanRunMigrationClasses(): void
@@ -88,7 +88,7 @@ class AbstractMigratorTest extends TestCase
 
         $migrationClasses = $migrator->gatherMigrationClassesFromDirectory($directory, $namespace);
 
-        $jobsTableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOBS);
+        $jobsTableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOB);
 
         $this->assertFalse($this->schemaManager->tablesExist($jobsTableName));
 
@@ -143,7 +143,7 @@ class AbstractMigratorTest extends TestCase
         );
 
         $this->assertTrue(in_array(
-            Store\Migrations\Version20220601000000CreateJobsTable::class,
+            Store\Migrations\Version20220601000000CreateJobTable::class,
             $nonImplementedMigrationClasses
         ));
     }

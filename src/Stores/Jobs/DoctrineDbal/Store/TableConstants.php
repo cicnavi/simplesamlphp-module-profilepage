@@ -6,8 +6,8 @@ namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
 class TableConstants
 {
-    public const TABLE_NAME_JOBS = 'jobs';
-    public const TABLE_NAME_FAILED_JOBS = 'failed_jobs';
+    public const TABLE_NAME_JOB = 'job';
+    public const TABLE_NAME_JOB_FAILED = 'job_failed';
 
     // Both tables have same columns.
     public const COLUMN_NAME_ID = 'id';

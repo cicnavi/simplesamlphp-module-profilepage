@@ -6,11 +6,11 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  */
 class AbstractMigrationTest extends TestCase
@@ -27,7 +27,7 @@ class AbstractMigrationTest extends TestCase
     {
         $this->assertInstanceOf(
             AbstractMigration::class,
-            new Version20220601000000CreateJobsTable($this->connection)
+            new Version20220601000000CreateJobTable($this->connection)
         );
     }
 
@@ -41,7 +41,7 @@ class AbstractMigrationTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        (new Version20220601000000CreateJobsTable($connectionStub));
+        (new Version20220601000000CreateJobTable($connectionStub));
     }
 
     public function testCanThrowGenericMigrationExceptionOnRun(): void

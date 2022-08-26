@@ -9,11 +9,11 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000000CreateVersionedDataStoreTables
+ * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000000CreateIdpTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  */
-class Version20220801000000CreateVersionedDataStoreTablesTest extends TestCase
+class Version20220801000000CreateIdpTableTest extends TestCase
 {
     protected Connection $connection;
     protected \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager;
@@ -36,7 +36,7 @@ class Version20220801000000CreateVersionedDataStoreTablesTest extends TestCase
     public function testCanRunMigration(): void
     {
         $this->assertFalse($this->schemaManager->tablesExist($this->tableNameIdp));
-        $migration = new Migrations\Version20220801000000CreateVersionedDataStoreTables($this->connection);
+        $migration = new Migrations\Version20220801000000CreateIdpTable($this->connection);
         $migration->run();
         $this->assertTrue($this->schemaManager->tablesExist($this->tableNameIdp));
         $migration->revert();
@@ -52,7 +52,7 @@ class Version20220801000000CreateVersionedDataStoreTablesTest extends TestCase
         $this->connectionStub->method('dbal')->willReturn($this->dbalStub);
 
         /** @psalm-suppress InvalidArgument */
-        $migration = new Migrations\Version20220801000000CreateVersionedDataStoreTables($this->connectionStub);
+        $migration = new Migrations\Version20220801000000CreateIdpTable($this->connectionStub);
         $this->expectException(MigrationException::class);
         $migration->run();
     }
@@ -65,7 +65,7 @@ class Version20220801000000CreateVersionedDataStoreTablesTest extends TestCase
         $this->connectionStub->method('dbal')->willReturn($this->dbalStub);
 
         /** @psalm-suppress InvalidArgument */
-        $migration = new Migrations\Version20220801000000CreateVersionedDataStoreTables($this->connectionStub);
+        $migration = new Migrations\Version20220801000000CreateIdpTable($this->connectionStub);
         $this->expectException(MigrationException::class);
         $migration->revert();
     }
@@ -76,8 +76,10 @@ class Version20220801000000CreateVersionedDataStoreTablesTest extends TestCase
             ->willReturnOnConsecutiveCalls(''); // Invalid (empty) name for table
 
         /** @psalm-suppress InvalidArgument */
-        $migration = new Migrations\Version20220801000000CreateVersionedDataStoreTables($this->connectionStub);
+        $migration = new Migrations\Version20220801000000CreateIdpTable($this->connectionStub);
         $this->expectException(MigrationException::class);
         $migration->run();
     }
+
+    // TODO mivanci nastavi s ostalim tablicama.
 }
