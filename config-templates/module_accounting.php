@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Providers;
 use SimpleSAML\Module\accounting\Stores;
 use SimpleSAML\Module\accounting\Trackers;
-use SimpleSAML\Module\accounting\Providers;
 
 $config = [
     /**
@@ -51,7 +51,7 @@ $config = [
          * make sure to set its Doctrine DBAL compatible connection in
          * "class-to-connection map" setting, if you use it.
          */
-        Trackers\DoctrineDbal\VersionedAuthentication::class,
+        Trackers\DoctrineDbal\Versioned\Authentication::class,
     ],
 
     /**
@@ -63,7 +63,7 @@ $config = [
         /**
          * In addition to tracking data, this class can also serve as authentication data provider.
          */
-        Trackers\DoctrineDbal\VersionedAuthentication::class,
+        Trackers\DoctrineDbal\Versioned\Authentication::class,
 
     /**
      * Class-to-connection map. Can be used to set different connections for different classes (stores, trackers,

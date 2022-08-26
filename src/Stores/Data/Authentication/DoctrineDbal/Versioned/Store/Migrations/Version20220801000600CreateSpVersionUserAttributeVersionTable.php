@@ -9,7 +9,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
 
-class Version20220801000600CreateSpUserAttributeVersionTable extends AbstractMigration
+class Version20220801000600CreateSpVersionUserAttributeVersionTable extends AbstractMigration
 {
     protected function getLocalTablePrefix(): string
     {

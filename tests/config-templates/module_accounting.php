@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Providers;
 use SimpleSAML\Module\accounting\Stores;
 use SimpleSAML\Module\accounting\Trackers;
-use SimpleSAML\Module\accounting\Providers;
 
 $config = [
 
@@ -18,15 +18,15 @@ $config = [
     ModuleConfiguration::OPTION_JOBS_STORE_CLASS => Stores\Jobs\DoctrineDbal\Store::class,
 
     ModuleConfiguration::OPTION_ENABLED_TRACKERS => [
-        Trackers\DoctrineDbal\VersionedAuthentication::class,
+        Trackers\DoctrineDbal\Versioned\Authentication::class,
     ],
 
     ModuleConfiguration::OPTION_AUTHENTICATION_DATA_PROVIDER_CLASS =>
-        Trackers\DoctrineDbal\VersionedAuthentication::class,
+        Trackers\DoctrineDbal\Versioned\Authentication::class,
 
     ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [
         Stores\Jobs\DoctrineDbal\Store::class => 'doctrine_dbal_pdo_sqlite',
-        Trackers\DoctrineDbal\VersionedAuthentication::class => 'doctrine_dbal_pdo_sqlite',
+        Trackers\DoctrineDbal\Versioned\Authentication::class => 'doctrine_dbal_pdo_sqlite',
     ],
 
     ModuleConfiguration::OPTION_CONNECTIONS_AND_PARAMETERS => [

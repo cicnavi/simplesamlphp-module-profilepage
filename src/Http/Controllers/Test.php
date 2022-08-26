@@ -11,7 +11,7 @@ use SimpleSAML\Locale\Translate;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
-use SimpleSAML\Module\accounting\Trackers\DoctrineDbal\VersionedAuthentication;
+use SimpleSAML\Module\accounting\Trackers\DoctrineDbal\Versioned\Authentication;
 use SimpleSAML\Session;
 use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +56,7 @@ class Test
         $jobsStore = (new JobsStoreBuilder($this->moduleConfiguration, $this->logger))
             ->build($this->moduleConfiguration->getJobsStoreClass());
 
-        $dataStore = Store::build($this->moduleConfiguration, $this->logger, VersionedAuthentication::class);
+        $dataStore = Store::build($this->moduleConfiguration, $this->logger, Authentication::class);
 
         $jobsStoreNeedsSetup = $jobsStore->needsSetup();
         $jobsStoreSetupRan = false;

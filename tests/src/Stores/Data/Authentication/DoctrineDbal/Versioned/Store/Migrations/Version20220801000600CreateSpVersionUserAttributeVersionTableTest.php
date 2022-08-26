@@ -9,11 +9,11 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000000CreateIdpTable
+ * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000600CreateSpVersionUserAttributeVersionTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection *
  */
-class Version20220801000000CreateIdpTableTest extends TestCase
+class Version20220801000600CreateSpVersionUserAttributeVersionTableTest extends TestCase
 {
     protected Connection $connection;
     protected \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager;
@@ -26,7 +26,7 @@ class Version20220801000000CreateIdpTableTest extends TestCase
     {
         $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
-        $this->tableName = 'vds_idp';
+        $this->tableName = 'vds_sp_version_user_attribute_version';
 
         $this->connectionStub = $this->createStub(Connection::class);
         $this->dbalStub = $this->createStub(\Doctrine\DBAL\Connection::class);
@@ -36,7 +36,8 @@ class Version20220801000000CreateIdpTableTest extends TestCase
     public function testCanRunMigration(): void
     {
         $this->assertFalse($this->schemaManager->tablesExist($this->tableName));
-        $migration = new Migrations\Version20220801000000CreateIdpTable($this->connection);
+        $migration =
+            new Migrations\Version20220801000600CreateSpVersionUserAttributeVersionTable($this->connection);
         $migration->run();
         $this->assertTrue($this->schemaManager->tablesExist($this->tableName));
         $migration->revert();
@@ -52,7 +53,8 @@ class Version20220801000000CreateIdpTableTest extends TestCase
         $this->connectionStub->method('dbal')->willReturn($this->dbalStub);
 
         /** @psalm-suppress InvalidArgument */
-        $migration = new Migrations\Version20220801000000CreateIdpTable($this->connectionStub);
+        $migration =
+            new Migrations\Version20220801000600CreateSpVersionUserAttributeVersionTable($this->connectionStub);
         $this->expectException(MigrationException::class);
         $migration->run();
     }
@@ -65,7 +67,8 @@ class Version20220801000000CreateIdpTableTest extends TestCase
         $this->connectionStub->method('dbal')->willReturn($this->dbalStub);
 
         /** @psalm-suppress InvalidArgument */
-        $migration = new Migrations\Version20220801000000CreateIdpTable($this->connectionStub);
+        $migration =
+            new Migrations\Version20220801000600CreateSpVersionUserAttributeVersionTable($this->connectionStub);
         $this->expectException(MigrationException::class);
         $migration->revert();
     }
@@ -76,7 +79,8 @@ class Version20220801000000CreateIdpTableTest extends TestCase
             ->willReturnOnConsecutiveCalls(''); // Invalid (empty) name for table
 
         /** @psalm-suppress InvalidArgument */
-        $migration = new Migrations\Version20220801000000CreateIdpTable($this->connectionStub);
+        $migration =
+            new Migrations\Version20220801000600CreateSpVersionUserAttributeVersionTable($this->connectionStub);
         $this->expectException(MigrationException::class);
         $migration->run();
     }
