@@ -20,9 +20,9 @@ class Store extends AbstractStore implements DataStoreInterface
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
         Factory $connectionFactory,
-        string $connectionKey = null
+        string $class = null
     ) {
-        parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey);
+        parent::__construct($moduleConfiguration, $logger, $connectionFactory, $class);
     }
 
     /**
@@ -32,13 +32,13 @@ class Store extends AbstractStore implements DataStoreInterface
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        string $connectionKey
+        string $class = null
     ): self {
         return new self(
             $moduleConfiguration,
             $logger,
             new Factory($moduleConfiguration, $logger),
-            $connectionKey
+            $class
         );
     }
 }

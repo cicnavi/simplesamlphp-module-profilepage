@@ -9,6 +9,7 @@ use SimpleSAML\Configuration;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores;
+use SimpleSAML\Module\accounting\Trackers;
 
 /**
  * @covers \SimpleSAML\Module\accounting\ModuleConfiguration
@@ -46,7 +47,7 @@ class ModuleConfigurationTest extends TestCase
         $this->assertIsString($this->moduleConfiguration->getUserIdAttributeName());
     }
 
-    public function testCanGetJobsStore(): void
+    public function testCanGetJobsStoreClass(): void
     {
         $this->assertTrue(
             is_subclass_of($this->moduleConfiguration->getJobsStoreClass(), Stores\Interfaces\JobsStoreInterface::class)
@@ -71,7 +72,42 @@ class ModuleConfigurationTest extends TestCase
     {
         $this->assertSame(
             'doctrine_dbal_pdo_sqlite',
-            $this->moduleConfiguration->getClassConnectionParameters(Stores\Jobs\DoctrineDbal\Store::class)
+            $this->moduleConfiguration->getClassConnectionKey(Stores\Jobs\DoctrineDbal\Store::class)
+        );
+    }
+
+    public function testCanGetSlaveConnectionKey(): void
+    {
+        $this->assertSame(
+            'doctrine_dbal_pdo_sqlite_slave',
+            $this->moduleConfiguration->getClassConnectionKey(
+                Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class,
+                ModuleConfiguration\ConnectionType::SLAVE
+            )
+        );
+    }
+
+    public function testThrowsForNonStringAndNonArrayConnectionKey(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new ModuleConfiguration('invalid_object_value_module_accounting.php');
+    }
+
+    public function testThrowsForNonMasterInArrayConnection(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new ModuleConfiguration('invalid_array_value_module_accounting.php');
+    }
+
+    public function testThrowsForInvalidConnectiontype(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $this->moduleConfiguration->getClassConnectionKey(
+            Stores\Jobs\DoctrineDbal\Store::class,
+            'invalid'
         );
     }
 
@@ -90,7 +126,7 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
-    public function testCanGetSettingsForSpecificConnection(): void
+    public function testCanGetParametersForSpecificConnection(): void
     {
         $this->assertIsArray($this->moduleConfiguration->getConnectionParameters('doctrine_dbal_pdo_sqlite'));
     }

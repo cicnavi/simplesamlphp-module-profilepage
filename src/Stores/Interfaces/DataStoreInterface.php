@@ -12,6 +12,6 @@ interface DataStoreInterface extends StoreInterface
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        string $connectionKey
+        string $class = null
     ): self;
 }

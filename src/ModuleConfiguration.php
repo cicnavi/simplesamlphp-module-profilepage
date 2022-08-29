@@ -46,6 +46,149 @@ class ModuleConfiguration
         $this->validate();
     }
 
+    public function getAccountingProcessingType(): string
+    {
+        return $this->getConfiguration()->getString(self::OPTION_ACCOUNTING_PROCESSING_TYPE);
+    }
+
+    /**
+     * Get underlying SimpleSAMLphp Configuration instance.
+     *
+     * @return Configuration
+     */
+    public function getConfiguration(): Configuration
+    {
+        return $this->configuration;
+    }
+
+    public function getJobsStoreClass(): string
+    {
+        return $this->getConfiguration()->getString(self::OPTION_JOBS_STORE);
+    }
+
+    public function getDefaultDataTrackerAndProviderClass(): string
+    {
+        return $this->getConfiguration()->getString(self::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER);
+    }
+
+    public function getConnectionsAndParameters(): array
+    {
+        return $this->getConfiguration()->getArray(self::OPTION_CONNECTIONS_AND_PARAMETERS);
+    }
+
+    protected function getAdditionalTrackers(): array
+    {
+        return $this->getConfiguration()->getArray(self::OPTION_ADDITIONAL_TRACKERS);
+    }
+
+    public function getClassToConnectionsMap(): array
+    {
+        return $this->getConfiguration()->getArray(self::OPTION_CLASS_TO_CONNECTION_MAP);
+    }
+
+    /**
+     * Get configuration option from module configuration file.
+     *
+     * @param string $option
+     * @return mixed
+     */
+    public function get(string $option)
+    {
+        if (!$this->configuration->hasValue($option)) {
+            throw new InvalidConfigurationException(
+                sprintf('Configuration option does not exist (%s).', $option)
+            );
+        }
+
+        return $this->configuration->getValue($option);
+    }
+
+    public function getUserIdAttributeName(): string
+    {
+        return $this->getConfiguration()->getString(self::OPTION_USER_ID_ATTRIBUTE_NAME);
+    }
+
+    public function getClassConnectionKey(string $class, string $connectionType = ConnectionType::MASTER): string
+    {
+        $this->validateConnectionType($connectionType);
+
+        $connections = $this->getClassToConnectionsMap();
+
+        if (!isset($connections[$class])) {
+            throw new InvalidConfigurationException(sprintf('Connection for class \'%s\' not set.', $class));
+        }
+
+        $connectionValue = $connections[$class];
+
+        // If the key is defined directly, return that.
+        if (is_string($connectionValue)) {
+            return $connectionValue;
+        }
+
+        if (!is_array($connectionValue)) {
+            throw new InvalidConfigurationException(
+                sprintf('Connection for class \'%s\' is not defined as string nor as array.', $class)
+            );
+        }
+
+        if (!isset($connectionValue[ConnectionType::MASTER])) {
+            $message = sprintf(
+                'Connection for class \'%s\' is defined as array, however no master connection key is set.',
+                $class
+            );
+            throw new InvalidConfigurationException($message);
+        }
+
+        // By default, use master connection key.
+        $connectionKey = (string)$connectionValue[ConnectionType::MASTER];
+
+        if ($connectionType === ConnectionType::MASTER || (! isset($connectionValue[ConnectionType::SLAVE]))) {
+            return $connectionKey;
+        }
+
+        if (is_array($connectionValue[ConnectionType::SLAVE])) {
+            // Return random slave connection key.
+            $slaveConnections = $connectionValue[ConnectionType::SLAVE];
+            $connectionKey = (string)$slaveConnections[array_rand($slaveConnections)];
+        }
+
+        return $connectionKey;
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     */
+    public function getClassConnectionParameters(string $class, string $connectionType = ConnectionType::MASTER): array
+    {
+        return $this->getConnectionParameters($this->getClassConnectionKey($class, $connectionType));
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     */
+    public function getConnectionParameters(string $connectionKey): array
+    {
+        $connections = $this->getConnectionsAndParameters();
+
+        if (!isset($connections[$connectionKey]) || !is_array($connections[$connectionKey])) {
+            throw new InvalidConfigurationException(
+                sprintf('Connection parameters not set for key \'%s\'.', $connectionKey)
+            );
+        }
+
+        return $connections[$connectionKey];
+    }
+
+    public function getModuleSourceDirectory(): string
+    {
+        return __DIR__;
+    }
+
+    public function getModuleRootDirectory(): string
+    {
+        return dirname(__DIR__);
+    }
+
     /**
      * @throws InvalidConfigurationException
      */
@@ -66,21 +209,10 @@ class ModuleConfiguration
             } catch (Throwable $exception) {
                 $errors[] = $exception->getMessage();
             }
-            try {
-                $this->validateJobsStoreConnection();
-            } catch (Throwable $exception) {
-                $errors[] = $exception->getMessage();
-            }
         }
 
         try {
             $this->validateDefaultDataTrackerAndProvider();
-        } catch (Throwable $exception) {
-            $errors[] = $exception->getMessage();
-        }
-
-        try {
-            $this->validateDefaultDataTrackerAndProviderConnection();
         } catch (Throwable $exception) {
             $errors[] = $exception->getMessage();
         }
@@ -91,94 +223,16 @@ class ModuleConfiguration
             $errors[] = $exception->getMessage();
         }
 
+        try {
+            $this->validateClassToConnectionMap();
+        } catch (Throwable $exception) {
+            $errors[] = $exception->getMessage();
+        }
+
         if (!empty($errors)) {
             $message = sprintf('Module configuration validation failed with errors: %s', implode(' ', $errors));
             throw new InvalidConfigurationException($message);
         }
-    }
-
-    /**
-     * @throws InvalidConfigurationException
-     */
-    protected function validateAccountingProcessingType(): void
-    {
-        // Only defined accounting processing types are allowed.
-        if (!in_array($this->getAccountingProcessingType(), AccountingProcessingType::VALID_OPTIONS)) {
-            $message = sprintf(
-                'Accounting processing type is not valid; possible values are: %s.',
-                implode(', ', AccountingProcessingType::VALID_OPTIONS)
-            );
-
-            throw new InvalidConfigurationException($message);
-        }
-    }
-
-    public function getAccountingProcessingType(): string
-    {
-        return $this->getConfiguration()->getString(self::OPTION_ACCOUNTING_PROCESSING_TYPE);
-    }
-
-    /**
-     * Get underlying SimpleSAMLphp Configuration instance.
-     *
-     * @return Configuration
-     */
-    public function getConfiguration(): Configuration
-    {
-        return $this->configuration;
-    }
-
-    /**
-     * @throws InvalidConfigurationException
-     */
-    protected function validateJobsStoreClass(): void
-    {
-        // Jobs store class must implement JobsStoreInterface
-        $jobsStore = $this->getJobsStoreClass();
-        if (!class_exists($jobsStore) || !is_subclass_of($jobsStore, JobsStoreInterface::class)) {
-            $message = sprintf(
-                'Provided jobs store class \'%s\' does not implement interface \'%s\'.',
-                $jobsStore,
-                JobsStoreInterface::class
-            );
-
-            throw new InvalidConfigurationException($message);
-        }
-    }
-
-    public function getJobsStoreClass(): string
-    {
-        return $this->getConfiguration()->getString(self::OPTION_JOBS_STORE);
-    }
-
-    /**
-     * @throws InvalidConfigurationException
-     */
-    protected function validateJobsStoreConnection(): void
-    {
-        $jobsStoreConnectionKey = $this->getJobsStoreConnectionKey();
-
-        $connectionsAndParameters = $this->getConnectionsAndParameters();
-
-        if (!array_key_exists($jobsStoreConnectionKey, $connectionsAndParameters)) {
-            $message = sprintf(
-                'Connection parameters for jobs store connection key \'%s\' not set.',
-                $jobsStoreConnectionKey
-            );
-
-            throw new InvalidConfigurationException($message);
-        }
-    }
-
-    public function getJobsStoreConnectionKey(): string
-    {
-        $jobsStoreClass = $this->getJobsStoreClass();
-        return $this->getClassConnectionKey($jobsStoreClass);
-    }
-
-    public function getConnectionsAndParameters(): array
-    {
-        return $this->getConfiguration()->getArray(self::OPTION_CONNECTIONS_AND_PARAMETERS);
     }
 
     /**
@@ -212,71 +266,6 @@ class ModuleConfiguration
         }
     }
 
-    public function getDefaultDataTrackerAndProviderClass(): string
-    {
-        return $this->getConfiguration()->getString(self::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER);
-    }
-
-    /**
-     * @throws InvalidConfigurationException
-     */
-    protected function validateDefaultDataTrackerAndProviderConnection(): void
-    {
-        $errors = [];
-
-        // Default data tracker and provider must have at least master connection set.
-        $defaultDataTrackerAndProviderConnection = $this->getDefaultDataTrackerAndProviderConnection();
-
-        if (!isset($defaultDataTrackerAndProviderConnection[ConnectionType::MASTER])) {
-            $errors[] = 'Default data tracker and provider master connection key not set.';
-        }
-
-        $connectionsAndParameters = $this->getConnectionsAndParameters();
-
-        // Master connection parameters must exist.
-        $defaultDataTrackerAndProviderMasterConnectionKey =
-            (string)($defaultDataTrackerAndProviderConnection[ConnectionType::MASTER] ?? '');
-
-        if (!array_key_exists($defaultDataTrackerAndProviderMasterConnectionKey, $connectionsAndParameters)) {
-            $errors[] = sprintf(
-                'Default data tracker and provider master connection key \'%s\' parameters not set.',
-                $defaultDataTrackerAndProviderMasterConnectionKey
-            );
-        }
-
-        // If default data tracker and provider slave connections are set, validate them.
-        if (isset($defaultDataTrackerAndProviderConnection[ConnectionType::SLAVE])) {
-            if (!is_array($defaultDataTrackerAndProviderConnection[ConnectionType::SLAVE])) {
-                $errors[] = 'Default data tracker and provider slave connections must be defined in array.';
-            } else {
-                $defaultDataTrackerAndProviderSlaveConnections =
-                    $defaultDataTrackerAndProviderConnection[ConnectionType::SLAVE];
-
-                /** @var string $slaveConnectionKey */
-                foreach ($defaultDataTrackerAndProviderSlaveConnections as $slaveConnectionKey) {
-                    /** @psalm-suppress DocblockTypeContradiction */
-                    if (!is_string($slaveConnectionKey)) {
-                        $errors[] = 'Default data tracker and provider slave connection key must be string.';
-                    } elseif (!array_key_exists($slaveConnectionKey, $connectionsAndParameters)) {
-                        $errors[] = sprintf(
-                            'Default data tracker and provider slave connection key \'%s\' parameters not set.',
-                            $slaveConnectionKey
-                        );
-                    }
-                }
-            }
-        }
-
-        if (!empty($errors)) {
-            throw new InvalidConfigurationException(implode(' ', $errors));
-        }
-    }
-
-    public function getDefaultDataTrackerAndProviderConnection(): array
-    {
-        return $this->getConfiguration()->getArray(self::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER_CONNECTION);
-    }
-
     /**
      * @throws InvalidConfigurationException
      */
@@ -284,33 +273,19 @@ class ModuleConfiguration
     {
         $errors = [];
 
-        $connectionsAndParameters = $this->getConnectionsAndParameters();
-
         // Validate additional trackers
         /**
          * @var string $trackerClass
-         * @var string $trackerConnectionKey
          */
-        foreach ($this->getClassToConnectionsMap() as $trackerClass => $trackerConnectionKey) {
+        foreach ($this->getAdditionalTrackers() as $trackerClass) {
             /** @psalm-suppress DocblockTypeContradiction */
             if (!is_string($trackerClass)) {
-                $errors[] = 'The key in additional trackers array must be class string.';
+                $errors[] = 'Additional trackers array must contain class strings only.';
             } elseif (!is_subclass_of($trackerClass, AuthenticationDataTrackerInterface::class)) {
                 $errors[] = sprintf(
                     'Tracker class \'%s\' does not implement interface \'%s\'.',
                     $trackerClass,
                     AuthenticationDataTrackerInterface::class
-                );
-            }
-
-            /** @psalm-suppress DocblockTypeContradiction */
-            if (!is_string($trackerConnectionKey)) {
-                $errors[] = 'The value for each additional tracker must be connection key string.';
-            } elseif (!array_key_exists($trackerConnectionKey, $connectionsAndParameters)) {
-                $errors[] = sprintf(
-                    'Connection parameters for key \'%s\' used by tracker class \'%s\' not set.',
-                    $trackerConnectionKey,
-                    $trackerClass
                 );
             }
         }
@@ -320,127 +295,79 @@ class ModuleConfiguration
         }
     }
 
-    public function getClassToConnectionsMap(): array
-    {
-        return $this->getConfiguration()->getArray(self::OPTION_CLASS_TO_CONNECTION_MAP);
-    }
-
-    /**
-     * Get configuration option from module configuration file.
-     *
-     * @param string $option
-     * @return mixed
-     */
-    public function get(string $option)
-    {
-        if (!$this->configuration->hasValue($option)) {
-            throw new InvalidConfigurationException(
-                sprintf('Configuration option does not exist (%s).', $option)
-            );
-        }
-
-        return $this->configuration->getValue($option);
-    }
-
-    public function getUserIdAttributeName(): string
-    {
-        return $this->getConfiguration()->getString(self::OPTION_USER_ID_ATTRIBUTE_NAME);
-    }
-
-    public function getClassConnectionKey(string $class, string $connectionType = ConnectionType::MASTER): string
-    {
-        $this->validateConnectionType($connectionType);
-        $connections = $this->getClassToConnectionsMap();
-
-        if (!isset($connections[$class])) {
-            throw new InvalidConfigurationException(sprintf('Connection for class \'%s\' not set.', $class));
-        }
-
-        $connectionValue = $connections[$class];
-
-        // If the key is defined directly, return that.
-        if (is_string($connectionValue)) {
-            return $connectionValue;
-        }
-
-        if (!is_array($connectionValue)) {
-            throw new InvalidConfigurationException(
-                sprintf('Connection for class \'%s\' is not defined as string nor as array.', $class)
-            );
-        }
-
-        if (!isset($connectionValue[ConnectionType::MASTER])) {
-            throw new InvalidConfigurationException(
-                sprintf(
-                    'Connection for class \'%s\' is defined as array, however no master connection key is set.',
-                    $class
-                )
-            );
-        }
-
-        // By default, use master connection key.
-        $connectionKey = (string)$connectionValue[ConnectionType::MASTER];
-
-        if (
-            $connectionType === ConnectionType::SLAVE &&
-            isset($connectionValue[ConnectionType::SLAVE]) &&
-            is_array($connectionValue[ConnectionType::SLAVE])
-        ) {
-            // Return random slave connection key.
-            $slaveConnections = $connections[ConnectionType::SLAVE];
-            $connectionKey = (string)$slaveConnections[array_rand($slaveConnections)];
-        }
-
-        return $connectionKey;
-    }
-
     /**
      * @throws InvalidConfigurationException
      */
-    public function getClassConnectionParameters(string $class, string $connectionType = ConnectionType::MASTER): array
-    {
-        return $this->getConnectionParameters($this->getClassConnectionKey($class, $connectionType));
-    }
-
-    /**
-     * @throws InvalidConfigurationException
-     */
-    protected function validateConnectionType(string $connectionType)
+    protected function validateConnectionType(string $connectionType): void
     {
         if (!in_array($connectionType, ConnectionType::VALID_OPTIONS)) {
-            throw new InvalidConfigurationException(
-                sprintf(
-                    'Connection type \'%s\' is not valid. Possible values are: %s.',
-                    $connectionType,
-                    implode(', ', ConnectionType::VALID_OPTIONS)
-                )
+            $message = sprintf(
+                'Connection type \'%s\' is not valid. Possible values are: %s.',
+                $connectionType,
+                implode(', ', ConnectionType::VALID_OPTIONS)
             );
+            throw new InvalidConfigurationException($message);
         }
     }
 
     /**
      * @throws InvalidConfigurationException
      */
-    public function getConnectionParameters(string $connectionKey): array
+    protected function validateAccountingProcessingType(): void
     {
-        $connections = $this->getConnectionsAndParameters();
-
-        if (!isset($connections[$connectionKey]) || !is_array($connections[$connectionKey])) {
-            throw new InvalidConfigurationException(
-                sprintf('Connection parameters not set for key \'%s\'.', $connectionKey)
+        // Only defined accounting processing types are allowed.
+        if (!in_array($this->getAccountingProcessingType(), AccountingProcessingType::VALID_OPTIONS)) {
+            $message = sprintf(
+                'Accounting processing type is not valid; possible values are: %s.',
+                implode(', ', AccountingProcessingType::VALID_OPTIONS)
             );
+
+            throw new InvalidConfigurationException($message);
+        }
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     */
+    protected function validateJobsStoreClass(): void
+    {
+        // Jobs store class must implement JobsStoreInterface
+        $jobsStore = $this->getJobsStoreClass();
+        if (!class_exists($jobsStore) || !is_subclass_of($jobsStore, JobsStoreInterface::class)) {
+            $message = sprintf(
+                'Provided jobs store class \'%s\' does not implement interface \'%s\'.',
+                $jobsStore,
+                JobsStoreInterface::class
+            );
+
+            throw new InvalidConfigurationException($message);
+        }
+    }
+
+    /**
+     * @throws InvalidConfigurationException
+     */
+    protected function validateClassToConnectionMap(): void
+    {
+        $errors = [];
+
+        $connectionsAndParameters = $this->getConnectionsAndParameters();
+        // Each defined class should have defined connection parameters.
+        $classToConnectionMap = array_keys($this->getClassToConnectionsMap());
+        /** @var string $class */
+        foreach ($classToConnectionMap as $class) {
+            $connectionKey = $this->getClassConnectionKey($class);
+            if (! array_key_exists($connectionKey, $connectionsAndParameters)) {
+                $errors[] = sprintf(
+                    'Class \'%s\' has connection key \'%s\' set, however parameters for that key are not set.',
+                    $class,
+                    $connectionKey
+                );
+            }
         }
 
-        return $connections[$connectionKey];
-    }
-
-    public function getModuleSourceDirectory(): string
-    {
-        return __DIR__;
-    }
-
-    public function getModuleRootDirectory(): string
-    {
-        return dirname(__DIR__);
+        if (!empty($errors)) {
+            throw new InvalidConfigurationException(implode(' ', $errors));
+        }
     }
 }

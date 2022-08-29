@@ -29,10 +29,10 @@ class Store extends AbstractStore implements JobsStoreInterface
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
         Factory $connectionFactory,
-        string $connectionKey = null,
+        string $class = null,
         Repository $jobsRepository = null
     ) {
-        parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey);
+        parent::__construct($moduleConfiguration, $logger, $connectionFactory, $class);
 
         $this->prefixedTableNameJobs = $this->connection->preparePrefixedTableName(TableConstants::TABLE_NAME_JOB);
         $this->prefixedTableNameFailedJobs = $this->connection
@@ -120,20 +120,20 @@ class Store extends AbstractStore implements JobsStoreInterface
      * Build store instance.
      * @param ModuleConfiguration $moduleConfiguration
      * @param LoggerInterface $logger
-     * @param string|null $connectionKey
+     * @param string|null $class
      * @return self
      * @throws StoreException
      */
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        string $connectionKey = null
+        string $class = null
     ): self {
         return new self(
             $moduleConfiguration,
             $logger,
             new Factory($moduleConfiguration, $logger),
-            $connectionKey
+            $class
         );
     }
 }

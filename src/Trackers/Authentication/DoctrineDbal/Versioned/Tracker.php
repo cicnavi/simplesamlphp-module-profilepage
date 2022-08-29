@@ -16,7 +16,7 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger
     ): self {
-        // TODO: Implement build() method.
+        return new self();
     }
 
     public function process(Event $authenticationEvent): void

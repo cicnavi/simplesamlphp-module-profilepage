@@ -27,6 +27,6 @@ interface JobsStoreInterface extends StoreInterface
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        string $connectionKey = null
+        string $class = null
     ): self;
 }
