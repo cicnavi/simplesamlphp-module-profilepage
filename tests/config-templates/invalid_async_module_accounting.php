@@ -11,17 +11,27 @@ $config = [
     ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
         ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS,
 
-    ModuleConfiguration::OPTION_JOBS_STORE_CLASS => 'invalid',
+    ModuleConfiguration::OPTION_JOBS_STORE => 'invalid',
 
-    ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [
-        Stores\Jobs\DoctrineDbal\Store::class => 'invalid',
+    ModuleConfiguration::OPTION_JOBS_STORE_CONNECTION => 'invalid',
+
+    ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER => 'invalid',
+
+    ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER_CONNECTION => [
+        ModuleConfiguration\ConnectionType::MASTER => 'invalid',
+        ModuleConfiguration\ConnectionType::SLAVE => [
+            'invalid',
+        ],
     ],
 
-    ModuleConfiguration::OPTION_ENABLED_TRACKERS => [
+    ModuleConfiguration::OPTION_ADDITIONAL_TRACKERS => [
         'invalid',
     ],
 
-    ModuleConfiguration::OPTION_AUTHENTICATION_DATA_PROVIDER_CLASS => 'invalid',
+    ModuleConfiguration::OPTION_ADDITIONAL_TRACKERS_TO_CONNECTION_MAP => [
+        'invalid' => 'invalid',
+    ],
+
 
     ModuleConfiguration::OPTION_CONNECTIONS_AND_PARAMETERS => [
         'doctrine_dbal_pdo_mysql' => [

@@ -8,7 +8,7 @@ use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInt
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Providers\Interfaces\AuthenticationDataProviderInterface;
 
-interface TrackerInterface extends BuildableUsingModuleConfigurationInterface, AuthenticationDataProviderInterface
+interface AuthenticationDataTrackerInterface extends BuildableUsingModuleConfigurationInterface
 {
     public static function build(ModuleConfiguration $moduleConfiguration, LoggerInterface $logger): self;
 

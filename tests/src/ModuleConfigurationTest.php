@@ -71,7 +71,7 @@ class ModuleConfigurationTest extends TestCase
     {
         $this->assertSame(
             'doctrine_dbal_pdo_sqlite',
-            $this->moduleConfiguration->getClassConnectionParameters(Stores\Jobs\DoctrineDbal\Store::class)
+            $this->moduleConfiguration->getAdditionalTrackerConnectionParameters(Stores\Jobs\DoctrineDbal\Store::class)
         );
     }
 
@@ -79,7 +79,7 @@ class ModuleConfigurationTest extends TestCase
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        $this->moduleConfiguration->getClassConnectionParameters('invalid');
+        $this->moduleConfiguration->getAdditionalTrackerConnectionParameters('invalid');
     }
 
     public function testCanGetDefinedConnections(): void

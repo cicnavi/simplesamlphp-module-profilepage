@@ -22,62 +22,72 @@ $config = [
 
     /**
      * Accounting processing type. There are two possible types: 'synchronous' and 'asynchronous'.
-     * - 'synchronous': accounting processing will be performed during authentication itself (slower authentication)
-     * - 'asynchronous': for each authentication event a new job will be created for later processing (faster
-     *   authentication, but requires setting up job storage and a cron entry).
      */
     ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
+        /**
+         * Synchronous option, meaning accounting processing will be performed during authentication itself
+         * (slower authentication).
+         */
         ModuleConfiguration\AccountingProcessingType::VALUE_SYNCHRONOUS,
+        /**
+         * Asynchronous option, meaning for each authentication event a new job will be created for later processing
+         * (faster authentication, but requires setting up job storage and a cron entry).
+         */
+        //ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS,
 
     /**
      * Jobs store class. In case of the 'asynchronous' accounting processing type, this determines which class
-     * will be used to store jobs. The class must implement Stores\Interfaces\JobsStoreInterface. The default
-     * class Stores\Jobs\DoctrineDbal\Store expects Doctrine DBAL compatible connection to be set in
-     * "class-to-connection map" setting.
+     * will be used to store jobs. The class must implement Stores\Interfaces\JobsStoreInterface.
      */
-    ModuleConfiguration::OPTION_JOBS_STORE_CLASS => Stores\Jobs\DoctrineDbal\Store::class,
+    ModuleConfiguration::OPTION_JOBS_STORE =>
+        /**
+         * Default jobs store class which expects Doctrine DBAL compatible connection to be set below.
+         */
+        Stores\Jobs\DoctrineDbal\Store::class,
 
     /**
-     * Enabled tracker classes. Trackers will process and persist authentication data to proper data store.
-     * Tracker classes must implement Trackers\Interfaces\TrackerInterface.
+     * Connection which will be used by jobs store class defined above.
      */
-    ModuleConfiguration::OPTION_ENABLED_TRACKERS => [
+    ModuleConfiguration::OPTION_JOBS_STORE_CONNECTION => 'doctrine_dbal_pdo_mysql',
+
+    /**
+     * Default data tracker and provider to be used for accounting and as a source for data display in SSP UI.
+     * This class must implement Trackers\Interfaces\AuthenticationDataTrackerInterface and
+     * Providers\Interfaces\AuthenticationDataProviderInterface
+     */
+    ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER =>
         /**
          * Track each authentication event for idp / sp / user combination, and any change in idp / sp metadata or
          * released user attributes. Each authentication event record will have data used and released at the
-         * time of the authentication event (versioned data). This tracker can also be used as an
-         * authentication data provider. This tracker internally uses store class
-         * Stores\Data\Authentication\DoctrineDbal\Versioned\Store::class, so
-         * make sure to set its Doctrine DBAL compatible connection in
-         * "class-to-connection map" setting, if you use it.
+         * time of the authentication event (versioned idp / sp / user data). This tracker can also be
+         * used as an authentication data provider. It expects Doctrine DBAL compatible connection
+         * to be set below. Internally it uses store class
+         * Stores\Data\DoctrineDbal\DoctrineDbal\Versioned\Store::class.
          */
-        Trackers\DoctrineDbal\Versioned\Authentication::class,
+        Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class,
+
+    /**
+     * Connection which will be used by default data tracker and provider. There can be two connection types: master
+     * and slave. Master connection is single connection which will be used to write data to, and it must be set.
+     * If no slave connections are set, master will also be used to read data from. If slave connections are
+     * set, random one will be picked to read data from (typically to show data in SSP UI).
+     */
+    ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER_CONNECTION => [
+        ModuleConfiguration\ConnectionType::MASTER => 'doctrine_dbal_pdo_mysql',
+        ModuleConfiguration\ConnectionType::SLAVE => [
+            'doctrine_dbal_pdo_mysql',
+        ],
     ],
 
     /**
-     * Class which will be used as authentication data provider. This means it will serve as data source
-     * for accounted authentication data when presented in UI. This class must implement
-     * Providers\Interfaces\AuthenticationDataProviderInterface.
+     * Additional trackers to run besides default data tracker. These trackers will typically only process and
+     * persist authentication data to proper data store, and won't be used to display data in SSP UI.
+     * These tracker classes must implement Trackers\Interfaces\AuthenticationDataTrackerInterface.
+     * Tracker class must be defined as array key, and its connection as value.
      */
-    ModuleConfiguration::OPTION_AUTHENTICATION_DATA_PROVIDER_CLASS =>
-        /**
-         * In addition to tracking data, this class can also serve as authentication data provider.
-         */
-        Trackers\DoctrineDbal\Versioned\Authentication::class,
-
-    /**
-     * Class-to-connection map. Can be used to set different connections for different classes (stores, trackers,
-     * data providers...). By default, here are Doctrine DBAL compatible stores and their connections.
-     */
-    ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [
-        /**
-         * Used when accounting is asynchronous and this class is used as jobs store class.
-         */
-        Stores\Jobs\DoctrineDbal\Store::class => 'doctrine_dbal_pdo_mysql',
-        /**
-         * Used when tracker Trackers\DoctrineDbal\VersionedAuthentication::class is used.
-         */
-        Stores\Data\Authentication\DoctrineDbal\Versioned\Store::class => 'doctrine_dbal_pdo_mysql',
+    ModuleConfiguration::OPTION_ADDITIONAL_TRACKERS => [
+        // TODO mivanci at least one more tracker and its connection
+        // tracker-class => connection-key
     ],
 
     /**

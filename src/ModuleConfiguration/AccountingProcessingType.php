@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\ModuleConfiguration;
 
-class AccountingProcessingType
+final class AccountingProcessingType
 {
     public const VALUE_SYNCHRONOUS = 'synchronous';
     public const VALUE_ASYNCHRONOUS = 'asynchronous';
