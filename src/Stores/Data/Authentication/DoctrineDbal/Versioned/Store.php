@@ -32,7 +32,7 @@ class Store extends AbstractStore implements DataStoreInterface
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        string $connectionKey = null
+        string $connectionKey
     ): self {
         return new self(
             $moduleConfiguration,

@@ -46,11 +46,6 @@ $config = [
         Stores\Jobs\DoctrineDbal\Store::class,
 
     /**
-     * Connection which will be used by jobs store class defined above.
-     */
-    ModuleConfiguration::OPTION_JOBS_STORE_CONNECTION => 'doctrine_dbal_pdo_mysql',
-
-    /**
      * Default data tracker and provider to be used for accounting and as a source for data display in SSP UI.
      * This class must implement Trackers\Interfaces\AuthenticationDataTrackerInterface and
      * Providers\Interfaces\AuthenticationDataProviderInterface
@@ -66,28 +61,39 @@ $config = [
          */
         Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class,
 
-    /**
-     * Connection which will be used by default data tracker and provider. There can be two connection types: master
-     * and slave. Master connection is single connection which will be used to write data to, and it must be set.
-     * If no slave connections are set, master will also be used to read data from. If slave connections are
-     * set, random one will be picked to read data from (typically to show data in SSP UI).
-     */
-    ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER_CONNECTION => [
-        ModuleConfiguration\ConnectionType::MASTER => 'doctrine_dbal_pdo_mysql',
-        ModuleConfiguration\ConnectionType::SLAVE => [
-            'doctrine_dbal_pdo_mysql',
-        ],
-    ],
 
     /**
      * Additional trackers to run besides default data tracker. These trackers will typically only process and
      * persist authentication data to proper data store, and won't be used to display data in SSP UI.
      * These tracker classes must implement Trackers\Interfaces\AuthenticationDataTrackerInterface.
-     * Tracker class must be defined as array key, and its connection as value.
      */
     ModuleConfiguration::OPTION_ADDITIONAL_TRACKERS => [
         // TODO mivanci at least one more tracker and its connection
-        // tracker-class => connection-key
+        // tracker-class
+    ],
+
+    /**
+     * Map of classes (stores, trackers, providers, ...) and connection keys, which defines which connections will
+     * be used. Value for connection key can be string, or it can be an array with two connection types as keys:
+     * master or slave. Master connection is single connection which will be used to write data to, and it
+     * must be set. If no slave connections are set, master will also be used to read data from. Slave
+     * connections are defined as array of strings. If slave connections are set, random one will
+     * be picked to read data from.
+     */
+    ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [
+        /**
+         * Connection key to be used by jobs store class.
+         */
+        Stores\Jobs\DoctrineDbal\Store::class => 'doctrine_dbal_pdo_mysql',
+        /**
+         * Connection key to be used by this data tracker and provider.
+         */
+        Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class => [
+            ModuleConfiguration\ConnectionType::MASTER => 'doctrine_dbal_pdo_mysql',
+            ModuleConfiguration\ConnectionType::SLAVE => [
+                'doctrine_dbal_pdo_mysql',
+            ],
+        ],
     ],
 
     /**
