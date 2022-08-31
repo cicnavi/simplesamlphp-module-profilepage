@@ -72,11 +72,12 @@ class Store extends AbstractStore implements DataStoreInterface
     {
         $idpEntityIdHashSha256 = $hashDecoratedState->getIdpEntityIdHashSha256();
 
+        /** @var string|bool $idpId */
+
         // Check if it already exists.
         try {
             $result = $this->repository->getIdpByEntityIdHashSha256($idpEntityIdHashSha256);
 
-            /** @var string|bool $idpId */
             if (($idpId = $result->fetchOne()) !== false) {
                 return (int)$idpId;
             }
@@ -100,7 +101,7 @@ class Store extends AbstractStore implements DataStoreInterface
         try {
             $result = $this->repository->getIdpByEntityIdHashSha256($idpEntityIdHashSha256);
 
-            /** @var string|bool $idpId */
+            /** @psalm-suppress MixedAssignment */
             if (($idpId = $result->fetchOne()) !== false) {
                 return (int)$idpId;
             }
