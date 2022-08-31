@@ -8,19 +8,50 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Providers\Interfaces\AuthenticationDataProviderInterface;
+use SimpleSAML\Module\accounting\Stores\Builders\DataStoreBuilder;
+use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
+use SimpleSAML\Module\accounting\Stores\Interfaces\DataStoreInterface;
 use SimpleSAML\Module\accounting\Trackers\Interfaces\AuthenticationDataTrackerInterface;
 
 class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataProviderInterface
 {
+    protected ModuleConfiguration $moduleConfiguration;
+    protected LoggerInterface $logger;
+    protected DataStoreInterface $dataStore;
+
+    public function __construct(
+        ModuleConfiguration $moduleConfiguration,
+        LoggerInterface $logger,
+        DataStoreInterface $dataStore = null
+    ) {
+        $this->moduleConfiguration = $moduleConfiguration;
+        $this->logger = $logger;
+
+        // Use provided store or initialize default store for this tracker.
+        $this->dataStore = $dataStore ??
+            (new DataStoreBuilder($this->moduleConfiguration, $this->logger))
+                ->build(Store::class, $this->moduleConfiguration->getClassConnectionKey(self::class));
+    }
+
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger
     ): self {
-        return new self();
+        return new self($moduleConfiguration, $logger);
     }
 
     public function process(Event $authenticationEvent): void
     {
-        // TODO: Implement process() method.
+        $this->dataStore->persist($authenticationEvent);
+    }
+
+    public function needsSetup(): bool
+    {
+        return $this->dataStore->needsSetup();
+    }
+
+    public function runSetup(): void
+    {
+        $this->dataStore->runSetup();
     }
 }

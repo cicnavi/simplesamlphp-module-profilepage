@@ -6,13 +6,17 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
+use SimpleSAML\Module\accounting\Entities\Authentication\State;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\RawJob;
+use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\RawJob
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
+ * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
  */
 class RawJobTest extends TestCase
 {
@@ -23,7 +27,7 @@ class RawJobTest extends TestCase
     protected function setUp(): void
     {
         $this->abstractPlatformStub = $this->createStub(AbstractPlatform::class);
-        $this->authenticationEvent = new Event(['sample' => 'state']);
+        $this->authenticationEvent = new Event(new State(StateArrays::FULL));
         $this->validRawRow = [
             Store\TableConstants::COLUMN_NAME_ID => 1,
             Store\TableConstants::COLUMN_NAME_PAYLOAD => serialize($this->authenticationEvent),

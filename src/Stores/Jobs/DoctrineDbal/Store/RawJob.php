@@ -10,29 +10,29 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 use Throwable;
 
 use function sprintf;
 
-class RawJob
+class RawJob extends AbstractRawEntity
 {
     protected int $id;
     protected AbstractPayload $payload;
     protected string $type;
     protected DateTimeImmutable $createdAt;
-    protected AbstractPlatform $abstractPlatform;
 
     public function __construct(array $rawRow, AbstractPlatform $abstractPlatform)
     {
-        $this->abstractPlatform = $abstractPlatform;
+        parent::__construct($rawRow, $abstractPlatform);
 
         $this->validate($rawRow);
 
         $this->id = (int)$rawRow[Store\TableConstants::COLUMN_NAME_ID];
         $this->payload = $this->resolvePayload((string)$rawRow[Store\TableConstants::COLUMN_NAME_PAYLOAD]);
         $this->type = (string)$rawRow[Store\TableConstants::COLUMN_NAME_TYPE];
-        $this->createdAt = $this->resolveCreatedAt($rawRow);
+        $this->createdAt = $this->resolveDateTimeImmutable($rawRow[Store\TableConstants::COLUMN_NAME_CREATED_AT]);
     }
 
     protected function validate(array $rawRow): void

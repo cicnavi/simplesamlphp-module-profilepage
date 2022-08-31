@@ -22,7 +22,7 @@ class JobsStoreBuilder extends Bases\AbstractStoreBuilder
             );
         }
 
-        $connectionKey = $connectionKey ?? $class;
+        $connectionKey = $connectionKey ?? $this->moduleConfiguration->getClassConnectionKey($class);
 
         /** @var JobsStoreInterface $store */
         $store = $this->buildGeneric($class, [$connectionKey]);

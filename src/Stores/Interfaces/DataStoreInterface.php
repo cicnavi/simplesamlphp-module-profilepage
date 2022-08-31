@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\accounting\Stores\Interfaces;
 
 use Psr\Log\LoggerInterface;
+use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 interface DataStoreInterface extends StoreInterface
@@ -12,6 +13,8 @@ interface DataStoreInterface extends StoreInterface
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        string $class = null
+        string $connectionKey = null
     ): self;
+
+    public function persist(Event $authenticationEvent): void;
 }

@@ -18,6 +18,7 @@ use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Version
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Repository
  */
 class DataStoreBuilderTest extends TestCase
 {

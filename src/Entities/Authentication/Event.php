@@ -8,14 +8,14 @@ use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 
 class Event extends AbstractPayload
 {
-    protected array $state;
+    protected State $state;
 
-    public function __construct(array $state)
+    public function __construct(State $state)
     {
         $this->state = $state;
     }
 
-    public function getState(): array
+    public function getState(): State
     {
         return $this->state;
     }

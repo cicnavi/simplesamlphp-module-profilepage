@@ -4,6 +4,7 @@ namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
+use SimpleSAML\Module\accounting\Entities\Authentication\State;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
@@ -14,6 +15,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store
@@ -33,6 +35,8 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
+ * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
  */
 class StoreTest extends TestCase
 {
@@ -125,7 +129,7 @@ class StoreTest extends TestCase
         $jobsStore->runSetup();
 
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
-        $queryBuilder->select('COUNT(id) as jobsCount')->from($jobsStore->getPrefixedTableNameJobs())->fetchOne();
+        $queryBuilder->select('COUNT(id) as jobsCount')->from($jobsStore->getPrefixedTableNameJobs());
 
         $this->assertSame(0, (int) $queryBuilder->executeQuery()->fetchOne());
 
@@ -187,7 +191,7 @@ class StoreTest extends TestCase
         $jobsStore = new Store($this->moduleConfiguration, $this->loggerStub, $this->factoryStub);
         $jobsStore->runSetup();
 
-        $authenticationEvent = new Event(['sample-state']);
+        $authenticationEvent = new Event(new State(StateArrays::FULL));
         $authenticationEventJob = new Event\Job($authenticationEvent);
 
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();

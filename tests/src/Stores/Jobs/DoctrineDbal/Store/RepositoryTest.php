@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
+use SimpleSAML\Module\accounting\Entities\Authentication\State;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
@@ -17,6 +18,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository;
+use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
@@ -35,6 +37,8 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository;
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
+ * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
  */
 class RepositoryTest extends TestCase
 {
@@ -201,7 +205,7 @@ class RepositoryTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $repository->insert($this->jobStub);
 
-        $authenticationEvent = new Event(['sample-state']);
+        $authenticationEvent = new Event(new State(StateArrays::FULL));
         $authenticationEventJob = new Event\Job($authenticationEvent);
 
         $repository->insert($authenticationEventJob);

@@ -37,7 +37,7 @@ class InstanceBuilderUsingModuleConfigurationHelper
             $instance = $reflectionMethod->invoke(null, ...$allArguments);
         } catch (\Throwable $exception) {
             $message = \sprintf(
-                'Error building instance using module configuration. Error was: %.',
+                'Error building instance using module configuration. Error was: %s.',
                 $exception->getMessage()
             );
             throw new Exception($message, (int)$exception->getCode(), $exception);

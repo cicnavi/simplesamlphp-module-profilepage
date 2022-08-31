@@ -7,6 +7,7 @@ namespace SimpleSAML\Module\accounting\Auth\Process;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Auth\ProcessingFilter;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
+use SimpleSAML\Module\accounting\Entities\Authentication\State;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
@@ -45,7 +46,7 @@ class Accounting extends ProcessingFilter
      */
     public function process(array &$state): void
     {
-        $authenticationEvent = new Event($state);
+        $authenticationEvent = new Event(new State($state));
 
         if ($this->isAccountingProcessingTypeAsynchronous()) {
             // Only create authentication event job for later processing...

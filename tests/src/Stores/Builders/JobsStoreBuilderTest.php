@@ -96,7 +96,7 @@ class JobsStoreBuilderTest extends TestCase
             public static function build(
                 ModuleConfiguration $moduleConfiguration,
                 LoggerInterface $logger,
-                string $class = null
+                string $connectionKey = null
             ): StoreInterface {
                 return new self();
             }
