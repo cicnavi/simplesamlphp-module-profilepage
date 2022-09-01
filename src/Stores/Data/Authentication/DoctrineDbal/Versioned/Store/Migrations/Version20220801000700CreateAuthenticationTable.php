@@ -34,7 +34,7 @@ class Version20220801000700CreateAuthenticationTable extends AbstractMigration
             $table->addColumn('idp_version_id', Types::BIGINT)
                 ->setUnsigned(true);
 
-            $table->addColumn('sp_version_user_attribute_version_id', Types::BIGINT)
+            $table->addColumn('sp_version_user_version_id', Types::BIGINT)
                 ->setUnsigned(true);
 
             $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
@@ -48,8 +48,8 @@ class Version20220801000700CreateAuthenticationTable extends AbstractMigration
             );
 
             $table->addForeignKeyConstraint(
-                $this->preparePrefixedTableName('sp_version_user_attribute_version'),
-                ['sp_version_user_attribute_version_id'],
+                $this->preparePrefixedTableName('sp_version_user_version'),
+                ['sp_version_user_version_id'],
                 ['id']
             );
 

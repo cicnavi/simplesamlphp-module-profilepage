@@ -31,12 +31,13 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000200CreateSpTable
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000300CreateSpVersionTable
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000400CreateUserTable
- * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000500CreateUserAttributeVersionTable
- * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000600CreateSpVersionUserAttributeVersionTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000500CreateUserVersionTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000600CreateSpVersionUserVersionTable
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000700CreateAuthenticationTable
  * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\HashDecoratedState
  * @uses \SimpleSAML\Module\accounting\Helpers\HashHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\ArrayHelper
  */
 class StoreTest extends TestCase
 {
@@ -72,14 +73,39 @@ class StoreTest extends TestCase
         $store = new Store($this->moduleConfigurationStub, $this->loggerStub, $this->factoryStub);
         $store->runSetup();
 
-        $countQueryBuilder = $this->connection->dbal()->createQueryBuilder();
-        $countQueryBuilder->select('COUNT(id) as idpCount')->from('vds_idp');
+        $idpCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $idpVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $spCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $spVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $userCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $userVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $this->assertSame(0, (int)$countQueryBuilder->executeQuery()->fetchOne());
+        $idpCountQueryBuilder->select('COUNT(id) as idpCount')->from('vds_idp');
+        $idpVersionCountQueryBuilder->select('COUNT(id) as idpVersionCount')->from('vds_idp_version');
+        $spCountQueryBuilder->select('COUNT(id) as spCount')->from('vds_sp');
+        $spVersionCountQueryBuilder->select('COUNT(id) as spVersionCount')->from('vds_sp_version');
+        $userCountQueryBuilder->select('COUNT(id) as userCount')->from('vds_user');
+        $userVersionCountQueryBuilder->select('COUNT(id) as userCount')->from('vds_user_version');
+
+        $this->assertSame(0, (int)$idpCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$idpVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$spCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$spVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$userCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$userVersionCountQueryBuilder->executeQuery()->fetchOne());
 
         $store->persist($this->authenticationEvent);
 
-        $this->assertSame(1, (int)$countQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$idpCountQueryBuilder->executeQuery()->fetchOne());
+
+        $store->persist($this->authenticationEvent);
+
+        $this->assertSame(1, (int)$idpCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$idpVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$spCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$spVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$userCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$userVersionCountQueryBuilder->executeQuery()->fetchOne());
     }
 
     protected function setUp(): void
@@ -88,6 +114,8 @@ class StoreTest extends TestCase
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $this->moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn($connectionParams);
+        $this->moduleConfigurationStub->method('getUserIdAttributeName')
+            ->willReturn('hrEduPersonPersistentID');
 
         $this->connection = new Connection($connectionParams);
 

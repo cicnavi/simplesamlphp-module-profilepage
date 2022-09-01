@@ -38,23 +38,28 @@ class TableConstants
 
     // Table 'sp_version', same structure as in 'idp_version'
     public const TABLE_NAME_SP_VERSION = 'sp_version';
-    public const TABLE_SP_VERSION_COLUMN_NAME_ID = 'sp';
-    public const TABLE_SP_VERSION_COLUMN_NAME_IDP_ID = 'sp_id';
+    public const TABLE_SP_VERSION_COLUMN_NAME_ID = 'id';
+    public const TABLE_SP_VERSION_COLUMN_NAME_SP_ID = 'sp_id';
     public const TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD = 'payload';
     public const TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 = 'payload_hash_sha256';
     public const TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT = 'created_at';
 
     // Table 'user'
     public const TABLE_NAME_USER = 'user';
-    public const TABLE_USER_COLUMN_ID = 'id'; // int
-    public const TABLE_USER_COLUMN_IDENTIFIER = 'identifier'; // text, varies... (can be ePTID, which is long XML).
-    public const TABLE_USER_COLUMN_IDENTIFIER_HASH_SHA256 = 'identifier_hash_sha256';
+    public const TABLE_USER_COLUMN_NAME_ID = 'id'; // int
+    public const TABLE_USER_COLUMN_NAME_IDENTIFIER = 'identifier'; // text, varies... (can be ePTID, which is long XML).
+    public const TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256 = 'identifier_hash_sha256';
     public const TABLE_USER_COLUMN_NAME_CREATED_AT = 'created_at';
 
-    public const TABLE_NAME_USER_ATTRIBUTE_VERSION = 'user_attribute_version';
+    public const TABLE_NAME_USER_VERSION = 'user_version';
+    public const TABLE_USER_VERSION_COLUMN_NAME_ID = 'id'; // int ID
+    public const TABLE_USER_VERSION_COLUMN_NAME_USER_ID = 'user_id'; // FK
+    public const TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD = 'payload'; // Serialized attributes metadata version
+    public const TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 = 'payload_hash_sha256'; // Payload sha256 hash, unq
+    public const TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT = 'created_at';
 
-    // Attribute versions released to SP
-    public const TABLE_NAME_SP_USER_ATTRIBUTE_VERSION = 'sp_user_attribute_version';
+    // Attribute versions released to SP version
+    public const TABLE_NAME_SP_VERSION_USER_VERSION = 'sp_version_user_version';
 
     // Attribute set history, contains information per IdP / SP / user on every attribute
     // that was ever released to SP, including the latest value and release date

@@ -8,4 +8,10 @@ class HashHelper
     {
         return hash('sha256', $data);
     }
+
+    public static function getSha256ForArray(array $array): string
+    {
+        ArrayHelper::recursivelySortByKey($array);
+        return self::getSha256(serialize($array));
+    }
 }

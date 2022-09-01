@@ -11,7 +11,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
 
-class Version20220801000600CreateSpVersionUserAttributeVersionTable extends AbstractMigration
+class Version20220801000600CreateSpVersionUserVersionTable extends AbstractMigration
 {
     protected function getLocalTablePrefix(): string
     {
@@ -24,7 +24,7 @@ class Version20220801000600CreateSpVersionUserAttributeVersionTable extends Abst
      */
     public function run(): void
     {
-        $tableName = $this->preparePrefixedTableName('sp_version_user_attribute_version');
+        $tableName = $this->preparePrefixedTableName('sp_version_user_version');
 
         try {
             $table = new Table($tableName);
@@ -36,7 +36,7 @@ class Version20220801000600CreateSpVersionUserAttributeVersionTable extends Abst
             $table->addColumn('sp_version_id', Types::BIGINT)
                 ->setUnsigned(true);
 
-            $table->addColumn('user_attribute_version_id', Types::BIGINT)
+            $table->addColumn('user_version_id', Types::BIGINT)
                 ->setUnsigned(true);
 
             $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
@@ -50,8 +50,8 @@ class Version20220801000600CreateSpVersionUserAttributeVersionTable extends Abst
             );
 
             $table->addForeignKeyConstraint(
-                $this->preparePrefixedTableName('user_attribute_version'),
-                ['user_attribute_version_id'],
+                $this->preparePrefixedTableName('user_version'),
+                ['user_version_id'],
                 ['id']
             );
 
@@ -70,7 +70,7 @@ class Version20220801000600CreateSpVersionUserAttributeVersionTable extends Abst
      */
     public function revert(): void
     {
-        $tableName = $this->preparePrefixedTableName('sp_version_user_attribute_version');
+        $tableName = $this->preparePrefixedTableName('sp_version_user_version');
 
         try {
             $this->schemaManager->dropTable($tableName);

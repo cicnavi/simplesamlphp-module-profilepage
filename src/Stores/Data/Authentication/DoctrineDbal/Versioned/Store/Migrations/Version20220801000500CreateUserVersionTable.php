@@ -9,7 +9,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
 
-class Version20220801000500CreateUserAttributeVersionTable extends AbstractMigration
+class Version20220801000500CreateUserVersionTable extends AbstractMigration
 {
     protected function getLocalTablePrefix(): string
     {
@@ -22,7 +22,7 @@ class Version20220801000500CreateUserAttributeVersionTable extends AbstractMigra
      */
     public function run(): void
     {
-        $tableName = $this->preparePrefixedTableName('user_attribute_version');
+        $tableName = $this->preparePrefixedTableName('user_version');
 
         try {
             $table = new Table($tableName);
@@ -64,7 +64,7 @@ class Version20220801000500CreateUserAttributeVersionTable extends AbstractMigra
      */
     public function revert(): void
     {
-        $tableName = $this->preparePrefixedTableName('user_attribute_version');
+        $tableName = $this->preparePrefixedTableName('user_version');
 
         try {
             $this->schemaManager->dropTable($tableName);
