@@ -25,8 +25,8 @@ class TableConstants
     public const TABLE_NAME_IDP_VERSION = 'idp_version';
     public const TABLE_IDP_VERSION_COLUMN_NAME_ID = 'id'; // int ID
     public const TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID = 'idp_id'; // FK
-    public const TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD = 'payload'; // Serialized IdP metadata version
-    public const TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 = 'payload_hash_sha256'; // Payload sha256 hash, unq
+    public const TABLE_IDP_VERSION_COLUMN_NAME_METADATA = 'metadata'; // Serialized IdP metadata version
+    public const TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 = 'metadata_hash_sha256'; // Metadata sha256 hash
     public const TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT = 'created_at';
 
     // Table 'sp', same structure as in 'idp'
@@ -40,8 +40,8 @@ class TableConstants
     public const TABLE_NAME_SP_VERSION = 'sp_version';
     public const TABLE_SP_VERSION_COLUMN_NAME_ID = 'id';
     public const TABLE_SP_VERSION_COLUMN_NAME_SP_ID = 'sp_id';
-    public const TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD = 'payload';
-    public const TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 = 'payload_hash_sha256';
+    public const TABLE_SP_VERSION_COLUMN_NAME_METADATA = 'metadata';
+    public const TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 = 'metadata_hash_sha256';
     public const TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT = 'created_at';
 
     // Table 'user'
@@ -54,16 +54,24 @@ class TableConstants
     public const TABLE_NAME_USER_VERSION = 'user_version';
     public const TABLE_USER_VERSION_COLUMN_NAME_ID = 'id'; // int ID
     public const TABLE_USER_VERSION_COLUMN_NAME_USER_ID = 'user_id'; // FK
-    public const TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD = 'payload'; // Serialized attributes metadata version
-    public const TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 = 'payload_hash_sha256'; // Payload sha256 hash, unq
+    public const TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES = 'attributes'; // Serialized attributes version
+    public const TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256 = 'attributes_hash_sha256';
     public const TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT = 'created_at';
 
     // Attribute versions released to SP version
     public const TABLE_NAME_SP_VERSION_USER_VERSION = 'sp_version_user_version';
+    public const TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_ID = 'id';
+    public const TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_SP_VERSION_ID = 'sp_version_id';
+    public const TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_USER_VERSION_ID = 'user_version_id';
+    public const TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_CREATED_AT = 'created_at';
+
+    public const TABLE_NAME_AUTHENTICATION_EVENT = 'authentication_event';
+    public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_VERSION_ID = 'idp_version_id';
+    public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_SP_VERSION_USER_VERSION_ID = 'sp_version_user_version_id';
+    public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT = 'happened_at';
+    public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT = 'created_at';
 
     // Attribute set history, contains information per IdP / SP / user on every attribute
     // that was ever released to SP, including the latest value and release date
     public const TABLE_NAME_IDP_SP_USER_ATTRIBUTE_SET_HISTORY = 'idp_sp_user_attribute_set_history';
-
-    public const TABLE_NAME_AUTHENTICATION = 'authentication';
 }

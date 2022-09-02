@@ -9,7 +9,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
 
-class Version20220801000700CreateAuthenticationTable extends AbstractMigration
+class Version20220801000700CreateAuthenticationEventTable extends AbstractMigration
 {
     protected function getLocalTablePrefix(): string
     {
@@ -22,7 +22,7 @@ class Version20220801000700CreateAuthenticationTable extends AbstractMigration
      */
     public function run(): void
     {
-        $tableName = $this->preparePrefixedTableName('authentication');
+        $tableName = $this->preparePrefixedTableName('authentication_event');
 
         try {
             $table = new Table($tableName);
@@ -36,6 +36,8 @@ class Version20220801000700CreateAuthenticationTable extends AbstractMigration
 
             $table->addColumn('sp_version_user_version_id', Types::BIGINT)
                 ->setUnsigned(true);
+
+            $table->addColumn('happened_at', Types::DATETIMETZ_IMMUTABLE);
 
             $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
 
@@ -68,7 +70,7 @@ class Version20220801000700CreateAuthenticationTable extends AbstractMigration
      */
     public function revert(): void
     {
-        $tableName = $this->preparePrefixedTableName('authentication');
+        $tableName = $this->preparePrefixedTableName('authentication_event');
 
         try {
             $this->schemaManager->dropTable($tableName);

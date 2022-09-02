@@ -54,18 +54,12 @@ class Store extends AbstractStore implements DataStoreInterface
         );
     }
 
-    /** @psalm-suppress UnusedVariable TODO mivanci remove */
+    /**
+     * @throws StoreException
+     */
     public function persist(Event $authenticationEvent): void
     {
-        // Get IdP ID
         $hashDecoratedState = new HashDecoratedState($authenticationEvent->getState());
-        $idpEntityId = $hashDecoratedState->getState()->getIdpEntityId();
-        $idpEntityIdHash = $hashDecoratedState->getIdpEntityIdHashSha256();
-        $idpMetadataArray = $hashDecoratedState->getState()->getIdpMetadataArray();
-
-//        if (empty($idpMetadataArray)) {
-//            // TODO mivanci consider fetching metadata from metadata store if not present in state
-//        }
 
         $idpId = $this->resolveIdpId($hashDecoratedState);
         $idpVersionId = $this->resolveIdpVersionId($idpId, $hashDecoratedState);
@@ -73,6 +67,10 @@ class Store extends AbstractStore implements DataStoreInterface
         $spVersionId = $this->resolveSpVersionId($spId, $hashDecoratedState);
         $userId = $this->resolveUserId($hashDecoratedState);
         $userVersionId = $this->resolveUserVersionId($userId, $hashDecoratedState);
+        $spVersionUserVersionId = $this->resolveSpVersionUserVersionId($spVersionId, $userVersionId);
+
+        $happenedAt = $authenticationEvent->getHappenedAt();
+        $this->repository->insertAuthenticationEvent($idpVersionId, $spVersionUserVersionId, $happenedAt);
     }
 
     /**
@@ -84,7 +82,7 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Check if it already exists.
         try {
-            $result = $this->repository->getIdpByEntityIdHashSha256($idpEntityIdHashSha256);
+            $result = $this->repository->getIdp($idpEntityIdHashSha256);
             $idpId = $result->fetchOne();
 
             if ($idpId !== false) {
@@ -108,7 +106,7 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Try again, this time it should exist...
         try {
-            $result = $this->repository->getIdpByEntityIdHashSha256($idpEntityIdHashSha256);
+            $result = $this->repository->getIdp($idpEntityIdHashSha256);
             $idpIdNew = $result->fetchOne();
 
             if ($idpIdNew !== false) {
@@ -131,6 +129,10 @@ class Store extends AbstractStore implements DataStoreInterface
      */
     protected function resolveIdpVersionId(int $idpId, HashDecoratedState $hashDecoratedState): int
     {
+//        if (empty($idpMetadataArray)) {
+//            // TODO mivanci consider fetching metadata from SSP metadata store if not present in state
+//        }
+
         // Check if it already exists.
         $idpMetadataArrayHashSha256 = $hashDecoratedState->getIdpMetadataArrayHashSha256();
 
@@ -187,7 +189,7 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Check if it already exists.
         try {
-            $result = $this->repository->getSpByEntityIdHashSha256($spEntityIdHashSha256);
+            $result = $this->repository->getSp($spEntityIdHashSha256);
             $spId = $result->fetchOne();
 
             if ($spId !== false) {
@@ -211,7 +213,7 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Try again, this time it should exist...
         try {
-            $result = $this->repository->getSpByEntityIdHashSha256($spEntityIdHashSha256);
+            $result = $this->repository->getSp($spEntityIdHashSha256);
             $spIdNew = $result->fetchOne();
 
             if ($spIdNew !== false) {
@@ -301,7 +303,7 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Check if it already exists.
         try {
-            $result = $this->repository->getUserByIdentifierHashSha256($userIdentifierValueHashSha256);
+            $result = $this->repository->getUser($userIdentifierValueHashSha256);
             $userId = $result->fetchOne();
 
             if ($userId !== false) {
@@ -325,7 +327,7 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Try again, this time it should exist...
         try {
-            $result = $this->repository->getUserByIdentifierHashSha256($userIdentifierValueHashSha256);
+            $result = $this->repository->getUser($userIdentifierValueHashSha256);
             $userIdNew = $result->fetchOne();
 
             if ($userIdNew !== false) {
@@ -394,6 +396,55 @@ class Store extends AbstractStore implements DataStoreInterface
             throw new StoreException($message);
         } catch (\Throwable $exception) {
             $message = sprintf('Error resolving user version ID. Error was: %s.', $exception->getMessage());
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    protected function resolveSpVersionUserVersionId(int $spVersionId, int $userVersionId): int
+    {
+        // Check if it already exists.
+        try {
+            $result = $this->repository->getSpVersionUserVersion($spVersionId, $userVersionId);
+            $spVersionUserVersionId = $result->fetchOne();
+
+            if ($spVersionUserVersionId !== false) {
+                return (int)$spVersionUserVersionId;
+            }
+        } catch (\Throwable $exception) {
+            $message = sprintf('Error resolving SpVersionUserVersion ID. Error was: %s.', $exception->getMessage());
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+
+        // Create new
+        try {
+            $this->repository->insertSpVersionUserVersion($spVersionId, $userVersionId);
+        } catch (\Throwable $exception) {
+            $message = sprintf(
+                'Error inserting new SpVersionUserVersion, however, continuing in case of race condition. ' .
+                'Error was: %s.',
+                $exception->getMessage()
+            );
+            $this->logger->warning($message);
+        }
+
+        // Try again, this time it should exist...
+        try {
+            $result = $this->repository->getSpVersionUserVersion($spVersionId, $userVersionId);
+            $spVersionUserVersionIdNew = $result->fetchOne();
+
+            if ($spVersionUserVersionIdNew !== false) {
+                return (int)$spVersionUserVersionIdNew;
+            }
+
+            $message = sprintf(
+                'Error fetching SpVersionUserVersion ID even after insertion for SpVersion ID %s and ' .
+                'UserVersion ID %s.',
+                $spVersionId,
+                $userVersionId
+            );
+            throw new StoreException($message);
+        } catch (\Throwable $exception) {
+            $message = sprintf('Error resolving SpVersionUserVersion ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }

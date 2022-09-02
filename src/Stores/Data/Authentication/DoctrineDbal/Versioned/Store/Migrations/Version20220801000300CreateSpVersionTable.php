@@ -34,9 +34,9 @@ class Version20220801000300CreateSpVersionTable extends AbstractMigration
             $table->addColumn('sp_id', Types::BIGINT)
                 ->setUnsigned(true);
 
-            $table->addColumn('payload', Types::TEXT);
+            $table->addColumn('metadata', Types::TEXT);
 
-            $table->addColumn('payload_hash_sha256', Types::STRING)
+            $table->addColumn('metadata_hash_sha256', Types::STRING)
                 ->setLength(TableConstants::COLUMN_HASH_SHA265_HEXITS_LENGTH)
                 ->setFixed(true);
 
@@ -46,7 +46,7 @@ class Version20220801000300CreateSpVersionTable extends AbstractMigration
 
             $table->addForeignKeyConstraint($this->preparePrefixedTableName('sp'), ['sp_id'], ['id']);
 
-            $table->addUniqueConstraint(['payload_hash_sha256']);
+            $table->addUniqueConstraint(['metadata_hash_sha256']);
 
             $this->schemaManager->createTable($table);
         } catch (\Throwable $exception) {

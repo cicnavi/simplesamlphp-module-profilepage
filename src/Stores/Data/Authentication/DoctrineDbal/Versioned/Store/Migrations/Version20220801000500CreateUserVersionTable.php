@@ -34,10 +34,10 @@ class Version20220801000500CreateUserVersionTable extends AbstractMigration
             $table->addColumn('user_id', Types::BIGINT)
                 ->setUnsigned(true);
 
-            $table->addColumn('payload', Types::TEXT)
+            $table->addColumn('attributes', Types::TEXT)
                 ->setComment('Serialized attributes.');
 
-            $table->addColumn('payload_hash_sha256', Types::STRING)
+            $table->addColumn('attributes_hash_sha256', Types::STRING)
                 ->setLength(TableConstants::COLUMN_HASH_SHA265_HEXITS_LENGTH)
                 ->setFixed(true);
 
@@ -47,7 +47,7 @@ class Version20220801000500CreateUserVersionTable extends AbstractMigration
 
             $table->addForeignKeyConstraint($this->preparePrefixedTableName('user'), ['user_id'], ['id']);
 
-            $table->addUniqueConstraint(['payload_hash_sha256']);
+            $table->addUniqueConstraint(['attributes_hash_sha256']);
 
             $this->schemaManager->createTable($table);
         } catch (\Throwable $exception) {

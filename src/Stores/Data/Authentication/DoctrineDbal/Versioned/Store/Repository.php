@@ -22,6 +22,8 @@ class Repository
     protected string $tableNameSpVersion;
     protected string $tableNameUser;
     protected string $tableNameUserVersion;
+    protected string $tableNameSpVersionUserVersion;
+    protected string $tableNameAuthenticationEvent;
 
     public function __construct(Connection $connection, LoggerInterface $logger)
     {
@@ -34,12 +36,21 @@ class Repository
         $this->tableNameSpVersion = $this->preparePrefixedTableName(TableConstants::TABLE_NAME_SP_VERSION);
         $this->tableNameUser = $this->preparePrefixedTableName(TableConstants::TABLE_NAME_USER);
         $this->tableNameUserVersion = $this->preparePrefixedTableName(TableConstants::TABLE_NAME_USER_VERSION);
+        $this->tableNameSpVersionUserVersion =
+            $this->preparePrefixedTableName(TableConstants::TABLE_NAME_SP_VERSION_USER_VERSION);
+        $this->tableNameAuthenticationEvent =
+            $this->preparePrefixedTableName(TableConstants::TABLE_NAME_AUTHENTICATION_EVENT);
+    }
+
+    protected function preparePrefixedTableName(string $tableName): string
+    {
+        return $this->connection->preparePrefixedTableName(TableConstants::TABLE_PREFIX . $tableName);
     }
 
     /**
      * @throws StoreException
      */
-    public function getIdpByEntityIdHashSha256(string $idpEntityIdHashSha256): Result
+    public function getIdp(string $entityIdHashSha256): Result
     {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
@@ -52,8 +63,8 @@ class Repository
         )
             ->from($this->tableNameIdp)
             ->where(
-                TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 .  ' = ' .
-                $queryBuilder->createNamedParameter($idpEntityIdHashSha256)
+                TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 . ' = ' .
+                $queryBuilder->createNamedParameter($entityIdHashSha256)
             )->setMaxResults(1);
 
         try {
@@ -61,7 +72,7 @@ class Repository
         } catch (Throwable $exception) {
             $message = sprintf(
                 'Error getting IdP by entity ID hash SHA256 \'%s\'. Error was: %s.',
-                $idpEntityIdHashSha256,
+                $entityIdHashSha256,
                 $exception->getMessage()
             );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
@@ -71,7 +82,7 @@ class Repository
     /**
      * @throws StoreException
      */
-    public function getIdpVersion(int $idpId, string $payloadHashSha256): Result
+    public function getIdpVersion(int $idpId, string $metadataHashSha256): Result
     {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
@@ -79,8 +90,8 @@ class Repository
         $queryBuilder->select(
             TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_ID,
             TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID,
-            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD,
-            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256,
+            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA,
+            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256,
             TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT,
         )
             ->from($this->tableNameIdpVersion)
@@ -91,8 +102,8 @@ class Repository
                         $queryBuilder->createNamedParameter($idpId, ParameterType::INTEGER)
                     ),
                     $queryBuilder->expr()->eq(
-                        TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256,
-                        $queryBuilder->createNamedParameter($payloadHashSha256)
+                        TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256,
+                        $queryBuilder->createNamedParameter($metadataHashSha256)
                     )
                 )
             )->setMaxResults(1);
@@ -104,24 +115,19 @@ class Repository
             $message = sprintf(
                 'Error getting IdP Version for IdP %s and metadata array hash %s. Error was: %s.',
                 $idpId,
-                $payloadHashSha256,
+                $metadataHashSha256,
                 $exception->getMessage()
             );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
 
-    protected function preparePrefixedTableName(string $tableName): string
-    {
-        return $this->connection->preparePrefixedTableName(TableConstants::TABLE_PREFIX . $tableName);
-    }
-
     /**
      * @throws StoreException
      */
     public function insertIdp(
-        string $idpEntityId,
-        string $idpEntityIdHashSha256,
+        string $entityId,
+        string $entityIdHashSha256,
         \DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -141,8 +147,8 @@ class Repository
             )
             ->setParameters(
                 [
-                    TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID => $idpEntityId,
-                    TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => $idpEntityIdHashSha256,
+                    TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID => $entityId,
+                    TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => $entityIdHashSha256,
                     TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT => $createdAt,
                 ],
                 [
@@ -165,8 +171,8 @@ class Repository
      */
     public function insertIdpVersion(
         int $idpId,
-        string $payload,
-        string $payloadHashSha256,
+        string $metadata,
+        string $metadataHashSha256,
         \DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -178,10 +184,10 @@ class Repository
                 [
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID => ':' .
                         TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID,
-                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD => ':' .
-                        TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD,
-                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 => ':' .
-                        TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256,
+                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA => ':' .
+                        TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA,
+                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 => ':' .
+                        TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256,
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT => ':' .
                         TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT,
                 ]
@@ -189,14 +195,14 @@ class Repository
             ->setParameters(
                 [
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID => $idpId,
-                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD => $payload,
-                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 => $payloadHashSha256,
+                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA => $metadata,
+                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 => $metadataHashSha256,
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT => $createdAt,
                 ],
                 [
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID => Types::BIGINT,
-                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD => Types::TEXT,
-                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 => Types::STRING,
+                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA => Types::TEXT,
+                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 => Types::STRING,
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
                 ]
             );
@@ -212,7 +218,7 @@ class Repository
     /**
      * @throws StoreException
      */
-    public function getSpByEntityIdHashSha256(string $spEntityIdHashSha256): Result
+    public function getSp(string $entityIdHashSha256): Result
     {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
@@ -225,8 +231,8 @@ class Repository
         )
             ->from($this->tableNameSp)
             ->where(
-                TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 .  ' = ' .
-                $queryBuilder->createNamedParameter($spEntityIdHashSha256)
+                TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 . ' = ' .
+                $queryBuilder->createNamedParameter($entityIdHashSha256)
             )->setMaxResults(1);
 
         try {
@@ -234,7 +240,7 @@ class Repository
         } catch (Throwable $exception) {
             $message = sprintf(
                 'Error getting SP by entity ID hash SHA256 \'%s\'. Error was: %s.',
-                $spEntityIdHashSha256,
+                $entityIdHashSha256,
                 $exception->getMessage()
             );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
@@ -242,8 +248,8 @@ class Repository
     }
 
     public function insertSp(
-        string $spEntityId,
-        string $spEntityIdHashSha256,
+        string $entityId,
+        string $entityIdHashSha256,
         \DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -263,8 +269,8 @@ class Repository
             )
             ->setParameters(
                 [
-                    TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID => $spEntityId,
-                    TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => $spEntityIdHashSha256,
+                    TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID => $entityId,
+                    TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => $entityIdHashSha256,
                     TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT => $createdAt,
                 ],
                 [
@@ -285,7 +291,7 @@ class Repository
     /**
      * @throws StoreException
      */
-    public function getSpVersion(int $spId, string $spMetadataArrayHashSha256): Result
+    public function getSpVersion(int $spId, string $metadataHashSha256): Result
     {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
@@ -293,8 +299,8 @@ class Repository
         $queryBuilder->select(
             TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID,
             TableConstants::TABLE_SP_VERSION_COLUMN_NAME_SP_ID,
-            TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD,
-            TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256,
+            TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA,
+            TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256,
             TableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT,
         )
             ->from($this->tableNameSpVersion)
@@ -305,8 +311,8 @@ class Repository
                         $queryBuilder->createNamedParameter($spId, ParameterType::INTEGER)
                     ),
                     $queryBuilder->expr()->eq(
-                        TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256,
-                        $queryBuilder->createNamedParameter($spMetadataArrayHashSha256)
+                        TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256,
+                        $queryBuilder->createNamedParameter($metadataHashSha256)
                     )
                 )
             )->setMaxResults(1);
@@ -318,7 +324,7 @@ class Repository
             $message = sprintf(
                 'Error getting SP Version for SP %s and metadata array hash %s. Error was: %s.',
                 $spId,
-                $spMetadataArrayHashSha256,
+                $metadataHashSha256,
                 $exception->getMessage()
             );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
@@ -330,8 +336,8 @@ class Repository
      */
     public function insertSpVersion(
         int $spId,
-        string $payload,
-        string $payloadHashSha256,
+        string $metadata,
+        string $metadataHashSha256,
         \DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -343,10 +349,10 @@ class Repository
                 [
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_SP_ID => ':' .
                         TableConstants::TABLE_SP_VERSION_COLUMN_NAME_SP_ID,
-                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD => ':' .
-                        TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD,
-                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 => ':' .
-                        TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256,
+                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA => ':' .
+                        TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA,
+                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 => ':' .
+                        TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256,
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT => ':' .
                         TableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT,
                 ]
@@ -354,14 +360,14 @@ class Repository
             ->setParameters(
                 [
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_SP_ID => $spId,
-                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD => $payload,
-                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 => $payloadHashSha256,
+                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA => $metadata,
+                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 => $metadataHashSha256,
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT => $createdAt,
                 ],
                 [
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_SP_ID => Types::BIGINT,
-                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD => Types::TEXT,
-                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 => Types::STRING,
+                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA => Types::TEXT,
+                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 => Types::STRING,
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
                 ]
             );
@@ -377,7 +383,7 @@ class Repository
     /**
      * @throws StoreException
      */
-    public function getUserByIdentifierHashSha256(string $identifierHashSha256): Result
+    public function getUser(string $identifierHashSha256): Result
     {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
@@ -390,7 +396,7 @@ class Repository
         )
             ->from($this->tableNameUser)
             ->where(
-                TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256 .  ' = ' .
+                TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256 . ' = ' .
                 $queryBuilder->createNamedParameter($identifierHashSha256)
             )->setMaxResults(1);
 
@@ -453,7 +459,7 @@ class Repository
     /**
      * @throws StoreException
      */
-    public function getUserVersion(int $userId, string $payloadHashSha256): Result
+    public function getUserVersion(int $userId, string $attributesHashSha256): Result
     {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
@@ -461,8 +467,8 @@ class Repository
         $queryBuilder->select(
             TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID,
             TableConstants::TABLE_USER_VERSION_COLUMN_NAME_USER_ID,
-            TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD,
-            TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256,
+            TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES,
+            TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256,
             TableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT,
         )
             ->from($this->tableNameUserVersion)
@@ -473,8 +479,8 @@ class Repository
                         $queryBuilder->createNamedParameter($userId, ParameterType::INTEGER)
                     ),
                     $queryBuilder->expr()->eq(
-                        TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256,
-                        $queryBuilder->createNamedParameter($payloadHashSha256)
+                        TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256,
+                        $queryBuilder->createNamedParameter($attributesHashSha256)
                     )
                 )
             )->setMaxResults(1);
@@ -486,7 +492,7 @@ class Repository
             $message = sprintf(
                 'Error getting user version for user ID %s and attribute array hash %s. Error was: %s.',
                 $userId,
-                $payloadHashSha256,
+                $attributesHashSha256,
                 $exception->getMessage()
             );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
@@ -498,8 +504,8 @@ class Repository
      */
     public function insertUserVersion(
         int $userId,
-        string $payload,
-        string $payloadHashSha256,
+        string $attributes,
+        string $attributesHashSha256,
         \DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -511,10 +517,10 @@ class Repository
                 [
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_USER_ID => ':' .
                         TableConstants::TABLE_USER_VERSION_COLUMN_NAME_USER_ID,
-                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD => ':' .
-                        TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD,
-                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 => ':' .
-                        TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256,
+                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES => ':' .
+                        TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES,
+                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256 => ':' .
+                        TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256,
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT => ':' .
                         TableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT,
                 ]
@@ -522,14 +528,14 @@ class Repository
             ->setParameters(
                 [
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_USER_ID => $userId,
-                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD => $payload,
-                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 => $payloadHashSha256,
+                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES => $attributes,
+                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256 => $attributesHashSha256,
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT => $createdAt,
                 ],
                 [
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_USER_ID => Types::BIGINT,
-                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD => Types::TEXT,
-                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_PAYLOAD_HASH_SHA256 => Types::STRING,
+                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES => Types::TEXT,
+                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256 => Types::STRING,
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
                 ]
             );
@@ -538,6 +544,138 @@ class Repository
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
             $message = sprintf('Could not insert user version. Error was: %s.', $exception->getMessage());
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function getSpVersionUserVersion(int $spVersionId, int $userVersionId): Result
+    {
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        /** @psalm-suppress TooManyArguments */
+        $queryBuilder->select(
+            TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_ID,
+            TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_SP_VERSION_ID,
+            TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_USER_VERSION_ID,
+            TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_CREATED_AT,
+        )
+            ->from($this->tableNameSpVersionUserVersion)
+            ->where(
+                $queryBuilder->expr()->and(
+                    $queryBuilder->expr()->eq(
+                        TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_SP_VERSION_ID,
+                        $queryBuilder->createNamedParameter($spVersionId, ParameterType::INTEGER)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_USER_VERSION_ID,
+                        $queryBuilder->createNamedParameter($userVersionId)
+                    )
+                )
+            )->setMaxResults(1);
+
+        try {
+            return $queryBuilder->executeQuery();
+        } catch (Throwable $exception) {
+            $message = sprintf(
+                'Error getting SpVersionUserVersion for SpVersion %s and UserVersion %s. Error was: %s.',
+                $spVersionId,
+                $userVersionId,
+                $exception->getMessage()
+            );
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function insertSpVersionUserVersion(
+        int $spVersionId,
+        int $userVersionId,
+        \DateTimeImmutable $createdAt = null
+    ): void {
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        $createdAt = $createdAt ?? new \DateTimeImmutable();
+
+        $queryBuilder->insert($this->tableNameSpVersionUserVersion)
+            ->values(
+                [
+                    TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_SP_VERSION_ID => ':' .
+                        TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_SP_VERSION_ID,
+                    TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_USER_VERSION_ID => ':' .
+                        TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_USER_VERSION_ID,
+                    TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_CREATED_AT => ':' .
+                        TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_CREATED_AT,
+                ]
+            )
+            ->setParameters(
+                [
+                    TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_SP_VERSION_ID => $spVersionId,
+                    TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_USER_VERSION_ID => $userVersionId,
+                    TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_CREATED_AT => $createdAt,
+                ],
+                [
+                    TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_SP_VERSION_ID => Types::BIGINT,
+                    TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_USER_VERSION_ID => Types::BIGINT,
+                    TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
+                ]
+            );
+
+        try {
+            $queryBuilder->executeStatement();
+        } catch (Throwable $exception) {
+            $message = sprintf('Could not insert SpVersionUserVersion. Error was: %s.', $exception->getMessage());
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    public function insertAuthenticationEvent(
+        int $idpVersionId,
+        int $spVersionUserVersionId,
+        \DateTimeImmutable $happenedAt,
+        \DateTimeImmutable $createdAt = null
+    ): void {
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        $createdAt = $createdAt ?? new \DateTimeImmutable();
+
+        $queryBuilder->insert($this->tableNameAuthenticationEvent)
+            ->values(
+                [
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_VERSION_ID => ':' .
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_VERSION_ID,
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_SP_VERSION_USER_VERSION_ID => ':' .
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_SP_VERSION_USER_VERSION_ID,
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT => ':' .
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT => ':' .
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT,
+                ]
+            )
+            ->setParameters(
+                [
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_VERSION_ID => $idpVersionId,
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_SP_VERSION_USER_VERSION_ID =>
+                        $spVersionUserVersionId,
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT => $happenedAt,
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT => $createdAt,
+                ],
+                [
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_VERSION_ID => Types::BIGINT,
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_SP_VERSION_USER_VERSION_ID => Types::BIGINT,
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT => Types::DATETIMETZ_IMMUTABLE,
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
+                ]
+            );
+
+        try {
+            $queryBuilder->executeStatement();
+        } catch (Throwable $exception) {
+            $message = sprintf('Could not insert AuthenticationEvent. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
