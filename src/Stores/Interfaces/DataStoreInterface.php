@@ -17,4 +17,6 @@ interface DataStoreInterface extends StoreInterface
     ): self;
 
     public function persist(Event $authenticationEvent): void;
+
+    public function getConnectedOrganizations(string $userIdentifierHashSha256);
 }

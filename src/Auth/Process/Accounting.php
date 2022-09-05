@@ -12,12 +12,15 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
+use SimpleSAML\Module\accounting\Trackers\Interfaces\AuthenticationDataTrackerInterface;
 
 class Accounting extends ProcessingFilter
 {
     protected ModuleConfiguration $moduleConfiguration;
     protected JobsStoreBuilder $jobsStoreBuilder;
     protected LoggerInterface $logger;
+    protected AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder;
 
     /**
      * @param array $config
@@ -31,7 +34,8 @@ class Accounting extends ProcessingFilter
         $reserved,
         ModuleConfiguration $moduleConfiguration = null,
         LoggerInterface $logger = null,
-        JobsStoreBuilder $jobsStoreBuilder = null
+        JobsStoreBuilder $jobsStoreBuilder = null,
+        AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder = null
     ) {
         parent::__construct($config, $reserved);
 
@@ -39,6 +43,9 @@ class Accounting extends ProcessingFilter
         $this->moduleConfiguration = $moduleConfiguration ?? new ModuleConfiguration();
         $this->logger = $logger ?? new Logger();
         $this->jobsStoreBuilder = $jobsStoreBuilder ?? new JobsStoreBuilder($this->moduleConfiguration, $this->logger);
+
+        $this->authenticationDataTrackerBuilder = $authenticationDataTrackerBuilder ??
+            new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger);
     }
 
     /**
@@ -46,16 +53,29 @@ class Accounting extends ProcessingFilter
      */
     public function process(array &$state): void
     {
-        $authenticationEvent = new Event(new State($state));
+        try {
+            $authenticationEvent = new Event(new State($state));
 
-        if ($this->isAccountingProcessingTypeAsynchronous()) {
-            // Only create authentication event job for later processing...
-            $this->createAuthenticationEventJob($authenticationEvent);
-            return;
+            if ($this->isAccountingProcessingTypeAsynchronous()) {
+                // Only create authentication event job for later processing...
+                $this->createAuthenticationEventJob($authenticationEvent);
+                return;
+            }
+
+            // Accounting type is synchronous, so do the processing right away...
+            $configuredTrackers = [
+                $this->moduleConfiguration->getDefaultDataTrackerAndProviderClass(),
+                ...$this->moduleConfiguration->getAdditionalTrackers()
+            ];
+
+            foreach ($configuredTrackers as $tracker) {
+                ($this->authenticationDataTrackerBuilder->build($tracker))->process($authenticationEvent);
+            }
+        } catch (\Throwable $exception) {
+            $message = sprintf('Accounting error, skipping... Error was: %s.', $exception->getMessage());
+            $this->logger->error($message, $state);
         }
 
-        // TODO Do the processing right away...
-        // Since LoggerInterface doesn't bind to SimpleSAML\Module\accounting\Services\Logger, move to implementation
     }
 
     protected function isAccountingProcessingTypeAsynchronous(): bool

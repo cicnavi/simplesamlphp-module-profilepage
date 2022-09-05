@@ -22,6 +22,7 @@ class ModuleConfiguration
     public const FILE_NAME = 'module_accounting.php';
 
     public const OPTION_USER_ID_ATTRIBUTE_NAME = 'user_id_attribute_name';
+    public const OPTION_DEFAULT_AUTHENTICATION_SOURCE = 'default_authentication_source';
     public const OPTION_ACCOUNTING_PROCESSING_TYPE = 'accounting_processing_type';
     public const OPTION_JOBS_STORE = 'jobs_store';
     public const OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER = 'default_data_tracker_and_provider';
@@ -76,7 +77,7 @@ class ModuleConfiguration
         return $this->getConfiguration()->getArray(self::OPTION_CONNECTIONS_AND_PARAMETERS);
     }
 
-    protected function getAdditionalTrackers(): array
+    public function getAdditionalTrackers(): array
     {
         return $this->getConfiguration()->getArray(self::OPTION_ADDITIONAL_TRACKERS);
     }
@@ -106,6 +107,11 @@ class ModuleConfiguration
     public function getUserIdAttributeName(): string
     {
         return $this->getConfiguration()->getString(self::OPTION_USER_ID_ATTRIBUTE_NAME);
+    }
+
+    public function getDefaultAuthenticationSource(): string
+    {
+        return $this->getConfiguration()->getString(self::OPTION_DEFAULT_AUTHENTICATION_SOURCE);
     }
 
     public function getClassConnectionKey(string $class, string $connectionType = ConnectionType::MASTER): string

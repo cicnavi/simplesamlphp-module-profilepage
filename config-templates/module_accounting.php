@@ -21,6 +21,11 @@ $config = [
     ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE_NAME => 'urn:oasis:names:tc:SAML:attribute:subject-id',
 
     /**
+     * Default authentication source which will be used when authenticating users in SimpleSAMLphp Profile Page.
+     */
+    ModuleConfiguration::OPTION_DEFAULT_AUTHENTICATION_SOURCE => 'default-sp',
+
+    /**
      * Accounting processing type. There are two possible types: 'synchronous' and 'asynchronous'.
      */
     ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>

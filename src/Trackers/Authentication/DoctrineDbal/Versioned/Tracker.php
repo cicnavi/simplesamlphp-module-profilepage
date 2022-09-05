@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned;
 
+use Doctrine\DBAL\Result;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
+use SimpleSAML\Module\accounting\Helpers\HashHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Providers\Interfaces\AuthenticationDataProviderInterface;
 use SimpleSAML\Module\accounting\Stores\Builders\DataStoreBuilder;
@@ -53,5 +55,17 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
     public function runSetup(): void
     {
         $this->dataStore->runSetup();
+    }
+
+    public function getConnectedOrganizations(string $userIdentifier): Result
+    {
+        // TODO mivanci refactor all this...
+        $userIdentifierHashSha256 = HashHelper::getSha256($userIdentifier);
+        return $this->dataStore->getConnectedOrganizations($userIdentifierHashSha256);
+    }
+
+    public function getActivity(int $userId): Result
+    {
+        // TODO: Implement getActivity() method.
     }
 }

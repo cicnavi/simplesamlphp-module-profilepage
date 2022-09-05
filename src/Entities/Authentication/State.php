@@ -97,7 +97,7 @@ class State
     protected function resolveAuthnInstant(array $state): \DateTimeImmutable
     {
         if (empty($state['AuthnInstant'])) {
-            throw new UnexpectedValueException('State array does not contain AuthnInstant value.');
+            return new \DateTimeImmutable();
         }
 
         $authInstant = (string)$state['AuthnInstant'];

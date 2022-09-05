@@ -1,0 +1,24 @@
+{# @var moduleConfiguration \SimpleSAML\Module\accounting\ModuleConfiguration #}
+
+{% set pagetitle = 'Connected Organizations'|trans %}
+{% set frontpage_section = 'main' %}
+
+{% extends "base.twig" %}
+
+{% block preload %}
+    <link rel="stylesheet" href="{{ asset('css/accounting.css', 'accounting') }}">
+{% endblock %}
+
+{% block content %}
+
+    <h2>{{ pagetitle }} </h2>
+
+
+
+    <ul>
+        {% for name, value in normalizedAttributes %}
+            <li><strong>{{ name }}</strong>: {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

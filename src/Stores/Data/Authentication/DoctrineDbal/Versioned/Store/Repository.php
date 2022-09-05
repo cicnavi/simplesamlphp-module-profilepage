@@ -24,6 +24,7 @@ class Repository
     protected string $tableNameUserVersion;
     protected string $tableNameSpVersionUserVersion;
     protected string $tableNameAuthenticationEvent;
+    protected string $tableNameAttributeSetHistory;
 
     public function __construct(Connection $connection, LoggerInterface $logger)
     {
@@ -40,6 +41,8 @@ class Repository
             $this->preparePrefixedTableName(TableConstants::TABLE_NAME_SP_VERSION_USER_VERSION);
         $this->tableNameAuthenticationEvent =
             $this->preparePrefixedTableName(TableConstants::TABLE_NAME_AUTHENTICATION_EVENT);
+        $this->tableNameAttributeSetHistory =
+            $this->preparePrefixedTableName(TableConstants::TABLE_NAME_ATTRIBUTE_SET_HISTORY);
     }
 
     protected function preparePrefixedTableName(string $tableName): string
@@ -71,7 +74,7 @@ class Repository
             return $queryBuilder->executeQuery();
         } catch (Throwable $exception) {
             $message = sprintf(
-                'Error getting IdP by entity ID hash SHA256 \'%s\'. Error was: %s.',
+                'Error executing query to get IdP by entity ID hash SHA256 \'%s\'. Error was: %s.',
                 $entityIdHashSha256,
                 $exception->getMessage()
             );
@@ -113,7 +116,7 @@ class Repository
             return $queryBuilder->executeQuery();
         } catch (Throwable $exception) {
             $message = sprintf(
-                'Error getting IdP Version for IdP %s and metadata array hash %s. Error was: %s.',
+                'Error executing query to get IdP Version for IdP %s and metadata array hash %s. Error was: %s.',
                 $idpId,
                 $metadataHashSha256,
                 $exception->getMessage()
@@ -161,7 +164,7 @@ class Repository
         try {
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
-            $message = sprintf('Could not insert IdP. Error was: %s.', $exception->getMessage());
+            $message = sprintf('Error executing query to insert IdP. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -210,7 +213,7 @@ class Repository
         try {
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
-            $message = sprintf('Could not insert IdP Version. Error was: %s.', $exception->getMessage());
+            $message = sprintf('Error executing query to insert IdP Version. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -239,7 +242,7 @@ class Repository
             return $queryBuilder->executeQuery();
         } catch (Throwable $exception) {
             $message = sprintf(
-                'Error getting SP by entity ID hash SHA256 \'%s\'. Error was: %s.',
+                'Error executing query to get SP by entity ID hash SHA256 \'%s\'. Error was: %s.',
                 $entityIdHashSha256,
                 $exception->getMessage()
             );
@@ -283,7 +286,7 @@ class Repository
         try {
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
-            $message = sprintf('Could not insert SP. Error was: %s.', $exception->getMessage());
+            $message = sprintf('Error executing query to insert SP. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -322,7 +325,7 @@ class Repository
             return $queryBuilder->executeQuery();
         } catch (Throwable $exception) {
             $message = sprintf(
-                'Error getting SP Version for SP %s and metadata array hash %s. Error was: %s.',
+                'Error executing query to get SP Version for SP %s and metadata array hash %s. Error was: %s.',
                 $spId,
                 $metadataHashSha256,
                 $exception->getMessage()
@@ -375,7 +378,7 @@ class Repository
         try {
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
-            $message = sprintf('Could not insert SP Version. Error was: %s.', $exception->getMessage());
+            $message = sprintf('Error executing query to insert SP Version. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -404,7 +407,7 @@ class Repository
             return $queryBuilder->executeQuery();
         } catch (Throwable $exception) {
             $message = sprintf(
-                'Error getting user by identifier hash SHA256 \'%s\'. Error was: %s.',
+                'Error executing query to get user by identifier hash SHA256 \'%s\'. Error was: %s.',
                 $identifierHashSha256,
                 $exception->getMessage()
             );
@@ -451,7 +454,7 @@ class Repository
         try {
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
-            $message = sprintf('Could not insert user. Error was: %s.', $exception->getMessage());
+            $message = sprintf('Error executing query to insert user. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -490,7 +493,7 @@ class Repository
             return $queryBuilder->executeQuery();
         } catch (Throwable $exception) {
             $message = sprintf(
-                'Error getting user version for user ID %s and attribute array hash %s. Error was: %s.',
+                'Error executing query to get user version for user ID %s and attribute array hash %s. Error was: %s.',
                 $userId,
                 $attributesHashSha256,
                 $exception->getMessage()
@@ -543,7 +546,10 @@ class Repository
         try {
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
-            $message = sprintf('Could not insert user version. Error was: %s.', $exception->getMessage());
+            $message = sprintf(
+                'Error executing query to insert user version. Error was: %s.',
+                $exception->getMessage()
+            );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -571,7 +577,7 @@ class Repository
                     ),
                     $queryBuilder->expr()->eq(
                         TableConstants::TABLE_SP_VERSION_USER_VERSION_COLUMN_NAME_USER_VERSION_ID,
-                        $queryBuilder->createNamedParameter($userVersionId)
+                        $queryBuilder->createNamedParameter($userVersionId, ParameterType::INTEGER)
                     )
                 )
             )->setMaxResults(1);
@@ -580,7 +586,7 @@ class Repository
             return $queryBuilder->executeQuery();
         } catch (Throwable $exception) {
             $message = sprintf(
-                'Error getting SpVersionUserVersion for SpVersion %s and UserVersion %s. Error was: %s.',
+                'Error executing query to get SpVersionUserVersion for SpVersion %s and UserVersion %s. Error was: %s.',
                 $spVersionId,
                 $userVersionId,
                 $exception->getMessage()
@@ -628,11 +634,17 @@ class Repository
         try {
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
-            $message = sprintf('Could not insert SpVersionUserVersion. Error was: %s.', $exception->getMessage());
+            $message = sprintf(
+                'Error executing query to insert SpVersionUserVersion. Error was: %s.',
+                $exception->getMessage()
+            );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
 
+    /**
+     * @throws StoreException
+     */
     public function insertAuthenticationEvent(
         int $idpVersionId,
         int $spVersionUserVersionId,
@@ -675,7 +687,170 @@ class Repository
         try {
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
-            $message = sprintf('Could not insert AuthenticationEvent. Error was: %s.', $exception->getMessage());
+            $message = sprintf(
+                'Error executing query to insert AuthenticationEvent. Error was: %s.',
+                $exception->getMessage()
+            );
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function getAttributeSetHistory(int $idpId, int $spId, int $userId): Result
+    {
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        /** @psalm-suppress TooManyArguments */
+        $queryBuilder->select(
+            TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ID,
+            TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_IDP_ID,
+            TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_SP_ID,
+            TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_USER_ID,
+            TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ATTRIBUTES,
+            TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_BY_ATTRIBUTES_HASH_SHA_256,
+            TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_CREATED_AT,
+            TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_AT,
+        )
+            ->from($this->tableNameAttributeSetHistory)
+            ->where(
+                $queryBuilder->expr()->and(
+                    $queryBuilder->expr()->eq(
+                        TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_IDP_ID,
+                        $queryBuilder->createNamedParameter($idpId, ParameterType::INTEGER)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_SP_ID,
+                        $queryBuilder->createNamedParameter($spId, ParameterType::INTEGER)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_USER_ID,
+                        $queryBuilder->createNamedParameter($userId, ParameterType::INTEGER)
+                    )
+                )
+            )->setMaxResults(1);
+
+        try {
+            return $queryBuilder->executeQuery();
+        } catch (Throwable $exception) {
+            $message = sprintf(
+                'Error executing query to get attribute set history for IdP ID %s, SP ID %s, user ID %s.' .
+                ' Error was: %s.',
+                $idpId,
+                $spId,
+                $userId,
+                $exception->getMessage()
+            );
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function insertAttributeSetHistory(
+        int $idpId,
+        int $spId,
+        int $userId,
+        string $attributes,
+        string $attributesHash256,
+        \DateTimeImmutable $createdAt = null,
+        \DateTimeImmutable $updatedAt = null
+    ): void {
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        $createdAt = $createdAt ?? new \DateTimeImmutable();
+        $updatedAt = $updatedAt ?? new \DateTimeImmutable();
+
+        $queryBuilder->insert($this->tableNameAttributeSetHistory)
+            ->values(
+                [
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_IDP_ID => ':' .
+                        TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_IDP_ID,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_SP_ID => ':' .
+                        TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_SP_ID,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_USER_ID => ':' .
+                        TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_USER_ID,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ATTRIBUTES => ':' .
+                        TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ATTRIBUTES,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_BY_ATTRIBUTES_HASH_SHA_256 => ':' .
+                        TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_BY_ATTRIBUTES_HASH_SHA_256,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_CREATED_AT => ':' .
+                        TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_CREATED_AT,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_AT => ':' .
+                        TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_AT,
+                ]
+            )
+            ->setParameters(
+                [
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_IDP_ID => $idpId,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_SP_ID => $spId,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_USER_ID => $userId,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ATTRIBUTES => $attributes,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_BY_ATTRIBUTES_HASH_SHA_256 =>
+                        $attributesHash256,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_CREATED_AT => $createdAt,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_AT => $updatedAt,
+                ],
+                [
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_IDP_ID => Types::BIGINT,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_SP_ID => Types::BIGINT,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_USER_ID => Types::BIGINT,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ATTRIBUTES => Types::TEXT,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_BY_ATTRIBUTES_HASH_SHA_256 =>
+                        Types::STRING,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
+                    TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_AT => Types::DATETIMETZ_IMMUTABLE,
+                ]
+            );
+
+        try {
+            $queryBuilder->executeStatement();
+        } catch (Throwable $exception) {
+            $message = sprintf(
+                'Error executing query to insert attribute set history. Error was: %s.',
+                $exception->getMessage()
+            );
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function updateAttributeSetHistory(
+        int $id,
+        string $attributes,
+        string $attributesHash256,
+        \DateTimeImmutable $updatedAt = null
+    ): void {
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        $updatedAt = $updatedAt ?? new \DateTimeImmutable();
+
+        $queryBuilder->update($this->tableNameAttributeSetHistory)
+            ->set(
+                TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ATTRIBUTES,
+                $queryBuilder->createNamedParameter($attributes, Types::TEXT)
+            )->set(
+                TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_BY_ATTRIBUTES_HASH_SHA_256,
+                $queryBuilder->createNamedParameter($attributesHash256, Types::STRING)
+            )->set(
+                TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_AT,
+                $queryBuilder->createNamedParameter($updatedAt, Types::DATETIMETZ_IMMUTABLE)
+            )->where(
+                TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ID . ' = ' .
+                $queryBuilder->createNamedParameter($id, Types::BIGINT)
+            );
+
+        try {
+            $queryBuilder->executeStatement();
+        } catch (Throwable $exception) {
+            $message = sprintf(
+                'Error executing query to update attribute set history. Error was: %s.',
+                $exception->getMessage()
+            );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }

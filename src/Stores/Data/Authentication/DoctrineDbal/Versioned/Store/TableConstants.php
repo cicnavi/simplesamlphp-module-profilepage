@@ -73,5 +73,14 @@ class TableConstants
 
     // Attribute set history, contains information per IdP / SP / user on every attribute
     // that was ever released to SP, including the latest value and release date
-    public const TABLE_NAME_IDP_SP_USER_ATTRIBUTE_SET_HISTORY = 'idp_sp_user_attribute_set_history';
+    public const TABLE_NAME_ATTRIBUTE_SET_HISTORY = 'attribute_set_history';
+    public const TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ID = 'id';
+    public const TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_IDP_ID = 'idp_id';
+    public const TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_SP_ID = 'sp_id';
+    public const TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_USER_ID = 'user_id';
+    public const TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ATTRIBUTES = 'attributes';
+    public const TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_BY_ATTRIBUTES_HASH_SHA_256 =
+        'updated_by_attributes_hash_sha_256';
+    public const TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_CREATED_AT = 'created_at';
+    public const TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_AT = 'updated_at';
 }

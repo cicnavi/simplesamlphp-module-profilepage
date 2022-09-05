@@ -6,3 +6,11 @@ accounting-test:
 accounting-admin-configuration-status:
     path:       /admin/configuration/status
     defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Admin\Configuration::status' }
+
+accounting-user-personal-data:
+    path: /user/personal-data
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::personalData' }
+
+accounting-user-connected-organizations:
+    path: /user/connected-organizations
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::connectedOrganizations' }

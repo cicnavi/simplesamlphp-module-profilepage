@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned;
 
+use Doctrine\DBAL\Result;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
@@ -71,6 +72,8 @@ class Store extends AbstractStore implements DataStoreInterface
 
         $happenedAt = $authenticationEvent->getHappenedAt();
         $this->repository->insertAuthenticationEvent($idpVersionId, $spVersionUserVersionId, $happenedAt);
+
+        $this->saveAttributeSetHistory($idpId, $spId, $userId, $hashDecoratedState);
     }
 
     /**
@@ -445,6 +448,106 @@ class Store extends AbstractStore implements DataStoreInterface
             throw new StoreException($message);
         } catch (\Throwable $exception) {
             $message = sprintf('Error resolving SpVersionUserVersion ID. Error was: %s.', $exception->getMessage());
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @throws StoreException
+     */
+    protected function saveAttributeSetHistory(
+        int $idpId,
+        int $spId,
+        int $userId,
+        HashDecoratedState $hashDecoratedState
+    ): void {
+        $currentAttributesHash256 = $hashDecoratedState->getAttributesArrayHashSha256();
+        $currentAttributes = $hashDecoratedState->getState()->getAttributes();
+
+        try {
+            $result = $this->repository->getAttributeSetHistory($idpId, $spId, $userId);
+            $attributeSetHistory = $result->fetchAssociative();
+
+            // If it doesn't exist yet, create it.
+            if ($attributeSetHistory === false) {
+                $this->repository->insertAttributeSetHistory(
+                    $idpId,
+                    $spId,
+                    $userId,
+                    serialize($currentAttributes),
+                    $currentAttributesHash256
+                );
+                return;
+            }
+
+            // It exists, but check if it was updated by current attributes hash.
+            /** @var string $updatedByAttributesHashSha256 */
+            $updatedByAttributesHashSha256 = $attributeSetHistory[TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_BY_ATTRIBUTES_HASH_SHA_256] ?? '';
+
+            if ($updatedByAttributesHashSha256 === $currentAttributesHash256) {
+                return;
+            }
+
+            // We have a new version of attributes, so merge any new changes.
+            $oldAttributes = unserialize(
+                (string)$attributeSetHistory[TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ATTRIBUTES]
+            );
+
+            $attributeSetHistoryId =
+                (int)$attributeSetHistory[TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ID];
+
+            if ($oldAttributes === false || (!is_array($oldAttributes))) {
+                $message = sprintf(
+                    'Could not deserialize current attributes for attribute set history ID %s.',
+                    $attributeSetHistoryId
+                );
+                throw new StoreException($message);
+            }
+
+            $updatedAttributes = array_merge($oldAttributes, $currentAttributes);
+
+            $this->repository->updateAttributeSetHistory(
+                $attributeSetHistoryId,
+                serialize($updatedAttributes),
+                $currentAttributesHash256
+            );
+        } catch (\Throwable $exception) {
+            $message = sprintf(
+                'Error saving attribute set history for IdP ID %s, SP ID %s, user ID %s. Error was: %s.',
+                $idpId,
+                $spId,
+                $userId,
+                $exception->getMessage()
+            );
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function getConnectedOrganizations(string $userIdentifierHashSha256): Result
+    {
+        // TODO mivanci refactor and move this to repository...
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        $queryBuilder->select(
+            'vs.entity_id AS sp_entity_id',
+            'COUNT(vae.id) AS authentications',
+        )->from('vds_authentication_event', 'vae')
+            ->leftJoin('vae', 'vds_sp_version_user_version', 'vsvuv', 'vae.sp_version_user_version_id = vsvuv.id')
+            ->leftJoin('vsvuv', 'vds_sp_version', 'vsv', 'vsvuv.sp_version_id = vsv.id')
+            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
+            ->groupBy('vs.id')
+            ->orderBy('authentications', 'DESC');
+
+        try {
+            return $queryBuilder->executeQuery();
+        } catch (\Throwable $exception) {
+            $message = sprintf(
+                'Error executing query to get connected organizations. Error was: %s.',
+                $exception->getMessage()
+            );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
