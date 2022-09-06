@@ -526,23 +526,61 @@ class Store extends AbstractStore implements DataStoreInterface
     /**
      * @throws StoreException
      */
-    public function getConnectedOrganizations(string $userIdentifierHashSha256): Result
+    public function getConnectedOrganizations(string $userIdentifierHashSha256): array
     {
         // TODO mivanci refactor and move this to repository...
-        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $authenticationsqueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $spLastMetadataQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $userLastAttributesQueryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $queryBuilder->select(
+        $authenticationsqueryBuilder->select(
             'vs.entity_id AS sp_entity_id',
-            'COUNT(vae.id) AS authentications',
+            'COUNT(vae.id) AS number_of_authentications',
+            'MAX(vae.happened_at) AS last_authentication_at',
+            'MIN(vae.happened_at) AS first_authentication_at',
         )->from('vds_authentication_event', 'vae')
             ->leftJoin('vae', 'vds_sp_version_user_version', 'vsvuv', 'vae.sp_version_user_version_id = vsvuv.id')
             ->leftJoin('vsvuv', 'vds_sp_version', 'vsv', 'vsvuv.sp_version_id = vsv.id')
             ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
+            ->leftJoin('vsvuv', 'vds_user_version', 'vuv', 'vsvuv.user_version_id = vuv.id')
+            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
+            ->where('vu.identifier_hash_sha256 = ' . $authenticationsqueryBuilder->createNamedParameter($userIdentifierHashSha256))
             ->groupBy('vs.id')
-            ->orderBy('authentications', 'DESC');
+            ->orderBy('number_of_authentications', 'DESC');
+
+        $spLastMetadataQueryBuilder->select(
+            'vs.entity_id AS sp_entity_id',
+            'vsv.metadata AS sp_metadata',
+        )->from('vds_authentication_event', 'vae')
+            ->leftJoin('vae', 'vds_sp_version_user_version', 'vsvuv', 'vae.sp_version_user_version_id = vsvuv.id')
+            ->leftJoin('vsvuv', 'vds_sp_version', 'vsv', 'vsvuv.sp_version_id = vsv.id')
+            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
+            ->leftJoin('vsvuv', 'vds_user_version', 'vuv', 'vsvuv.user_version_id = vuv.id')
+            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
+            ->leftJoin('vsv', 'vds_sp_version', 'vsv2', 'vsv.id = vsv2.id AND vsv.id < vsv2.id')
+            ->where('vu.identifier_hash_sha256 = ' . $spLastMetadataQueryBuilder->createNamedParameter($userIdentifierHashSha256))
+            ->andWhere('vsv2.id IS NULL');
+
+        $userLastAttributesQueryBuilder->select(
+            'vs.entity_id AS sp_entity_id',
+            'vuv.attributes AS user_attributes',
+        )->from('vds_authentication_event', 'vae')
+            ->leftJoin('vae', 'vds_sp_version_user_version', 'vsvuv', 'vae.sp_version_user_version_id = vsvuv.id')
+            ->leftJoin('vsvuv', 'vds_sp_version', 'vsv', 'vsvuv.sp_version_id = vsv.id')
+            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
+            ->leftJoin('vsvuv', 'vds_user_version', 'vuv', 'vsvuv.user_version_id = vuv.id')
+            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
+            ->leftJoin('vuv', 'vds_sp_version', 'vuv2', 'vuv.id = vuv2.id AND vuv.id < vuv2.id')
+            ->where('vu.identifier_hash_sha256 = ' . $userLastAttributesQueryBuilder->createNamedParameter($userIdentifierHashSha256))
+            ->andWhere('vuv2.id IS NULL');
 
         try {
-            return $queryBuilder->executeQuery();
+            $numberOfAuthentications = $authenticationsqueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
+            $spLastMetadata = $spLastMetadataQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
+            $userLastAttributes = $userLastAttributesQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
+
+
+            die(var_dump(array_merge_recursive($numberOfAuthentications, $spLastMetadata, $userLastAttributes)));
         } catch (\Throwable $exception) {
             $message = sprintf(
                 'Error executing query to get connected organizations. Error was: %s.',

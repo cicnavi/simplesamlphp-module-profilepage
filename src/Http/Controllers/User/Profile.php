@@ -61,7 +61,7 @@ class Profile
         foreach ($this->authSimple->getAttributes() as $name => $value) {
             $normalizedAttributes[$name] = is_array($value) ? implode('; ', $value) : (string)$value;
         }
-
+        die(var_dump($normalizedAttributes));
         $template = new Template($this->sspConfiguration, 'accounting:user/personal-data.twig');
         $template->data = compact('normalizedAttributes');
         return $template;
@@ -83,7 +83,7 @@ class Profile
         $authenticationDataProvider = $this->authenticationDataProviderBuilder
             ->build($this->moduleConfiguration->getDefaultDataTrackerAndProviderClass());
 
-        var_dump($authenticationDataProvider->getConnectedOrganizations($userIdentifier)->fetchAllKeyValue());die();
+        var_dump($authenticationDataProvider->getConnectedOrganizations($userIdentifier));die();
         $data = [];
         $template = new Template($this->sspConfiguration, 'accounting:user/personal-data.twig');
         $template->data = compact('data');

@@ -57,7 +57,7 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
         $this->dataStore->runSetup();
     }
 
-    public function getConnectedOrganizations(string $userIdentifier): Result
+    public function getConnectedOrganizations(string $userIdentifier): array
     {
         // TODO mivanci refactor all this...
         $userIdentifierHashSha256 = HashHelper::getSha256($userIdentifier);
