@@ -17,5 +17,5 @@ interface AuthenticationDataProviderInterface extends BuildableUsingModuleConfig
     public function getConnectedOrganizations(string $userIdentifier): array;
 
     // TODO mivanci replace Result with proper "bag"
-    public function getActivity(int $userId): Result;
+    public function getActivity(string $userIdentifier): array;
 }

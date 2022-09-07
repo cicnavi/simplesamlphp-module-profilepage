@@ -68,16 +68,6 @@ class StateTest extends TestCase
         (new State($stateArray));
     }
 
-    public function testThrowsOnMissingAuthnInstant(): void
-    {
-        $this->expectException(UnexpectedValueException::class);
-
-        $stateArray = StateArrays::FULL;
-        unset($stateArray['AuthnInstant']);
-
-        new State($stateArray);
-    }
-
     public function testThrowsOnInvalidAuthnInstantValue(): void
     {
         $this->expectException(UnexpectedValueException::class);

@@ -87,10 +87,9 @@ class Test
 
         $authenticationEvent = new Event($state);
 
-        $dataStore->persist($authenticationEvent);
+        //$dataStore->persist($authenticationEvent);
 
         $template->data = [
-            'test' => Translate::noop('Accounting'),
             'jobs_store' => $this->moduleConfiguration->getJobsStoreClass(),
             'jobs_store_needs_setup' => $jobsStoreNeedsSetup ? 'yes' : 'no',
             'jobs_store_setup_ran' => $jobsStoreSetupRan ? 'yes' : 'no',

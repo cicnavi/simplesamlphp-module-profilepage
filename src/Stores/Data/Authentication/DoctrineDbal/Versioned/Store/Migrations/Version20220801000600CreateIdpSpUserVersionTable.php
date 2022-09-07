@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations;
 
 use Doctrine\DBAL\Schema\Table;
@@ -9,7 +11,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
 
-class Version20220801000800CreateAttributeSetHistoryTable extends AbstractMigration
+class Version20220801000600CreateIdpSpUserVersionTable extends AbstractMigration
 {
     protected function getLocalTablePrefix(): string
     {
@@ -22,7 +24,7 @@ class Version20220801000800CreateAttributeSetHistoryTable extends AbstractMigrat
      */
     public function run(): void
     {
-        $tableName = $this->preparePrefixedTableName('attribute_set_history');
+        $tableName = $this->preparePrefixedTableName('idp_sp_user_version');
 
         try {
             $table = new Table($tableName);
@@ -31,47 +33,36 @@ class Version20220801000800CreateAttributeSetHistoryTable extends AbstractMigrat
                 ->setUnsigned(true)
                 ->setAutoincrement(true);
 
-            $table->addColumn('idp_id', Types::BIGINT)
+            $table->addColumn('idp_version_id', Types::BIGINT)
                 ->setUnsigned(true);
 
-            $table->addColumn('sp_id', Types::BIGINT)
+            $table->addColumn('sp_version_id', Types::BIGINT)
                 ->setUnsigned(true);
 
-            $table->addColumn('user_id', Types::BIGINT)
+            $table->addColumn('user_version_id', Types::BIGINT)
                 ->setUnsigned(true);
-
-            $table->addColumn('attributes', Types::TEXT)
-                ->setComment('Serialized attributes.');
-
-            $table->addColumn('updated_by_attributes_hash_sha_256', Types::STRING)
-                ->setLength(TableConstants::COLUMN_HASH_SHA265_HEXITS_LENGTH)
-                ->setFixed(true);
 
             $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
-
-            $table->addColumn('updated_at', Types::DATETIMETZ_IMMUTABLE);
 
             $table->setPrimaryKey(['id']);
 
             $table->addForeignKeyConstraint(
-                $this->preparePrefixedTableName('idp'),
-                ['idp_id'],
+                $this->preparePrefixedTableName('idp_version'),
+                ['idp_version_id'],
                 ['id']
             );
 
             $table->addForeignKeyConstraint(
-                $this->preparePrefixedTableName('sp'),
-                ['sp_id'],
+                $this->preparePrefixedTableName('sp_version'),
+                ['sp_version_id'],
                 ['id']
             );
 
             $table->addForeignKeyConstraint(
-                $this->preparePrefixedTableName('user'),
-                ['user_id'],
+                $this->preparePrefixedTableName('user_version'),
+                ['user_version_id'],
                 ['id']
             );
-
-            $table->addUniqueConstraint(['idp_id', 'sp_id', 'user_id']);
 
             $this->schemaManager->createTable($table);
         } catch (\Throwable $exception) {
@@ -88,7 +79,7 @@ class Version20220801000800CreateAttributeSetHistoryTable extends AbstractMigrat
      */
     public function revert(): void
     {
-        $tableName = $this->preparePrefixedTableName('attribute_set_history');
+        $tableName = $this->preparePrefixedTableName('idp_sp_user_version');
 
         try {
             $this->schemaManager->dropTable($tableName);

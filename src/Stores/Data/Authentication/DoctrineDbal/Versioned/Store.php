@@ -68,12 +68,10 @@ class Store extends AbstractStore implements DataStoreInterface
         $spVersionId = $this->resolveSpVersionId($spId, $hashDecoratedState);
         $userId = $this->resolveUserId($hashDecoratedState);
         $userVersionId = $this->resolveUserVersionId($userId, $hashDecoratedState);
-        $spVersionUserVersionId = $this->resolveSpVersionUserVersionId($spVersionId, $userVersionId);
+        $idpSpUserVersionId = $this->resolveIdpSpUserVersionId($idpVersionId, $spVersionId, $userVersionId);
 
         $happenedAt = $authenticationEvent->getHappenedAt();
-        $this->repository->insertAuthenticationEvent($idpVersionId, $spVersionUserVersionId, $happenedAt);
-
-        $this->saveAttributeSetHistory($idpId, $spId, $userId, $hashDecoratedState);
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $happenedAt);
     }
 
     /**
@@ -403,27 +401,27 @@ class Store extends AbstractStore implements DataStoreInterface
         }
     }
 
-    protected function resolveSpVersionUserVersionId(int $spVersionId, int $userVersionId): int
+    protected function resolveIdpSpUserVersionId(int $idpVersionId, int $spVersionId, int $userVersionId): int
     {
         // Check if it already exists.
         try {
-            $result = $this->repository->getSpVersionUserVersion($spVersionId, $userVersionId);
-            $spVersionUserVersionId = $result->fetchOne();
+            $result = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId);
+            $IdpSpUserVersionId = $result->fetchOne();
 
-            if ($spVersionUserVersionId !== false) {
-                return (int)$spVersionUserVersionId;
+            if ($IdpSpUserVersionId !== false) {
+                return (int)$IdpSpUserVersionId;
             }
         } catch (\Throwable $exception) {
-            $message = sprintf('Error resolving SpVersionUserVersion ID. Error was: %s.', $exception->getMessage());
+            $message = sprintf('Error resolving IdpSpUserVersion ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
 
         // Create new
         try {
-            $this->repository->insertSpVersionUserVersion($spVersionId, $userVersionId);
+            $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId);
         } catch (\Throwable $exception) {
             $message = sprintf(
-                'Error inserting new SpVersionUserVersion, however, continuing in case of race condition. ' .
+                'Error inserting new IdpSpUserVersion, however, continuing in case of race condition. ' .
                 'Error was: %s.',
                 $exception->getMessage()
             );
@@ -432,93 +430,23 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Try again, this time it should exist...
         try {
-            $result = $this->repository->getSpVersionUserVersion($spVersionId, $userVersionId);
-            $spVersionUserVersionIdNew = $result->fetchOne();
+            $result = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId);
+            $IdpSpUserVersionIdNew = $result->fetchOne();
 
-            if ($spVersionUserVersionIdNew !== false) {
-                return (int)$spVersionUserVersionIdNew;
+            if ($IdpSpUserVersionIdNew !== false) {
+                return (int)$IdpSpUserVersionIdNew;
             }
 
             $message = sprintf(
-                'Error fetching SpVersionUserVersion ID even after insertion for SpVersion ID %s and ' .
+                'Error fetching IdpSpUserVersion ID even after insertion for IdpVersion %s, SpVersion ID %s and ' .
                 'UserVersion ID %s.',
+                $idpVersionId,
                 $spVersionId,
                 $userVersionId
             );
             throw new StoreException($message);
         } catch (\Throwable $exception) {
-            $message = sprintf('Error resolving SpVersionUserVersion ID. Error was: %s.', $exception->getMessage());
-            throw new StoreException($message, (int)$exception->getCode(), $exception);
-        }
-    }
-
-    /**
-     * @throws StoreException
-     */
-    protected function saveAttributeSetHistory(
-        int $idpId,
-        int $spId,
-        int $userId,
-        HashDecoratedState $hashDecoratedState
-    ): void {
-        $currentAttributesHash256 = $hashDecoratedState->getAttributesArrayHashSha256();
-        $currentAttributes = $hashDecoratedState->getState()->getAttributes();
-
-        try {
-            $result = $this->repository->getAttributeSetHistory($idpId, $spId, $userId);
-            $attributeSetHistory = $result->fetchAssociative();
-
-            // If it doesn't exist yet, create it.
-            if ($attributeSetHistory === false) {
-                $this->repository->insertAttributeSetHistory(
-                    $idpId,
-                    $spId,
-                    $userId,
-                    serialize($currentAttributes),
-                    $currentAttributesHash256
-                );
-                return;
-            }
-
-            // It exists, but check if it was updated by current attributes hash.
-            /** @var string $updatedByAttributesHashSha256 */
-            $updatedByAttributesHashSha256 = $attributeSetHistory[TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_UPDATED_BY_ATTRIBUTES_HASH_SHA_256] ?? '';
-
-            if ($updatedByAttributesHashSha256 === $currentAttributesHash256) {
-                return;
-            }
-
-            // We have a new version of attributes, so merge any new changes.
-            $oldAttributes = unserialize(
-                (string)$attributeSetHistory[TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ATTRIBUTES]
-            );
-
-            $attributeSetHistoryId =
-                (int)$attributeSetHistory[TableConstants::TABLE_ATTRIBUTE_SET_HISTORY_COLUMN_NAME_ID];
-
-            if ($oldAttributes === false || (!is_array($oldAttributes))) {
-                $message = sprintf(
-                    'Could not deserialize current attributes for attribute set history ID %s.',
-                    $attributeSetHistoryId
-                );
-                throw new StoreException($message);
-            }
-
-            $updatedAttributes = array_merge($oldAttributes, $currentAttributes);
-
-            $this->repository->updateAttributeSetHistory(
-                $attributeSetHistoryId,
-                serialize($updatedAttributes),
-                $currentAttributesHash256
-            );
-        } catch (\Throwable $exception) {
-            $message = sprintf(
-                'Error saving attribute set history for IdP ID %s, SP ID %s, user ID %s. Error was: %s.',
-                $idpId,
-                $spId,
-                $userId,
-                $exception->getMessage()
-            );
+            $message = sprintf('Error resolving IdpSpUserVersion ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -529,58 +457,111 @@ class Store extends AbstractStore implements DataStoreInterface
     public function getConnectedOrganizations(string $userIdentifierHashSha256): array
     {
         // TODO mivanci refactor and move this to repository...
-        $authenticationsqueryBuilder = $this->connection->dbal()->createQueryBuilder();
-        $spLastMetadataQueryBuilder = $this->connection->dbal()->createQueryBuilder();
-        $userLastAttributesQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $lastMetadataAndAttributesQueryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $authenticationsqueryBuilder->select(
+        /** @psalm-suppress TooManyArguments */
+        $authenticationEventsQueryBuilder->select(
             'vs.entity_id AS sp_entity_id',
             'COUNT(vae.id) AS number_of_authentications',
             'MAX(vae.happened_at) AS last_authentication_at',
             'MIN(vae.happened_at) AS first_authentication_at',
         )->from('vds_authentication_event', 'vae')
-            ->leftJoin('vae', 'vds_sp_version_user_version', 'vsvuv', 'vae.sp_version_user_version_id = vsvuv.id')
-            ->leftJoin('vsvuv', 'vds_sp_version', 'vsv', 'vsvuv.sp_version_id = vsv.id')
+            ->leftJoin(
+                'vae',
+                'vds_idp_sp_user_version',
+                'visuv',
+                'vae.idp_sp_user_version_id = visuv.id'
+            )
+            ->leftJoin('visuv', 'vds_sp_version', 'vsv', 'visuv.sp_version_id = vsv.id')
             ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
-            ->leftJoin('vsvuv', 'vds_user_version', 'vuv', 'vsvuv.user_version_id = vuv.id')
+            ->leftJoin('visuv', 'vds_user_version', 'vuv', 'visuv.user_version_id = vuv.id')
             ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
-            ->where('vu.identifier_hash_sha256 = ' . $authenticationsqueryBuilder->createNamedParameter($userIdentifierHashSha256))
+            ->where(
+                'vu.identifier_hash_sha256 = ' .
+                $authenticationEventsQueryBuilder->createNamedParameter($userIdentifierHashSha256)
+            )
             ->groupBy('vs.id')
             ->orderBy('number_of_authentications', 'DESC');
 
-        $spLastMetadataQueryBuilder->select(
+        /** @psalm-suppress TooManyArguments */
+        $lastMetadataAndAttributesQueryBuilder->select(
             'vs.entity_id AS sp_entity_id',
             'vsv.metadata AS sp_metadata',
+            'vuv.attributes AS user_attributes',
+            //            'vsv.id AS sp_version_id',
+            //            'vuv.id AS user_version_id',
         )->from('vds_authentication_event', 'vae')
-            ->leftJoin('vae', 'vds_sp_version_user_version', 'vsvuv', 'vae.sp_version_user_version_id = vsvuv.id')
-            ->leftJoin('vsvuv', 'vds_sp_version', 'vsv', 'vsvuv.sp_version_id = vsv.id')
+            ->leftJoin(
+                'vae',
+                'vds_idp_sp_user_version',
+                'visuv',
+                'vae.idp_sp_user_version_id = visuv.id'
+            )
+            ->leftJoin('visuv', 'vds_sp_version', 'vsv', 'visuv.sp_version_id = vsv.id')
             ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
-            ->leftJoin('vsvuv', 'vds_user_version', 'vuv', 'vsvuv.user_version_id = vuv.id')
+            ->leftJoin('visuv', 'vds_user_version', 'vuv', 'visuv.user_version_id = vuv.id')
             ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
             ->leftJoin('vsv', 'vds_sp_version', 'vsv2', 'vsv.id = vsv2.id AND vsv.id < vsv2.id')
-            ->where('vu.identifier_hash_sha256 = ' . $spLastMetadataQueryBuilder->createNamedParameter($userIdentifierHashSha256))
-            ->andWhere('vsv2.id IS NULL');
-
-        $userLastAttributesQueryBuilder->select(
-            'vs.entity_id AS sp_entity_id',
-            'vuv.attributes AS user_attributes',
-        )->from('vds_authentication_event', 'vae')
-            ->leftJoin('vae', 'vds_sp_version_user_version', 'vsvuv', 'vae.sp_version_user_version_id = vsvuv.id')
-            ->leftJoin('vsvuv', 'vds_sp_version', 'vsv', 'vsvuv.sp_version_id = vsv.id')
-            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
-            ->leftJoin('vsvuv', 'vds_user_version', 'vuv', 'vsvuv.user_version_id = vuv.id')
-            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
-            ->leftJoin('vuv', 'vds_sp_version', 'vuv2', 'vuv.id = vuv2.id AND vuv.id < vuv2.id')
-            ->where('vu.identifier_hash_sha256 = ' . $userLastAttributesQueryBuilder->createNamedParameter($userIdentifierHashSha256))
+            ->leftJoin('vuv', 'vds_user_version', 'vuv2', 'vuv.id = vuv2.id AND vuv.id < vuv2.id')
+            ->where(
+                'vu.identifier_hash_sha256 = ' .
+                $lastMetadataAndAttributesQueryBuilder->createNamedParameter($userIdentifierHashSha256)
+            )
+            ->andWhere('vsv2.id IS NULL')
             ->andWhere('vuv2.id IS NULL');
 
         try {
-            $numberOfAuthentications = $authenticationsqueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
-            $spLastMetadata = $spLastMetadataQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
-            $userLastAttributes = $userLastAttributesQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
+            $numberOfAuthentications = $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
+            $lastMetadataAndAttributes =
+                $lastMetadataAndAttributesQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
+
+            return array_merge_recursive($numberOfAuthentications, $lastMetadataAndAttributes);
+        } catch (\Throwable $exception) {
+            $message = sprintf(
+                'Error executing query to get connected organizations. Error was: %s.',
+                $exception->getMessage()
+            );
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
 
 
-            die(var_dump(array_merge_recursive($numberOfAuthentications, $spLastMetadata, $userLastAttributes)));
+    /**
+     * @throws StoreException
+     */
+    public function getActivity(string $userIdentifierHashSha256): array
+    {
+        // TODO mivanci refactor and move this to repository...
+        // TODO mivanci pagination
+        $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        /** @psalm-suppress TooManyArguments */
+        $authenticationEventsQueryBuilder->select(
+            'vae.happened_at',
+            'vsv.metadata AS sp_metadata',
+            'vuv.attributes AS user_attributes'
+        )->from('vds_authentication_event', 'vae')
+            ->leftJoin(
+                'vae',
+                'vds_idp_sp_user_version',
+                'visuv',
+                'vae.idp_sp_user_version_id = visuv.id'
+            )
+            ->leftJoin('visuv', 'vds_sp_version', 'vsv', 'visuv.sp_version_id = vsv.id')
+            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
+            ->leftJoin('visuv', 'vds_user_version', 'vuv', 'visuv.user_version_id = vuv.id')
+            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
+            ->where(
+                'vu.identifier_hash_sha256 = ' .
+                $authenticationEventsQueryBuilder->createNamedParameter($userIdentifierHashSha256)
+            )
+            ->orderBy('vae.id', 'DESC');
+
+        try {
+            $numberOfAuthentications = $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociative();
+
+            return array_merge_recursive($numberOfAuthentications);
         } catch (\Throwable $exception) {
             $message = sprintf(
                 'Error executing query to get connected organizations. Error was: %s.',

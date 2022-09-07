@@ -75,7 +75,6 @@ class Accounting extends ProcessingFilter
             $message = sprintf('Accounting error, skipping... Error was: %s.', $exception->getMessage());
             $this->logger->error($message, $state);
         }
-
     }
 
     protected function isAccountingProcessingTypeAsynchronous(): bool

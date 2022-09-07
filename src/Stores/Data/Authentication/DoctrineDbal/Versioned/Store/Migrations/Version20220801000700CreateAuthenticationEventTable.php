@@ -31,10 +31,7 @@ class Version20220801000700CreateAuthenticationEventTable extends AbstractMigrat
                 ->setUnsigned(true)
                 ->setAutoincrement(true);
 
-            $table->addColumn('idp_version_id', Types::BIGINT)
-                ->setUnsigned(true);
-
-            $table->addColumn('sp_version_user_version_id', Types::BIGINT)
+            $table->addColumn('idp_sp_user_version_id', Types::BIGINT)
                 ->setUnsigned(true);
 
             $table->addColumn('happened_at', Types::DATETIMETZ_IMMUTABLE);
@@ -44,14 +41,8 @@ class Version20220801000700CreateAuthenticationEventTable extends AbstractMigrat
             $table->setPrimaryKey(['id']);
 
             $table->addForeignKeyConstraint(
-                $this->preparePrefixedTableName('idp_version'),
-                ['idp_version_id'],
-                ['id']
-            );
-
-            $table->addForeignKeyConstraint(
-                $this->preparePrefixedTableName('sp_version_user_version'),
-                ['sp_version_user_version_id'],
+                $this->preparePrefixedTableName('idp_sp_user_version'),
+                ['idp_sp_user_version_id'],
                 ['id']
             );
 

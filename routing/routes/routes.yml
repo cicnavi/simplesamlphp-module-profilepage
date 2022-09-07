@@ -1,6 +1,6 @@
 
 accounting-test:
-    path:       /test
+    path:       /setup
     defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::test' }
 
 accounting-admin-configuration-status:
@@ -14,3 +14,7 @@ accounting-user-personal-data:
 accounting-user-connected-organizations:
     path: /user/connected-organizations
     defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::connectedOrganizations' }
+
+accounting-user-activity:
+    path: /user/activity
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::activity' }

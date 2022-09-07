@@ -48,7 +48,7 @@ class Profile
         $this->defaultAuthenticationSource = $moduleConfiguration->getDefaultAuthenticationSource();
         $this->authSimple = $authSimple ?? new Simple($this->defaultAuthenticationSource, $sspConfiguration, $session);
 
-        $this->authenticationDataProviderBuilder =$authenticationDataProviderBuilder ??
+        $this->authenticationDataProviderBuilder = $authenticationDataProviderBuilder ??
             new AuthenticationDataProviderBuilder($this->moduleConfiguration, $this->logger);
     }
 
@@ -83,7 +83,32 @@ class Profile
         $authenticationDataProvider = $this->authenticationDataProviderBuilder
             ->build($this->moduleConfiguration->getDefaultDataTrackerAndProviderClass());
 
-        var_dump($authenticationDataProvider->getConnectedOrganizations($userIdentifier));die();
+        var_dump($authenticationDataProvider->getConnectedOrganizations($userIdentifier));
+        die();
+        $data = [];
+        $template = new Template($this->sspConfiguration, 'accounting:user/personal-data.twig');
+        $template->data = compact('data');
+        return $template;
+    }
+
+    public function activity(): Template
+    {
+        $this->authSimple->requireAuth();
+        $attributes = $this->authSimple->getAttributes();
+        $idAttributeName = $this->moduleConfiguration->getUserIdAttributeName();
+
+        if (empty($attributes[$idAttributeName]) || !is_array($attributes[$idAttributeName])) {
+            $message = sprintf('No identifier %s present in user attributes.', $idAttributeName);
+            throw new Module\accounting\Exceptions\Exception($message);
+        }
+
+        $userIdentifier = (string)reset($attributes[$idAttributeName]);
+
+        $authenticationDataProvider = $this->authenticationDataProviderBuilder
+            ->build($this->moduleConfiguration->getDefaultDataTrackerAndProviderClass());
+
+        var_dump($authenticationDataProvider->getActivity($userIdentifier));
+        die();
         $data = [];
         $template = new Template($this->sspConfiguration, 'accounting:user/personal-data.twig');
         $template->data = compact('data');
