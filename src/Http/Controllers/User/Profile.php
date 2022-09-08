@@ -14,6 +14,9 @@ use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @psalm-suppress all TODO mivanci remove this psalm suppress after testing
+ */
 class Profile
 {
     protected ModuleConfiguration $moduleConfiguration;
@@ -50,17 +53,29 @@ class Profile
 
         $this->authenticationDataProviderBuilder = $authenticationDataProviderBuilder ??
             new AuthenticationDataProviderBuilder($this->moduleConfiguration, $this->logger);
+
+        // Make sure the end user is authenticated.
+        $this->authSimple->requireAuth();
     }
 
-    public function personalData(Request $request): Template
+    public function personalData(Request $request): Response
     {
-        $this->authSimple->requireAuth();
-
         $normalizedAttributes = [];
 
+        $toNameAttributeMap = $this->prepareToNameAttributeMap();
+
+        /**
+         * @var string $name
+         * @var string[] $value
+         */
         foreach ($this->authSimple->getAttributes() as $name => $value) {
-            $normalizedAttributes[$name] = is_array($value) ? implode('; ', $value) : (string)$value;
+            // Convert attribute names to user-friendly names.
+            if (array_key_exists($name, $toNameAttributeMap)) {
+                $name = $toNameAttributeMap[$name];
+            }
+            $normalizedAttributes[$name] = implode('; ', $value);
         }
+
         die(var_dump($normalizedAttributes));
         $template = new Template($this->sspConfiguration, 'accounting:user/personal-data.twig');
         $template->data = compact('normalizedAttributes');
@@ -114,5 +129,27 @@ class Profile
         $template = new Template($this->sspConfiguration, 'accounting:user/personal-data.twig');
         $template->data = compact('data');
         return $template;
+    }
+
+    public function logout(): Response
+    {
+        // TODO mivanci make logout button available using HTTP POST
+        return new RunnableResponse([$this->authSimple, 'logout'], [$this->getLogoutUrl()]);
+    }
+
+    protected function getLogoutUrl(): string
+    {
+        return $this->sspConfiguration->getBasePath() . 'logout.php';
+    }
+
+    /**
+     * Load all attribute map files which translate attribute names to user-friendly name format.
+     */
+    protected function prepareToNameAttributeMap(): array
+    {
+        return Module\accounting\Helpers\AttributesHelper::getMergedAttributeMapForFiles(
+            $this->sspConfiguration->getBaseDir(),
+            Module\accounting\Helpers\AttributesHelper::MAP_FILES_TO_NAME
+        );
     }
 }

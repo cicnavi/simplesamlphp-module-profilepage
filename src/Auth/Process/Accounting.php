@@ -63,11 +63,12 @@ class Accounting extends ProcessingFilter
             }
 
             // Accounting type is synchronous, so do the processing right away...
-            $configuredTrackers = [
-                $this->moduleConfiguration->getDefaultDataTrackerAndProviderClass(),
-                ...$this->moduleConfiguration->getAdditionalTrackers()
-            ];
+            $configuredTrackers = array_merge(
+                [$this->moduleConfiguration->getDefaultDataTrackerAndProviderClass()],
+                $this->moduleConfiguration->getAdditionalTrackers()
+            );
 
+            /** @var string $tracker */
             foreach ($configuredTrackers as $tracker) {
                 ($this->authenticationDataTrackerBuilder->build($tracker))->process($authenticationEvent);
             }

@@ -22,3 +22,9 @@ accounting-user-connected-organizations:
 accounting-user-activity:
     path: /user/activity
     defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::activity' }
+
+accounting-user-logout:
+    path: /user/logout
+    methods:
+        - POST
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::logout' }

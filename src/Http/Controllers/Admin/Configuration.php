@@ -10,6 +10,8 @@ use SimpleSAML\Configuration as SspConfiguration;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Session;
+use SimpleSAML\Utils;
+use SimpleSAML\Utils\Auth;
 use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
@@ -19,20 +21,20 @@ class Configuration
     protected SspConfiguration $sspConfiguration;
     protected Session $session;
     protected LoggerInterface $logger;
+    protected Utils\Auth $sspAuthUtils;
 
-    /**
-     * @param SspConfiguration $sspConfiguration
-     * @param Session $session The current user session.
-     * @param LoggerInterface $logger
-     */
     public function __construct(
         SspConfiguration $sspConfiguration,
         Session $session,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Utils\Auth $sspAuthUtils = null
     ) {
         $this->sspConfiguration = $sspConfiguration;
         $this->session = $session;
         $this->logger = $logger;
+        $this->sspAuthUtils = $sspAuthUtils ?? new Utils\Auth();
+
+        $this->sspAuthUtils->requireAdmin();
     }
 
     /**

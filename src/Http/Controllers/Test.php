@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * TODO mivanci delete this file
+ * @psalm-suppress all
  */
 class Test
 {
@@ -125,7 +126,7 @@ class Test
             'start_time' => $start->format('Y-m-d H:i:s.u'),
         ];
 
-        /** @var $job Event\Job */
+        /** @var Event\Job $job */
         while (($job = $jobsStore->dequeue(Event\Job::class)) !== null) {
             foreach ($configuredTrackers as $tracker) {
                 ($trackerBuilder->build($tracker))->process($job->getPayload());
