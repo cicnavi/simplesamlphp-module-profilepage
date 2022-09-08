@@ -69,6 +69,7 @@ class Profile
 
     public function connectedOrganizations(Request $request): Template
     {
+        // TODO mivanci make sure to use slave connection for data provider if available
         $this->authSimple->requireAuth();
         $attributes = $this->authSimple->getAttributes();
         $idAttributeName = $this->moduleConfiguration->getUserIdAttributeName();

@@ -1,7 +1,11 @@
 
-accounting-test:
+accounting-setup:
     path:       /setup
-    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::test' }
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::setup' }
+
+accounting-job-runner:
+    path:       /job-runner
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::jobRunner' }
 
 accounting-admin-configuration-status:
     path:       /admin/configuration/status

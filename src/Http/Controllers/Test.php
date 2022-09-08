@@ -15,6 +15,7 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 use SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned\Tracker;
+use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
 use SimpleSAML\Session;
 use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +53,7 @@ class Test
      * @return Template
      * @throws Exception
      */
-    public function test(Request $request): Template
+    public function setup(Request $request): Template
     {
         $template = new Template($this->sspConfiguration, 'accounting:test.twig');
 
@@ -71,13 +72,13 @@ class Test
 
 
         if ($jobsStoreNeedsSetup && $request->query->has('setup')) {
-            $this->logger->error('Jobs Store setup ran.');
+            $this->logger->info('Jobs Store setup ran.');
             $jobsStore->runSetup();
             $jobsStoreSetupRan = true;
         }
 
         if ($dataStoreNeedsSetup && $request->query->has('setup')) {
-            $this->logger->error('Data Store setup ran.');
+            $this->logger->info('Data Store setup ran.');
             $dataStore->runSetup();
             $dataStoreSetupRan = true;
         }
@@ -89,7 +90,7 @@ class Test
 
         //$dataStore->persist($authenticationEvent);
 
-        $template->data = [
+        $data = [
             'jobs_store' => $this->moduleConfiguration->getJobsStoreClass(),
             'jobs_store_needs_setup' => $jobsStoreNeedsSetup ? 'yes' : 'no',
             'jobs_store_setup_ran' => $jobsStoreSetupRan ? 'yes' : 'no',
@@ -99,6 +100,43 @@ class Test
             'data_store_setup_ran' => $dataStoreSetupRan ? 'yes' : 'no',
         ];
 
+        die(var_dump($data));
+
+        $template->data = $data;
         return $template;
+    }
+
+    public function jobRunner():void
+    {
+        $jobsStore = (new JobsStoreBuilder($this->moduleConfiguration, $this->logger))
+            ->build($this->moduleConfiguration->getJobsStoreClass());
+
+
+        $trackerBuilder = new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger);
+
+        $configuredTrackers = array_merge(
+            [$this->moduleConfiguration->getDefaultDataTrackerAndProviderClass()],
+            $this->moduleConfiguration->getAdditionalTrackers()
+        );
+
+        $start = new \DateTimeImmutable();
+        $data = [
+            'jobs_processed' => 0,
+            'start_time' => $start->format('Y-m-d H:i:s.u'),
+        ];
+
+        /** @var $job Event\Job */
+        while (($job = $jobsStore->dequeue(Event\Job::class)) !== null) {
+            foreach ($configuredTrackers as $tracker) {
+                ($trackerBuilder->build($tracker))->process($job->getPayload());
+                $data['jobs_processed']++;
+            }
+        }
+
+        $end = new \DateTimeImmutable();
+        $data['end_time'] = $end->format('Y-m-d H:i:s.u');
+        $data['duration'] = $end->diff($start)->format('%s seconds, %f microseconds');
+
+        die(var_dump($data));
     }
 }
