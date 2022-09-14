@@ -20,7 +20,7 @@ $config = [
         Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class,
 
     ModuleConfiguration::OPTION_ADDITIONAL_TRACKERS => [
-        // TODO mivanci at least one more tracker
+        //
     ],
 
     ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [

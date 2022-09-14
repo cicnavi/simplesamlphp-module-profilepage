@@ -99,7 +99,7 @@ class Profile
         $authenticationDataProvider = $this->authenticationDataProviderBuilder
             ->build($this->moduleConfiguration->getDefaultDataTrackerAndProviderClass());
 
-        var_dump($authenticationDataProvider->getConnectedOrganizations($userIdentifier));
+        var_dump($authenticationDataProvider->getConnectedServiceProviders($userIdentifier));
         die();
         $data = [];
         $template = new Template($this->sspConfiguration, 'accounting:user/personal-data.twig');

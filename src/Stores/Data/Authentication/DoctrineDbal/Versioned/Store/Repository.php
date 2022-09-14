@@ -698,4 +698,152 @@ class Repository
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
+
+    /**
+     * @throws StoreException
+     */
+    public function getConnectedOrganizations(string $userIdentifierHashSha256): array
+    {
+        $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $lastMetadataAndAttributesQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        /** @psalm-suppress TooManyArguments */
+        $authenticationEventsQueryBuilder->select(
+            //'vs.entity_id AS sp_entity_id',
+            TableConstants::TABLE_ALIAS_SP . '.' .
+            TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID . ' AS ' .
+            TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_SP_ENTITY_ID,
+            //'COUNT(vae.id) AS number_of_authentications',
+            'COUNT(' .  TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
+            TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_ID . ') AS ' .
+            TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS,
+            //'MAX(vae.happened_at) AS last_authentication_at',
+            'MAX(' .  TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
+            TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT . ') AS ' .
+            TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_LAST_AUTHENTICATION_AT,
+            //'MIN(vae.happened_at) AS first_authentication_at',
+            'MIN(' .  TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
+            TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT . ') AS ' .
+            TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_FIRST_AUTHENTICATION_AT,
+        )->from($this->tableNameAuthenticationEvent, TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT)
+            ->leftJoin(
+                //'vae',
+                TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT,
+                //'vds_idp_sp_user_version',
+                $this->tableNameIdpSpUserVersion,
+                //'visuv',
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION,
+                //'vae.idp_sp_user_version_id = visuv.id'
+                TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
+                TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_SP_USER_VERSION_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION . '.' .
+                TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'visuv',
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION,
+                //'vds_sp_version',
+                $this->tableNameSpVersion,
+                //'vsv',
+                TableConstants::TABLE_ALIAS_SP_VERSION,
+                //'visuv.sp_version_id = vsv.id'
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION . '.' .
+                TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_SP_VERSION_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_SP_VERSION . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'vsv',
+                TableConstants::TABLE_ALIAS_SP_VERSION,
+                //'vds_sp',
+                $this->tableNameSp,
+                //'vs',
+                TableConstants::TABLE_ALIAS_SP,
+                //'vsv.sp_id = vs.id'
+                TableConstants::TABLE_ALIAS_SP_VERSION . '.' .
+                TableConstants::TABLE_SP_VERSION_COLUMN_NAME_SP_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_SP . '.' . TableConstants::TABLE_SP_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'visuv',
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION,
+                //'vds_user_version',
+                $this->tableNameUserVersion,
+                //'vuv',
+                TableConstants::TABLE_ALIAS_USER_VERSION,
+                //'visuv.user_version_id = vuv.id'
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION . '.' .
+                TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_USER_VERSION_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_USER_VERSION . '.' . TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'vuv',
+                TableConstants::TABLE_ALIAS_USER_VERSION,
+                //'vds_user',
+                $this->tableNameUser,
+                //'vu',
+                TableConstants::TABLE_ALIAS_USER,
+                //'vuv.user_id = vu.id'
+                TableConstants::TABLE_ALIAS_USER_VERSION . '.' .
+                TableConstants::TABLE_USER_VERSION_COLUMN_NAME_USER_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_USER . '.' . TableConstants::TABLE_USER_COLUMN_NAME_ID
+            )
+            ->where(
+                //'vu.identifier_hash_sha256 = ' .
+                TableConstants::TABLE_ALIAS_USER . '.' .
+                TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256 . ' = ' .
+                $authenticationEventsQueryBuilder->createNamedParameter($userIdentifierHashSha256)
+            )
+            ->groupBy(
+                //'vs.id'
+                TableConstants::TABLE_ALIAS_SP . '.' . TableConstants::TABLE_SP_COLUMN_NAME_ID
+            )
+            ->orderBy(
+                //'number_of_authentications',
+                TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS,
+                'DESC'
+            );
+
+        // TODO mivanci continue refactoring...
+
+        /** @psalm-suppress TooManyArguments */
+        $lastMetadataAndAttributesQueryBuilder->select(
+            'vs.entity_id AS sp_entity_id',
+            'vsv.metadata AS sp_metadata',
+            'vuv.attributes AS user_attributes',
+            //            'vsv.id AS sp_version_id',
+            //            'vuv.id AS user_version_id',
+        )->from('vds_authentication_event', 'vae')
+            ->leftJoin(
+                'vae',
+                'vds_idp_sp_user_version',
+                'visuv',
+                'vae.idp_sp_user_version_id = visuv.id'
+            )
+            ->leftJoin('visuv', 'vds_sp_version', 'vsv', 'visuv.sp_version_id = vsv.id')
+            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
+            ->leftJoin('visuv', 'vds_user_version', 'vuv', 'visuv.user_version_id = vuv.id')
+            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
+            ->leftJoin('vsv', 'vds_sp_version', 'vsv2', 'vsv.id = vsv2.id AND vsv.id < vsv2.id')
+            ->leftJoin('vuv', 'vds_user_version', 'vuv2', 'vuv.id = vuv2.id AND vuv.id < vuv2.id')
+            ->where(
+                'vu.identifier_hash_sha256 = ' .
+                $lastMetadataAndAttributesQueryBuilder->createNamedParameter($userIdentifierHashSha256)
+            )
+            ->andWhere('vsv2.id IS NULL')
+            ->andWhere('vuv2.id IS NULL');
+
+        try {
+            $numberOfAuthentications = $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
+            $lastMetadataAndAttributes =
+                $lastMetadataAndAttributesQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
+
+            return array_merge_recursive($numberOfAuthentications, $lastMetadataAndAttributes);
+        } catch (\Throwable $exception) {
+            $message = sprintf(
+                'Error executing query to get connected organizations. Error was: %s.',
+                $exception->getMessage()
+            );
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
 }

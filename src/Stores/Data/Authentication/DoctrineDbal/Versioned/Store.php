@@ -130,10 +130,6 @@ class Store extends AbstractStore implements DataStoreInterface
      */
     protected function resolveIdpVersionId(int $idpId, HashDecoratedState $hashDecoratedState): int
     {
-//        if (empty($idpMetadataArray)) {
-//            // TODO mivanci consider fetching metadata from SSP metadata store if not present in state
-//        }
-
         // Check if it already exists.
         $idpMetadataArrayHashSha256 = $hashDecoratedState->getIdpMetadataArrayHashSha256();
 

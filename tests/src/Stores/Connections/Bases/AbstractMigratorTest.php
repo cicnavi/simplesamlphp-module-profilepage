@@ -42,15 +42,6 @@ class AbstractMigratorTest extends TestCase
     {
         parent::setUp();
         $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
-        // TODO mivanci ostavi samo sqlite verziju
-//        $this->connection = new Connection([
-//            'dbname' => 'accounting',
-//           'user' => 'apps',
-//           'password' => 'apps',
-//           'host' => '127.0.0.1',
-//           'port' => '33306',
-//           'driver' => 'pdo_mysql',
-//                                               ]);
 
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
         $this->tableName = $this->connection->preparePrefixedTableName(Migrator::TABLE_NAME);

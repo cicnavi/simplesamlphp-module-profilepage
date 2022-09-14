@@ -17,7 +17,6 @@ class AuthenticationDataProviderBuilder
     protected ModuleConfiguration $moduleConfiguration;
     protected LoggerInterface $logger;
 
-    // TODO mivanci move to abstract parent for all builders
     public function __construct(ModuleConfiguration $moduleConfiguration, LoggerInterface $logger)
     {
         $this->moduleConfiguration = $moduleConfiguration;

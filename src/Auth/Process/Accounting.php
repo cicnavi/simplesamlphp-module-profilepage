@@ -39,7 +39,6 @@ class Accounting extends ProcessingFilter
     ) {
         parent::__construct($config, $reserved);
 
-        // TODO mivanci check if authproc works when params are not nullable.
         $this->moduleConfiguration = $moduleConfiguration ?? new ModuleConfiguration();
         $this->logger = $logger ?? new Logger();
         $this->jobsStoreBuilder = $jobsStoreBuilder ?? new JobsStoreBuilder($this->moduleConfiguration, $this->logger);
