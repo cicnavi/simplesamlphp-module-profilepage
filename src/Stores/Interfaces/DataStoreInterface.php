@@ -6,6 +6,7 @@ namespace SimpleSAML\Module\accounting\Stores\Interfaces;
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
+use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider\Bag;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 interface DataStoreInterface extends StoreInterface
@@ -18,7 +19,7 @@ interface DataStoreInterface extends StoreInterface
 
     public function persist(Event $authenticationEvent): void;
 
-    public function getConnectedOrganizations(string $userIdentifierHashSha256): array;
+    public function getConnectedOrganizations(string $userIdentifierHashSha256): Bag;
 
     public function getActivity(string $userIdentifierHashSha256): array;
 }

@@ -15,6 +15,14 @@ class ConnectedServiceProvider
     protected \DateTimeImmutable $firstAuthenticationAt;
     protected User $user;
 
+    /**
+     * TODO mivanci make sortable by name (or entity ID if not present), number of authns, last/first authn.
+     * @param ServiceProvider $serviceProvider
+     * @param int $numberOfAuthentications
+     * @param \DateTimeImmutable $lastAuthenticationAt
+     * @param \DateTimeImmutable $firstAuthenticationAt
+     * @param User $user
+     */
     public function __construct(
         ServiceProvider $serviceProvider,
         int $numberOfAuthentications,

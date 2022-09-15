@@ -18,6 +18,8 @@ abstract class AbstractRawEntity
     {
         $this->rawRow = $rawRow;
         $this->abstractPlatform = $abstractPlatform;
+
+        $this->validate($rawRow);
     }
 
     /**
@@ -32,8 +34,8 @@ abstract class AbstractRawEntity
     protected function resolveDateTimeImmutable($value): DateTimeImmutable
     {
         try {
-            /** @var DateTimeImmutable $createdAt */
-            $createdAt = (Type::getType(Types::DATETIME_IMMUTABLE))
+            /** @var DateTimeImmutable $dateTimeImmutable */
+            $dateTimeImmutable = (Type::getType(Types::DATETIME_IMMUTABLE))
                 ->convertToPHPValue($value, $this->abstractPlatform);
         } catch (Throwable $exception) {
             $message = sprintf(
@@ -44,6 +46,6 @@ abstract class AbstractRawEntity
             throw new UnexpectedValueException($message, (int)$exception->getCode(), $exception);
         }
 
-        return $createdAt;
+        return $dateTimeImmutable;
     }
 }

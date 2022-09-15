@@ -27,8 +27,6 @@ class RawJob extends AbstractRawEntity
     {
         parent::__construct($rawRow, $abstractPlatform);
 
-        $this->validate($rawRow);
-
         $this->id = (int)$rawRow[Store\TableConstants::COLUMN_NAME_ID];
         $this->payload = $this->resolvePayload((string)$rawRow[Store\TableConstants::COLUMN_NAME_PAYLOAD]);
         $this->type = (string)$rawRow[Store\TableConstants::COLUMN_NAME_TYPE];

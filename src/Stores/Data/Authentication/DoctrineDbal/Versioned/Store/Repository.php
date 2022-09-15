@@ -803,34 +803,132 @@ class Repository
                 'DESC'
             );
 
-        // TODO mivanci continue refactoring...
 
         /** @psalm-suppress TooManyArguments */
         $lastMetadataAndAttributesQueryBuilder->select(
-            'vs.entity_id AS sp_entity_id',
-            'vsv.metadata AS sp_metadata',
-            'vuv.attributes AS user_attributes',
+            //'vs.entity_id AS sp_entity_id',
+            TableConstants::TABLE_ALIAS_SP . '.' . TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID . ' AS ' .
+            TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_SP_ENTITY_ID,
+            //'vsv.metadata AS sp_metadata',
+            TableConstants::TABLE_ALIAS_SP_VERSION . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA .
+            ' AS ' . TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_SP_METADATA,
+            //'vuv.attributes AS user_attributes',
+            TableConstants::TABLE_ALIAS_USER_VERSION . '.' . TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES .
+            ' AS ' . TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_USER_ATTRIBUTES
             //            'vsv.id AS sp_version_id',
             //            'vuv.id AS user_version_id',
-        )->from('vds_authentication_event', 'vae')
+        )->from(
+            //'vds_authentication_event',
+            $this->tableNameAuthenticationEvent,
+            //'vae'
+            TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT
+        )
             ->leftJoin(
-                'vae',
-                'vds_idp_sp_user_version',
-                'visuv',
-                'vae.idp_sp_user_version_id = visuv.id'
+                //'vae',
+                TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT,
+                //'vds_idp_sp_user_version',
+                $this->tableNameIdpSpUserVersion,
+                //'visuv',
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION,
+                //'vae.idp_sp_user_version_id = visuv.id'
+                TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
+                TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_SP_USER_VERSION_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION . '.' .
+                TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID
             )
-            ->leftJoin('visuv', 'vds_sp_version', 'vsv', 'visuv.sp_version_id = vsv.id')
-            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
-            ->leftJoin('visuv', 'vds_user_version', 'vuv', 'visuv.user_version_id = vuv.id')
-            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
-            ->leftJoin('vsv', 'vds_sp_version', 'vsv2', 'vsv.id = vsv2.id AND vsv.id < vsv2.id')
-            ->leftJoin('vuv', 'vds_user_version', 'vuv2', 'vuv.id = vuv2.id AND vuv.id < vuv2.id')
+            ->leftJoin(
+                //'visuv',
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION,
+                //'vds_sp_version',
+                $this->tableNameSpVersion,
+                //'vsv',
+                TableConstants::TABLE_ALIAS_SP_VERSION,
+                //'visuv.sp_version_id = vsv.id'
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION . '.' .
+                TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_SP_VERSION_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_SP_VERSION . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'vsv',
+                TableConstants::TABLE_ALIAS_SP_VERSION,
+                //'vds_sp',
+                $this->tableNameSp,
+                //'vs',
+                TableConstants::TABLE_ALIAS_SP,
+                //'vsv.sp_id = vs.id'
+                TableConstants::TABLE_ALIAS_SP_VERSION . '.' .
+                TableConstants::TABLE_SP_VERSION_COLUMN_NAME_SP_ID . ' = ' . TableConstants::TABLE_ALIAS_SP . '.' .
+                TableConstants::TABLE_SP_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'visuv',
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION,
+                //'vds_user_version',
+                $this->tableNameUserVersion,
+                //'vuv',
+                TableConstants::TABLE_ALIAS_USER_VERSION,
+                //'visuv.user_version_id = vuv.id'
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION . '.' .
+                TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_USER_VERSION_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_USER_VERSION . '.' . TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'vuv',
+                TableConstants::TABLE_ALIAS_USER_VERSION,
+                //'vds_user',
+                $this->tableNameUser,
+                //'vu',
+                TableConstants::TABLE_ALIAS_USER,
+                //'vuv.user_id = vu.id'
+                TableConstants::TABLE_ALIAS_USER_VERSION . '.' .
+                TableConstants::TABLE_USER_VERSION_COLUMN_NAME_USER_ID . ' = ' . TableConstants::TABLE_ALIAS_USER .
+                '.' . TableConstants::TABLE_USER_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'vsv',
+                TableConstants::TABLE_ALIAS_SP_VERSION,
+                //'vds_sp_version',
+                $this->tableNameSpVersion,
+                //'vsv2',
+                TableConstants::TABLE_ALIAS_SP_VERSION_2, // Another alias for self joining...
+                //'vsv.id = vsv2.id AND vsv.id < vsv2.id' // To be able to get latest one...
+                TableConstants::TABLE_ALIAS_SP_VERSION . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID
+                . ' = ' . TableConstants::TABLE_ALIAS_SP_VERSION_2 . '.' .
+                TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID . ' AND ' . TableConstants::TABLE_ALIAS_SP_VERSION .
+                '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID . ' < ' . TableConstants::TABLE_ALIAS_SP_VERSION_2
+                . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'vuv',
+                TableConstants::TABLE_ALIAS_USER_VERSION,
+                //'vds_user_version',
+                $this->tableNameUserVersion,
+                //'vuv2',
+                TableConstants::TABLE_ALIAS_USER_VERSION_2, // Another alias for self joining...
+                //'vuv.id = vuv2.id AND vuv.id < vuv2.id' // To be able to get latest one...
+                TableConstants::TABLE_ALIAS_USER_VERSION . '.' .
+                TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID . ' = ' . TableConstants::TABLE_ALIAS_USER_VERSION_2
+                . '.' . TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID . ' AND ' .
+                TableConstants::TABLE_ALIAS_USER_VERSION . '.' . TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID .
+                ' < ' . TableConstants::TABLE_ALIAS_USER_VERSION_2 . '.' .
+                TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID
+            )
             ->where(
-                'vu.identifier_hash_sha256 = ' .
+                //'vu.identifier_hash_sha256 = ' .
+                TableConstants::TABLE_ALIAS_USER . '.' .
+                TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256 . ' = ' .
                 $lastMetadataAndAttributesQueryBuilder->createNamedParameter($userIdentifierHashSha256)
             )
-            ->andWhere('vsv2.id IS NULL')
-            ->andWhere('vuv2.id IS NULL');
+            ->andWhere(
+                //'vsv2.id IS NULL'
+                TableConstants::TABLE_ALIAS_SP_VERSION_2 . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID
+                . ' IS NULL'
+            )
+            ->andWhere(
+                //'vuv2.id IS NULL'
+                TableConstants::TABLE_ALIAS_USER_VERSION_2 . '.' .
+                TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID . ' IS NULL'
+            );
 
         try {
             $numberOfAuthentications = $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();

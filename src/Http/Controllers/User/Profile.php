@@ -99,6 +99,7 @@ class Profile
         $authenticationDataProvider = $this->authenticationDataProviderBuilder
             ->build($this->moduleConfiguration->getDefaultDataTrackerAndProviderClass());
 
+        $this->removeDebugDisplayLimits();
         var_dump($authenticationDataProvider->getConnectedServiceProviders($userIdentifier));
         die();
         $data = [];
@@ -151,5 +152,13 @@ class Profile
             $this->sspConfiguration->getBaseDir(),
             Module\accounting\Helpers\AttributesHelper::MAP_FILES_TO_NAME
         );
+    }
+
+    /** TODO mivanci remove after debugging */
+    protected function removeDebugDisplayLimits(): void
+    {
+        ini_set('xdebug.var_display_max_depth', -1);
+        ini_set('xdebug.var_display_max_children', -1);
+        ini_set('xdebug.var_display_max_data', -1);
     }
 }
