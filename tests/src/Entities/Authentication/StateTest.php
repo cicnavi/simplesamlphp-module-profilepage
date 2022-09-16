@@ -19,18 +19,42 @@ class StateTest extends TestCase
         $this->assertSame($state->getIdpEntityId(), StateArrays::FULL['Source']['entityid']);
     }
 
-    public function testUseIdPMetadataForEntityIdIfSourceNotAvailable(): void
+    public function testCanResolveIdpEntityId(): void
+    {
+        $stateArray = StateArrays::FULL;
+        $state = new State($stateArray);
+        $this->assertSame($state->getIdpEntityId(), StateArrays::FULL['IdPMetadata']['entityid']);
+
+        $this->expectException(UnexpectedValueException::class);
+        unset($stateArray['IdPMetadata']['entityid']);
+        new State($stateArray);
+    }
+
+    public function testCanResolveSpEntityId(): void
+    {
+        $stateArray = StateArrays::FULL;
+        $state = new State($stateArray);
+        $this->assertSame($state->getSpEntityId(), StateArrays::FULL['SPMetadata']['entityid']);
+
+        $this->expectException(UnexpectedValueException::class);
+        unset($stateArray['SPMetadata']['entityid']);
+        new State($stateArray);
+    }
+
+    public function testCanResolveAttributes(): void
+    {
+        $state = new State(StateArrays::FULL);
+        $this->assertSame($state->getAttributes(), StateArrays::FULL['Attributes']);
+    }
+
+    public function testUseCurrentDateTimeIfAuthnInstantNotPresent(): void
     {
         $stateArray = StateArrays::FULL;
 
-        unset($stateArray['Source']);
+        unset($stateArray['AuthnInstant']);
 
         $state = new State($stateArray);
 
-        $this->assertSame($state->getIdpEntityId(), StateArrays::FULL['Source']['entityid']);
-        $this->assertSame($state->getSpEntityId(), StateArrays::FULL['Destination']['entityid']);
-        $this->assertSame($state->getAttributes(), StateArrays::FULL['Attributes']);
-        $this->assertInstanceOf(\DateTimeImmutable::class, $state->getCreatedAt());
         $this->assertInstanceOf(\DateTimeImmutable::class, $state->getAuthnInstant());
     }
 
@@ -100,5 +124,47 @@ class StateTest extends TestCase
         );
 
         $this->assertNull($state->getAttributeValue('non-existent'));
+    }
+
+    public function testCanResolveIdpMetadataArray(): void
+    {
+        // Metadata from 'IdPMetadata'
+        $sampleState = StateArrays::FULL;
+        $state = new State($sampleState);
+        $this->assertEquals($sampleState['IdPMetadata'], $state->getIdpMetadataArray());
+
+        // Fallback metadata from 'Source'
+        unset($sampleState['IdPMetadata']);
+        $state = new State($sampleState);
+        $this->assertEquals($sampleState['Source'], $state->getIdpMetadataArray());
+
+        // Throws on no IdP metadata
+        $this->expectException(UnexpectedValueException::class);
+        unset($sampleState['Source']);
+        new State($sampleState);
+    }
+
+    public function testCanResolveSpMetadataArray(): void
+    {
+        // Metadata from 'IdPMetadata'
+        $sampleState = StateArrays::FULL;
+        $state = new State($sampleState);
+        $this->assertEquals($sampleState['SPMetadata'], $state->getSpMetadataArray());
+
+        // Fallback metadata from 'Destination'
+        unset($sampleState['SPMetadata']);
+        $state = new State($sampleState);
+        $this->assertEquals($sampleState['Destination'], $state->getSpMetadataArray());
+
+        // Throws on no SP metadata
+        $this->expectException(UnexpectedValueException::class);
+        unset($sampleState['Destination']);
+        new State($sampleState);
+    }
+
+    public function testCanGetCreatedAt(): void
+    {
+        $state = new State(StateArrays::FULL);
+        $this->assertInstanceOf(\DateTimeImmutable::class, $state->getCreatedAt());
     }
 }

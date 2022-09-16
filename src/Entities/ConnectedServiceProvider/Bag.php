@@ -17,4 +17,9 @@ class Bag
 
         $this->connectedServiceProviders[$spEntityId] = $connectedServiceProvider;
     }
+
+    public function getAll(): array
+    {
+        return $this->connectedServiceProviders;
+    }
 }

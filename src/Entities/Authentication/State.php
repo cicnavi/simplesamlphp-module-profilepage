@@ -20,40 +20,30 @@ class State
     {
         $this->createdAt = $createdAt ?? new \DateTimeImmutable();
 
-        $this->idpEntityId = $this->resolveIdpEntityId($state);
         $this->idpMetadataArray = $this->resolveIdpMetadataArray($state);
-        $this->spEntityId = $this->resolveSpEntityId($state);
+        $this->idpEntityId = $this->resolveIdpEntityId();
         $this->spMetadataArray = $this->resolveSpMetadataArray($state);
+        $this->spEntityId = $this->resolveSpEntityId();
         $this->attributes = $this->resolveAttributes($state);
         $this->authnInstant = $this->resolveAuthnInstant($state);
     }
 
-    protected function resolveIdpEntityId(array $state): string
+    protected function resolveIdpEntityId(): string
     {
-        if (!empty($state['Source']['entityid']) && is_string($state['Source']['entityid'])) {
-            return $state['Source']['entityid'];
-        } elseif (
-            !empty($state['IdPMetadata']['entityid']) &&
-            is_string($state['IdPMetadata']['entityid'])
-        ) {
-            return $state['IdPMetadata']['entityid'];
+        if (!empty($this->idpMetadataArray['entityid']) && is_string($this->idpMetadataArray['entityid'])) {
+            return $this->idpMetadataArray['entityid'];
         }
 
-        throw new UnexpectedValueException('State array does not contain source (IdP) entity ID.');
+        throw new UnexpectedValueException('IdP metadata array does not contain entity ID.');
     }
 
-    protected function resolveSpEntityId(array $state): string
+    protected function resolveSpEntityId(): string
     {
-        if (!empty($state['Destination']['entityid']) && is_string($state['Destination']['entityid'])) {
-            return $state['Destination']['entityid'];
-        } elseif (
-            !empty($state['SPMetadata']['entityid']) &&
-            is_string($state['SPMetadata']['entityid'])
-        ) {
-            return $state['SPMetadata']['entityid'];
+        if (!empty($this->spMetadataArray['entityid']) && is_string($this->spMetadataArray['entityid'])) {
+            return $this->spMetadataArray['entityid'];
         }
 
-        throw new UnexpectedValueException('State array does not contain destination (SP) entity ID.');
+        throw new UnexpectedValueException('SP metadata array does not contain entity ID.');
     }
 
     protected function resolveAttributes(array $state): array
@@ -127,7 +117,7 @@ class State
             return $state['Source'];
         }
 
-        return [];
+        throw new UnexpectedValueException('State array does not contain IdP metadata.');
     }
 
     protected function resolveSpMetadataArray(array $state): array
@@ -138,7 +128,7 @@ class State
             return $state['Destination'];
         }
 
-        return [];
+        throw new UnexpectedValueException('State array does not contain SP metadata.');
     }
 
     /**

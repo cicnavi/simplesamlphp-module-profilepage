@@ -15,7 +15,8 @@ class EventTest extends TestCase
 {
     public function testCanGetState(): void
     {
-        $authenticationEvent = new Event(new State(StateArrays::FULL));
+        $dateTime = new \DateTimeImmutable();
+        $authenticationEvent = new Event(new State(StateArrays::FULL), $dateTime);
 
         $this->assertInstanceOf(State::class, $authenticationEvent->getState());
 
@@ -23,5 +24,7 @@ class EventTest extends TestCase
             StateArrays::FULL['Source']['entityid'],
             $authenticationEvent->getState()->getIdpEntityId()
         );
+
+        $this->assertEquals($dateTime, $authenticationEvent->getHappenedAt());
     }
 }

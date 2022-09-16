@@ -12,4 +12,9 @@ class Bag
     {
         $this->activities[] = $activity;
     }
+
+    public function getAll(): array
+    {
+        return $this->activities;
+    }
 }
