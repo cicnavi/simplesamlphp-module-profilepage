@@ -702,7 +702,7 @@ class Repository
     /**
      * @throws StoreException
      */
-    public function getConnectedOrganizations(string $userIdentifierHashSha256): array
+    public function getConnectedServiceProviders(string $userIdentifierHashSha256): array
     {
         $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
         $lastMetadataAndAttributesQueryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -936,6 +936,114 @@ class Repository
                 $lastMetadataAndAttributesQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
 
             return array_merge_recursive($numberOfAuthentications, $lastMetadataAndAttributes);
+        } catch (\Throwable $exception) {
+            $message = sprintf(
+                'Error executing query to get connected organizations. Error was: %s.',
+                $exception->getMessage()
+            );
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function getActivity(string $userIdentifierHashSha256): array
+    {
+        $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        /** @psalm-suppress TooManyArguments */
+        $authenticationEventsQueryBuilder->select(
+            //'vae.happened_at',
+            TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
+            TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
+            //'vsv.metadata AS sp_metadata',
+            TableConstants::TABLE_ALIAS_SP_VERSION . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA .
+            ' AS ' . TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA,
+            //'vuv.attributes AS user_attributes'
+            TableConstants::TABLE_ALIAS_USER_VERSION . '.' . TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES
+            . ' AS ' . TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES
+        )->from(
+            //'vds_authentication_event', 'vae'
+            $this->tableNameAuthenticationEvent,
+            //'vae'
+            TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT
+        )
+            ->leftJoin(
+                //'vae',
+                TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT,
+                //'vds_idp_sp_user_version',
+                $this->tableNameIdpSpUserVersion,
+                //'visuv',
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION,
+                //'vae.idp_sp_user_version_id = visuv.id'
+                TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
+                TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_SP_USER_VERSION_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION . '.' .
+                TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'visuv',
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION,
+                //'vds_sp_version',
+                $this->tableNameSpVersion,
+                //'vsv',
+                TableConstants::TABLE_ALIAS_SP_VERSION,
+                //'visuv.sp_version_id = vsv.id'
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION . '.' .
+                TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_SP_VERSION_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_SP_VERSION . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'vsv',
+                TableConstants::TABLE_ALIAS_SP_VERSION,
+                //'vds_sp',
+                $this->tableNameSp,
+                //'vs',
+                TableConstants::TABLE_ALIAS_SP,
+                //'vsv.sp_id = vs.id'
+                TableConstants::TABLE_ALIAS_SP_VERSION . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_SP_ID .
+                ' = ' . TableConstants::TABLE_ALIAS_SP . '.' . TableConstants::TABLE_SP_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'visuv',
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION,
+                //'vds_user_version',
+                $this->tableNameUserVersion,
+                //'vuv',
+                TableConstants::TABLE_ALIAS_USER_VERSION,
+                //'visuv.user_version_id = vuv.id'
+                TableConstants::TABLE_ALIAS_IDP_SP_USER_VERSION . '.' .
+                TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_USER_VERSION_ID . ' = ' .
+                TableConstants::TABLE_ALIAS_USER_VERSION . '.' . TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID
+            )
+            ->leftJoin(
+                //'vuv',
+                TableConstants::TABLE_ALIAS_USER_VERSION,
+                //'vds_user',
+                $this->tableNameUser,
+                //'vu',
+                TableConstants::TABLE_ALIAS_USER,
+                //'vuv.user_id = vu.id'
+                TableConstants::TABLE_ALIAS_USER_VERSION . '.' .
+                TableConstants::TABLE_USER_VERSION_COLUMN_NAME_USER_ID . ' = ' . TableConstants::TABLE_ALIAS_USER .
+                '.' . TableConstants::TABLE_USER_COLUMN_NAME_ID
+            )
+            ->where(
+                //'vu.identifier_hash_sha256 = ' .
+                TableConstants::TABLE_ALIAS_USER . '.' .
+                TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256 . ' = ' .
+                $authenticationEventsQueryBuilder->createNamedParameter($userIdentifierHashSha256)
+            )
+            ->orderBy(
+            //'vae.id',
+                TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
+                TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_ID,
+                'DESC'
+            );
+
+        try {
+            return $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociative();
         } catch (\Throwable $exception) {
             $message = sprintf(
                 'Error executing query to get connected organizations. Error was: %s.',

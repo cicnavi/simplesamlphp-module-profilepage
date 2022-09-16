@@ -124,6 +124,7 @@ class Profile
         $authenticationDataProvider = $this->authenticationDataProviderBuilder
             ->build($this->moduleConfiguration->getDefaultDataTrackerAndProviderClass());
 
+        $this->removeDebugDisplayLimits();
         var_dump($authenticationDataProvider->getActivity($userIdentifier));
         die();
         $data = [];

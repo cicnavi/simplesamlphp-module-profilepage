@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned;
 
-use Doctrine\DBAL\Result;
 use Psr\Log\LoggerInterface;
+use SimpleSAML\Module\accounting\Entities\Activity;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
-use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider\Bag;
 use SimpleSAML\Module\accounting\Entities\ServiceProvider;
 use SimpleSAML\Module\accounting\Entities\User;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Helpers\HashHelper;
@@ -19,10 +17,9 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\HashDecoratedState;
+use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawActivity;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawConnectedServiceProvider;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Repository;
-use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
-use SimpleSAML\Module\accounting\Stores\Helpers\DoctrineDbal\TypeHelper;
 use SimpleSAML\Module\accounting\Stores\Interfaces\DataStoreInterface;
 
 class Store extends AbstractStore implements DataStoreInterface
@@ -456,11 +453,11 @@ class Store extends AbstractStore implements DataStoreInterface
     /**
      * @throws StoreException
      */
-    public function getConnectedOrganizations(string $userIdentifierHashSha256): Bag
+    public function getConnectedOrganizations(string $userIdentifierHashSha256): ConnectedServiceProvider\Bag
     {
-        $connectedServiceProviderBag = new Bag();
+        $connectedServiceProviderBag = new ConnectedServiceProvider\Bag();
 
-        $results = $this->repository->getConnectedOrganizations($userIdentifierHashSha256);
+        $results = $this->repository->getConnectedServiceProviders($userIdentifierHashSha256);
 
         if (empty($results)) {
             return $connectedServiceProviderBag;
@@ -571,44 +568,73 @@ class Store extends AbstractStore implements DataStoreInterface
     /**
      * @throws StoreException
      */
-    public function getActivity(string $userIdentifierHashSha256): array
+    public function getActivity(string $userIdentifierHashSha256): Activity\Bag
     {
-        // TODO mivanci refactor and move this to repository...
         // TODO mivanci pagination
-        $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $results =  $this->repository->getActivity($userIdentifierHashSha256);
 
-        /** @psalm-suppress TooManyArguments */
-        $authenticationEventsQueryBuilder->select(
-            'vae.happened_at',
-            'vsv.metadata AS sp_metadata',
-            'vuv.attributes AS user_attributes'
-        )->from('vds_authentication_event', 'vae')
-            ->leftJoin(
-                'vae',
-                'vds_idp_sp_user_version',
-                'visuv',
-                'vae.idp_sp_user_version_id = visuv.id'
-            )
-            ->leftJoin('visuv', 'vds_sp_version', 'vsv', 'visuv.sp_version_id = vsv.id')
-            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
-            ->leftJoin('visuv', 'vds_user_version', 'vuv', 'visuv.user_version_id = vuv.id')
-            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
-            ->where(
-                'vu.identifier_hash_sha256 = ' .
-                $authenticationEventsQueryBuilder->createNamedParameter($userIdentifierHashSha256)
-            )
-            ->orderBy('vae.id', 'DESC');
+        $activityBag = new Activity\Bag();
+
+        if (empty($results)) {
+            return $activityBag;
+        }
 
         try {
-            $numberOfAuthentications = $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociative();
+            /** @var array $result */
+            foreach ($results as $result) {
+                $rawActivity = new RawActivity($result, $this->connection->dbal()->getDatabasePlatform());
+                $serviceProvider = new ServiceProvider($rawActivity->getServiceProviderMetadata());
+                $user = new User($rawActivity->getUserAttributes());
 
-            return array_merge_recursive($numberOfAuthentications);
+                $activityBag->add(
+                    new Activity($serviceProvider, $user, $rawActivity->getHappenedAt())
+                );
+            }
         } catch (\Throwable $exception) {
             $message = sprintf(
-                'Error executing query to get connected organizations. Error was: %s.',
+                'Error populating activity bag. Error was: %s',
                 $exception->getMessage()
             );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
+
+        return $activityBag;
+
+        // TODO mivanci remove
+//        $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+//
+//        /** @psalm-suppress TooManyArguments */
+//        $authenticationEventsQueryBuilder->select(
+//            'vae.happened_at',
+//            'vsv.metadata AS sp_metadata',
+//            'vuv.attributes AS user_attributes'
+//        )->from('vds_authentication_event', 'vae')
+//            ->leftJoin(
+//                'vae',
+//                'vds_idp_sp_user_version',
+//                'visuv',
+//                'vae.idp_sp_user_version_id = visuv.id'
+//            )
+//            ->leftJoin('visuv', 'vds_sp_version', 'vsv', 'visuv.sp_version_id = vsv.id')
+//            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
+//            ->leftJoin('visuv', 'vds_user_version', 'vuv', 'visuv.user_version_id = vuv.id')
+//            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
+//            ->where(
+//                'vu.identifier_hash_sha256 = ' .
+//                $authenticationEventsQueryBuilder->createNamedParameter($userIdentifierHashSha256)
+//            )
+//            ->orderBy('vae.id', 'DESC');
+//
+//        try {
+//            $numberOfAuthentications = $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociative();
+//
+//            return array_merge_recursive($numberOfAuthentications);
+//        } catch (\Throwable $exception) {
+//            $message = sprintf(
+//                'Error executing query to get connected organizations. Error was: %s.',
+//                $exception->getMessage()
+//            );
+//            throw new StoreException($message, (int)$exception->getCode(), $exception);
+//        }
     }
 }

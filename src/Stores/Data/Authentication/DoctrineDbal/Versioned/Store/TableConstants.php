@@ -91,4 +91,9 @@ class TableConstants
     public const ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_FIRST_AUTHENTICATION_AT = 'first_authentication_at';
     public const ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_SP_METADATA = 'sp_metadata';
     public const ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_USER_ATTRIBUTES = 'user_attributes';
+
+    // Entity 'Activity' related.
+    public const ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA = 'sp_metadata';
+    public const ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES = 'user_attributes';
+    public const ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT = 'happened_at';
 }
