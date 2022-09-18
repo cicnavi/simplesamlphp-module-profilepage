@@ -2,13 +2,13 @@
 
 namespace SimpleSAML\Test\Module\accounting\Entities\Bases;
 
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractEntityProvider;
+use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\IdentityProvider;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Bases\AbstractEntityProvider
+ * @covers \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
  * @uses \SimpleSAML\Module\accounting\Entities\IdentityProvider
  */
 class AbstractEntityProviderTest extends TestCase
@@ -21,8 +21,8 @@ class AbstractEntityProviderTest extends TestCase
     public function setUp(): void
     {
         $this->metadata = [
-            AbstractEntityProvider::METADATA_KEY_ENTITY_ID => 'http//example.org/idp',
-            AbstractEntityProvider::METADATA_KEY_NAME => [
+            AbstractProvider::METADATA_KEY_ENTITY_ID => 'http//example.org/idp',
+            AbstractProvider::METADATA_KEY_NAME => [
                 'en' => 'Test',
             ],
         ];
@@ -34,17 +34,17 @@ class AbstractEntityProviderTest extends TestCase
 
         $this->assertSame($this->metadata, $identityProvider->getMetadata());
         $this->assertSame(
-            $this->metadata[AbstractEntityProvider::METADATA_KEY_ENTITY_ID], $identityProvider->getEntityId()
+            $this->metadata[AbstractProvider::METADATA_KEY_ENTITY_ID], $identityProvider->getEntityId()
         );
         $this->assertSame(
-            $this->metadata[AbstractEntityProvider::METADATA_KEY_NAME]['en'], $identityProvider->getName()
+            $this->metadata[AbstractProvider::METADATA_KEY_NAME]['en'], $identityProvider->getName()
         );
     }
 
     public function testReturnsNullIfNameNotAvailable(): void
     {
         $metadata = $this->metadata;
-        unset($metadata[AbstractEntityProvider::METADATA_KEY_NAME]);
+        unset($metadata[AbstractProvider::METADATA_KEY_NAME]);
 
         $identityProvider = new IdentityProvider($metadata);
         $this->assertNull($identityProvider->getName());
@@ -53,7 +53,7 @@ class AbstractEntityProviderTest extends TestCase
     public function testThrowsIfEntityIdNotAvailable(): void
     {
         $metadata = $this->metadata;
-        unset($metadata[AbstractEntityProvider::METADATA_KEY_ENTITY_ID]);
+        unset($metadata[AbstractProvider::METADATA_KEY_ENTITY_ID]);
 
         $this->expectException(UnexpectedValueException::class);
         new IdentityProvider($metadata);

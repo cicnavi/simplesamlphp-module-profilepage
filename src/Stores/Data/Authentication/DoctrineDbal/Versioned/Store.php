@@ -99,7 +99,7 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Create new
         try {
-            $this->repository->insertIdp($hashDecoratedState->getState()->getIdpEntityId(), $idpEntityIdHashSha256);
+            $this->repository->insertIdp($hashDecoratedState->getState()->getIdentityProviderEntityId(), $idpEntityIdHashSha256);
         } catch (\Throwable $exception) {
             $message = sprintf(
                 'Error inserting new IdP, however, continuing in case of race condition. Error was: %s.',
@@ -152,7 +152,7 @@ class Store extends AbstractStore implements DataStoreInterface
         try {
             $this->repository->insertIdpVersion(
                 $idpId,
-                serialize($hashDecoratedState->getState()->getIdpMetadataArray()),
+                serialize($hashDecoratedState->getState()->getIdentityProviderMetadataArray()),
                 $idpMetadataArrayHashSha256
             );
         } catch (\Throwable $exception) {
@@ -202,7 +202,7 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Create new
         try {
-            $this->repository->insertSp($hashDecoratedState->getState()->getSpEntityId(), $spEntityIdHashSha256);
+            $this->repository->insertSp($hashDecoratedState->getState()->getServiceProviderEntityId(), $spEntityIdHashSha256);
         } catch (\Throwable $exception) {
             $message = sprintf(
                 'Error inserting new SP, however, continuing in case of race condition. Error was: %s.',
@@ -255,7 +255,7 @@ class Store extends AbstractStore implements DataStoreInterface
         try {
             $this->repository->insertSpVersion(
                 $spId,
-                serialize($hashDecoratedState->getState()->getSpMetadataArray()),
+                serialize($hashDecoratedState->getState()->getServiceProviderMetadataArray()),
                 $spMetadataArrayHashSha256
             );
         } catch (\Throwable $exception) {

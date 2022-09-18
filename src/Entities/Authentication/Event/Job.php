@@ -34,4 +34,9 @@ class Job extends AbstractJob
     {
         return self::class;
     }
+
+    public function getRawPayloadData()
+    {
+        // TODO: Implement getRawPayloadData() method.
+    }
 }

@@ -6,4 +6,8 @@ namespace SimpleSAML\Module\accounting\Entities\Bases;
 
 abstract class AbstractPayload
 {
+    /**
+     * @return mixed
+     */
+    abstract public function getRawPayloadData();
 }

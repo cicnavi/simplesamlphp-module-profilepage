@@ -12,6 +12,12 @@ interface JobInterface
     public function getId(): ?int;
 
     public function getPayload(): AbstractPayload;
+
+    /**
+     * @return mixed
+     */
+    public function getRawPayloadData();
+
     public function setPayload(AbstractPayload $payload): void;
 
     public function getType(): string;

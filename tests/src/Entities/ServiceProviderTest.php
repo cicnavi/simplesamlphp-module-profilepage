@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Entities\ServiceProvider
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractEntityProvider
+ * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
  */
 class ServiceProviderTest extends TestCase
 {

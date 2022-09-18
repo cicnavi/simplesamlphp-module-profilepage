@@ -18,11 +18,11 @@ class HashDecoratedState
     {
         $this->state = $state;
 
-        $this->idpEntityIdHashSha256 = HashHelper::getSha256($state->getIdpEntityId());
-        $this->idpMetadataArrayHashSha256 = HashHelper::getSha256ForArray($state->getIdpMetadataArray());
+        $this->idpEntityIdHashSha256 = HashHelper::getSha256($state->getIdentityProviderEntityId());
+        $this->idpMetadataArrayHashSha256 = HashHelper::getSha256ForArray($state->getIdentityProviderMetadataArray());
 
-        $this->spEntityIdHashSha256 = HashHelper::getSha256($state->getSpEntityId());
-        $this->spMetadataArrayHashSha256 = HashHelper::getSha256ForArray($state->getSpMetadataArray());
+        $this->spEntityIdHashSha256 = HashHelper::getSha256($state->getServiceProviderEntityId());
+        $this->spMetadataArrayHashSha256 = HashHelper::getSha256ForArray($state->getServiceProviderMetadataArray());
 
         $this->attributesArrayHashSha256 = HashHelper::getSha256ForArray($state->getAttributes());
     }

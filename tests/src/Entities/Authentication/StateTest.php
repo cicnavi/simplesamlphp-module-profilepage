@@ -16,14 +16,14 @@ class StateTest extends TestCase
     {
         $state = new State(StateArrays::FULL);
 
-        $this->assertSame($state->getIdpEntityId(), StateArrays::FULL['Source']['entityid']);
+        $this->assertSame($state->getIdentityProviderEntityId(), StateArrays::FULL['Source']['entityid']);
     }
 
     public function testCanResolveIdpEntityId(): void
     {
         $stateArray = StateArrays::FULL;
         $state = new State($stateArray);
-        $this->assertSame($state->getIdpEntityId(), StateArrays::FULL['IdPMetadata']['entityid']);
+        $this->assertSame($state->getIdentityProviderEntityId(), StateArrays::FULL['IdPMetadata']['entityid']);
 
         $this->expectException(UnexpectedValueException::class);
         unset($stateArray['IdPMetadata']['entityid']);
@@ -34,7 +34,7 @@ class StateTest extends TestCase
     {
         $stateArray = StateArrays::FULL;
         $state = new State($stateArray);
-        $this->assertSame($state->getSpEntityId(), StateArrays::FULL['SPMetadata']['entityid']);
+        $this->assertSame($state->getServiceProviderEntityId(), StateArrays::FULL['SPMetadata']['entityid']);
 
         $this->expectException(UnexpectedValueException::class);
         unset($stateArray['SPMetadata']['entityid']);
@@ -55,7 +55,7 @@ class StateTest extends TestCase
 
         $state = new State($stateArray);
 
-        $this->assertInstanceOf(\DateTimeImmutable::class, $state->getAuthnInstant());
+        $this->assertInstanceOf(\DateTimeImmutable::class, $state->getAuthenticationInstant());
     }
 
     public function testThrowsOnMissingSourceEntityId(): void
@@ -78,7 +78,7 @@ class StateTest extends TestCase
 
         $state = new State($stateArray);
 
-        $this->assertSame($state->getSpEntityId(), StateArrays::FULL['SPMetadata']['entityid']);
+        $this->assertSame($state->getServiceProviderEntityId(), StateArrays::FULL['SPMetadata']['entityid']);
     }
 
     public function testThrowsOnMissingDestinationEntityId(): void
@@ -131,12 +131,12 @@ class StateTest extends TestCase
         // Metadata from 'IdPMetadata'
         $sampleState = StateArrays::FULL;
         $state = new State($sampleState);
-        $this->assertEquals($sampleState['IdPMetadata'], $state->getIdpMetadataArray());
+        $this->assertEquals($sampleState['IdPMetadata'], $state->getIdentityProviderMetadataArray());
 
         // Fallback metadata from 'Source'
         unset($sampleState['IdPMetadata']);
         $state = new State($sampleState);
-        $this->assertEquals($sampleState['Source'], $state->getIdpMetadataArray());
+        $this->assertEquals($sampleState['Source'], $state->getIdentityProviderMetadataArray());
 
         // Throws on no IdP metadata
         $this->expectException(UnexpectedValueException::class);
@@ -149,12 +149,12 @@ class StateTest extends TestCase
         // Metadata from 'IdPMetadata'
         $sampleState = StateArrays::FULL;
         $state = new State($sampleState);
-        $this->assertEquals($sampleState['SPMetadata'], $state->getSpMetadataArray());
+        $this->assertEquals($sampleState['SPMetadata'], $state->getServiceProviderMetadataArray());
 
         // Fallback metadata from 'Destination'
         unset($sampleState['SPMetadata']);
         $state = new State($sampleState);
-        $this->assertEquals($sampleState['Destination'], $state->getSpMetadataArray());
+        $this->assertEquals($sampleState['Destination'], $state->getServiceProviderMetadataArray());
 
         // Throws on no SP metadata
         $this->expectException(UnexpectedValueException::class);

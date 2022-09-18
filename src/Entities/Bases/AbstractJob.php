@@ -44,4 +44,9 @@ abstract class AbstractJob implements JobInterface
     }
 
     abstract public function getType(): string;
+
+    /**
+     * @return mixed
+     */
+    abstract public function getRawPayloadData();
 }

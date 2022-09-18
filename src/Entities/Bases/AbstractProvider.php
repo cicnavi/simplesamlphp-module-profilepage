@@ -4,7 +4,7 @@ namespace SimpleSAML\Module\accounting\Entities\Bases;
 
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 
-abstract class AbstractEntityProvider
+abstract class AbstractProvider
 {
     public const METADATA_KEY_NAME = 'name';
     public const METADATA_KEY_ENTITY_ID = 'entityid';

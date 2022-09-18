@@ -4,43 +4,69 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Entities\Authentication;
 
+use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Helpers\NetworkHelper;
 
 class State
 {
-    protected string $idpEntityId;
-    protected string $spEntityId;
+    public const KEY_ATTRIBUTES = 'Attributes';
+    public const KEY_AUTHENTICATION_INSTANT = 'AuthnInstant';
+    public const KEY_IDENTITY_PROVIDER_METADATA = 'IdPMetadata';
+    public const KEY_SOURCE = 'Source';
+    public const KEY_SERVICE_PROVIDER_METADATA = 'SPMetadata';
+    public const KEY_DESTINATION = 'Destination';
+
+    public const KEY_ACCOUNTING = 'accounting';
+    public const ACCOUNTING_KEY_CLIENT_IP_ADDRESS = 'client_ip_address';
+
+    protected string $identityProviderEntityId;
+    protected string $serviceProviderEntityId;
     protected array $attributes;
     protected \DateTimeImmutable $createdAt;
-    protected \DateTimeImmutable $authnInstant;
-    protected array $idpMetadataArray;
-    protected array $spMetadataArray;
+    protected ?\DateTimeImmutable $authenticationInstant;
+    protected array $identityProviderMetadataArray;
+    protected array $serviceProviderMetadataArray;
 
     public function __construct(array $state, \DateTimeImmutable $createdAt = null)
     {
         $this->createdAt = $createdAt ?? new \DateTimeImmutable();
 
-        $this->idpMetadataArray = $this->resolveIdpMetadataArray($state);
-        $this->idpEntityId = $this->resolveIdpEntityId();
-        $this->spMetadataArray = $this->resolveSpMetadataArray($state);
-        $this->spEntityId = $this->resolveSpEntityId();
+        $this->identityProviderMetadataArray = $this->resolveIdentityProviderMetadataArray($state);
+        $this->identityProviderEntityId = $this->resolveIdentityProviderEntityId();
+        $this->serviceProviderMetadataArray = $this->resolveServiceProviderMetadataArray($state);
+        $this->serviceProviderEntityId = $this->resolveServiceProviderEntityId();
         $this->attributes = $this->resolveAttributes($state);
-        $this->authnInstant = $this->resolveAuthnInstant($state);
+        $this->authenticationInstant = $this->resolveAuthenticationInstant($state);
+        $this->clientIpAddress = $this->resolveClientIpAddress($state);
     }
 
-    protected function resolveIdpEntityId(): string
+    public function toArray(): array
     {
-        if (!empty($this->idpMetadataArray['entityid']) && is_string($this->idpMetadataArray['entityid'])) {
-            return $this->idpMetadataArray['entityid'];
+        return [
+
+        ];
+    }
+
+    protected function resolveIdentityProviderEntityId(): string
+    {
+        if (
+            !empty($this->identityProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID]) &&
+            is_string($this->identityProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID])
+        ) {
+            return $this->identityProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID];
         }
 
         throw new UnexpectedValueException('IdP metadata array does not contain entity ID.');
     }
 
-    protected function resolveSpEntityId(): string
+    protected function resolveServiceProviderEntityId(): string
     {
-        if (!empty($this->spMetadataArray['entityid']) && is_string($this->spMetadataArray['entityid'])) {
-            return $this->spMetadataArray['entityid'];
+        if (
+            !empty($this->serviceProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID]) &&
+            is_string($this->serviceProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID])
+        ) {
+            return $this->serviceProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID];
         }
 
         throw new UnexpectedValueException('SP metadata array does not contain entity ID.');
@@ -48,21 +74,21 @@ class State
 
     protected function resolveAttributes(array $state): array
     {
-        if (empty($state['Attributes']) || !is_array($state['Attributes'])) {
+        if (empty($state[self::KEY_ATTRIBUTES]) || !is_array($state[self::KEY_ATTRIBUTES])) {
             throw new UnexpectedValueException('State array does not contain user attributes.');
         }
 
-        return $state['Attributes'];
+        return $state[self::KEY_ATTRIBUTES];
     }
 
-    public function getIdpEntityId(): string
+    public function getIdentityProviderEntityId(): string
     {
-        return $this->idpEntityId;
+        return $this->identityProviderEntityId;
     }
 
-    public function getSpEntityId(): string
+    public function getServiceProviderEntityId(): string
     {
-        return $this->spEntityId;
+        return $this->serviceProviderEntityId;
     }
 
     public function getAttributes(): array
@@ -84,13 +110,13 @@ class State
         return $this->createdAt;
     }
 
-    protected function resolveAuthnInstant(array $state): \DateTimeImmutable
+    protected function resolveAuthenticationInstant(array $state): ?\DateTimeImmutable
     {
-        if (empty($state['AuthnInstant'])) {
-            return new \DateTimeImmutable();
+        if (empty($state[self::KEY_AUTHENTICATION_INSTANT])) {
+            return null;
         }
 
-        $authInstant = (string)$state['AuthnInstant'];
+        $authInstant = (string)$state[self::KEY_AUTHENTICATION_INSTANT];
 
         try {
             return new \DateTimeImmutable('@' . $authInstant);
@@ -104,28 +130,28 @@ class State
         }
     }
 
-    public function getAuthnInstant(): \DateTimeImmutable
+    public function getAuthenticationInstant(): \DateTimeImmutable
     {
-        return $this->authnInstant;
+        return $this->authenticationInstant;
     }
 
-    protected function resolveIdpMetadataArray(array $state): array
+    protected function resolveIdentityProviderMetadataArray(array $state): array
     {
-        if (!empty($state['IdPMetadata']) && is_array($state['IdPMetadata'])) {
-            return $state['IdPMetadata'];
-        } elseif (!empty($state['Source']) && is_array($state['Source'])) {
-            return $state['Source'];
+        if (!empty($state[self::KEY_IDENTITY_PROVIDER_METADATA]) && is_array($state[self::KEY_IDENTITY_PROVIDER_METADATA])) {
+            return $state[self::KEY_IDENTITY_PROVIDER_METADATA];
+        } elseif (!empty($state[self::KEY_SOURCE]) && is_array($state[self::KEY_SOURCE])) {
+            return $state[self::KEY_SOURCE];
         }
 
         throw new UnexpectedValueException('State array does not contain IdP metadata.');
     }
 
-    protected function resolveSpMetadataArray(array $state): array
+    protected function resolveServiceProviderMetadataArray(array $state): array
     {
-        if (!empty($state['SPMetadata']) && is_array($state['SPMetadata'])) {
-            return $state['SPMetadata'];
-        } elseif (!empty($state['Destination']) && is_array($state['Destination'])) {
-            return $state['Destination'];
+        if (!empty($state[self::KEY_SERVICE_PROVIDER_METADATA]) && is_array($state[self::KEY_SERVICE_PROVIDER_METADATA])) {
+            return $state[self::KEY_SERVICE_PROVIDER_METADATA];
+        } elseif (!empty($state[self::KEY_DESTINATION]) && is_array($state[self::KEY_DESTINATION])) {
+            return $state[self::KEY_DESTINATION];
         }
 
         throw new UnexpectedValueException('State array does not contain SP metadata.');
@@ -134,16 +160,23 @@ class State
     /**
      * @return array
      */
-    public function getIdpMetadataArray(): array
+    public function getIdentityProviderMetadataArray(): array
     {
-        return $this->idpMetadataArray;
+        return $this->identityProviderMetadataArray;
     }
 
     /**
      * @return array
      */
-    public function getSpMetadataArray(): array
+    public function getServiceProviderMetadataArray(): array
     {
-        return $this->spMetadataArray;
+        return $this->serviceProviderMetadataArray;
+    }
+
+    protected function resolveClientIpAddress(array $state): ?string
+    {
+        return NetworkHelper::resolveClientIpAddress(
+            $state[self::KEY_ACCOUNTING][self::ACCOUNTING_KEY_CLIENT_IP_ADDRESS] ?? null
+        );
     }
 }

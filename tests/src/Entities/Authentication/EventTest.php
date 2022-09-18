@@ -22,7 +22,7 @@ class EventTest extends TestCase
 
         $this->assertSame(
             StateArrays::FULL['Source']['entityid'],
-            $authenticationEvent->getState()->getIdpEntityId()
+            $authenticationEvent->getState()->getIdentityProviderEntityId()
         );
 
         $this->assertEquals($dateTime, $authenticationEvent->getHappenedAt());
