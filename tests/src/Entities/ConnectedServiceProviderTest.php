@@ -33,6 +33,7 @@ class ConnectedServiceProviderTest extends TestCase
 
     public function testCanCreateInstance(): void
     {
+        /** @psalm-suppress PossiblyInvalidArgument */
         $connectedServiceProvider = new ConnectedServiceProvider(
             $this->serviceProviderStub,
             $this->numberOfAuthentications,

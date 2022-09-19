@@ -9,6 +9,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Entities\Authentication\State
+ * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
  */
 class StateTest extends TestCase
 {
@@ -47,7 +48,7 @@ class StateTest extends TestCase
         $this->assertSame($state->getAttributes(), StateArrays::FULL['Attributes']);
     }
 
-    public function testUseCurrentDateTimeIfAuthnInstantNotPresent(): void
+    public function testReturnsNullIfAuthnInstantNotPresent(): void
     {
         $stateArray = StateArrays::FULL;
 
@@ -55,7 +56,7 @@ class StateTest extends TestCase
 
         $state = new State($stateArray);
 
-        $this->assertInstanceOf(\DateTimeImmutable::class, $state->getAuthenticationInstant());
+        $this->assertNull($state->getAuthenticationInstant());
     }
 
     public function testThrowsOnMissingSourceEntityId(): void
@@ -131,12 +132,12 @@ class StateTest extends TestCase
         // Metadata from 'IdPMetadata'
         $sampleState = StateArrays::FULL;
         $state = new State($sampleState);
-        $this->assertEquals($sampleState['IdPMetadata'], $state->getIdentityProviderMetadataArray());
+        $this->assertEquals($sampleState['IdPMetadata'], $state->getIdentityProviderMetadata());
 
         // Fallback metadata from 'Source'
         unset($sampleState['IdPMetadata']);
         $state = new State($sampleState);
-        $this->assertEquals($sampleState['Source'], $state->getIdentityProviderMetadataArray());
+        $this->assertEquals($sampleState['Source'], $state->getIdentityProviderMetadata());
 
         // Throws on no IdP metadata
         $this->expectException(UnexpectedValueException::class);
@@ -149,12 +150,12 @@ class StateTest extends TestCase
         // Metadata from 'IdPMetadata'
         $sampleState = StateArrays::FULL;
         $state = new State($sampleState);
-        $this->assertEquals($sampleState['SPMetadata'], $state->getServiceProviderMetadataArray());
+        $this->assertEquals($sampleState['SPMetadata'], $state->getServiceProviderMetadata());
 
         // Fallback metadata from 'Destination'
         unset($sampleState['SPMetadata']);
         $state = new State($sampleState);
-        $this->assertEquals($sampleState['Destination'], $state->getServiceProviderMetadataArray());
+        $this->assertEquals($sampleState['Destination'], $state->getServiceProviderMetadata());
 
         // Throws on no SP metadata
         $this->expectException(UnexpectedValueException::class);

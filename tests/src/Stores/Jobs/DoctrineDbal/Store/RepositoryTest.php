@@ -39,6 +39,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
+ * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
  */
 class RepositoryTest extends TestCase
 {

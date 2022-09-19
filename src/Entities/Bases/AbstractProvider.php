@@ -26,10 +26,12 @@ abstract class AbstractProvider
     public function getName(string $locale = 'en'): ?string
     {
         if (
+            isset($this->metadata[self::METADATA_KEY_NAME]) &&
+            is_array($this->metadata[self::METADATA_KEY_NAME]) &&
             !empty($this->metadata[self::METADATA_KEY_NAME][$locale]) &&
             is_string($this->metadata[self::METADATA_KEY_NAME][$locale])
         ) {
-            return $this->metadata[self::METADATA_KEY_NAME][$locale];
+            return (string)$this->metadata[self::METADATA_KEY_NAME][$locale];
         }
 
         return null;

@@ -26,9 +26,4 @@ class Event extends AbstractPayload
     {
         return $this->happenedAt;
     }
-
-    public function getRawPayloadData(): array
-    {
-        return $this->state->toArray();
-    }
 }

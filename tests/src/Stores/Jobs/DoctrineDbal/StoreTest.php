@@ -37,6 +37,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
+ * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
  */
 class StoreTest extends TestCase
 {

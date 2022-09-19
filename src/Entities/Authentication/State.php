@@ -25,36 +25,30 @@ class State
     protected array $attributes;
     protected \DateTimeImmutable $createdAt;
     protected ?\DateTimeImmutable $authenticationInstant;
-    protected array $identityProviderMetadataArray;
-    protected array $serviceProviderMetadataArray;
+    protected array $identityProviderMetadata;
+    protected array $serviceProviderMetadata;
+    protected ?string $clientIpAddress;
 
     public function __construct(array $state, \DateTimeImmutable $createdAt = null)
     {
         $this->createdAt = $createdAt ?? new \DateTimeImmutable();
 
-        $this->identityProviderMetadataArray = $this->resolveIdentityProviderMetadataArray($state);
+        $this->identityProviderMetadata = $this->resolveIdentityProviderMetadata($state);
         $this->identityProviderEntityId = $this->resolveIdentityProviderEntityId();
-        $this->serviceProviderMetadataArray = $this->resolveServiceProviderMetadataArray($state);
+        $this->serviceProviderMetadata = $this->resolveServiceProviderMetadata($state);
         $this->serviceProviderEntityId = $this->resolveServiceProviderEntityId();
         $this->attributes = $this->resolveAttributes($state);
         $this->authenticationInstant = $this->resolveAuthenticationInstant($state);
         $this->clientIpAddress = $this->resolveClientIpAddress($state);
     }
 
-    public function toArray(): array
-    {
-        return [
-
-        ];
-    }
-
     protected function resolveIdentityProviderEntityId(): string
     {
         if (
-            !empty($this->identityProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID]) &&
-            is_string($this->identityProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID])
+            !empty($this->identityProviderMetadata[AbstractProvider::METADATA_KEY_ENTITY_ID]) &&
+            is_string($this->identityProviderMetadata[AbstractProvider::METADATA_KEY_ENTITY_ID])
         ) {
-            return $this->identityProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID];
+            return $this->identityProviderMetadata[AbstractProvider::METADATA_KEY_ENTITY_ID];
         }
 
         throw new UnexpectedValueException('IdP metadata array does not contain entity ID.');
@@ -63,10 +57,10 @@ class State
     protected function resolveServiceProviderEntityId(): string
     {
         if (
-            !empty($this->serviceProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID]) &&
-            is_string($this->serviceProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID])
+            !empty($this->serviceProviderMetadata[AbstractProvider::METADATA_KEY_ENTITY_ID]) &&
+            is_string($this->serviceProviderMetadata[AbstractProvider::METADATA_KEY_ENTITY_ID])
         ) {
-            return $this->serviceProviderMetadataArray[AbstractProvider::METADATA_KEY_ENTITY_ID];
+            return $this->serviceProviderMetadata[AbstractProvider::METADATA_KEY_ENTITY_ID];
         }
 
         throw new UnexpectedValueException('SP metadata array does not contain entity ID.');
@@ -130,14 +124,17 @@ class State
         }
     }
 
-    public function getAuthenticationInstant(): \DateTimeImmutable
+    public function getAuthenticationInstant(): ?\DateTimeImmutable
     {
         return $this->authenticationInstant;
     }
 
-    protected function resolveIdentityProviderMetadataArray(array $state): array
+    protected function resolveIdentityProviderMetadata(array $state): array
     {
-        if (!empty($state[self::KEY_IDENTITY_PROVIDER_METADATA]) && is_array($state[self::KEY_IDENTITY_PROVIDER_METADATA])) {
+        if (
+            !empty($state[self::KEY_IDENTITY_PROVIDER_METADATA]) &&
+            is_array($state[self::KEY_IDENTITY_PROVIDER_METADATA])
+        ) {
             return $state[self::KEY_IDENTITY_PROVIDER_METADATA];
         } elseif (!empty($state[self::KEY_SOURCE]) && is_array($state[self::KEY_SOURCE])) {
             return $state[self::KEY_SOURCE];
@@ -146,9 +143,12 @@ class State
         throw new UnexpectedValueException('State array does not contain IdP metadata.');
     }
 
-    protected function resolveServiceProviderMetadataArray(array $state): array
+    protected function resolveServiceProviderMetadata(array $state): array
     {
-        if (!empty($state[self::KEY_SERVICE_PROVIDER_METADATA]) && is_array($state[self::KEY_SERVICE_PROVIDER_METADATA])) {
+        if (
+            !empty($state[self::KEY_SERVICE_PROVIDER_METADATA]) &&
+            is_array($state[self::KEY_SERVICE_PROVIDER_METADATA])
+        ) {
             return $state[self::KEY_SERVICE_PROVIDER_METADATA];
         } elseif (!empty($state[self::KEY_DESTINATION]) && is_array($state[self::KEY_DESTINATION])) {
             return $state[self::KEY_DESTINATION];
@@ -160,23 +160,33 @@ class State
     /**
      * @return array
      */
-    public function getIdentityProviderMetadataArray(): array
+    public function getIdentityProviderMetadata(): array
     {
-        return $this->identityProviderMetadataArray;
+        return $this->identityProviderMetadata;
     }
 
     /**
      * @return array
      */
-    public function getServiceProviderMetadataArray(): array
+    public function getServiceProviderMetadata(): array
     {
-        return $this->serviceProviderMetadataArray;
+        return $this->serviceProviderMetadata;
     }
 
     protected function resolveClientIpAddress(array $state): ?string
     {
         return NetworkHelper::resolveClientIpAddress(
-            $state[self::KEY_ACCOUNTING][self::ACCOUNTING_KEY_CLIENT_IP_ADDRESS] ?? null
+            isset($state[self::KEY_ACCOUNTING][self::ACCOUNTING_KEY_CLIENT_IP_ADDRESS]) ?
+                (string)$state[self::KEY_ACCOUNTING][self::ACCOUNTING_KEY_CLIENT_IP_ADDRESS]
+                : null
         );
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClientIpAddress(): ?string
+    {
+        return $this->clientIpAddress;
     }
 }

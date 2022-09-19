@@ -15,6 +15,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
+ * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
  */
 class JobTest extends TestCase
 {

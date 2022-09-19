@@ -38,6 +38,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\HashDecoratedState
  * @uses \SimpleSAML\Module\accounting\Helpers\HashHelper
  * @uses \SimpleSAML\Module\accounting\Helpers\ArrayHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
  */
 class StoreTest extends TestCase
 {

@@ -11,10 +11,10 @@ use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
  * @covers \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
  * @uses \SimpleSAML\Module\accounting\Entities\IdentityProvider
  */
-class AbstractEntityProviderTest extends TestCase
+class AbstractProviderTest extends TestCase
 {
     /**
-     * @var string[]
+     * @var array
      */
     protected array $metadata;
 
@@ -28,16 +28,21 @@ class AbstractEntityProviderTest extends TestCase
         ];
     }
 
+    /**
+     * @psalm-suppress MixedArrayAccess
+     */
     public function testCanCreateInstance(): void
     {
         $identityProvider = new IdentityProvider($this->metadata);
 
         $this->assertSame($this->metadata, $identityProvider->getMetadata());
         $this->assertSame(
-            $this->metadata[AbstractProvider::METADATA_KEY_ENTITY_ID], $identityProvider->getEntityId()
+            $this->metadata[AbstractProvider::METADATA_KEY_ENTITY_ID],
+            $identityProvider->getEntityId()
         );
         $this->assertSame(
-            $this->metadata[AbstractProvider::METADATA_KEY_NAME]['en'], $identityProvider->getName()
+            $this->metadata[AbstractProvider::METADATA_KEY_NAME]['en'],
+            $identityProvider->getName()
         );
     }
 

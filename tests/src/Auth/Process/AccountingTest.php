@@ -28,6 +28,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses   \SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder
  * @uses   \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
  * @uses   \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
+ * @uses   \SimpleSAML\Module\accounting\Helpers\NetworkHelper
  */
 class AccountingTest extends TestCase
 {

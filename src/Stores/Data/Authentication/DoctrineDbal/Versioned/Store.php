@@ -99,7 +99,10 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Create new
         try {
-            $this->repository->insertIdp($hashDecoratedState->getState()->getIdentityProviderEntityId(), $idpEntityIdHashSha256);
+            $this->repository->insertIdp(
+                $hashDecoratedState->getState()->getIdentityProviderEntityId(),
+                $idpEntityIdHashSha256
+            );
         } catch (\Throwable $exception) {
             $message = sprintf(
                 'Error inserting new IdP, however, continuing in case of race condition. Error was: %s.',
@@ -152,7 +155,7 @@ class Store extends AbstractStore implements DataStoreInterface
         try {
             $this->repository->insertIdpVersion(
                 $idpId,
-                serialize($hashDecoratedState->getState()->getIdentityProviderMetadataArray()),
+                serialize($hashDecoratedState->getState()->getIdentityProviderMetadata()),
                 $idpMetadataArrayHashSha256
             );
         } catch (\Throwable $exception) {
@@ -202,7 +205,10 @@ class Store extends AbstractStore implements DataStoreInterface
 
         // Create new
         try {
-            $this->repository->insertSp($hashDecoratedState->getState()->getServiceProviderEntityId(), $spEntityIdHashSha256);
+            $this->repository->insertSp(
+                $hashDecoratedState->getState()->getServiceProviderEntityId(),
+                $spEntityIdHashSha256
+            );
         } catch (\Throwable $exception) {
             $message = sprintf(
                 'Error inserting new SP, however, continuing in case of race condition. Error was: %s.',
@@ -255,7 +261,7 @@ class Store extends AbstractStore implements DataStoreInterface
         try {
             $this->repository->insertSpVersion(
                 $spId,
-                serialize($hashDecoratedState->getState()->getServiceProviderMetadataArray()),
+                serialize($hashDecoratedState->getState()->getServiceProviderMetadata()),
                 $spMetadataArrayHashSha256
             );
         } catch (\Throwable $exception) {
