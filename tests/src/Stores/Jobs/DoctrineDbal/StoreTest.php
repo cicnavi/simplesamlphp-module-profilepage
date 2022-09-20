@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal;
 
 use PHPUnit\Framework\TestCase;

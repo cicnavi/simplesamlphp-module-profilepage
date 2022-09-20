@@ -18,7 +18,7 @@ class AttributesHelper
         // by each include of the map file.
         $attributemap = [];
 
-        $fullAttributeToNameMap = [];
+        $fullAttributeMap = [];
 
         /** @var string $mapFile */
         foreach ($mapFiles as $mapFile) {
@@ -27,9 +27,9 @@ class AttributesHelper
                 continue;
             }
             include $mapFilePath;
-            $fullAttributeToNameMap = array_merge($fullAttributeToNameMap, $attributemap);
+            $fullAttributeMap = array_merge($fullAttributeMap, $attributemap);
         }
 
-        return $fullAttributeToNameMap;
+        return $fullAttributeMap;
     }
 }

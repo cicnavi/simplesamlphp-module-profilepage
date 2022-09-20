@@ -17,10 +17,4 @@ class ArrayHelper
 
         ksort($array);
     }
-
-    public static function getNewRecursivelySortedByKey(array $array): array
-    {
-        self::recursivelySortByKey($array);
-        return $array;
-    }
 }

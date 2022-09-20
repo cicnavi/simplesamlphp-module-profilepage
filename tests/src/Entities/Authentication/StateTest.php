@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Entities\Authentication;
 
 use SimpleSAML\Module\accounting\Entities\Authentication\State;
@@ -46,6 +48,20 @@ class StateTest extends TestCase
     {
         $state = new State(StateArrays::FULL);
         $this->assertSame($state->getAttributes(), StateArrays::FULL['Attributes']);
+    }
+
+    public function testCanResolveAccountedClientIpAddress(): void
+    {
+        $stateArray = StateArrays::FULL;
+
+        $state = new State($stateArray);
+        $this->assertNull($state->getClientIpAddress());
+
+        $sampleIp = '123.123.123.123';
+        $stateArray[State::KEY_ACCOUNTING][State::ACCOUNTING_KEY_CLIENT_IP_ADDRESS] = $sampleIp;
+
+        $state = new State($stateArray);
+        $this->assertSame($sampleIp, $state->getClientIpAddress());
     }
 
     public function testReturnsNullIfAuthnInstantNotPresent(): void
