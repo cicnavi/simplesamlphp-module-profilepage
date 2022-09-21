@@ -82,7 +82,7 @@ class Store extends AbstractStore implements DataStoreInterface
      */
     protected function resolveIdpId(HashDecoratedState $hashDecoratedState): int
     {
-        $idpEntityIdHashSha256 = $hashDecoratedState->getIdpEntityIdHashSha256();
+        $idpEntityIdHashSha256 = $hashDecoratedState->getIdentityProviderEntityIdHashSha256();
 
         // Check if it already exists.
         try {
@@ -137,7 +137,7 @@ class Store extends AbstractStore implements DataStoreInterface
     protected function resolveIdpVersionId(int $idpId, HashDecoratedState $hashDecoratedState): int
     {
         // Check if it already exists.
-        $idpMetadataArrayHashSha256 = $hashDecoratedState->getIdpMetadataArrayHashSha256();
+        $idpMetadataArrayHashSha256 = $hashDecoratedState->getIdentityProviderMetadataArrayHashSha256();
 
         try {
             $result = $this->repository->getIdpVersion($idpId, $idpMetadataArrayHashSha256);
@@ -188,7 +188,7 @@ class Store extends AbstractStore implements DataStoreInterface
 
     protected function resolveSpId(HashDecoratedState $hashDecoratedState): int
     {
-        $spEntityIdHashSha256 = $hashDecoratedState->getSpEntityIdHashSha256();
+        $spEntityIdHashSha256 = $hashDecoratedState->getServiceProviderEntityIdHashSha256();
 
         // Check if it already exists.
         try {
@@ -243,7 +243,7 @@ class Store extends AbstractStore implements DataStoreInterface
     protected function resolveSpVersionId(int $spId, HashDecoratedState $hashDecoratedState): int
     {
         // Check if it already exists.
-        $spMetadataArrayHashSha256 = $hashDecoratedState->getSpMetadataArrayHashSha256();
+        $spMetadataArrayHashSha256 = $hashDecoratedState->getServiceProviderMetadataArrayHashSha256();
 
         try {
             $result = $this->repository->getSpVersion($spId, $spMetadataArrayHashSha256);

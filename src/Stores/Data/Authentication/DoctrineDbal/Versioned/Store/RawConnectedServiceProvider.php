@@ -102,48 +102,43 @@ class RawConnectedServiceProvider extends AbstractRawEntity
         if (
             ! is_numeric($rawRow[TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS])
         ) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Column %s must be numeric.',
-                    TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS
-                )
+            $message = sprintf(
+                'Column %s must be numeric.',
+                TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS
             );
+            throw new UnexpectedValueException($message);
         }
 
         if (! is_string($rawRow[TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_LAST_AUTHENTICATION_AT])) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Column %s must be string.',
-                    TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_LAST_AUTHENTICATION_AT
-                )
+            $message = sprintf(
+                'Column %s must be string.',
+                TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_LAST_AUTHENTICATION_AT
             );
+            throw new UnexpectedValueException($message);
         }
 
         if (! is_string($rawRow[TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_FIRST_AUTHENTICATION_AT])) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Column %s must be string.',
-                    TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_FIRST_AUTHENTICATION_AT
-                )
+            $message = sprintf(
+                'Column %s must be string.',
+                TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_FIRST_AUTHENTICATION_AT
             );
+            throw new UnexpectedValueException($message);
         }
 
         if (! is_string($rawRow[TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_SP_METADATA])) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Column %s must be string.',
-                    TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_SP_METADATA
-                )
+            $message = sprintf(
+                'Column %s must be string.',
+                TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_SP_METADATA
             );
+            throw new UnexpectedValueException($message);
         }
 
         if (! is_string($rawRow[TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_USER_ATTRIBUTES])) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Column %s must be string.',
-                    TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_USER_ATTRIBUTES
-                )
+            $message = sprintf(
+                'Column %s must be string.',
+                TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_USER_ATTRIBUTES
             );
+            throw new UnexpectedValueException($message);
         }
     }
 

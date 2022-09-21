@@ -8,21 +8,23 @@ use SimpleSAML\Module\accounting\Helpers\HashHelper;
 class HashDecoratedState
 {
     protected State $state;
-    protected string $idpEntityIdHashSha256;
-    protected string $spEntityIdHashSha256;
-    protected string $idpMetadataArrayHashSha256;
-    protected string $spMetadataArrayHashSha256;
+    protected string $identityProviderEntityIdHashSha256;
+    protected string $serviceProviderEntityIdHashSha256;
+    protected string $identityProviderMetadataArrayHashSha256;
+    protected string $serviceProviderMetadataArrayHashSha256;
     protected string $attributesArrayHashSha256;
 
     public function __construct(State $state)
     {
         $this->state = $state;
 
-        $this->idpEntityIdHashSha256 = HashHelper::getSha256($state->getIdentityProviderEntityId());
-        $this->idpMetadataArrayHashSha256 = HashHelper::getSha256ForArray($state->getIdentityProviderMetadata());
+        $this->identityProviderEntityIdHashSha256 = HashHelper::getSha256($state->getIdentityProviderEntityId());
+        $this->identityProviderMetadataArrayHashSha256 =
+            HashHelper::getSha256ForArray($state->getIdentityProviderMetadata());
 
-        $this->spEntityIdHashSha256 = HashHelper::getSha256($state->getServiceProviderEntityId());
-        $this->spMetadataArrayHashSha256 = HashHelper::getSha256ForArray($state->getServiceProviderMetadata());
+        $this->serviceProviderEntityIdHashSha256 = HashHelper::getSha256($state->getServiceProviderEntityId());
+        $this->serviceProviderMetadataArrayHashSha256 =
+            HashHelper::getSha256ForArray($state->getServiceProviderMetadata());
 
         $this->attributesArrayHashSha256 = HashHelper::getSha256ForArray($state->getAttributes());
     }
@@ -38,30 +40,30 @@ class HashDecoratedState
     /**
      * @return string
      */
-    public function getIdpEntityIdHashSha256(): string
+    public function getIdentityProviderEntityIdHashSha256(): string
     {
-        return $this->idpEntityIdHashSha256;
+        return $this->identityProviderEntityIdHashSha256;
     }
 
     /**
      * @return string
      */
-    public function getSpEntityIdHashSha256(): string
+    public function getServiceProviderEntityIdHashSha256(): string
     {
-        return $this->spEntityIdHashSha256;
+        return $this->serviceProviderEntityIdHashSha256;
     }
 
     /**
      * @return string
      */
-    public function getIdpMetadataArrayHashSha256(): string
+    public function getIdentityProviderMetadataArrayHashSha256(): string
     {
-        return $this->idpMetadataArrayHashSha256;
+        return $this->identityProviderMetadataArrayHashSha256;
     }
 
-    public function getSpMetadataArrayHashSha256(): string
+    public function getServiceProviderMetadataArrayHashSha256(): string
     {
-        return $this->spMetadataArrayHashSha256;
+        return $this->serviceProviderMetadataArrayHashSha256;
     }
 
     /**

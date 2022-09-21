@@ -74,30 +74,27 @@ class RawActivity extends AbstractRawEntity
         }
 
         if (! is_string($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA])) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Column %s must be string.',
-                    TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA
-                )
+            $message = sprintf(
+                'Column %s must be string.',
+                TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA
             );
+            throw new UnexpectedValueException($message);
         }
 
         if (! is_string($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES])) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Column %s must be string.',
-                    TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES
-                )
+            $message = sprintf(
+                'Column %s must be string.',
+                TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES
             );
+            throw new UnexpectedValueException($message);
         }
 
         if (! is_string($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT])) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Column %s must be string.',
-                    TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT
-                )
+            $message = sprintf(
+                'Column %s must be string.',
+                TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT
             );
+            throw new UnexpectedValueException($message);
         }
     }
 
