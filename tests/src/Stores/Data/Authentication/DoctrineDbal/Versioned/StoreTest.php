@@ -83,6 +83,7 @@ class StoreTest extends TestCase
         $idpSpUserVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
         $authenticationEventCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
 
+        // TODO mivanci rewrite to use generated table names using constannts.
         $idpCountQueryBuilder->select('COUNT(id) as idpCount')->from('vds_idp');
         $idpVersionCountQueryBuilder->select('COUNT(id) as idpVersionCount')->from('vds_idp_version');
         $spCountQueryBuilder->select('COUNT(id) as spCount')->from('vds_sp');

@@ -8,6 +8,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
@@ -26,7 +27,8 @@ class AbstractRawEntityTest extends TestCase
     protected function setUp(): void
     {
         $this->abstractPlatformStub = $this->createStub(AbstractPlatform::class);
-        $this->abstractPlatformStub->method('getDateTimeFormatString')->willReturn('Y-m-d H:i:s');
+        $this->abstractPlatformStub->method('getDateTimeFormatString')
+            ->willReturn(DateTime::DEFAULT_FORMAT);
         $this->rawRow = ['sample' => 'test'];
     }
 

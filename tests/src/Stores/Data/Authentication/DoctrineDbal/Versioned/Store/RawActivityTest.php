@@ -7,6 +7,7 @@ use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawActivity;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
+use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawActivity
@@ -40,7 +41,7 @@ class RawActivityTest extends TestCase
             TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT => $this->happenedAt,
         ];
         $this->abstractPlatformStub = $this->createStub(AbstractPlatform::class);
-        $this->abstractPlatformStub->method('getDateTimeFormatString')->willReturn('Y-m-d H:i:s');
+        $this->abstractPlatformStub->method('getDateTimeFormatString')->willReturn(DateTime::DEFAULT_FORMAT);
     }
 
     public function testCanCreateInstance(): void

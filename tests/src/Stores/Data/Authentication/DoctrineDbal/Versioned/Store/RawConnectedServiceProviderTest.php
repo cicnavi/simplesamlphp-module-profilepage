@@ -7,6 +7,7 @@ use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawConnectedServiceProvider;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
+use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawConnectedServiceProvider
@@ -51,7 +52,7 @@ class RawConnectedServiceProviderTest extends TestCase
             TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_USER_ATTRIBUTES =>
                 serialize($this->userAttributes),
         ];
-        $this->dateTimeFormat = 'Y-m-d H:i:s';
+        $this->dateTimeFormat = DateTime::DEFAULT_FORMAT;
         $this->abstractPlatformStub = $this->createStub(AbstractPlatform::class);
         $this->abstractPlatformStub->method('getDateTimeFormatString')
             ->willReturn($this->dateTimeFormat);

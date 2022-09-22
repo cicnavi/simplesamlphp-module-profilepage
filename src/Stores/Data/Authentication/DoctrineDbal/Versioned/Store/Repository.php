@@ -82,49 +82,6 @@ class Repository
     /**
      * @throws StoreException
      */
-    public function getIdpVersion(int $idpId, string $metadataHashSha256): Result
-    {
-        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
-
-        /** @psalm-suppress TooManyArguments */
-        $queryBuilder->select(
-            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_ID,
-            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID,
-            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA,
-            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256,
-            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT,
-        )
-            ->from($this->tableNameIdpVersion)
-            ->where(
-                $queryBuilder->expr()->and(
-                    $queryBuilder->expr()->eq(
-                        TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID,
-                        $queryBuilder->createNamedParameter($idpId, ParameterType::INTEGER)
-                    ),
-                    $queryBuilder->expr()->eq(
-                        TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256,
-                        $queryBuilder->createNamedParameter($metadataHashSha256)
-                    )
-                )
-            )->setMaxResults(1);
-
-
-        try {
-            return $queryBuilder->executeQuery();
-        } catch (Throwable $exception) {
-            $message = sprintf(
-                'Error executing query to get IdP Version for IdP %s and metadata array hash %s. Error was: %s.',
-                $idpId,
-                $metadataHashSha256,
-                $exception->getMessage()
-            );
-            throw new StoreException($message, (int)$exception->getCode(), $exception);
-        }
-    }
-
-    /**
-     * @throws StoreException
-     */
     public function insertIdp(
         string $entityId,
         string $entityIdHashSha256,
@@ -162,6 +119,49 @@ class Repository
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
             $message = sprintf('Error executing query to insert IdP. Error was: %s.', $exception->getMessage());
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function getIdpVersion(int $idpId, string $metadataHashSha256): Result
+    {
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        /** @psalm-suppress TooManyArguments */
+        $queryBuilder->select(
+            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_ID,
+            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID,
+            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA,
+            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256,
+            TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT,
+        )
+            ->from($this->tableNameIdpVersion)
+            ->where(
+                $queryBuilder->expr()->and(
+                    $queryBuilder->expr()->eq(
+                        TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID,
+                        $queryBuilder->createNamedParameter($idpId, ParameterType::INTEGER)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256,
+                        $queryBuilder->createNamedParameter($metadataHashSha256)
+                    )
+                )
+            )->setMaxResults(1);
+
+
+        try {
+            return $queryBuilder->executeQuery();
+        } catch (Throwable $exception) {
+            $message = sprintf(
+                'Error executing query to get IdP Version for IdP %s and metadata array hash %s. Error was: %s.',
+                $idpId,
+                $metadataHashSha256,
+                $exception->getMessage()
+            );
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
