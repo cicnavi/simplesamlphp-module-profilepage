@@ -571,7 +571,7 @@ class Repository
                 $queryBuilder->expr()->and(
                     $queryBuilder->expr()->eq(
                         TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_IDP_VERSION_ID,
-                        $queryBuilder->createNamedParameter($spVersionId, ParameterType::INTEGER)
+                        $queryBuilder->createNamedParameter($idpVersionId, ParameterType::INTEGER)
                     ),
                     $queryBuilder->expr()->eq(
                         TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_SP_VERSION_ID,

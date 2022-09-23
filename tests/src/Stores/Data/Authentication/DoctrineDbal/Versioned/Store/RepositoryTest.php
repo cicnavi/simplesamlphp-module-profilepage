@@ -2,7 +2,6 @@
 
 namespace SimpleSAML\Test\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 
-use Doctrine\DBAL\DriverManager;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
@@ -11,7 +10,6 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Repository;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\TableConstants;
 use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 
 /**
@@ -41,7 +39,18 @@ class RepositoryTest extends TestCase
     protected $loggerStub;
     protected Migrator $migrator;
     protected string $dateTimeFormat;
+    protected string $idpEntityId;
+    protected string $idpEntityIdHash;
+    protected string $idpMetadata;
+    protected string $idpMetadataHash;
+    protected string $spEntityId;
+    protected string $spMetadataHash;
+    protected string $userIdentifier;
     protected string $userIdentifierHash;
+    protected string $userAttributes;
+    protected string $userAttributesHash;
+    protected Repository $repository;
+    protected \DateTimeImmutable $createdAt;
 
     protected function setUp(): void
     {
@@ -59,8 +68,30 @@ class RepositoryTest extends TestCase
         $this->migrator->runSetup();
         $this->migrator->runNonImplementedMigrationClasses($migrationsDirectory, $namespace);
 
+        /** @psalm-suppress PossiblyInvalidArgument */
+        $this->repository = new Repository($this->connection, $this->loggerStub);
+
         $this->dateTimeFormat = DateTime::DEFAULT_FORMAT;
+
+        $this->idpEntityId = 'idp-entity-id';
+        $this->idpEntityIdHash = 'idp-entity-id-hash';
+
+        $this->idpMetadata = 'idp-metadata';
+        $this->idpMetadataHash = 'idp-metadata-hash';
+
+        $this->spEntityId = 'sp-entity-id';
+        $this->spEntityIdHash = 'sp-entity-id-hash';
+
+        $this->spMetadata = 'sp-metadata';
+        $this->spMetadataHash = 'sp-metadata-hash';
+
+        $this->userIdentifier = 'user-identifier';
         $this->userIdentifierHash = 'user-identifier-hash';
+
+        $this->userAttributes = 'user-attributes';
+        $this->userAttributesHash = 'user-attributes-hash';
+
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function testCanCreateInstance(): void
@@ -74,24 +105,17 @@ class RepositoryTest extends TestCase
 
     public function testCanInsertAndGetIdp(): array
     {
-        $idpEntityId = 'idp-entity-id';
-        $idpEntityIdHash = 'idp-entity-id-hash';
-        $createdAt = new \DateTimeImmutable();
+        $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
-        $repository = new Repository($this->connection, $this->loggerStub);
-
-        $repository->insertIdp($idpEntityId, $idpEntityIdHash, $createdAt);
-
-        $result = $repository->getIdp($idpEntityIdHash)->fetchAssociative();
+        $result = $this->repository->getIdp($this->idpEntityIdHash)->fetchAssociative();
 
         /** @psalm-suppress PossiblyInvalidArrayAccess */
-        $this->assertSame($idpEntityId, $result[Store\TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID]);
+        $this->assertSame($this->idpEntityId, $result[Store\TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID]);
         /** @psalm-suppress PossiblyInvalidArrayAccess */
-        $this->assertSame($idpEntityIdHash, $result[Store\TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256]);
+        $this->assertSame($this->idpEntityIdHash, $result[Store\TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256]);
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $this->assertSame(
-            $createdAt->format($this->dateTimeFormat),
+            $this->createdAt->format($this->dateTimeFormat),
             $result[Store\TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT]
         );
 
@@ -105,27 +129,21 @@ class RepositoryTest extends TestCase
     {
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $idpId = $idpResult[Store\TableConstants::TABLE_IDP_COLUMN_NAME_ID];
-        $idpMetadata = 'idp-metadata';
-        $idpMetadataHash = 'idp-metadata-hash';
-        $createdAt = new \DateTimeImmutable();
 
-        /** @psalm-suppress PossiblyInvalidArgument */
-        $repository = new Repository($this->connection, $this->loggerStub);
+        $this->repository->insertIdpVersion($idpId, $this->idpMetadata, $this->idpMetadataHash, $this->createdAt);
 
-        $repository->insertIdpVersion($idpId, $idpMetadata, $idpMetadataHash, $createdAt);
-
-        $result = $repository->getIdpVersion($idpId, $idpMetadataHash)->fetchAssociative();
+        $result = $this->repository->getIdpVersion($idpId, $this->idpMetadataHash)->fetchAssociative();
 
         /** @psalm-suppress PossiblyInvalidArrayAccess */
-        $this->assertSame($idpMetadata, $result[Store\TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA]);
+        $this->assertSame($this->idpMetadata, $result[Store\TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA]);
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $this->assertSame(
-            $idpMetadataHash,
+            $this->idpMetadataHash,
             $result[Store\TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256]
         );
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $this->assertSame(
-            $createdAt->format($this->dateTimeFormat),
+            $this->createdAt->format($this->dateTimeFormat),
             $result[Store\TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT]
         );
 
@@ -134,23 +152,17 @@ class RepositoryTest extends TestCase
 
     public function testCanInsertAndGetSp(): array
     {
-        $spEntityId = 'sp-entity-id';
-        $spEntityIdHash = 'sp-entity-id-hash';
-        $createdAt = new \DateTimeImmutable();
+        $this->repository->insertSp($this->spEntityId, $this->spEntityIdHash, $this->createdAt);
 
-        $repository = new Repository($this->connection, $this->loggerStub);
-
-        $repository->insertSp($spEntityId, $spEntityIdHash, $createdAt);
-
-        $result = $repository->getSp($spEntityIdHash)->fetchAssociative();
+        $result = $this->repository->getSp($this->spEntityIdHash)->fetchAssociative();
 
         /** @psalm-suppress PossiblyInvalidArrayAccess */
-        $this->assertSame($spEntityId, $result[Store\TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID]);
+        $this->assertSame($this->spEntityId, $result[Store\TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID]);
         /** @psalm-suppress PossiblyInvalidArrayAccess */
-        $this->assertSame($spEntityIdHash, $result[Store\TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256]);
+        $this->assertSame($this->spEntityIdHash, $result[Store\TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256]);
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $this->assertSame(
-            $createdAt->format($this->dateTimeFormat),
+            $this->createdAt->format($this->dateTimeFormat),
             $result[Store\TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT]
         );
 
@@ -164,27 +176,21 @@ class RepositoryTest extends TestCase
     {
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $spId = $spResult[Store\TableConstants::TABLE_SP_COLUMN_NAME_ID];
-        $spMetadata = 'sp-metadata';
-        $spMetadataHash = 'sp-metadata-hash';
-        $createdAt = new \DateTimeImmutable();
 
-        /** @psalm-suppress PossiblyInvalidArgument */
-        $repository = new Repository($this->connection, $this->loggerStub);
+        $this->repository->insertSpVersion($spId, $this->spMetadata, $this->spMetadataHash, $this->createdAt);
 
-        $repository->insertSpVersion($spId, $spMetadata, $spMetadataHash, $createdAt);
-
-        $result = $repository->getSpVersion($spId, $spMetadataHash)->fetchAssociative();
+        $result = $this->repository->getSpVersion($spId, $this->spMetadataHash)->fetchAssociative();
 
         /** @psalm-suppress PossiblyInvalidArrayAccess */
-        $this->assertSame($spMetadata, $result[Store\TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA]);
+        $this->assertSame($this->spMetadata, $result[Store\TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA]);
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $this->assertSame(
-            $spMetadataHash,
+            $this->spMetadataHash,
             $result[Store\TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256]
         );
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $this->assertSame(
-            $createdAt->format($this->dateTimeFormat),
+            $this->createdAt->format($this->dateTimeFormat),
             $result[Store\TableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT]
         );
 
@@ -193,26 +199,20 @@ class RepositoryTest extends TestCase
 
     public function testCanInsertAndGetUser(): array
     {
-        $userIdentifier = 'user-identifier';
-        $userIdentifierHash = $this->userIdentifierHash;
-        $createdAt = new \DateTimeImmutable();
+        $this->repository->insertUser($this->userIdentifier, $this->userIdentifierHash, $this->createdAt);
 
-        $repository = new Repository($this->connection, $this->loggerStub);
-
-        $repository->insertUser($userIdentifier, $userIdentifierHash, $createdAt);
-
-        $result = $repository->getUser($userIdentifierHash)->fetchAssociative();
+        $result = $this->repository->getUser($this->userIdentifierHash)->fetchAssociative();
 
         /** @psalm-suppress PossiblyInvalidArrayAccess */
-        $this->assertSame($userIdentifier, $result[Store\TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER]);
+        $this->assertSame($this->userIdentifier, $result[Store\TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER]);
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $this->assertSame(
-            $userIdentifierHash,
+            $this->userIdentifierHash,
             $result[Store\TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256]
         );
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $this->assertSame(
-            $createdAt->format($this->dateTimeFormat),
+            $this->createdAt->format($this->dateTimeFormat),
             $result[Store\TableConstants::TABLE_USER_COLUMN_NAME_CREATED_AT]
         );
 
@@ -226,27 +226,22 @@ class RepositoryTest extends TestCase
     {
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $userId = $userResult[Store\TableConstants::TABLE_USER_COLUMN_NAME_ID];
-        $userAttributes = 'user-attributes';
-        $userAttributesHash = 'user-attributes-hash';
-        $createdAt = new \DateTimeImmutable();
 
-        /** @psalm-suppress PossiblyInvalidArgument */
-        $repository = new Repository($this->connection, $this->loggerStub);
+        $this->repository
+            ->insertUserVersion($userId, $this->userAttributes, $this->userAttributesHash, $this->createdAt);
 
-        $repository->insertUserVersion($userId, $userAttributes, $userAttributesHash, $createdAt);
-
-        $result = $repository->getUserVersion($userId, $userAttributesHash)->fetchAssociative();
+        $result = $this->repository->getUserVersion($userId, $this->userAttributesHash)->fetchAssociative();
 
         /** @psalm-suppress PossiblyInvalidArrayAccess */
-        $this->assertSame($userAttributes, $result[Store\TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES]);
+        $this->assertSame($this->userAttributes, $result[Store\TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES]);
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $this->assertSame(
-            $userAttributesHash,
+            $this->userAttributesHash,
             $result[Store\TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256]
         );
         /** @psalm-suppress PossiblyInvalidArrayAccess */
         $this->assertSame(
-            $createdAt->format($this->dateTimeFormat),
+            $this->createdAt->format($this->dateTimeFormat),
             $result[Store\TableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT]
         );
 
@@ -266,12 +261,10 @@ class RepositoryTest extends TestCase
         $idpVersionId = $idpVersionResult[Store\TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_ID];
         $spVersionId = $spVersionResult[Store\TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID];
         $userVersionId = $userVersionResult[Store\TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID];
-        $createdAt = new \DateTimeImmutable();
 
-        $repository = new Repository($this->connection, $this->loggerStub);
-
-        $repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId, $createdAt);
-        $result = $repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId)->fetchAssociative();
+        $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId, $this->createdAt);
+        $result = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId)
+            ->fetchAssociative();
 
         $this->assertSame(
             $idpVersionId,
@@ -286,7 +279,7 @@ class RepositoryTest extends TestCase
             $result[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_SP_VERSION_ID]
         );
         $this->assertSame(
-            $createdAt->format($this->dateTimeFormat),
+            $this->createdAt->format($this->dateTimeFormat),
             $result[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_CREATED_AT]
         );
 
@@ -296,9 +289,9 @@ class RepositoryTest extends TestCase
     /**
      * @depends testCanInsertAndGetIdpSpUserVersion
      */
-    public function testCanInsertAuthenticationEvent(array $idpSpUserVersion): void
+    public function testCanInsertAuthenticationEvent(array $idpSpUserVersionResult): void
     {
-        $idpSpUserVersionId = $idpSpUserVersion[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
+        $idpSpUserVersionId = $idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
         $createdAt = $happenedAt = new \DateTimeImmutable();
 
         $authenticationEventCounterQueryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -311,10 +304,177 @@ class RepositoryTest extends TestCase
 
         $this->assertSame(0, (int)$authenticationEventCounterQueryBuilder->executeQuery()->fetchOne());
 
-        $repository = new Repository($this->connection, $this->loggerStub);
-
-        $repository->insertAuthenticationEvent($idpSpUserVersionId, $happenedAt, $createdAt);
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $happenedAt, $createdAt);
 
         $this->assertSame(1, (int)$authenticationEventCounterQueryBuilder->executeQuery()->fetchOne());
+    }
+
+    public function testCanGetConnectedServiceProviders(): void
+    {
+        $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);
+        $idpResult = $this->repository->getIdp($this->idpEntityIdHash)->fetchAssociative();
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $idpId = $idpResult[Store\TableConstants::TABLE_IDP_COLUMN_NAME_ID];
+        $this->repository->insertIdpVersion($idpId, $this->idpMetadata, $this->idpMetadataHash, $this->createdAt);
+        $idpVersionResult = $this->repository->getIdpVersion($idpId, $this->idpMetadataHash)->fetchAssociative();
+
+        $this->repository->insertSp($this->spEntityId, $this->spEntityIdHash, $this->createdAt);
+        $spResult = $this->repository->getSp($this->spEntityIdHash)->fetchAssociative();
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $spId = $spResult[Store\TableConstants::TABLE_SP_COLUMN_NAME_ID];
+        $this->repository->insertSpVersion($spId, $this->spMetadata, $this->spMetadataHash, $this->createdAt);
+        $spVersionResult = $this->repository->getSpVersion($spId, $this->spMetadataHash)->fetchAssociative();
+
+        $this->repository->insertUser($this->userIdentifier, $this->userIdentifierHash, $this->createdAt);
+        $userResult = $this->repository->getUser($this->userIdentifierHash)->fetchAssociative();
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $userId = $userResult[Store\TableConstants::TABLE_USER_COLUMN_NAME_ID];
+        $this->repository
+            ->insertUserVersion($userId, $this->userAttributes, $this->userAttributesHash, $this->createdAt);
+        $userVersionResult = $this->repository->getUserVersion($userId, $this->userAttributesHash)->fetchAssociative();
+
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $idpVersionId = $idpVersionResult[Store\TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_ID];
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $spVersionId = $spVersionResult[Store\TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID];
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $userVersionId = $userVersionResult[Store\TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId, $this->createdAt);
+        $idpSpUserVersionResult = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId)
+            ->fetchAssociative();
+
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $idpSpUserVersionId = $idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        
+        $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
+
+        $this->assertCount(1, $resultArray);
+        $this->assertSame(
+            "1",
+            $resultArray[$this->spEntityId][Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
+        );
+
+        $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
+        $this->assertCount(1, $resultArray);
+
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
+        $this->assertCount(1, $resultArray);
+        $this->assertSame(
+            "2",
+            $resultArray[$this->spEntityId][Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
+        );
+
+        // Simulate another SP
+        $spEntityIdNew = $this->spEntityId . '-new';
+        $spEntityIdHashNew = $this->spEntityIdHash . '-new';
+        $spMetadataNew = $this->spMetadata . '-new';
+        $spMetadataHashNew = $this->spMetadataHash . '-new';
+        $this->repository->insertSp($spEntityIdNew, $spEntityIdHashNew, $this->createdAt);
+        $spResult = $this->repository->getSp($spEntityIdHashNew)->fetchAssociative();
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $spId = $spResult[Store\TableConstants::TABLE_SP_COLUMN_NAME_ID];
+        $this->repository->insertSpVersion($spId, $spMetadataNew, $spMetadataHashNew, $this->createdAt);
+        $spVersionResult = $this->repository->getSpVersion($spId, $spMetadataHashNew)->fetchAssociative();
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $spVersionId = $spVersionResult[Store\TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId, $this->createdAt);
+        $idpSpUserVersionResult = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId)
+            ->fetchAssociative();
+
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $idpSpUserVersionId = $idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+
+        $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
+        $this->assertCount(2, $resultArray);
+        $this->assertSame(
+            "1",
+            $resultArray[$spEntityIdNew][Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
+        );
+    }
+
+    public function testCanGetActivity(): void
+    {
+        $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);
+        $idpResult = $this->repository->getIdp($this->idpEntityIdHash)->fetchAssociative();
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $idpId = $idpResult[Store\TableConstants::TABLE_IDP_COLUMN_NAME_ID];
+        $this->repository->insertIdpVersion($idpId, $this->idpMetadata, $this->idpMetadataHash, $this->createdAt);
+        $idpVersionResult = $this->repository->getIdpVersion($idpId, $this->idpMetadataHash)->fetchAssociative();
+
+        $this->repository->insertSp($this->spEntityId, $this->spEntityIdHash, $this->createdAt);
+        $spResult = $this->repository->getSp($this->spEntityIdHash)->fetchAssociative();
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $spId = $spResult[Store\TableConstants::TABLE_SP_COLUMN_NAME_ID];
+        $this->repository->insertSpVersion($spId, $this->spMetadata, $this->spMetadataHash, $this->createdAt);
+        $spVersionResult = $this->repository->getSpVersion($spId, $this->spMetadataHash)->fetchAssociative();
+
+        $this->repository->insertUser($this->userIdentifier, $this->userIdentifierHash, $this->createdAt);
+        $userResult = $this->repository->getUser($this->userIdentifierHash)->fetchAssociative();
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $userId = $userResult[Store\TableConstants::TABLE_USER_COLUMN_NAME_ID];
+        $this->repository
+            ->insertUserVersion($userId, $this->userAttributes, $this->userAttributesHash, $this->createdAt);
+        $userVersionResult = $this->repository->getUserVersion($userId, $this->userAttributesHash)->fetchAssociative();
+
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $idpVersionId = $idpVersionResult[Store\TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_ID];
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $spVersionId = $spVersionResult[Store\TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID];
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $userVersionId = $userVersionResult[Store\TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId, $this->createdAt);
+        $idpSpUserVersionResult = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId)
+            ->fetchAssociative();
+
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $idpSpUserVersionId = $idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+
+        $resultArray = $this->repository->getActivity($this->userIdentifierHash);
+        $this->assertCount(1, $resultArray);
+
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $resultArray = $this->repository->getActivity($this->userIdentifierHash);
+        $this->assertCount(2, $resultArray);
+
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $resultArray = $this->repository->getActivity($this->userIdentifierHash);
+        $this->assertCount(3, $resultArray);
+
+        // Simulate another SP
+        $spEntityIdNew = $this->spEntityId . '-new';
+        $spEntityIdHashNew = $this->spEntityIdHash . '-new';
+        $spMetadataNew = $this->spMetadata . '-new';
+        $spMetadataHashNew = $this->spMetadataHash . '-new';
+        $this->repository->insertSp($spEntityIdNew, $spEntityIdHashNew, $this->createdAt);
+        $spResult = $this->repository->getSp($spEntityIdHashNew)->fetchAssociative();
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $spId = $spResult[Store\TableConstants::TABLE_SP_COLUMN_NAME_ID];
+        $this->repository->insertSpVersion($spId, $spMetadataNew, $spMetadataHashNew, $this->createdAt);
+        $spVersionResult = $this->repository->getSpVersion($spId, $spMetadataHashNew)->fetchAssociative();
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $spVersionId = $spVersionResult[Store\TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId, $this->createdAt);
+        $idpSpUserVersionResult = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId)
+            ->fetchAssociative();
+
+        /** @psalm-suppress PossiblyInvalidArrayAccess */
+        $idpSpUserVersionId = $idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+
+        $resultArray = $this->repository->getActivity($this->userIdentifierHash);
+
+        $this->assertCount(4, $resultArray);
     }
 }
