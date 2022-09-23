@@ -64,6 +64,8 @@ class Version20220801000600CreateIdpSpUserVersionTable extends AbstractMigration
                 ['id']
             );
 
+            $table->addUniqueConstraint(['idp_version_id', 'sp_version_id', 'user_version_id']);
+
             $this->schemaManager->createTable($table);
         } catch (\Throwable $exception) {
             throw $this->prepareGenericMigrationException(

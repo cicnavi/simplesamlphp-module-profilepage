@@ -11,6 +11,8 @@ $config = [
 
     ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE_NAME => 'urn:oasis:names:tc:SAML:attribute:subject-id',
 
+    ModuleConfiguration::OPTION_DEFAULT_AUTHENTICATION_SOURCE => 'default-sp',
+
     ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
         ModuleConfiguration\AccountingProcessingType::VALUE_SYNCHRONOUS,
 

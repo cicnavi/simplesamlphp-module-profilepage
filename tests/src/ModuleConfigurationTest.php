@@ -42,9 +42,14 @@ class ModuleConfigurationTest extends TestCase
         $this->assertIsString($this->moduleConfiguration->get(ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE_NAME));
     }
 
-    public function testCanGetUserIdAttribute(): void
+    public function testCanGetUserIdAttributeName(): void
     {
         $this->assertIsString($this->moduleConfiguration->getUserIdAttributeName());
+    }
+
+    public function testCanGetDefaultAuthenticationSource(): void
+    {
+        $this->assertIsString($this->moduleConfiguration->getDefaultAuthenticationSource());
     }
 
     public function testCanGetJobsStoreClass(): void
