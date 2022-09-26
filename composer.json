@@ -1,5 +1,5 @@
 {
-    "name": "srcehr/simplesamlphp-module-accounting",
+    "name": "cicnavi/simplesamlphp-module-accounting",
     "description": "The SimpleSAMLphp accounting module",
     "type": "simplesamlphp-module",
     "license": "LGPL-2.1-or-later",
