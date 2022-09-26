@@ -8,6 +8,7 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Builders\DataStoreBuilder;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Builders\DataStoreBuilder
@@ -30,7 +31,7 @@ class DataStoreBuilderTest extends TestCase
     {
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $this->moduleConfigurationStub->method('getConnectionParameters')
-            ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
+            ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
 
         $this->loggerStub = $this->createStub(LoggerInterface::class);
 

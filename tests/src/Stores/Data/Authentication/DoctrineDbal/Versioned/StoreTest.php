@@ -17,6 +17,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 use SimpleSAML\Test\Module\accounting\Constants\RawRowResult;
 use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
@@ -80,7 +81,7 @@ class StoreTest extends TestCase
 
     protected function setUp(): void
     {
-        $connectionParams = ['driver' => 'pdo_sqlite', 'memory' => true,];
+        $connectionParams = ConnectionParameters::DBAL_SQLITE_MEMORY;
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $this->moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn($connectionParams);

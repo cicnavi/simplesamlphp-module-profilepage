@@ -10,6 +10,7 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Providers\Builders\AuthenticationDataProviderBuilder;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned\Tracker;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Providers\Builders\AuthenticationDataProviderBuilder
@@ -33,7 +34,7 @@ class AuthenticationDataProviderBuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
-        $connectionParams = ['driver' => 'pdo_sqlite', 'memory' => true,];
+        $connectionParams = ConnectionParameters::DBAL_SQLITE_MEMORY;
         $this->moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn($connectionParams);
 

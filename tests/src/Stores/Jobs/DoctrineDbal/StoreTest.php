@@ -17,6 +17,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
@@ -55,7 +56,7 @@ class StoreTest extends TestCase
     {
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
-        $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
+        $this->connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
 
         $this->loggerStub = $this->createStub(Logger::class);
 
@@ -120,7 +121,7 @@ class StoreTest extends TestCase
     {
         $moduleConfiguration = $this->createStub(ModuleConfiguration::class);
         $moduleConfiguration->method('getConnectionParameters')
-            ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
+            ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
         /** @psalm-suppress InvalidArgument */
         $this->assertInstanceOf(Store::class, Store::build($moduleConfiguration, $this->loggerStub));
     }

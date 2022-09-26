@@ -7,6 +7,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractM
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
@@ -20,7 +21,7 @@ class AbstractMigrationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
+        $this->connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
     }
 
     public function testCanInstantiateMigrationClass(): void

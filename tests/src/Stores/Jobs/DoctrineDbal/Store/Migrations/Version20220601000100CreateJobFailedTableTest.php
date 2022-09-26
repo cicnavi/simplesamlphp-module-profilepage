@@ -8,6 +8,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
@@ -23,7 +24,7 @@ class Version20220601000100CreateJobFailedTableTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
+        $this->connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
         $this->tableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOB_FAILED);
     }

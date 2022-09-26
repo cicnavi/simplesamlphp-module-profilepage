@@ -13,6 +13,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Repository;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 
 /**
@@ -70,7 +71,7 @@ class RepositoryTest extends TestCase
         $this->loggerStub = $this->createStub(LoggerInterface::class);
 
         // For real DB testing.
-        $connectionParameters = ['driver' => 'pdo_sqlite', 'memory' => true,];
+        $connectionParameters = ConnectionParameters::DBAL_SQLITE_MEMORY;
         $this->connection = new Connection($connectionParameters);
         $this->migrator = new Migrator($this->connection, $this->loggerStub);
         $moduleConfiguration = new ModuleConfiguration();

@@ -14,6 +14,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 use function PHPUnit\Framework\assertFalse;
 
@@ -43,7 +44,7 @@ class MigratorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
+        $this->connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
 
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
         $this->tableName = $this->connection->preparePrefixedTableName(Migrator::TABLE_NAME);

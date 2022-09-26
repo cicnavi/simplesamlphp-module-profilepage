@@ -8,6 +8,7 @@ use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory
@@ -44,7 +45,7 @@ class FactoryTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $factory = new Factory($this->moduleConfiguration, $this->loggerServiceMock);
 
-        $connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
+        $connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
 
         $this->assertInstanceOf(Migrator::class, $factory->buildMigrator($connection));
     }

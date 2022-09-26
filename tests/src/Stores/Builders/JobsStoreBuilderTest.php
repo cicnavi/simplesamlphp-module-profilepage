@@ -10,6 +10,7 @@ use SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Interfaces\StoreInterface;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder
@@ -32,7 +33,7 @@ class JobsStoreBuilderTest extends TestCase
     {
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $this->moduleConfigurationStub->method('getConnectionParameters')
-            ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
+            ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
         $this->moduleConfigurationStub->method('getJobsStoreClass')->willReturn(Store::class);
 
         $this->loggerStub = $this->createStub(LoggerInterface::class);
@@ -50,7 +51,7 @@ class JobsStoreBuilderTest extends TestCase
     {
         $moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $moduleConfigurationStub->method('getConnectionParameters')
-            ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
+            ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
 
         $invalidStore = new class {
         };
@@ -73,7 +74,7 @@ class JobsStoreBuilderTest extends TestCase
     {
         $moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $moduleConfigurationStub->method('getConnectionParameters')
-            ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
+            ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
 
         $this->expectException(StoreException::class);
 
@@ -104,7 +105,7 @@ class JobsStoreBuilderTest extends TestCase
 
         $moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $moduleConfigurationStub->method('getConnectionParameters')
-            ->willReturn(['driver' => 'pdo_sqlite', 'memory' => true,]);
+            ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
         $moduleConfigurationStub->method('getJobsStoreClass')->willReturn(get_class($sampleStore));
 
         $this->expectException(StoreException::class);

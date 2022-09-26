@@ -7,6 +7,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000300CreateSpVersionTable
@@ -24,7 +25,7 @@ class Version20220801000300CreateSpVersionTableTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
+        $this->connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
         $this->tableName = 'vds_sp_version';
 
