@@ -1,7 +1,19 @@
 services:
   # default configuration for services in *this* file
   _defaults:
+    autowire: true
     public: false
+    bind:
+      Psr\Log\LoggerInterface: '@accounting.logger'
 
-  SimpleSAML\Module\accounting\ModuleConfiguration:
-    class: SimpleSAML\Module\accounting\ModuleConfiguration
+  # Services
+  SimpleSAML\Module\accounting\:
+    resource: '../../src/*'
+    exclude: '../../src/{Http/Controllers}'
+  # Service aliases
+  accounting.logger:
+    class: SimpleSAML\Module\accounting\Services\Logger
+  # Controllers
+  SimpleSAML\Module\accounting\Http\Controllers\:
+    resource: '../../src/Http/Controllers/*'
+    tags: ['controller.service_arguments']

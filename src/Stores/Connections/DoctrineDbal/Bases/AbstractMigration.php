@@ -30,11 +30,10 @@ abstract class AbstractMigration implements MigrationInterface
         }
     }
 
-    /**
-     * @throws MigrationException
-     */
-    protected function throwGenericMigrationException(string $contextDetails, Throwable $throwable): void
-    {
+    protected function prepareGenericMigrationException(
+        string $contextDetails,
+        Throwable $throwable
+    ): MigrationException {
         $message = sprintf(
             'There was an error running a migration class %s. Context details: %s. Error was: %s.',
             static::class,
@@ -42,6 +41,28 @@ abstract class AbstractMigration implements MigrationInterface
             $throwable->getMessage()
         );
 
-        throw new MigrationException($message, (int) $throwable->getCode(), $throwable);
+        return new MigrationException($message, (int) $throwable->getCode(), $throwable);
+    }
+
+    /**
+     * Prepare prefixed table name which will include table prefix from connection, local table prefix, and table name.
+     *
+     * @param string $tableName
+     * @return string
+     */
+    protected function preparePrefixedTableName(string $tableName): string
+    {
+        return $this->connection->preparePrefixedTableName($this->getLocalTablePrefix() . $tableName);
+    }
+
+    /**
+     * Get local table prefix (prefix per migration). Empty string by default. Override in particular migration to
+     * set another local prefix.
+     *
+     * @return string
+     */
+    protected function getLocalTablePrefix(): string
+    {
+        return '';
     }
 }

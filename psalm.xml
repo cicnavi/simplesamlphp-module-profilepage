@@ -23,6 +23,7 @@
             <errorLevel type="suppress">
                 <directory name="config-templates" />
                 <directory name="tests/config-templates" />
+                <directory name="tests/attributemap" />
             </errorLevel>
         </UnusedVariable>
 

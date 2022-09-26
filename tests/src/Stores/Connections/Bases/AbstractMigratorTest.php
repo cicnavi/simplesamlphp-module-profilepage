@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\Bases;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\LoggerService;
+use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
@@ -19,9 +22,10 @@ use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000000CreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000100CreateFailedJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  */
 class AbstractMigratorTest extends TestCase
 {
@@ -38,21 +42,12 @@ class AbstractMigratorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
-        // TODO mivanci ostavi samo sqlite verziju
-//        $this->connection = new Connection([
-//            'dbname' => 'accounting',
-//           'user' => 'apps',
-//           'password' => 'apps',
-//           'host' => '127.0.0.1',
-//           'port' => '33306',
-//           'driver' => 'pdo_mysql',
-//                                               ]);
+        $this->connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
 
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
         $this->tableName = $this->connection->preparePrefixedTableName(Migrator::TABLE_NAME);
 
-        $this->loggerServiceMock = $this->createMock(LoggerService::class);
+        $this->loggerServiceMock = $this->createMock(Logger::class);
 
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
@@ -60,7 +55,7 @@ class AbstractMigratorTest extends TestCase
 
     public function testCanGatherMigrationClassesFromDirectory(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $directory = $this->getSampleMigrationsDirectory();
@@ -69,12 +64,12 @@ class AbstractMigratorTest extends TestCase
 
         $migrationClasses = $migrator->gatherMigrationClassesFromDirectory($directory, $namespace);
 
-        $this->assertTrue(in_array($namespace . '\Version20220601000000CreateJobsTable', $migrationClasses));
+        $this->assertTrue(in_array($namespace . '\Version20220601000000CreateJobTable', $migrationClasses));
     }
 
     public function testCanRunMigrationClasses(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
@@ -85,7 +80,7 @@ class AbstractMigratorTest extends TestCase
 
         $migrationClasses = $migrator->gatherMigrationClassesFromDirectory($directory, $namespace);
 
-        $jobsTableName = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
+        $jobsTableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOB);
 
         $this->assertFalse($this->schemaManager->tablesExist($jobsTableName));
 
@@ -96,7 +91,7 @@ class AbstractMigratorTest extends TestCase
 
     public function testCanGatherOnlyMigrationClasses(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $directory = __DIR__;
@@ -119,7 +114,7 @@ class AbstractMigratorTest extends TestCase
             }
         };
 
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $this->expectException(MigrationException::class);
@@ -129,7 +124,7 @@ class AbstractMigratorTest extends TestCase
 
     public function testCanGetNonImplementedMigrationClasses(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
@@ -140,14 +135,14 @@ class AbstractMigratorTest extends TestCase
         );
 
         $this->assertTrue(in_array(
-            JobsStore\Migrations\Version20220601000000CreateJobsTable::class,
+            Store\Migrations\Version20220601000000CreateJobTable::class,
             $nonImplementedMigrationClasses
         ));
     }
 
     public function testCanFindOutIfNonImplementedMigrationClassesExist(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
@@ -160,7 +155,7 @@ class AbstractMigratorTest extends TestCase
 
     public function testCanRunNonImplementedMigrationClasses(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
@@ -179,11 +174,11 @@ class AbstractMigratorTest extends TestCase
     {
         return $this->moduleConfiguration->getModuleSourceDirectory() . DIRECTORY_SEPARATOR .
             'Stores' . DIRECTORY_SEPARATOR . 'Jobs' . DIRECTORY_SEPARATOR . 'DoctrineDbal' . DIRECTORY_SEPARATOR .
-            'JobsStore' . DIRECTORY_SEPARATOR . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
+            'Store' . DIRECTORY_SEPARATOR . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 
     protected function getSampleNameSpace(): string
     {
-        return JobsStore::class . '\\' . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
+        return Store::class . '\\' . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 }

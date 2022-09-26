@@ -1,0 +1,26 @@
+{# @var moduleConfiguration \SimpleSAML\Module\accounting\ModuleConfiguration #}
+
+{% set pagetitle = 'Personal Data'|trans %}
+{% set frontpage_section = 'main' %}
+
+{% extends "base.twig" %}
+
+{% block preload %}
+    <link rel="stylesheet" href="{{ asset('css/accounting.css', 'accounting') }}">
+{% endblock %}
+
+{% block content %}
+
+    <h2>{{ pagetitle }} </h2>
+
+    <p>
+        {% trans %}This is what we know about you... Lorem ipsum...{% endtrans %}
+    </p>
+
+    <ul>
+        {% for name, value in normalizedAttributes %}
+            <li><strong>{{ name }}</strong>: {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

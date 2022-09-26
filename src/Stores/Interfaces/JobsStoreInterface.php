@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Interfaces;
 
+use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
+use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 interface JobsStoreInterface extends StoreInterface
 {
@@ -21,4 +23,10 @@ interface JobsStoreInterface extends StoreInterface
      * @return ?JobInterface
      */
     public function dequeue(string $type = null): ?JobInterface;
+
+    public static function build(
+        ModuleConfiguration $moduleConfiguration,
+        LoggerInterface $logger,
+        string $connectionKey = null
+    ): self;
 }

@@ -1,0 +1,47 @@
+{# @var moduleConfiguration \SimpleSAML\Module\accounting\ModuleConfiguration #}
+
+{% set pagetitle = 'Configuration Status'|trans %}
+{% set frontpage_section = 'main' %}
+
+{% extends "base.twig" %}
+
+{% block preload %}
+    <link rel="stylesheet" href="{{ asset('css/accounting.css', 'accounting') }}">
+{% endblock %}
+
+{% block content %}
+
+    <h2>{{ pagetitle }} </h2>
+
+    {% if configurationValidationErrors is not null %}
+        <p>{{ configurationValidationErrors }}</p>
+    {% elseif moduleConfiguration is not null %}
+        <ul>
+            <li>
+                <strong>{{ 'User ID Attribute Name'|trans }}</strong>: {{ moduleConfiguration.getUserIdAttributeName }}
+            </li>
+            <li>
+                <strong>{{ 'Accounting Processing Type'|trans }}</strong>: {{ moduleConfiguration.getAccountingProcessingType }}
+            </li>
+        </ul>
+
+        {% if moduleConfiguration.getAccountingProcessingType == 'asynchronous' %}
+            <ul>
+                <li>
+                    <strong>{{ 'Jobs Store Class'|trans }}</strong>: {{ moduleConfiguration.getJobsStoreClass }}
+                </li>
+                <li>
+                    {% if jobsStore is not null %}
+                        <strong>{{ 'Jobs Store Setup Needed'|trans }}</strong>:
+                        {{ jobsStore.needsSetup ? 'Yes'|trans : 'No'|trans }}
+                    {% else %}
+                        {{ 'Could not initialize jobs store.'|trans }}
+                    {% endif %}
+                </li>
+            </ul>
+        {% endif %}
+    {% else %}
+        <p>{{ 'Could not initialize module configuration.'|trans }}</p>
+    {% endif %}
+
+{% endblock %}

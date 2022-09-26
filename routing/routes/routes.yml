@@ -1,4 +1,30 @@
 
-accounting-test:
-    path:       /test
-    defaults:   { _controller: 'SimpleSAML\Module\accounting\Controller\Test::test' }
+accounting-setup:
+    path:       /setup
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::setup' }
+
+accounting-job-runner:
+    path:       /job-runner
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::jobRunner' }
+
+accounting-admin-configuration-status:
+    path:       /admin/configuration/status
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Admin\Configuration::status' }
+
+accounting-user-personal-data:
+    path: /user/personal-data
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::personalData' }
+
+accounting-user-connected-organizations:
+    path: /user/connected-organizations
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::connectedOrganizations' }
+
+accounting-user-activity:
+    path: /user/activity
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::activity' }
+
+accounting-user-logout:
+    path: /user/logout
+    methods:
+        - POST
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::logout' }

@@ -8,12 +8,13 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\LoggerService;
+use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore;
+use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 use function PHPUnit\Framework\assertFalse;
 
@@ -22,10 +23,11 @@ use function PHPUnit\Framework\assertFalse;
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000000CreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\JobsStore\Migrations\Version20220601000100CreateFailedJobsTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
+ * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  */
 class MigratorTest extends TestCase
 {
@@ -42,21 +44,12 @@ class MigratorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->connection = new Connection(['driver' => 'pdo_sqlite', 'memory' => true,]);
-        // TODO mivanci ostavi samo sqlite verziju
-//        $this->connection = new Connection([
-//            'dbname' => 'accounting',
-//           'user' => 'apps',
-//           'password' => 'apps',
-//           'host' => '127.0.0.1',
-//           'port' => '33306',
-//           'driver' => 'pdo_mysql',
-//                                               ]);
+        $this->connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
 
         $this->schemaManager = $this->connection->dbal()->createSchemaManager();
         $this->tableName = $this->connection->preparePrefixedTableName(Migrator::TABLE_NAME);
 
-        $this->loggerServiceMock = $this->createMock(LoggerService::class);
+        $this->loggerServiceMock = $this->createMock(Logger::class);
 
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
@@ -66,7 +59,7 @@ class MigratorTest extends TestCase
     {
         $this->assertFalse($this->schemaManager->tablesExist([$this->tableName]));
 
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $this->assertTrue($migrator->needsSetup());
@@ -84,7 +77,7 @@ class MigratorTest extends TestCase
             ->method('warning')
             ->with($this->stringContains('setup is not needed'));
 
-        /** @psalm-suppress InvalidArgument Using mock instead of LoggerService instance */
+        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $this->assertTrue($migrator->needsSetup());
@@ -100,10 +93,10 @@ class MigratorTest extends TestCase
 
         $migrator->runSetup();
 
-        $tableNameJobs = $this->connection->preparePrefixedTableName(JobsStore::TABLE_NAME_JOBS);
+        $tableNameJobs = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOB);
         $this > assertFalse($this->schemaManager->tablesExist($tableNameJobs));
 
-        $migrator->runMigrationClasses([JobsStore\Migrations\Version20220601000000CreateJobsTable::class]);
+        $migrator->runMigrationClasses([Store\Migrations\Version20220601000000CreateJobTable::class]);
 
         $this->assertTrue($this->schemaManager->tablesExist($tableNameJobs));
     }
@@ -212,7 +205,7 @@ class MigratorTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        $migrator->runMigrationClasses([JobsStore\Migrations\Version20220601000000CreateJobsTable::class]);
+        $migrator->runMigrationClasses([Store\Migrations\Version20220601000000CreateJobTable::class]);
     }
 
     public function testThrowsStoreExceptionOnGetImplementedMigrationClasses(): void
@@ -234,11 +227,11 @@ class MigratorTest extends TestCase
     {
         return $this->moduleConfiguration->getModuleSourceDirectory() . DIRECTORY_SEPARATOR .
             'Stores' . DIRECTORY_SEPARATOR . 'Jobs' . DIRECTORY_SEPARATOR . 'DoctrineDbal' . DIRECTORY_SEPARATOR .
-            'JobsStore' . DIRECTORY_SEPARATOR . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
+            'Store' . DIRECTORY_SEPARATOR . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 
     protected function getSampleNameSpace(): string
     {
-        return JobsStore::class . '\\' . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
+        return Store::class . '\\' . AbstractMigrator::DEFAULT_MIGRATIONS_DIRECTORY_NAME;
     }
 }
