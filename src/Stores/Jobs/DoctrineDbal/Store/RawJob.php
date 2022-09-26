@@ -109,27 +109,6 @@ class RawJob extends AbstractRawEntity
         return $this->type;
     }
 
-    protected function resolveCreatedAt(array $rawRow): DateTimeImmutable
-    {
-        try {
-            /** @var DateTimeImmutable $createdAt */
-            $createdAt = (Type::getType(Types::DATETIME_IMMUTABLE))
-                ->convertToPHPValue($rawRow[Store\TableConstants::COLUMN_NAME_CREATED_AT], $this->abstractPlatform);
-        } catch (Throwable $exception) {
-            throw new UnexpectedValueException(
-                sprintf(
-                    'Could not create instance of DateTimeImmutable using value %s for column %s.',
-                    var_export($rawRow[Store\TableConstants::COLUMN_NAME_CREATED_AT], true),
-                    Store\TableConstants::COLUMN_NAME_CREATED_AT
-                ),
-                (int)$exception->getCode(),
-                $exception
-            );
-        }
-
-        return $createdAt;
-    }
-
     /**
      * @return DateTimeImmutable
      */
