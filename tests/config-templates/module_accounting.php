@@ -16,6 +16,8 @@ $config = [
     ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
         ModuleConfiguration\AccountingProcessingType::VALUE_SYNCHRONOUS,
 
+    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
+
     ModuleConfiguration::OPTION_JOBS_STORE => Stores\Jobs\DoctrineDbal\Store::class,
 
     ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER =>

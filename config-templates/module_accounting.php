@@ -41,6 +41,14 @@ $config = [
         //ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS,
 
     /**
+     * Cron tags.
+     *
+     * Job runner tag designates the cron tag to use when running accounting jobs. Make sure to add this tag to
+     * the cron module configuration if you want to use it.
+     */
+    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
+
+    /**
      * Jobs store class. In case of the 'asynchronous' accounting processing type, this determines which class
      * will be used to store jobs. The class must implement Stores\Interfaces\JobsStoreInterface.
      */

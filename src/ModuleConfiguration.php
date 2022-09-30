@@ -29,6 +29,7 @@ class ModuleConfiguration
     public const OPTION_ADDITIONAL_TRACKERS = 'additional_trackers';
     public const OPTION_CONNECTIONS_AND_PARAMETERS = 'connections_and_parameters';
     public const OPTION_CLASS_TO_CONNECTION_MAP = 'class_to_connection_map';
+    public const OPTION_CRON_TAG_FOR_JOB_RUNNER = 'cron_tag_for_job_runner';
 
     /**
      * Contains configuration from module configuration file.
@@ -50,6 +51,11 @@ class ModuleConfiguration
     public function getAccountingProcessingType(): string
     {
         return $this->getConfiguration()->getString(self::OPTION_ACCOUNTING_PROCESSING_TYPE);
+    }
+
+    public function getCronTagForJobRunner(): string
+    {
+        return $this->getConfiguration()->getString(self::OPTION_CRON_TAG_FOR_JOB_RUNNER);
     }
 
     /**
@@ -212,6 +218,7 @@ class ModuleConfiguration
         if ($this->getAccountingProcessingType() === AccountingProcessingType::VALUE_ASYNCHRONOUS) {
             try {
                 $this->validateJobsStoreClass();
+                $this->validateCronTagForJobRunner();
             } catch (Throwable $exception) {
                 $errors[] = $exception->getMessage();
             }
@@ -375,5 +382,10 @@ class ModuleConfiguration
         if (!empty($errors)) {
             throw new InvalidConfigurationException(implode(' ', $errors));
         }
+    }
+
+    protected function validateCronTagForJobRunner(): void
+    {
+        $this->getCronTagForJobRunner();
     }
 }
