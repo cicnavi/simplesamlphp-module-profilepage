@@ -14,6 +14,7 @@ use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use Cicnavi\SimpleFileCache\SimpleFileCache;
 use SimpleSAML\Module\accounting\Services\JobRunner\State;
+use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 
 class JobRunner
 {
@@ -31,7 +32,10 @@ class JobRunner
     protected const STATE_KEY_LAST_UPDATE_TIMESTAMP = 'last-update';
     protected const STATE_KEY_JOB_RUNNER_ID = 'job-runner-id';
 
+    public const STATE_THRESHOLD_INTERVAL = 'PT10M';
+
     protected int $jobRunnerId;
+
 
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
@@ -42,12 +46,8 @@ class JobRunner
         $this->moduleConfiguration = $moduleConfiguration;
         $this->sspConfiguration = $sspConfiguration;
         $this->logger = $logger ?? new Logger();
-        $this->cache = $cache ?? new SimpleFileCache(
-            self::CACHE_NAME,
-            $this->sspConfiguration->getPathValue('datadir') ??
-                $sspConfiguration->getPathValue('tempdir') ??
-                null
-        );
+
+        $this->cache = $cache ?? $this->resolveCache($this->sspConfiguration);
 
         try {
             $this->jobRunnerId = random_int(PHP_INT_MIN, PHP_INT_MAX);
@@ -61,11 +61,12 @@ class JobRunner
      */
     public function run(): void
     {
-        die('tu');
+        // TODO mivanci continue implementing this..
         if (! $this->shouldRun()) {
             return;
         }
 
+        die(var_dump($this->cache->get(self::CACHE_KEY_STATE)));
         $this->runStarted = true;
         $this->initializeState();
     }
@@ -94,6 +95,7 @@ class JobRunner
         } catch (\Throwable $exception) {
             $message = sprintf('Job runner state is not valid. Error was: %.', $exception->getMessage());
             $this->logger->warning($message);
+            $this->clearState();
             return false;
         }
 
@@ -124,11 +126,40 @@ class JobRunner
         }
     }
 
+    /**
+     * @throws Exception
+     */
     protected function validateState()
     {
-        if ($this->runStarted === false && $this->cache->has(self::CACHE_KEY_STATE)) {
-            $message = 'Job run has not started, however state has already been initialized.';
+        $state = $this->getState();
+
+        // Validate state before start.
+        if ($this->runStarted === false) {
+            if ($state !== null) {
+                $message = 'Job run has not started, however state has already been initialized.';
+                throw new Exception($message);
+            }
         }
+
+        // Validate state after start.
+        if ($this->runStarted === true) {
+            if ($state === null) {
+                $message = 'Job run has started, however state has not been initialized.';
+                throw new Exception($message);
+            }
+
+            if ($state->getJobRunnerId() !== $this->jobRunnerId) {
+                $message = 'Current job runner ID differs from the ID in the state.';
+                throw new Exception($message);
+            }
+
+            $threshold = (new \DateTime())->sub(new \DateInterval(self::STATE_THRESHOLD_INTERVAL));
+            if ($state->getUpdatedAt() < $threshold) {
+                $message = 'Job runner state is stale.';
+                throw new Exception($message);
+            }
+        }
+
     }
 
     protected function getFreshStateInstance(): State
@@ -138,14 +169,9 @@ class JobRunner
 
     protected function isAnotherJobRunnerActive(): bool
     {
-        if (! $this->cache->has(self::CACHE_KEY_STATE)) {
-            return false;
-        }
-
         try {
-            $state = $this->cache->get(self::CACHE_KEY_STATE);
-            die(var_dump($state));
-        } catch (\Throwable | InvalidArgumentException $exception) {
+            $state = $this->getState();
+        } catch (\Throwable $exception) {
             $message = sprintf(
                 'Error checking if another job runner is active. To play safe, we will assume true. ' .
                 'Error was: %s.',
@@ -153,6 +179,71 @@ class JobRunner
             );
             $this->logger->error($message);
             return true;
+        }
+
+        if ($state === null) {
+            return false;
+        }
+
+        return $state->getJobRunnerId() !== $this->jobRunnerId;
+    }
+
+    protected function resolveCache(SspConfiguration $sspConfiguration)
+    {
+        try {
+            $this->logger->debug('Trying to initialize cache using SSP datadir.');
+            $cache = new SimpleFileCache(
+                self::CACHE_NAME,
+                $this->sspConfiguration->getPathValue('datadir')
+            );
+            $this->logger->debug('Successfully initialized cache using SSP datadir.');
+            return $cache;
+        } catch (\Throwable $exception) {
+            $message = sprintf('Error initializing cache using datadir. Error was: %s', $exception->getMessage());
+            $this->logger->debug($message);
+        }
+
+        try {
+            $this->logger->debug('Trying to initialize cache using SSP tempdir.');
+            $cache = new SimpleFileCache(
+                self::CACHE_NAME,
+                $this->sspConfiguration->getPathValue('tempdir')
+            );
+            $this->logger->debug('Successfully initialized cache using SSP tempdir.');
+            return $cache;
+        } catch (\Throwable $exception) {
+            $message = sprintf('Error initializing cache using tempdir. Error was: %s.', $exception->getMessage());
+            $this->logger->debug($message);
+        }
+
+        try {
+            $this->logger->debug('Trying to initialize cache using system tmp dir.');
+            $cache = new SimpleFileCache(self::CACHE_NAME);
+            $this->logger->debug('Successfully initialized cache using system tmp dir.');
+            return $cache;
+        } catch (\Throwable $exception) {
+            $message = sprintf(
+                'Error initializing cache. Error was: %s.', $exception->getMessage()
+            );
+            $this->logger->debug($message);
+            throw new Exception($message, (int)$exception->getCode(),$exception);
+        }
+    }
+
+    protected function clearState()
+    {
+        $this->cache->delete(self::CACHE_KEY_STATE);
+    }
+
+    protected function getState(): ?State
+    {
+        try {
+            /** @var ?State $state */
+            $state = $this->cache->get(self::CACHE_KEY_STATE);
+            return $state;
+        } catch (\Throwable | InvalidArgumentException $exception) {
+            $message = sprintf('Error getting state from cache. Error was: %s', $exception->getMessage());
+            throw new Exception($message, (int)$exception->getCode(), $exception);
         }
     }
 }
