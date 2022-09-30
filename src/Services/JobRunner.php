@@ -171,21 +171,21 @@ class JobRunner
     {
         try {
             $state = $this->getState();
+
+            if ($state === null) {
+                return false;
+            }
+
+            return $state->getJobRunnerId() !== $this->jobRunnerId;
         } catch (\Throwable $exception) {
             $message = sprintf(
                 'Error checking if another job runner is active. To play safe, we will assume true. ' .
-                'Error was: %s.',
+                'Error was: %s',
                 $exception->getMessage()
             );
             $this->logger->error($message);
             return true;
         }
-
-        if ($state === null) {
-            return false;
-        }
-
-        return $state->getJobRunnerId() !== $this->jobRunnerId;
     }
 
     protected function resolveCache(SspConfiguration $sspConfiguration)
