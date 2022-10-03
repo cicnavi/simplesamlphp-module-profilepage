@@ -24,6 +24,12 @@ interface JobsStoreInterface extends StoreInterface
      */
     public function dequeue(string $type = null): ?JobInterface;
 
+    /**
+     * @param JobInterface $job
+     * @return void
+     */
+    public function markFailedJob(JobInterface $job): void;
+
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
