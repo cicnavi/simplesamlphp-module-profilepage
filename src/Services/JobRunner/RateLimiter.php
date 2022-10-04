@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleSAML\Module\accounting\Services;
+namespace SimpleSAML\Module\accounting\Services\JobRunner;
 
 class RateLimiter
 {
@@ -28,9 +28,8 @@ class RateLimiter
         /** @psalm-suppress ArgumentTypeCoercion */
         sleep($this->currentBackoffPauseInSeconds);
 
-        $this->currentBackoffPauseInSeconds = $this->currentBackoffPauseInSeconds < $this->maxBackoffPauseInSeconds ?
-            $this->currentBackoffPauseInSeconds + $this->currentBackoffPauseInSeconds :
-            $this->maxBackoffPauseInSeconds;
+        $newBackoffPauseInSeconds = $this->currentBackoffPauseInSeconds + $this->currentBackoffPauseInSeconds;
+        $this->currentBackoffPauseInSeconds = min($newBackoffPauseInSeconds, $this->maxBackoffPauseInSeconds);
     }
 
     public function doPause(int $seconds = 1): void
@@ -44,12 +43,39 @@ class RateLimiter
         $this->currentBackoffPauseInSeconds = 1;
     }
 
+    /**
+     * Convert date interval to seconds, interval being minimum 1 second.
+     * @param \DateInterval $dateInterval Minimum is 1 second.
+     * @return int
+     */
     protected function dateIntervalToSeconds(\DateInterval $dateInterval): int
     {
         $reference = new \DateTimeImmutable();
         $endTime = $reference->add($dateInterval);
 
-        return $endTime->getTimestamp() - $reference->getTimestamp();
+        $duration = $endTime->getTimestamp() - $reference->getTimestamp();
+
+        if ($duration < 1) {
+            $duration = 1;
+        }
+
+        return $duration;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxPauseInSeconds(): int
+    {
+        return $this->maxPauseInSeconds;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxBackoffPauseInSeconds(): int
+    {
+        return $this->maxBackoffPauseInSeconds;
     }
 
     /**

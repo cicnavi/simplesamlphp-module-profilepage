@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Services;
 
+use Cicnavi\SimpleFileCache\SimpleFileCache;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -13,7 +14,7 @@ use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use Cicnavi\SimpleFileCache\SimpleFileCache;
+use SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter;
 use SimpleSAML\Module\accounting\Services\JobRunner\State;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;

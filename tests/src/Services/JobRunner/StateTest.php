@@ -19,7 +19,7 @@ class StateTest extends TestCase
 
     public function testCanCreateInstance(): void
     {
-        $startedAt = $updatedAt = $endedAt = new \DateTimeImmutable();
+        $startedAt = $updatedAt = new \DateTimeImmutable();
 
         $state = new State($this->jobRunnerId);
         $this->assertInstanceOf(State::class, $state);
