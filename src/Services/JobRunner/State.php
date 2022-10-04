@@ -6,21 +6,32 @@ namespace SimpleSAML\Module\accounting\Services\JobRunner;
 
 class State
 {
+    public const MAX_NUMBER_OF_MESSAGES_TO_KEEP = 100;
+    public const DEFAULT_NUMBER_OF_MESSAGES_TO_KEEP = 10;
+
     protected int $jobRunnerId;
     protected ?\DateTimeImmutable $startedAt;
-    protected ?\DateTimeImmutable $updatedAt;
+    protected \DateTimeImmutable $updatedAt;
     protected ?\DateTimeImmutable $endedAt = null;
     protected int $successfulJobsProcessed = 0;
     protected int $failedJobsProcessed = 0;
+    protected array $statusMessages = [];
+    protected int $numberOfStatusMessagesToKeep = 10;
 
     public function __construct(
         int $jobRunnerId,
         \DateTimeImmutable $startedAt = null,
-        \DateTimeImmutable $updatedAt = null
+        \DateTimeImmutable $updatedAt = null,
+        int $numberOfStatusMessagesToKeep = self::DEFAULT_NUMBER_OF_MESSAGES_TO_KEEP
     ) {
         $this->jobRunnerId = $jobRunnerId;
         $this->startedAt = $startedAt;
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = $updatedAt ?? new \DateTimeImmutable();
+
+        $this->numberOfStatusMessagesToKeep =
+            $numberOfStatusMessagesToKeep > 0 && $numberOfStatusMessagesToKeep <= self::MAX_NUMBER_OF_MESSAGES_TO_KEEP ?
+            $numberOfStatusMessagesToKeep :
+            self::DEFAULT_NUMBER_OF_MESSAGES_TO_KEEP;
     }
 
     /**
@@ -55,7 +66,7 @@ class State
     }
 
     /**
-     * @return \DateTimeImmutable|null
+     * @return \DateTimeImmutable
      */
     public function getUpdatedAt(): \DateTimeImmutable
     {
@@ -126,12 +137,6 @@ class State
 
     public function isStale(\DateInterval $threshold): bool
     {
-        // TODO mivanci if updatedAt is smaller than threshold
-
-        if ($this->updatedAt === null) {
-            return false;
-        }
-
         $minDateTime = (new \DateTimeImmutable())->sub($threshold);
 
         if ($this->getUpdatedAt() < $minDateTime) {
@@ -139,5 +144,36 @@ class State
         }
 
         return false;
+    }
+
+    public function getTotalJobsProcessed(): int
+    {
+        return $this->getSuccessfulJobsProcessed() + $this->getFailedJobsProcessed();
+    }
+
+    public function addStatusMessage(string $message): void
+    {
+        $this->statusMessages[] = $message;
+
+        if (count($this->statusMessages) > $this->numberOfStatusMessagesToKeep) {
+            array_shift($this->statusMessages);
+        }
+    }
+
+    public function getStatusMessages(): array
+    {
+        return $this->statusMessages;
+    }
+
+    public function getLastStatusMessage(): ?string
+    {
+        if (empty($this->statusMessages)) {
+            return null;
+        }
+
+        $message = (string)end($this->statusMessages);
+        reset($this->statusMessages);
+
+        return $message;
     }
 }

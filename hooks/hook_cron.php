@@ -13,12 +13,23 @@ function accounting_hook_cron(array &$cronInfo): void
 
     $cronTagForJobRunner = $moduleConfiguration->getCronTagForJobRunner();
 
-    if ($currentCronTag === $cronTagForJobRunner) {
-        $state = (new JobRunner($moduleConfiguration, \SimpleSAML\Configuration::getConfig()))->run();
-        $message = sprintf('Successful jobs: %s', $state->getSuccessfulJobsProcessed());
-        $cronInfo['summary'][] = 'Module `oidc` clean up. Removed expired entries from storage.';
+    try {
+        if ($currentCronTag === $cronTagForJobRunner) {
+            $state = (new JobRunner($moduleConfiguration, \SimpleSAML\Configuration::getConfig()))->run();
+            foreach ($state->getStatusMessages() as $statusMessage) {
+                $cronInfo['summary'][] = $statusMessage;
+            }
+            // TODO mivanci improve message.
+            $message = sprintf(
+                'Successful jobs: %s, failed jobs: %s, total: %s.',
+                $state->getSuccessfulJobsProcessed(),
+                $state->getFailedJobsProcessed(),
+                $state->getTotalJobsProcessed()
+            );
+            $cronInfo['summary'][] = $message;
+        }
+    } catch (Throwable $exception) {
+        $message = 'Job runner error: ' . $exception->getMessage();
+        $cronInfo['summary'][] = $message;
     }
-
-
-    $croninfo['summary'][] = 'Module `oidc` clean up. Removed expired entries from storage.';
 }
