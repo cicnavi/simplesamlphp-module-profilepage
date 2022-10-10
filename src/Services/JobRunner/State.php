@@ -17,6 +17,7 @@ class State
     protected int $failedJobsProcessed = 0;
     protected array $statusMessages = [];
     protected int $numberOfStatusMessagesToKeep = 10;
+    protected bool $isGracefulInterruptInitiated = false;
 
     public function __construct(
         int $jobRunnerId,
@@ -175,5 +176,21 @@ class State
         reset($this->statusMessages);
 
         return $message;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsGracefulInterruptInitiated(): bool
+    {
+        return $this->isGracefulInterruptInitiated;
+    }
+
+    /**
+     * @param bool $isGracefulInterruptInitiated
+     */
+    public function setIsGracefulInterruptInitiated(bool $isGracefulInterruptInitiated): void
+    {
+        $this->isGracefulInterruptInitiated = $isGracefulInterruptInitiated;
     }
 }

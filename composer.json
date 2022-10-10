@@ -40,6 +40,9 @@
         "simplesamlphp/simplesamlphp": "^2@beta",
         "simplesamlphp/simplesamlphp-test-framework": "^1"
     },
+    "suggest": {
+        "ext-pcntl": "*"
+    },
     "scripts": {
         "pre-commit": [
             "vendor/bin/phpcs -p",

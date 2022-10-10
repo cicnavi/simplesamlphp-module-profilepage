@@ -20,7 +20,6 @@ use PHPUnit\Framework\TestCase;
  */
 class JobRunnerTest extends TestCase
 {
-
     /**
      * @var Stub|ModuleConfiguration
      */

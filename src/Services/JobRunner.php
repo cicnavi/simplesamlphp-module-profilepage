@@ -69,6 +69,8 @@ class JobRunner
         $this->trackers = $this->resolveTrackers();
         $this->stateStaleThresholdInterval = new \DateInterval(self::STATE_STALE_THRESHOLD_INTERVAL);
         $this->rateLimiter = $rateLimiter ?? new RateLimiter();
+
+        $this->registerInterruptHandler();
     }
 
     /**
@@ -177,38 +179,47 @@ class JobRunner
      */
     protected function shouldRun(): bool
     {
-        // TODO mivanci change default to null, make configurable and nullable if CLI
-        $durationSeconds = 60;
+        // Enable this code to tick, which will enable it to catch CTRL-C signals and stop gracefully.
+        declare(ticks=1) {
+            // TODO mivanci change default to null, make configurable and nullable if CLI
+            $durationSeconds = 60;
 
-        if (!$this->isCli()) {
-            $maxSeconds = (int)floor((int)ini_get('max_execution_time') * 0.8);
-            if ($maxSeconds < $durationSeconds) {
-                $durationSeconds = $maxSeconds;
+            if (!$this->isCli()) {
+                $maxSeconds = (int)floor((int)ini_get('max_execution_time') * 0.8);
+                if ($maxSeconds < $durationSeconds) {
+                    $durationSeconds = $maxSeconds;
+                }
             }
-        }
 
-        $maxExecutionTime = new \DateInterval('PT' . $durationSeconds . 'S');
+            $maxExecutionTime = new \DateInterval('PT' . $durationSeconds . 'S');
 
-        $startedAt = $this->state->getStartedAt();
-        if ($startedAt !== null) {
-            $maxDateTime = $startedAt->add($maxExecutionTime);
+            $startedAt = $this->state->getStartedAt();
+            if ($startedAt !== null) {
+                $maxDateTime = $startedAt->add($maxExecutionTime);
 
-            if ((new \DateTimeImmutable()) > $maxDateTime) {
-                $this->logger->debug('Maximum job runner execution time reached.');
+                if ((new \DateTimeImmutable()) > $maxDateTime) {
+                    $message = 'Maximum job runner execution time reached.';
+                    $this->logger->debug($message);
+                    $this->state->addStatusMessage($message);
+                    return false;
+                }
+            }
+            // TODO mivanci make configurable.
+            if ($this->state->getTotalJobsProcessed() > (PHP_INT_MAX - 1)) {
                 return false;
             }
-        }
-        // TODO mivanci make configurable.
-        if ($this->state->getTotalJobsProcessed() > PHP_INT_MAX - 1) {
-            return false;
-        }
 
-        try {
-            $this->validateSelfState();
-        } catch (\Throwable $exception) {
-            $message = sprintf('Job runner state is not valid. Error was: %.', $exception->getMessage());
-            $this->logger->warning($message);
-            return false;
+            try {
+                $this->validateSelfState();
+            } catch (\Throwable $exception) {
+                $message = sprintf(
+                    'Job runner state is not valid. Message was: %s',
+                    $exception->getMessage()
+                );
+                $this->logger->warning($message);
+                $this->state->addStatusMessage($message);
+                return false;
+            }
         }
 
         return true;
@@ -291,6 +302,11 @@ class JobRunner
             if ($cachedState->isStale($this->stateStaleThresholdInterval)) {
                 $message = 'Job runner cached state is stale, which means possible job runner process shutdown' .
                     ' without cached state clearing.';
+                throw new Exception($message);
+            }
+
+            if ($cachedState->getIsGracefulInterruptInitiated()) {
+                $message = 'Graceful job processing interrupt initiated.';
                 throw new Exception($message);
             }
         }
@@ -485,5 +501,43 @@ class JobRunner
     protected function isCli(): bool
     {
         return http_response_code() === false;
+    }
+
+    /**
+     * Register interrupt handler. This makes it possible to stop job processing gracefully by
+     * clearing the current state. It relies on pcntl extension, so to use this feature,
+     * that extension has to be enabled.
+     * @see https://www.php.net/manual/en/pcntl.installation.php
+     * @return void
+     */
+    protected function registerInterruptHandler(): void
+    {
+        // pcntl won't be available in web server environment, so skip immediately.
+        if (! $this->isCli()) {
+            return;
+        }
+
+        // Extension pcntl doesn't come with PHP by default, so check if the proper function is available.
+        if (! function_exists('pcntl_signal')) {
+            $message = 'pcntl related functions not available, skipping registering interrupt handler.';
+            $this->logger->info($message);
+            $this->state->addStatusMessage($message);
+            return;
+        }
+
+        pcntl_signal(SIGINT, [$this, 'handleInterrupt']);
+        pcntl_signal(SIGTERM, [$this, 'handleInterrupt']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function handleInterrupt(int $signal): void
+    {
+        $message = sprintf('Gracefully stopping job processing. Interrupt signal was %s.', $signal);
+        $this->state->addStatusMessage($message);
+        $this->logger->info($message);
+        $this->state->setIsGracefulInterruptInitiated(true);
+        $this->updateCachedState($this->state);
     }
 }
