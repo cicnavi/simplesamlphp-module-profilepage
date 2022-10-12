@@ -7,6 +7,7 @@ use SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter
+ * @uses \SimpleSAML\Module\accounting\Helpers\DateTimeHelper
  */
 class RateLimiterTest extends TestCase
 {

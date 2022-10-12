@@ -12,6 +12,7 @@ use SimpleSAML\Configuration;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\JobRunner;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Services\JobRunner
@@ -44,16 +45,35 @@ class JobRunnerTest extends TestCase
      * @var Stub|JobRunner\RateLimiter
      */
     protected $rateLimiter;
+    /**
+     * @var Stub|AuthenticationDataTrackerBuilder
+     */
+    protected $authenticationDataTrackerBuilder;
 
     protected function setUp(): void
     {
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $this->sspConfigurationStub = $this->createStub(Configuration::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->authenticationDataTrackerBuilder = $this->createStub(AuthenticationDataTrackerBuilder::class);
         $this->cacheStub = $this->createStub(CacheInterface::class);
         $this->stateStub = $this->createStub(JobRunner\State::class);
         $this->rateLimiter = $this->createStub(JobRunner\RateLimiter::class);
     }
 
-    // TODO mivanci continue
+    public function testCanCreateInstance(): void
+    {
+        $this->assertInstanceOf(
+            JobRunner::class,
+            new JobRunner(
+                $this->moduleConfigurationStub,
+                $this->sspConfigurationStub,
+                $this->loggerMock,
+                $this->authenticationDataTrackerBuilder,
+                $this->cacheStub,
+                $this->stateStub,
+                $this->rateLimiter
+            )
+        );
+    }
 }

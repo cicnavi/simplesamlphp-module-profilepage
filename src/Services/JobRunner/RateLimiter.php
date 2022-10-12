@@ -2,6 +2,8 @@
 
 namespace SimpleSAML\Module\accounting\Services\JobRunner;
 
+use SimpleSAML\Module\accounting\Helpers\DateTimeHelper;
+
 class RateLimiter
 {
     public const DEFAULT_MAX_PAUSE_DURATION = 'PT10M';
@@ -15,10 +17,10 @@ class RateLimiter
         \DateInterval $maxPauseInterval = null,
         \DateInterval $maxBackoffInterval = null
     ) {
-        $this->maxPauseInSeconds = $this->dateIntervalToSeconds(
+        $this->maxPauseInSeconds = DateTimeHelper::convertDateIntervalToSeconds(
             $maxPauseInterval ?? new \DateInterval(self::DEFAULT_MAX_PAUSE_DURATION)
         );
-        $this->maxBackoffPauseInSeconds = $this->dateIntervalToSeconds(
+        $this->maxBackoffPauseInSeconds = DateTimeHelper::convertDateIntervalToSeconds(
             $maxBackoffInterval ?? new \DateInterval(self::DEFAULT_MAX_BACKOFF_PAUSE_DURATION)
         );
     }
@@ -41,25 +43,6 @@ class RateLimiter
     public function resetBackoffPause(): void
     {
         $this->currentBackoffPauseInSeconds = 1;
-    }
-
-    /**
-     * Convert date interval to seconds, interval being minimum 1 second.
-     * @param \DateInterval $dateInterval Minimum is 1 second.
-     * @return int
-     */
-    protected function dateIntervalToSeconds(\DateInterval $dateInterval): int
-    {
-        $reference = new \DateTimeImmutable();
-        $endTime = $reference->add($dateInterval);
-
-        $duration = $endTime->getTimestamp() - $reference->getTimestamp();
-
-        if ($duration < 1) {
-            $duration = 1;
-        }
-
-        return $duration;
     }
 
     /**

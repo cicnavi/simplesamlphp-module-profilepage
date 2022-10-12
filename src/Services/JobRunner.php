@@ -13,6 +13,7 @@ use SimpleSAML\Module\accounting\Entities\Authentication\Event\Job;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Helpers\DateTimeHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter;
 use SimpleSAML\Module\accounting\Services\JobRunner\State;
@@ -25,6 +26,7 @@ class JobRunner
     protected ModuleConfiguration $moduleConfiguration;
     protected SspConfiguration $sspConfiguration;
     protected LoggerInterface $logger;
+    protected AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder;
     protected CacheInterface $cache;
     protected State $state;
 
@@ -43,11 +45,14 @@ class JobRunner
     protected array $trackers;
     protected \DateInterval $stateStaleThresholdInterval;
     protected RateLimiter $rateLimiter;
+    protected ?\DateInterval $maximumExecutionTime;
+    protected ?int $shouldPauseAfterNumberOfJobsProcessed;
 
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
         SspConfiguration $sspConfiguration,
         LoggerInterface $logger = null,
+        AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder = null,
         CacheInterface $cache = null,
         State $state = null,
         RateLimiter $rateLimiter = null
@@ -55,6 +60,8 @@ class JobRunner
         $this->moduleConfiguration = $moduleConfiguration;
         $this->sspConfiguration = $sspConfiguration;
         $this->logger = $logger ?? new Logger();
+        $this->authenticationDataTrackerBuilder = $authenticationDataTrackerBuilder ??
+            new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger);
 
         $this->cache = $cache ?? $this->resolveCache();
 
@@ -71,6 +78,10 @@ class JobRunner
         $this->rateLimiter = $rateLimiter ?? new RateLimiter();
 
         $this->registerInterruptHandler();
+
+        $this->maximumExecutionTime = $this->resolveMaximumExecutionTime();
+        $this->shouldPauseAfterNumberOfJobsProcessed =
+            $this->moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed();
     }
 
     /**
@@ -148,9 +159,12 @@ class JobRunner
                 );
                 $this->state->addStatusMessage($successMessage);
 
-                // Just to try not to "kill" backend store, do the pause after n jobs.
-                // TODO mivanci introduce configuration option for store friendly pausing.
-                if ($jobsProcessedSincePause > 3) {
+                // If the job runner friendly pausing is enabled, and if the number of jobs processed since the last
+                // pause is greater than the configured value, do the pause.
+                if (
+                    $this->shouldPauseAfterNumberOfJobsProcessed !== null &&
+                    $jobsProcessedSincePause > $this->shouldPauseAfterNumberOfJobsProcessed
+                ) {
                     $this->rateLimiter->doPause();
                     $jobsProcessedSincePause = 0;
                 } else {
@@ -181,29 +195,13 @@ class JobRunner
     {
         // Enable this code to tick, which will enable it to catch CTRL-C signals and stop gracefully.
         declare(ticks=1) {
-            // TODO mivanci change default to null, make configurable and nullable if CLI
-            $durationSeconds = 60;
-
-            if (!$this->isCli()) {
-                $maxSeconds = (int)floor((int)ini_get('max_execution_time') * 0.8);
-                if ($maxSeconds < $durationSeconds) {
-                    $durationSeconds = $maxSeconds;
-                }
+            if ($this->isMaximumExecutionTimeReached()) {
+                $message = 'Maximum job runner execution time reached.';
+                $this->logger->debug($message);
+                $this->state->addStatusMessage($message);
+                return false;
             }
 
-            $maxExecutionTime = new \DateInterval('PT' . $durationSeconds . 'S');
-
-            $startedAt = $this->state->getStartedAt();
-            if ($startedAt !== null) {
-                $maxDateTime = $startedAt->add($maxExecutionTime);
-
-                if ((new \DateTimeImmutable()) > $maxDateTime) {
-                    $message = 'Maximum job runner execution time reached.';
-                    $this->logger->debug($message);
-                    $this->state->addStatusMessage($message);
-                    return false;
-                }
-            }
             // TODO mivanci make configurable.
             if ($this->state->getTotalJobsProcessed() > (PHP_INT_MAX - 1)) {
                 return false;
@@ -488,11 +486,9 @@ class JobRunner
             $this->moduleConfiguration->getAdditionalTrackers()
         );
 
-        $trackerBuilder = new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger);
-
         /** @var string $trackerClass */
         foreach ($configuredTrackerClasses as $trackerClass) {
-            $trackers[$trackerClass] = $trackerBuilder->build($trackerClass);
+            $trackers[$trackerClass] = $this->authenticationDataTrackerBuilder->build($trackerClass);
         }
 
         return $trackers;
@@ -539,5 +535,55 @@ class JobRunner
         $this->logger->info($message);
         $this->state->setIsGracefulInterruptInitiated(true);
         $this->updateCachedState($this->state);
+    }
+
+    protected function resolveMaximumExecutionTime(): ?\DateInterval
+    {
+        $maximumExecutionTime = $this->moduleConfiguration->getJobRunnerMaximumExecutionTime();
+
+        // If we are in CLI environment, we can safely use module configuration setting.
+        if ($this->isCli()) {
+            return $maximumExecutionTime;
+        }
+
+        // We are in a "web" environment, so take max execution time ini setting into account.
+        $iniMaximumExecutionTimeSeconds = (int)floor((int)ini_get('max_execution_time') * 0.8);
+        $iniMaximumExecutionTime = new \DateInterval('PT' . $iniMaximumExecutionTimeSeconds . 'S');
+
+        // If the module setting is null (meaning infinite), use the ini setting.
+        if ($maximumExecutionTime === null) {
+            return $iniMaximumExecutionTime;
+        }
+
+        // Use the shorter interval from the two...
+        $maximumExecutionTimeSeconds = DateTimeHelper::convertDateIntervalToSeconds($maximumExecutionTime);
+        if ($iniMaximumExecutionTimeSeconds < $maximumExecutionTimeSeconds) {
+            return $iniMaximumExecutionTime;
+        }
+
+        return $maximumExecutionTime;
+    }
+
+    protected function isMaximumExecutionTimeReached(): bool
+    {
+        if ($this->maximumExecutionTime === null) {
+            // Execution time is infinite.
+            return false;
+        }
+
+        $startedAt = $this->state->getStartedAt();
+        if ($startedAt === null) {
+            // Processing has not even started yet.
+            return false;
+        }
+
+        $maxDateTime = $startedAt->add($this->maximumExecutionTime);
+        if ($maxDateTime < (new \DateTimeImmutable())) {
+            // Maximum has not been reached yet.
+            return false;
+        }
+
+        // Maximum has been reached.
+        return true;
     }
 }

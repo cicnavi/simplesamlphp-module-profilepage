@@ -30,6 +30,9 @@ class ModuleConfiguration
     public const OPTION_CONNECTIONS_AND_PARAMETERS = 'connections_and_parameters';
     public const OPTION_CLASS_TO_CONNECTION_MAP = 'class_to_connection_map';
     public const OPTION_CRON_TAG_FOR_JOB_RUNNER = 'cron_tag_for_job_runner';
+    public const OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME = 'job_runner_maximum_execution_time';
+    public const OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED =
+        'job_runner_should_pause_after_number_of_jobs_processed';
 
     /**
      * Contains configuration from module configuration file.
@@ -71,6 +74,55 @@ class ModuleConfiguration
     public function getJobsStoreClass(): string
     {
         return $this->getConfiguration()->getString(self::OPTION_JOBS_STORE);
+    }
+
+    public function getJobRunnerMaximumExecutionTime(): ?\DateInterval
+    {
+        $value = $this->get(self::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME);
+
+        if (is_null($value)) {
+            return null;
+        }
+
+        if (! is_string($value)) {
+            $message = sprintf('Job runner maximum activity must be defined either as null, or DateInterval' .
+                               'duration (string).');
+            throw new InvalidConfigurationException($message);
+        }
+
+        try {
+            return new \DateInterval($value);
+        } catch (Throwable $exception) {
+            $message = sprintf('Can not create DateInterval instance using value %s as parameter.', $value);
+            throw new InvalidConfigurationException($message);
+        }
+    }
+
+    public function getJobRunnerShouldPauseAfterNumberOfJobsProcessed(): ?int
+    {
+        $value = $this->get(self::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED);
+
+        if (is_null($value)) {
+            return null;
+        }
+
+        if (! is_int($value)) {
+            $message = sprintf(
+                'Option \'%s\' must be defined either as null, or positive integer.',
+                self::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED
+            );
+            throw new InvalidConfigurationException($message);
+        }
+
+        if ($value < 1) {
+            $message = sprintf(
+                'Option \'%s\' must positive integer.',
+                self::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED
+            );
+            throw new InvalidConfigurationException($message);
+        }
+
+        return $value;
     }
 
     public function getDefaultDataTrackerAndProviderClass(): string
