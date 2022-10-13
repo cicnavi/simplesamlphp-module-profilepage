@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Services\JobRunner;
 
 use PHPUnit\Framework\TestCase;
@@ -8,6 +10,7 @@ use SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter;
 /**
  * @covers \SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter
  * @uses \SimpleSAML\Module\accounting\Helpers\DateTimeHelper
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class RateLimiterTest extends TestCase
 {

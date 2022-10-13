@@ -2,12 +2,14 @@
 
 namespace SimpleSAML\Module\accounting\Services\JobRunner;
 
-use SimpleSAML\Module\accounting\Helpers\DateTimeHelper;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 class RateLimiter
 {
     public const DEFAULT_MAX_PAUSE_DURATION = 'PT10M';
     public const DEFAULT_MAX_BACKOFF_PAUSE_DURATION = 'PT1M';
+
+    protected HelpersManager $helpersManager;
 
     protected int $maxPauseInSeconds;
     protected int $maxBackoffPauseInSeconds;
@@ -15,12 +17,15 @@ class RateLimiter
 
     public function __construct(
         \DateInterval $maxPauseInterval = null,
-        \DateInterval $maxBackoffInterval = null
+        \DateInterval $maxBackoffInterval = null,
+        HelpersManager $helpersManager = null
     ) {
-        $this->maxPauseInSeconds = DateTimeHelper::convertDateIntervalToSeconds(
+        $this->helpersManager = $helpersManager ?? new HelpersManager();
+
+        $this->maxPauseInSeconds = $this->helpersManager->getDateTimeHelper()->convertDateIntervalToSeconds(
             $maxPauseInterval ?? new \DateInterval(self::DEFAULT_MAX_PAUSE_DURATION)
         );
-        $this->maxBackoffPauseInSeconds = DateTimeHelper::convertDateIntervalToSeconds(
+        $this->maxBackoffPauseInSeconds = $this->helpersManager->getDateTimeHelper()->convertDateIntervalToSeconds(
             $maxBackoffInterval ?? new \DateInterval(self::DEFAULT_MAX_BACKOFF_PAUSE_DURATION)
         );
     }

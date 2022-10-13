@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Helpers;
 
+// TODO mivanci move to HelpersManager
 class HashHelper
 {
     public static function getSha256(string $data): string

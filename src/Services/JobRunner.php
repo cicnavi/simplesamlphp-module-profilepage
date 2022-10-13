@@ -13,7 +13,6 @@ use SimpleSAML\Module\accounting\Entities\Authentication\Event\Job;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Helpers\DateTimeHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter;
 use SimpleSAML\Module\accounting\Services\JobRunner\State;
@@ -27,6 +26,7 @@ class JobRunner
     protected SspConfiguration $sspConfiguration;
     protected LoggerInterface $logger;
     protected AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder;
+    protected JobsStoreBuilder $jobsStoreBuilder;
     protected CacheInterface $cache;
     protected State $state;
 
@@ -45,6 +45,7 @@ class JobRunner
     protected array $trackers;
     protected \DateInterval $stateStaleThresholdInterval;
     protected RateLimiter $rateLimiter;
+    protected HelpersManager $helpersManager;
     protected ?\DateInterval $maximumExecutionTime;
     protected ?int $shouldPauseAfterNumberOfJobsProcessed;
 
@@ -53,23 +54,24 @@ class JobRunner
         SspConfiguration $sspConfiguration,
         LoggerInterface $logger = null,
         AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder = null,
+        JobsStoreBuilder $jobsStoreBuilder = null,
         CacheInterface $cache = null,
         State $state = null,
-        RateLimiter $rateLimiter = null
+        RateLimiter $rateLimiter = null,
+        HelpersManager $helpersManager = null
     ) {
         $this->moduleConfiguration = $moduleConfiguration;
         $this->sspConfiguration = $sspConfiguration;
         $this->logger = $logger ?? new Logger();
         $this->authenticationDataTrackerBuilder = $authenticationDataTrackerBuilder ??
             new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger);
+        $this->jobsStoreBuilder = $jobsStoreBuilder ?? new JobsStoreBuilder($this->moduleConfiguration, $this->logger);
 
         $this->cache = $cache ?? $this->resolveCache();
 
-        try {
-            $this->jobRunnerId = random_int(PHP_INT_MIN, PHP_INT_MAX);
-        } catch (\Throwable $exception) {
-            $this->jobRunnerId = rand();
-        }
+        $this->helpersManager = $helpersManager ?? new HelpersManager();
+
+        $this->jobRunnerId = $this->helpersManager->getRandomHelper()->getRandomInt();
 
         $this->state = $state ?? new State($this->jobRunnerId);
 
@@ -77,11 +79,11 @@ class JobRunner
         $this->stateStaleThresholdInterval = new \DateInterval(self::STATE_STALE_THRESHOLD_INTERVAL);
         $this->rateLimiter = $rateLimiter ?? new RateLimiter();
 
-        $this->registerInterruptHandler();
-
         $this->maximumExecutionTime = $this->resolveMaximumExecutionTime();
         $this->shouldPauseAfterNumberOfJobsProcessed =
             $this->moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed();
+
+        $this->registerInterruptHandler();
     }
 
     /**
@@ -110,10 +112,11 @@ class JobRunner
             return $this->state;
         }
 
+        $this->logger->debug('Run conditions validated.');
+
         $this->initializeCachedState();
 
-        $jobsStore = (new JobsStoreBuilder($this->moduleConfiguration, $this->logger))
-            ->build($this->moduleConfiguration->getJobsStoreClass());
+        $jobsStore = $this->jobsStoreBuilder->build($this->moduleConfiguration->getJobsStoreClass());
 
         $jobsProcessedSincePause = 0;
 
@@ -125,38 +128,45 @@ class JobRunner
 
                 $this->updateCachedState($this->state);
 
-                // No new jobs at the moment....
-                if ($job === null) {
-                    $this->state->addStatusMessage('No (more) jobs to process.');
-                    // If in CLI, do the backoff pause, so we can continue working later.
-                    if ($this->isCli()) {
-                        $message = sprintf(
-                            'Doing a backoff pause for %s seconds.',
-                            $this->rateLimiter->getCurrentBackoffPauseInSeconds()
-                        );
-                        $this->state->addStatusMessage($message);
-                        $this->rateLimiter->doBackoffPause();
-                        $jobsProcessedSincePause = 0;
-                        continue;
-                    } else {
-                        // Since this is a web run, we will break immediately, so we can return HTTP response.
-                        break;
+                declare(ticks=1) {
+                    // No new jobs at the moment....
+                    if ($job === null) {
+                        $this->state->addStatusMessage('No (more) jobs to process.');
+                        // If in CLI, do the backoff pause, so we can continue working later.
+                        if ($this->isCli()) {
+                            $message = sprintf(
+                                'Doing a backoff pause for %s seconds.',
+                                $this->rateLimiter->getCurrentBackoffPauseInSeconds()
+                            );
+                            $this->logger->debug($message);
+                            $this->state->addStatusMessage($message);
+                            $this->rateLimiter->doBackoffPause();
+                            $jobsProcessedSincePause = 0;
+                            continue;
+                        } else {
+                            // Since this is a web run, we will break immediately, so we can return HTTP response.
+                            break;
+                        }
                     }
-                }
 
-                // We have a job...
-                $this->rateLimiter->resetBackoffPause();
+                    // We have a job...
+                    $this->rateLimiter->resetBackoffPause();
+                }
 
                 /** @var AuthenticationDataTrackerInterface $tracker */
                 foreach ($this->trackers as $tracker) {
+                    /** @var Job $job */
                     $tracker->process($job->getPayload());
                 }
 
                 $this->state->incrementSuccessfulJobsProcessed();
+
+                /** @var Job $job */
                 $successMessage = sprintf(
                     'Successfully processed job with ID %s.',
                     $job->getId() ?? '(N/A)'
                 );
+                $this->logger->debug($successMessage);
                 $this->state->addStatusMessage($successMessage);
 
                 // If the job runner friendly pausing is enabled, and if the number of jobs processed since the last
@@ -202,8 +212,10 @@ class JobRunner
                 return false;
             }
 
-            // TODO mivanci make configurable.
             if ($this->state->getTotalJobsProcessed() > (PHP_INT_MAX - 1)) {
+                $message = 'Maximum number of processed jobs reached.';
+                $this->logger->debug($message);
+                $this->state->addStatusMessage($message);
                 return false;
             }
 
@@ -234,14 +246,13 @@ class JobRunner
                 throw new UnexpectedValueException('Job runner state already initialized.');
             }
         } catch (\Throwable $exception) {
-            $message = sprintf('Error initializing job runner state. Error was: %.', $exception->getMessage());
+            $message = sprintf('Error initializing job runner state. Error was: %s.', $exception->getMessage());
             $this->logger->error($message);
             throw new Exception($message, (int)$exception->getCode(), $exception);
         }
 
         $startedAt = new \DateTimeImmutable();
         $this->state->setStartedAt($startedAt);
-
         $this->updateCachedState($this->state, $startedAt);
     }
 
@@ -323,6 +334,7 @@ class JobRunner
             // state is not stale (which indicates that the runner was shutdown without state clearing). If stale,
             // this means that the job runner is not active.
             if ($cachedState->isStale($this->stateStaleThresholdInterval)) {
+                $this->logger->warning('Stale cache encountered. Assuming no job runner is active.');
                 return false;
             }
 
@@ -440,7 +452,7 @@ class JobRunner
         try {
             $this->cache->set(self::CACHE_KEY_STATE, $state);
         } catch (\Throwable | InvalidArgumentException $exception) {
-            $message = sprintf('Error setting job runner state. Error was: %.', $exception->getMessage());
+            $message = sprintf('Error setting job runner state. Error was: %s.', $exception->getMessage());
             $this->logger->error($message);
             throw new Exception($message, (int)$exception->getCode(), $exception);
         }
@@ -458,12 +470,6 @@ class JobRunner
             $message = 'Job runner called, however accounting mode is not ' .
                 ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS;
             $this->logger->warning($message);
-            throw new Exception($message);
-        }
-
-        if (empty($this->trackers)) {
-            $message = 'No trackers configured.';
-            $this->logger->debug($message);
             throw new Exception($message);
         }
 
@@ -496,7 +502,7 @@ class JobRunner
 
     protected function isCli(): bool
     {
-        return http_response_code() === false;
+        return $this->helpersManager->getEnvironmentHelper()->isCli();
     }
 
     /**
@@ -556,8 +562,12 @@ class JobRunner
         }
 
         // Use the shorter interval from the two...
-        $maximumExecutionTimeSeconds = DateTimeHelper::convertDateIntervalToSeconds($maximumExecutionTime);
+        $maximumExecutionTimeSeconds = $this->helpersManager
+            ->getDateTimeHelper()
+            ->convertDateIntervalToSeconds($maximumExecutionTime);
+
         if ($iniMaximumExecutionTimeSeconds < $maximumExecutionTimeSeconds) {
+            $this->logger->debug('Using maximum execution time from INI setting since it is shorter.');
             return $iniMaximumExecutionTime;
         }
 
@@ -578,7 +588,7 @@ class JobRunner
         }
 
         $maxDateTime = $startedAt->add($this->maximumExecutionTime);
-        if ($maxDateTime < (new \DateTimeImmutable())) {
+        if ($maxDateTime > (new \DateTimeImmutable())) {
             // Maximum has not been reached yet.
             return false;
         }

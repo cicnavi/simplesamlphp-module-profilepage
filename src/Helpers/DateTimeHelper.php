@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Helpers;
 
 class DateTimeHelper
@@ -9,7 +11,7 @@ class DateTimeHelper
      * @param \DateInterval $dateInterval Minimum is 1 second.
      * @return int
      */
-    public static function convertDateIntervalToSeconds(\DateInterval $dateInterval): int
+    public function convertDateIntervalToSeconds(\DateInterval $dateInterval): int
     {
         $reference = new \DateTimeImmutable();
         $endTime = $reference->add($dateInterval);
