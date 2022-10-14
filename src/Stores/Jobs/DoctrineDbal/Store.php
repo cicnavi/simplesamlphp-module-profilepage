@@ -21,6 +21,7 @@ class Store extends AbstractStore implements JobsStoreInterface
     protected string $prefixedTableNameJobs;
     protected string $prefixedTableNameFailedJobs;
     protected Repository $jobsRepository;
+    protected Repository $failedJobsRepository;
 
     /**
      * @throws StoreException
@@ -30,7 +31,8 @@ class Store extends AbstractStore implements JobsStoreInterface
         LoggerInterface $logger,
         Factory $connectionFactory,
         string $connectionKey = null,
-        Repository $jobsRepository = null
+        Repository $jobsRepository = null,
+        Repository $failedJobsRepository = null
     ) {
         parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey);
 
@@ -40,6 +42,9 @@ class Store extends AbstractStore implements JobsStoreInterface
 
         $this->jobsRepository = $jobsRepository ??
             new Repository($this->connection, $this->prefixedTableNameJobs, $this->logger);
+
+        $this->failedJobsRepository = $failedJobsRepository ??
+            new Repository($this->connection, $this->prefixedTableNameFailedJobs, $this->logger);
     }
 
     /**
@@ -135,5 +140,13 @@ class Store extends AbstractStore implements JobsStoreInterface
             new Factory($moduleConfiguration, $logger),
             $connectionKey
         );
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function markFailedJob(JobInterface $job): void
+    {
+        $this->failedJobsRepository->insert($job);
     }
 }

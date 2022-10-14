@@ -5,7 +5,9 @@ SimpleSAMLphp module providing user accounting functionality.
 
 ## TODO
 - [x] Data stores
-- [ ] Cron hooks
+- [ ] Cron hook
+  - [ ] explain specific cron tag for accounting (it should have its own tag which should be
+added to cron config 
 - [ ] Profile page UI
 - [ ] Translation
 

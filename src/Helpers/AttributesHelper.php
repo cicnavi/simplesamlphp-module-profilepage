@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Helpers;
 
+// TODO mivanci move to HelpersManager
+
 class AttributesHelper
 {
     /**
