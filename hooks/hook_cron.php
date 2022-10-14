@@ -19,9 +19,8 @@ function accounting_hook_cron(array &$cronInfo): void
             foreach ($state->getStatusMessages() as $statusMessage) {
                 $cronInfo['summary'][] = $statusMessage;
             }
-            // TODO mivanci improve message.
             $message = sprintf(
-                'Successful jobs: %s, failed jobs: %s, total: %s.',
+                'Job processing finished with %s successful jobs, %s failed jobs; total: %s.',
                 $state->getSuccessfulJobsProcessed(),
                 $state->getFailedJobsProcessed(),
                 $state->getTotalJobsProcessed()
