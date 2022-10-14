@@ -76,9 +76,12 @@ class Profile
             $normalizedAttributes[$name] = implode('; ', $value);
         }
 
-        die(var_dump($normalizedAttributes));
+        // TODO mivanci make base Controller which provides template builder
         $template = new Template($this->sspConfiguration, 'accounting:user/personal-data.twig');
+        $localization = $template->getLocalization();
+        $localization->addModuleDomain(ModuleConfiguration::MODULE_NAME);
         $template->data = compact('normalizedAttributes');
+        $localization->addAttributeDomains();
         return $template;
     }
 
