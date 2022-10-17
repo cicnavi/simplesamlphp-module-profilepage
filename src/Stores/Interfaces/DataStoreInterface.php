@@ -22,5 +22,5 @@ interface DataStoreInterface extends StoreInterface
 
     public function getConnectedOrganizations(string $userIdentifierHashSha256): ConnectedServiceProvider\Bag;
 
-    public function getActivity(string $userIdentifierHashSha256): Activity\Bag;
+    public function getActivity(string $userIdentifierHashSha256, int $maxResults, int $firstResult): Activity\Bag;
 }

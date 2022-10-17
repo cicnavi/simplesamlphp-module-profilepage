@@ -32,15 +32,15 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 class TrackerTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|ModuleConfiguration|ModuleConfiguration&\PHPUnit\Framework\MockObject\Stub
+     * @var \PHPUnit\Framework\MockObject\Stub|ModuleConfiguration
      */
     protected $moduleConfigurationStub;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface|LoggerInterface&\PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
      */
     protected $loggerMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Store|Store&\PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|Store
      */
     protected $dataStoreMock;
 
@@ -60,7 +60,12 @@ class TrackerTest extends TestCase
     {
         $this->assertInstanceOf(
             Tracker::class,
-            new Tracker($this->moduleConfigurationStub, $this->loggerMock, $this->dataStoreMock)
+            new Tracker(
+                $this->moduleConfigurationStub,
+                $this->loggerMock,
+                ModuleConfiguration\ConnectionType::MASTER,
+                $this->dataStoreMock
+            )
         );
 
         $this->assertInstanceOf(
@@ -83,7 +88,12 @@ class TrackerTest extends TestCase
             ->with($authenticationEventStub);
 
         /** @psalm-suppress PossiblyInvalidArgument */
-        $tracker = new Tracker($this->moduleConfigurationStub, $this->loggerMock, $this->dataStoreMock);
+        $tracker = new Tracker(
+            $this->moduleConfigurationStub,
+            $this->loggerMock,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->dataStoreMock
+        );
 
         $tracker->process($authenticationEventStub);
     }
@@ -98,7 +108,12 @@ class TrackerTest extends TestCase
             ->method('runSetup');
 
         /** @psalm-suppress PossiblyInvalidArgument */
-        $tracker = new Tracker($this->moduleConfigurationStub, $this->loggerMock, $this->dataStoreMock);
+        $tracker = new Tracker(
+            $this->moduleConfigurationStub,
+            $this->loggerMock,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->dataStoreMock
+        );
 
         $this->assertTrue($tracker->needsSetup());
 
@@ -113,7 +128,12 @@ class TrackerTest extends TestCase
             ->willReturn($connectedOrganizationsBagStub);
 
         /** @psalm-suppress PossiblyInvalidArgument */
-        $tracker = new Tracker($this->moduleConfigurationStub, $this->loggerMock, $this->dataStoreMock);
+        $tracker = new Tracker(
+            $this->moduleConfigurationStub,
+            $this->loggerMock,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->dataStoreMock
+        );
 
         $this->assertInstanceOf(
             ConnectedServiceProvider\Bag::class,
@@ -128,11 +148,16 @@ class TrackerTest extends TestCase
             ->method('getActivity')
             ->willReturn($activityBag);
 
-        $tracker = new Tracker($this->moduleConfigurationStub, $this->loggerMock, $this->dataStoreMock);
+        $tracker = new Tracker(
+            $this->moduleConfigurationStub,
+            $this->loggerMock,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->dataStoreMock
+        );
 
         $this->assertInstanceOf(
             Activity\Bag::class,
-            $tracker->getActivity('test')
+            $tracker->getActivity('test', 10, 0)
         );
     }
 }

@@ -1,0 +1,37 @@
+{# @var activityBag \SimpleSAML\Module\accounting\Entities\Activity\Bag #}
+{# @var connectedServiceProvider \SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider #}
+
+{% extends "@accounting/base.twig" %}
+
+{% set pagetitle = 'Activity'|trans %}
+
+{% block content %}
+
+    <h2>{{ pagetitle }} </h2>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>Time</th>
+            <th>Access</th>
+            <th>Sent data</th>
+        </tr>
+        {% for activity in activityBag.getAll %}
+            <tr>
+                <td>{{ activity.getHappenedAt|date() }}</td>
+                <td>{{ activity.getServiceProvider.getName }}</td>
+                <td>
+                    {% for attributeName in activity.getUser.getAttributes|keys %}
+                        {{ attributeName|trans }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+
+    </ul>
+
+{% endblock %}

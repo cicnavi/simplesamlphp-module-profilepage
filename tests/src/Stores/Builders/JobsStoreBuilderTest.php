@@ -58,9 +58,12 @@ class JobsStoreBuilderTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         $storeBuilder = new class ($moduleConfigurationStub, $this->loggerStub) extends AbstractStoreBuilder {
-            public function build(string $class, string $connectionKey = null): StoreInterface
-            {
-                return $this->buildGeneric($class, [$connectionKey]);
+            public function build(
+                string $class,
+                string $connectionKey = null,
+                string $connectionType = ModuleConfiguration\ConnectionType::MASTER
+            ): StoreInterface {
+                return $this->buildGeneric($class, [$connectionKey, $connectionType]);
             }
         };
 

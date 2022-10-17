@@ -250,6 +250,7 @@ class StoreTest extends TestCase
             $this->loggerStub,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $repositoryStub
         );
         $jobsStore->runSetup();
@@ -271,6 +272,7 @@ class StoreTest extends TestCase
             $this->loggerStub,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $repositoryStub
         );
         $jobsStore->runSetup();
@@ -292,6 +294,7 @@ class StoreTest extends TestCase
             $this->loggerStub,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $repositoryStub
         );
         $jobsStore->runSetup();

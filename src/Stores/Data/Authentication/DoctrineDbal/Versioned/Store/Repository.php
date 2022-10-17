@@ -951,7 +951,7 @@ class Repository
     /**
      * @throws StoreException
      */
-    public function getActivity(string $userIdentifierHashSha256): array
+    public function getActivity(string $userIdentifierHashSha256, int $maxResults, int $firstResult): array
     {
         try {
             $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -1045,7 +1045,9 @@ class Repository
                     TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
                     TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_ID,
                     'DESC'
-                );
+                )
+            ->setMaxResults($maxResults)
+            ->setFirstResult($firstResult);
 
             return $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociative();
         } catch (\Throwable $exception) {

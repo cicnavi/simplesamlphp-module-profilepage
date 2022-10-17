@@ -12,6 +12,7 @@ function accounting_hook_adminmenu(\SimpleSAML\XHTML\Template &$template): void
     $menuKey = 'menu';
 
     // TODO mivanci check is setup is needed. If yes, only put link to setup page.
+    // TODO mivanci create and use routes helper
 
     $profilePageEntry = [
         $moduleName => [

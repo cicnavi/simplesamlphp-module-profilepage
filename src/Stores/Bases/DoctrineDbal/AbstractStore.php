@@ -30,12 +30,14 @@ abstract class AbstractStore implements BuildableUsingModuleConfigurationInterfa
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
         Factory $connectionFactory,
-        string $connectionKey = null
+        string $connectionKey = null,
+        string $connectionType = ModuleConfiguration\ConnectionType::MASTER
     ) {
         $this->moduleConfiguration = $moduleConfiguration;
         $this->logger = $logger;
 
-        $connectionKey = $connectionKey ?? $moduleConfiguration->getClassConnectionKey($this->getSelfClass());
+        $connectionKey = $connectionKey ??
+            $moduleConfiguration->getClassConnectionKey($this->getSelfClass(), $connectionType);
         $this->connection = $connectionFactory->buildConnection($connectionKey);
         $this->migrator = $connectionFactory->buildMigrator($this->connection);
     }
