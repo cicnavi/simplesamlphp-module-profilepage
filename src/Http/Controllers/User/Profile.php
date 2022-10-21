@@ -116,7 +116,7 @@ class Profile
         $activityBag = $authenticationDataProvider->getActivity($userIdentifier, $maxResults, $firstResult);
 
         $template = $this->resolveTemplate('accounting:user/activity.twig');
-        $template->data = compact('activityBag');
+        $template->data = compact('activityBag', 'page', 'maxResults');
 
         return $template;
     }

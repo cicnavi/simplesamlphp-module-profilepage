@@ -5,35 +5,62 @@
 
 {% set pagetitle = 'Connected organizations'|trans %}
 
+{% set pageMenuItem = 'connected-organizations' %}
+
 {% block content %}
 
     <h2>{{ pagetitle }} </h2>
 
-    <section id="banner">
-        <div>
-            {% trans %}This is what we know about you...{% endtrans %}
-        </div>
-    </section>
-
-    <table>
-        <tbody>
+    <table class="pure-table pure-table-striped pure-table-attributes">
+        <thead>
         <tr>
-            <th>Name</th>
-            <th>All access</th>
-            <th>Last access</th>
+            <th><strong>{{ 'Name'|trans }}</strong></th>
+            <th><strong>{{ 'All access'|trans }}</strong></th>
+            <th><strong>{{ 'Last access'|trans }}</strong></th>
         </tr>
+        </thead>
+        <tbody>
         {% for connectedServiceProvider in connectedServiceProviderBag.getAll %}
-            <tr>
-                <td>{{ connectedServiceProvider.getServiceProvider.getName }}</td>
-                <td>{{ connectedServiceProvider.getNumberOfAuthentications }}</td>
+            <tr class="accordion">
+                <td>{{ connectedServiceProvider.getServiceProvider.getName|e }}</td>
+                <td>{{ connectedServiceProvider.getNumberOfAuthentications|e }}</td>
                 <td>{{ connectedServiceProvider.getLastAuthenticationAt|date() }}</td>
+            </tr>
+            <tr class="panel">
+                <td colspan="3">
+                    <strong>{{ 'Service details'|trans }}</strong>
+                    <ul>
+                        <li>{{ 'Entity ID'|trans }}: {{ connectedServiceProvider.getServiceProvider.getEntityId|e }}</li>
+                        <li>{{ 'Description'|trans }}: {{ connectedServiceProvider.getServiceProvider.getDescription|e|default(' / ') }}</li>
+                    </ul>
+
+                    <strong>{{ 'Information transfered to service'|trans }}</strong>
+                    <ul>
+                        {% for name, value in connectedServiceProvider.getUser.getAttributes %}
+                            <li>
+                                {{ name|trans }}: {{ value|join(', ') }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    <strong>{{ 'Login details'|trans }}</strong>
+                    <ul>
+                        <li>
+                            {{ 'First access'|trans }}: {{ connectedServiceProvider.getFirstAuthenticationAt|date() }}
+                        </li>
+                        <li>
+                            {{ 'Last access'|trans }}: {{ connectedServiceProvider.getLastAuthenticationAt|date() }}
+                        </li>
+                    </ul>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
+{% endblock %}
 
-    </ul>
-
+{% block postload %}
+    {{ parent() }}
+    {% include '@accounting/includes/_js-accordion.twig' %}
 {% endblock %}

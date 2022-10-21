@@ -21,7 +21,7 @@ use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * TODO mivanci delete this file
+ * TODO mivanci delete this file before release
  * @psalm-suppress all
  */
 class Test

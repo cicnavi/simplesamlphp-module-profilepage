@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Configuration as SspConfiguration;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
 use SimpleSAML\Session;
 use SimpleSAML\Utils;
 use SimpleSAML\Utils\Auth;
@@ -48,9 +49,19 @@ class Configuration
         $moduleConfiguration = null;
         $configurationValidationErrors = null;
         $jobsStore = null;
+        $defaultDataTrackerAndProvider = null;
+        $setupNeeded = false;
 
         try {
             $moduleConfiguration = new ModuleConfiguration();
+
+            $defaultDataTrackerAndProvider =
+                (new AuthenticationDataTrackerBuilder($moduleConfiguration, $this->logger))
+                ->build($moduleConfiguration->getDefaultDataTrackerAndProviderClass());
+
+            if ($defaultDataTrackerAndProvider->needsSetup()) {
+                $setupNeeded = true;
+            }
 
             if (
                 $moduleConfiguration->getAccountingProcessingType() ===
@@ -58,6 +69,9 @@ class Configuration
             ) {
                 $jobsStore = (new JobsStoreBuilder($moduleConfiguration, $this->logger))
                     ->build($moduleConfiguration->getJobsStoreClass());
+                if ($jobsStore->needsSetup()) {
+                    $setupNeeded = true;
+                }
             }
         } catch (Throwable $exception) {
             $configurationValidationErrors = $exception->getMessage();
@@ -67,6 +81,8 @@ class Configuration
             'moduleConfiguration' => $moduleConfiguration,
             'configurationValidationErrors' => $configurationValidationErrors,
             'jobsStore' => $jobsStore,
+            'defaultDataTrackerAndProvider' => $defaultDataTrackerAndProvider,
+            'setupNeeded' => $setupNeeded
         ];
 
         $template = new Template($this->sspConfiguration, 'accounting:admin/configuration/status.twig');

@@ -42,6 +42,13 @@ abstract class AbstractProvider
         return $this->entityId;
     }
 
+    public function getDescription(): ?string
+    {
+        // TODO mivanci
+        return null;
+    }
+
+
     protected function resolveEntityId(): string
     {
         if (
