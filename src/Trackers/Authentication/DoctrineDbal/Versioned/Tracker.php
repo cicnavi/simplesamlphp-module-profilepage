@@ -25,6 +25,7 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
+        string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
         DataStoreInterface $dataStore = null
     ) {
         $this->moduleConfiguration = $moduleConfiguration;
@@ -33,14 +34,19 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
         // Use provided store or initialize default store for this tracker.
         $this->dataStore = $dataStore ??
             (new DataStoreBuilder($this->moduleConfiguration, $this->logger))
-                ->build(Store::class, $this->moduleConfiguration->getClassConnectionKey(self::class));
+                ->build(
+                    Store::class,
+                    $this->moduleConfiguration->getClassConnectionKey(self::class),
+                    $connectionType
+                );
     }
 
     public static function build(
         ModuleConfiguration $moduleConfiguration,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        string $connectionType = ModuleConfiguration\ConnectionType::MASTER
     ): self {
-        return new self($moduleConfiguration, $logger);
+        return new self($moduleConfiguration, $logger, $connectionType);
     }
 
     public function process(Event $authenticationEvent): void
@@ -55,6 +61,11 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
 
     public function runSetup(): void
     {
+        if (! $this->needsSetup()) {
+            $this->logger->warning('Run setup called, however setup is not needed.');
+            return;
+        }
+
         $this->dataStore->runSetup();
     }
 
@@ -64,9 +75,9 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
         return $this->dataStore->getConnectedOrganizations($userIdentifierHashSha256);
     }
 
-    public function getActivity(string $userIdentifier): Activity\Bag
+    public function getActivity(string $userIdentifier, int $maxResults, int $firstResult): Activity\Bag
     {
         $userIdentifierHashSha256 = HashHelper::getSha256($userIdentifier);
-        return $this->dataStore->getActivity($userIdentifierHashSha256);
+        return $this->dataStore->getActivity($userIdentifierHashSha256, $maxResults, $firstResult);
     }
 }

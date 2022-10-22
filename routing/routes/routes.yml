@@ -3,6 +3,7 @@ accounting-setup:
     path:       /setup
     defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::setup' }
 
+# TODO mivanci delete
 accounting-job-runner:
     path:       /job-runner
     defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::jobRunner' }

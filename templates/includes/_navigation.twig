@@ -1,0 +1,28 @@
+<div class="pure-menu">
+    <span class="pure-menu-heading"></span>
+    <ul class="pure-menu-list">
+{# asset icon example #}
+{#        <li class="pure-menu-item">#}
+{#            <a href="personal-data">#}
+{#                <span class="navicon">#}
+{#                    <img src="{{ asset('css/src/icons/prof-page.svg', 'accounting') }}"#}
+{#                         alt="Personal Data Icon">#}
+{#                </span>#}
+{#                <span>Personal Data</span>#}
+{#            </a>#}
+{#        </li>#}
+
+        <li class="pure-menu-item {% if pageMenuItem is defined and pageMenuItem == 'personal-data' %}pure-menu-selected{% endif %}">
+            <a href="personal-data" class="pure-menu-link">Personal Data</a>
+        </li>
+        <li class="pure-menu-item {% if pageMenuItem is defined and pageMenuItem == 'connected-organizations' %}pure-menu-selected{% endif %}">
+            <a href="connected-organizations" class="pure-menu-link">Connected Organizations</a>
+        </li>
+        <li class="pure-menu-item {% if pageMenuItem is defined and pageMenuItem == 'activity' %} pure-menu-selected{% endif %}">
+            <a href="activity" class="pure-menu-link">Activity</a>
+        </li>
+        <li class="pure-menu-item">
+            <a href="#" class="pure-menu-link">Log Out</a>
+        </li>
+    </ul>
+</div>

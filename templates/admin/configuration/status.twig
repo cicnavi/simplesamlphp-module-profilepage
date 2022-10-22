@@ -5,10 +5,6 @@
 
 {% extends "base.twig" %}
 
-{% block preload %}
-    <link rel="stylesheet" href="{{ asset('css/accounting.css', 'accounting') }}">
-{% endblock %}
-
 {% block content %}
 
     <h2>{{ pagetitle }} </h2>
@@ -21,9 +17,20 @@
                 <strong>{{ 'User ID Attribute Name'|trans }}</strong>: {{ moduleConfiguration.getUserIdAttributeName }}
             </li>
             <li>
-                <strong>{{ 'Accounting Processing Type'|trans }}</strong>: {{ moduleConfiguration.getAccountingProcessingType }}
+                <strong>{{ 'Accounting Processing Type'|trans }}</strong>:
+                {{ moduleConfiguration.getAccountingProcessingType }}
+            </li>
+            <li>
+                <strong>{{ 'Default Data Tracker and Provider Class'|trans }}</strong>:
+                {{ moduleConfiguration.getDefaultDataTrackerAndProviderClass }}
+            </li>
+            <li>
+                <strong>{{ 'Tracker and Provider Setup Needed'|trans }}</strong>:
+                {{ defaultDataTrackerAndProvider.needsSetup ? 'Yes'|trans : 'No'|trans }}
             </li>
         </ul>
+
+{#        TODO mivanci setup for additional trackers#}
 
         {% if moduleConfiguration.getAccountingProcessingType == 'asynchronous' %}
             <ul>
@@ -44,4 +51,17 @@
         <p>{{ 'Could not initialize module configuration.'|trans }}</p>
     {% endif %}
 
+    <br>
+
+    {% if setupNeeded %}
+        <p>{{ 'Run setup before using the module.'|trans }}</p>
+        <a class="pure-button pure-button-warning" href="?runSetup=1">{{ 'Run Setup'|trans }}</a>
+    {% else %}
+        <p>
+            {{ 'Everything seems good to go.'|trans }}
+            <br>
+            <br>
+            {{ ' Profile page URL is'|trans }}: <a href="{{ profilePageUri }}">{{ profilePageUri }}</a>
+        </p>
+    {% endif %}
 {% endblock %}

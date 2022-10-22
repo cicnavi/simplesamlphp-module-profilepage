@@ -16,6 +16,8 @@ use Throwable;
 
 class ModuleConfiguration
 {
+    public const MODULE_NAME = 'accounting';
+
     /**
      * Default file name for module configuration. Can be overridden, for example, for testing purposes.
      */

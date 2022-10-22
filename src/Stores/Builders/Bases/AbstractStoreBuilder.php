@@ -25,7 +25,11 @@ abstract class AbstractStoreBuilder
         $this->logger = $logger;
     }
 
-    abstract public function build(string $class, string $connectionKey = null): StoreInterface;
+    abstract public function build(
+        string $class,
+        string $connectionKey = null,
+        string $connectionType = ModuleConfiguration\ConnectionType::MASTER
+    ): StoreInterface;
 
     /**
      * @throws StoreException

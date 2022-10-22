@@ -26,8 +26,10 @@ class AuthenticationDataProviderBuilder
     /**
      * @throws Exception
      */
-    public function build(string $class): AuthenticationDataProviderInterface
-    {
+    public function build(
+        string $class,
+        string $connectionType = ModuleConfiguration\ConnectionType::MASTER
+    ): AuthenticationDataProviderInterface {
         try {
             // Make sure that the class implements proper interface
             if (!is_subclass_of($class, AuthenticationDataProviderInterface::class)) {
@@ -44,7 +46,8 @@ class AuthenticationDataProviderBuilder
             $store = InstanceBuilderUsingModuleConfigurationHelper::build(
                 $class,
                 $this->moduleConfiguration,
-                $this->logger
+                $this->logger,
+                [$connectionType]
             );
         } catch (Throwable $exception) {
             $message = sprintf('Error building instance for class %s. Error was: %s', $class, $exception->getMessage());

@@ -233,6 +233,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -253,6 +254,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -271,6 +273,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -291,6 +294,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -309,6 +313,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -329,6 +334,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -347,6 +353,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -367,6 +374,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -387,6 +395,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -404,6 +413,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -424,6 +434,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -442,6 +453,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -462,6 +474,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -480,6 +493,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -500,6 +514,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -519,6 +534,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -538,6 +554,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -560,6 +577,7 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
@@ -577,10 +595,11 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
-        $activityBag = $store->getActivity('test');
+        $activityBag = $store->getActivity('test', 10, 0);
 
         $this->assertEmpty($activityBag->getAll());
     }
@@ -596,10 +615,11 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
-        $activityBag = $store->getActivity('test');
+        $activityBag = $store->getActivity('test', 10, 0);
 
         $this->assertNotEmpty($activityBag->getAll());
     }
@@ -618,10 +638,11 @@ class StoreTest extends TestCase
             $this->loggerMock,
             $this->factoryStub,
             null,
+            ModuleConfiguration\ConnectionType::MASTER,
             $this->repositoryStub
         );
 
         $this->expectException(StoreException::class);
-        $store->getActivity('test');
+        $store->getActivity('test', 10, 0);
     }
 }

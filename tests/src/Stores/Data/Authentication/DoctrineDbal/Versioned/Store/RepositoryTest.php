@@ -639,15 +639,15 @@ class RepositoryTest extends TestCase
 
         $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
 
-        $resultArray = $this->repository->getActivity($this->userIdentifierHash);
+        $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
         $this->assertCount(1, $resultArray);
 
         $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
-        $resultArray = $this->repository->getActivity($this->userIdentifierHash);
+        $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
         $this->assertCount(2, $resultArray);
 
         $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
-        $resultArray = $this->repository->getActivity($this->userIdentifierHash);
+        $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
         $this->assertCount(3, $resultArray);
 
         // Simulate another SP
@@ -670,7 +670,7 @@ class RepositoryTest extends TestCase
             (int)$idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
 
         $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
-        $resultArray = $this->repository->getActivity($this->userIdentifierHash);
+        $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
         $this->assertCount(4, $resultArray);
 
         // Simulate a change in user attributes
@@ -682,6 +682,6 @@ class RepositoryTest extends TestCase
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
-        $repository->getActivity($this->userIdentifierHash);
+        $repository->getActivity($this->userIdentifierHash, 10, 0);
     }
 }

@@ -1,24 +1,66 @@
-{# @var moduleConfiguration \SimpleSAML\Module\accounting\ModuleConfiguration #}
+{# @var connectedServiceProviderBag \SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider\Bag #}
+{# @var connectedServiceProvider \SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider #}
 
-{% set pagetitle = 'Connected Organizations'|trans %}
-{% set frontpage_section = 'main' %}
+{% extends "@accounting/base.twig" %}
 
-{% extends "base.twig" %}
+{% set pagetitle = 'Connected organizations'|trans %}
 
-{% block preload %}
-    <link rel="stylesheet" href="{{ asset('css/accounting.css', 'accounting') }}">
-{% endblock %}
+{% set pageMenuItem = 'connected-organizations' %}
 
 {% block content %}
 
     <h2>{{ pagetitle }} </h2>
 
+    <table class="pure-table pure-table-striped pure-table-attributes">
+        <thead>
+        <tr>
+            <th><strong>{{ 'Name'|trans }}</strong></th>
+            <th><strong>{{ 'All access'|trans }}</strong></th>
+            <th><strong>{{ 'Last access'|trans }}</strong></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for connectedServiceProvider in connectedServiceProviderBag.getAll %}
+            <tr class="accordion">
+                <td>{{ connectedServiceProvider.getServiceProvider.getName|e }}</td>
+                <td>{{ connectedServiceProvider.getNumberOfAuthentications|e }}</td>
+                <td>{{ connectedServiceProvider.getLastAuthenticationAt|date() }}</td>
+            </tr>
+            <tr class="panel">
+                <td colspan="3">
+                    <strong>{{ 'Service details'|trans }}</strong>
+                    <ul>
+                        <li>{{ 'Entity ID'|trans }}: {{ connectedServiceProvider.getServiceProvider.getEntityId|e }}</li>
+                        <li>{{ 'Description'|trans }}: {{ connectedServiceProvider.getServiceProvider.getDescription|e|default(' / ') }}</li>
+                    </ul>
 
+                    <strong>{{ 'Information transfered to service'|trans }}</strong>
+                    <ul>
+                        {% for name, value in connectedServiceProvider.getUser.getAttributes %}
+                            <li>
+                                {{ name|trans }}: {{ value|join(', ') }}
+                            </li>
+                        {% endfor %}
+                    </ul>
 
-    <ul>
-        {% for name, value in normalizedAttributes %}
-            <li><strong>{{ name }}</strong>: {{ value }}</li>
+                    <strong>{{ 'Login details'|trans }}</strong>
+                    <ul>
+                        <li>
+                            {{ 'First access'|trans }}: {{ connectedServiceProvider.getFirstAuthenticationAt|date() }}
+                        </li>
+                        <li>
+                            {{ 'Last access'|trans }}: {{ connectedServiceProvider.getLastAuthenticationAt|date() }}
+                        </li>
+                    </ul>
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
+        </tbody>
+    </table>
 
+{% endblock %}
+
+{% block postload %}
+    {{ parent() }}
+    {% include '@accounting/includes/_js-accordion.twig' %}
 {% endblock %}

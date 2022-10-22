@@ -34,9 +34,10 @@ class Store extends AbstractStore implements DataStoreInterface
         LoggerInterface $logger,
         Factory $connectionFactory,
         string $connectionKey = null,
+        string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
         Repository $repository = null
     ) {
-        parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey);
+        parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey, $connectionType);
 
         $this->repository = $repository ?? new Repository($this->connection, $this->logger);
     }
@@ -48,13 +49,15 @@ class Store extends AbstractStore implements DataStoreInterface
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        string $connectionKey = null
+        string $connectionKey = null,
+        string $connectionType = ModuleConfiguration\ConnectionType::MASTER
     ): self {
         return new self(
             $moduleConfiguration,
             $logger,
             new Factory($moduleConfiguration, $logger),
-            $connectionKey
+            $connectionKey,
+            $connectionType
         );
     }
 
@@ -574,10 +577,10 @@ class Store extends AbstractStore implements DataStoreInterface
     /**
      * @throws StoreException
      */
-    public function getActivity(string $userIdentifierHashSha256): Activity\Bag
+    public function getActivity(string $userIdentifierHashSha256, int $maxResults, int $firstResult): Activity\Bag
     {
         // TODO mivanci pagination
-        $results =  $this->repository->getActivity($userIdentifierHashSha256);
+        $results =  $this->repository->getActivity($userIdentifierHashSha256, $maxResults, $firstResult);
 
         $activityBag = new Activity\Bag();
 
