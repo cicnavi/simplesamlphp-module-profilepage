@@ -61,6 +61,11 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
 
     public function runSetup(): void
     {
+        if (! $this->needsSetup()) {
+            $this->logger->warning('Run setup called, however setup is not needed.');
+            return;
+        }
+
         $this->dataStore->runSetup();
     }
 

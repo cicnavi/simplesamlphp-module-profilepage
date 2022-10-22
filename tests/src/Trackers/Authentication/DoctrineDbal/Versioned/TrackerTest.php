@@ -100,7 +100,7 @@ class TrackerTest extends TestCase
 
     public function testSetupDependsOnDataStore(): void
     {
-        $this->dataStoreMock->expects($this->once())
+        $this->dataStoreMock->expects($this->exactly(2))
             ->method('needsSetup')
             ->willReturn(true);
 

@@ -2,7 +2,6 @@
 
 {% set pagetitle = 'Configuration Status'|trans %}
 {% set frontpage_section = 'main' %}
-{% set setupNeeded = false %}
 
 {% extends "base.twig" %}
 
@@ -55,15 +54,14 @@
     <br>
 
     {% if setupNeeded %}
-        <p>{{ 'Run setup before using the module.'|trans }}.</p>
-        <a class="pure-button pure-button-warning" href="?setup=1">{{ 'Run Setup'|trans }}</a>
+        <p>{{ 'Run setup before using the module.'|trans }}</p>
+        <a class="pure-button pure-button-warning" href="?runSetup=1">{{ 'Run Setup'|trans }}</a>
     {% else %}
         <p>
             {{ 'Everything seems good to go.'|trans }}
             <br>
             <br>
-            {{ ' Profile page URL is'|trans }}: <a href="#">TODO</a>
+            {{ ' Profile page URL is'|trans }}: <a href="{{ profilePageUri }}">{{ profilePageUri }}</a>
         </p>
-
     {% endif %}
 {% endblock %}

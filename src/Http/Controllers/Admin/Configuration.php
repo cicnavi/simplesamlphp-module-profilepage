@@ -7,7 +7,9 @@ namespace SimpleSAML\Module\accounting\Http\Controllers\Admin;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Configuration as SspConfiguration;
+use SimpleSAML\Module\accounting\Helpers\ModuleRoutesHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
 use SimpleSAML\Session;
@@ -23,16 +25,19 @@ class Configuration
     protected Session $session;
     protected LoggerInterface $logger;
     protected Utils\Auth $sspAuthUtils;
+    protected HelpersManager $helpersManager;
 
     public function __construct(
         SspConfiguration $sspConfiguration,
         Session $session,
         LoggerInterface $logger,
+        HelpersManager $helpersManager,
         Utils\Auth $sspAuthUtils = null
     ) {
         $this->sspConfiguration = $sspConfiguration;
         $this->session = $session;
         $this->logger = $logger;
+        $this->helpersManager = $helpersManager;
         $this->sspAuthUtils = $sspAuthUtils ?? new Utils\Auth();
 
         $this->sspAuthUtils->requireAdmin();
@@ -51,6 +56,7 @@ class Configuration
         $jobsStore = null;
         $defaultDataTrackerAndProvider = null;
         $setupNeeded = false;
+        $runSetup = $request->query->has('runSetup');
 
         try {
             $moduleConfiguration = new ModuleConfiguration();
@@ -60,7 +66,11 @@ class Configuration
                 ->build($moduleConfiguration->getDefaultDataTrackerAndProviderClass());
 
             if ($defaultDataTrackerAndProvider->needsSetup()) {
-                $setupNeeded = true;
+                if ($runSetup) {
+                    $defaultDataTrackerAndProvider->runSetup();
+                } else {
+                    $setupNeeded = true;
+                }
             }
 
             if (
@@ -70,9 +80,14 @@ class Configuration
                 $jobsStore = (new JobsStoreBuilder($moduleConfiguration, $this->logger))
                     ->build($moduleConfiguration->getJobsStoreClass());
                 if ($jobsStore->needsSetup()) {
-                    $setupNeeded = true;
+                    if ($runSetup) {
+                        $jobsStore->runSetup();
+                    } else {
+                        $setupNeeded = true;
+                    }
                 }
             }
+            // TODO mivanci setup for additional trackers from configuration
         } catch (Throwable $exception) {
             $configurationValidationErrors = $exception->getMessage();
         }
@@ -82,7 +97,9 @@ class Configuration
             'configurationValidationErrors' => $configurationValidationErrors,
             'jobsStore' => $jobsStore,
             'defaultDataTrackerAndProvider' => $defaultDataTrackerAndProvider,
-            'setupNeeded' => $setupNeeded
+            'setupNeeded' => $setupNeeded,
+            'profilePageUri' => $this->helpersManager->getModuleRoutesHelper()
+                ->getUrl(ModuleRoutesHelper::PATH_USER_PERSONAL_DATA),
         ];
 
         $template = new Template($this->sspConfiguration, 'accounting:admin/configuration/status.twig');
