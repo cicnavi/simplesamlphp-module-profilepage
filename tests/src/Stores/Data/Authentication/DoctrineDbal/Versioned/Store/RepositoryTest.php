@@ -63,6 +63,7 @@ class RepositoryTest extends TestCase
     protected $connectionStub;
     protected string $spEntityIdHash;
     protected string $spMetadata;
+    protected string $clientIpAddress;
 
     protected function setUp(): void
     {
@@ -107,6 +108,7 @@ class RepositoryTest extends TestCase
         $this->userAttributesHash = 'user-attributes-hash';
 
         $this->createdAt = new \DateTimeImmutable();
+        $this->clientIpAddress = '123.123.123.123';
     }
 
     public function testCanCreateInstance(): void
@@ -426,7 +428,7 @@ class RepositoryTest extends TestCase
 
         $this->assertSame(0, (int)$authenticationEventCounterQueryBuilder->executeQuery()->fetchOne());
 
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $happenedAt, $createdAt);
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $happenedAt, null, $createdAt);
 
         $this->assertSame(1, (int)$authenticationEventCounterQueryBuilder->executeQuery()->fetchOne());
     }
@@ -472,7 +474,12 @@ class RepositoryTest extends TestCase
         $idpSpUserVersionId =
             (int)$idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
 
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $this->repository->insertAuthenticationEvent(
+            $idpSpUserVersionId,
+            $this->createdAt,
+            $this->clientIpAddress,
+            $this->createdAt
+        );
 
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
 
@@ -496,7 +503,12 @@ class RepositoryTest extends TestCase
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
         $this->assertCount(1, $resultArray);
 
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $this->repository->insertAuthenticationEvent(
+            $idpSpUserVersionId,
+            $this->createdAt,
+            $this->clientIpAddress,
+            $this->createdAt
+        );
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
         $this->assertCount(1, $resultArray);
         $this->assertSame(
@@ -533,7 +545,12 @@ class RepositoryTest extends TestCase
         $idpSpUserVersionId =
             (int)$idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
 
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $this->repository->insertAuthenticationEvent(
+            $idpSpUserVersionId,
+            $this->createdAt,
+            $this->clientIpAddress,
+            $this->createdAt
+        );
 
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
         $this->assertCount(2, $resultArray);
@@ -567,7 +584,12 @@ class RepositoryTest extends TestCase
         $idpSpUserVersionId =
             (int)$idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
 
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $this->repository->insertAuthenticationEvent(
+            $idpSpUserVersionId,
+            $this->createdAt,
+            $this->clientIpAddress,
+            $this->createdAt
+        );
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
 
         $this->assertCount(2, $resultArray);
@@ -637,16 +659,31 @@ class RepositoryTest extends TestCase
         $idpSpUserVersionId =
             (int)$idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
 
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $this->repository->insertAuthenticationEvent(
+            $idpSpUserVersionId,
+            $this->createdAt,
+            $this->clientIpAddress,
+            $this->createdAt
+        );
 
         $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
         $this->assertCount(1, $resultArray);
 
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $this->repository->insertAuthenticationEvent(
+            $idpSpUserVersionId,
+            $this->createdAt,
+            $this->clientIpAddress,
+            $this->createdAt
+        );
         $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
         $this->assertCount(2, $resultArray);
 
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $this->repository->insertAuthenticationEvent(
+            $idpSpUserVersionId,
+            $this->createdAt,
+            $this->clientIpAddress,
+            $this->createdAt
+        );
         $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
         $this->assertCount(3, $resultArray);
 
@@ -669,7 +706,12 @@ class RepositoryTest extends TestCase
         $idpSpUserVersionId =
             (int)$idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
 
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $this->createdAt, $this->createdAt);
+        $this->repository->insertAuthenticationEvent(
+            $idpSpUserVersionId,
+            $this->createdAt,
+            $this->clientIpAddress,
+            $this->createdAt
+        );
         $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
         $this->assertCount(4, $resultArray);
 

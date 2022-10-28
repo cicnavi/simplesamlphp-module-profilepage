@@ -54,6 +54,10 @@
                     </ul>
                 </td>
             </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">{{ 'No data available'|trans }}</td>
+            </tr>
         {% endfor %}
         </tbody>
     </table>

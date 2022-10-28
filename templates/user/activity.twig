@@ -32,6 +32,9 @@
             </tr>
             <tr class="panel">
                 <td colspan="3">
+                    <strong>{{ 'IP address'|trans }}</strong>
+                    <ul><li>{{ activity.getClientIpAddress }}</li></ul>
+
                     <strong>{{ 'Information transfered to service'|trans }}</strong>
                     <ul>
                         {% for name, value in activity.getUser.getAttributes %}
@@ -41,6 +44,10 @@
                         {% endfor %}
                     </ul>
                 </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">{{ 'No data available'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>

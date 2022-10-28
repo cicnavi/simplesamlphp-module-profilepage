@@ -76,8 +76,11 @@ class Store extends AbstractStore implements DataStoreInterface
         $userVersionId = $this->resolveUserVersionId($userId, $hashDecoratedState);
         $idpSpUserVersionId = $this->resolveIdpSpUserVersionId($idpVersionId, $spVersionId, $userVersionId);
 
-        $happenedAt = $authenticationEvent->getHappenedAt();
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $happenedAt);
+        $this->repository->insertAuthenticationEvent(
+            $idpSpUserVersionId,
+            $authenticationEvent->getHappenedAt(),
+            $authenticationEvent->getState()->getClientIpAddress()
+        );
     }
 
     /**
@@ -596,7 +599,12 @@ class Store extends AbstractStore implements DataStoreInterface
                 $user = new User($rawActivity->getUserAttributes());
 
                 $activityBag->add(
-                    new Activity($serviceProvider, $user, $rawActivity->getHappenedAt())
+                    new Activity(
+                        $serviceProvider,
+                        $user,
+                        $rawActivity->getHappenedAt(),
+                        $rawActivity->getClientIpAddress()
+                    )
                 );
             }
         } catch (\Throwable $exception) {
