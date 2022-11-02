@@ -21,17 +21,17 @@ class NetworkHelperTest extends TestCase
 
     public function testCanGetIpFromParameter(): void
     {
-        $this->assertSame($this->ipAddress, NetworkHelper::resolveClientIpAddress($this->ipAddress));
+        $this->assertSame($this->ipAddress, (new NetworkHelper())->resolveClientIpAddress($this->ipAddress));
     }
 
     public function testReturnsNullForInvalidIp(): void
     {
-        $this->assertNull(NetworkHelper::resolveClientIpAddress('invalid'));
+        $this->assertNull((new NetworkHelper())->resolveClientIpAddress('invalid'));
     }
 
     public function testReturnsNullForNonExistentIp(): void
     {
-        $this->assertNull(NetworkHelper::resolveClientIpAddress());
+        $this->assertNull((new NetworkHelper())->resolveClientIpAddress());
     }
 
     /**
@@ -43,6 +43,6 @@ class NetworkHelperTest extends TestCase
 
         $_SERVER['REMOTE_ADDR'] = $this->ipAddress;
 
-        $this->assertSame($this->ipAddress, NetworkHelper::resolveClientIpAddress());
+        $this->assertSame($this->ipAddress, (new NetworkHelper())->resolveClientIpAddress());
     }
 }

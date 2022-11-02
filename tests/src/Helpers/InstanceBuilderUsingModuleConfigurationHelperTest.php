@@ -8,6 +8,7 @@ use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper
@@ -17,7 +18,7 @@ class InstanceBuilderUsingModuleConfigurationHelperTest extends TestCase
     protected BuildableUsingModuleConfigurationInterface $stub;
     /** @var class-string */
     protected string $stubClass;
-    protected \PHPUnit\Framework\MockObject\Stub $moduleConfigurationstub;
+    protected \PHPUnit\Framework\MockObject\Stub $moduleConfigurationStub;
     protected \PHPUnit\Framework\MockObject\Stub $loggerStub;
 
     protected function setUp(): void
@@ -33,7 +34,7 @@ class InstanceBuilderUsingModuleConfigurationHelperTest extends TestCase
 
         $this->stubClass = get_class($this->stub);
 
-        $this->moduleConfigurationstub = $this->createStub(ModuleConfiguration::class);
+        $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $this->loggerStub = $this->createStub(LoggerInterface::class);
     }
 
@@ -42,9 +43,9 @@ class InstanceBuilderUsingModuleConfigurationHelperTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $this->assertInstanceOf(
             BuildableUsingModuleConfigurationInterface::class,
-            InstanceBuilderUsingModuleConfigurationHelper::build(
+            (new InstanceBuilderUsingModuleConfigurationHelper())->build(
                 $this->stubClass,
-                $this->moduleConfigurationstub,
+                $this->moduleConfigurationStub,
                 $this->loggerStub
             )
         );
@@ -55,9 +56,9 @@ class InstanceBuilderUsingModuleConfigurationHelperTest extends TestCase
         $this->expectException(Exception::class);
 
         /** @psalm-suppress InvalidArgument */
-        InstanceBuilderUsingModuleConfigurationHelper::build(
+        (new InstanceBuilderUsingModuleConfigurationHelper())->build(
             ModuleConfiguration::class, // Sample class which is not buildable.
-            $this->moduleConfigurationstub,
+            $this->moduleConfigurationStub,
             $this->loggerStub
         );
     }

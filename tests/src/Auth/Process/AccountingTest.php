@@ -11,6 +11,7 @@ use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Authentication\State;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
@@ -31,6 +32,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses   \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
  * @uses   \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
  * @uses   \SimpleSAML\Module\accounting\Helpers\NetworkHelper
+ * @uses   \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class AccountingTest extends TestCase
 {
@@ -42,6 +44,27 @@ class AccountingTest extends TestCase
     protected \PHPUnit\Framework\MockObject\MockObject $jobsStoreMock;
     protected \PHPUnit\Framework\MockObject\MockObject $trackerMock;
     protected array $sampleState;
+    protected HelpersManager $helpersManager;
+
+    protected function setUp(): void
+    {
+        $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
+
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+
+        $this->jobsStoreBuilderMock = $this->createMock(JobsStoreBuilder::class);
+        $this->authenticationDataTrackerBuilderMock =
+            $this->createMock(AuthenticationDataTrackerBuilder::class);
+
+        $this->jobsStoreMock = $this->createMock(Store::class);
+        $this->trackerMock = $this->createMock(Tracker::class);
+
+        $this->sampleState = StateArrays::FULL;
+
+        $this->filterConfig = [];
+
+        $this->helpersManager = new HelpersManager();
+    }
 
     public function testCanCreateInstance(): void
     {
@@ -64,6 +87,7 @@ class AccountingTest extends TestCase
                 null,
                 $this->moduleConfigurationStub,
                 $this->loggerMock,
+                $this->helpersManager,
                 $this->jobsStoreBuilderMock,
                 $this->authenticationDataTrackerBuilderMock
             )
@@ -96,6 +120,7 @@ class AccountingTest extends TestCase
             null,
             $this->moduleConfigurationStub,
             $this->loggerMock,
+            $this->helpersManager,
             $this->jobsStoreBuilderMock,
             $this->authenticationDataTrackerBuilderMock
         ))->process($this->sampleState);
@@ -130,6 +155,7 @@ class AccountingTest extends TestCase
             null,
             $this->moduleConfigurationStub,
             $this->loggerMock,
+            $this->helpersManager,
             $this->jobsStoreBuilderMock,
             $this->authenticationDataTrackerBuilderMock
         ))->process($this->sampleState);
@@ -148,26 +174,9 @@ class AccountingTest extends TestCase
             null,
             $this->moduleConfigurationStub,
             $this->loggerMock,
+            $this->helpersManager,
             $this->jobsStoreBuilderMock,
             $this->authenticationDataTrackerBuilderMock
         ))->process($this->sampleState);
-    }
-
-    protected function setUp(): void
-    {
-        $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
-
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
-
-        $this->jobsStoreBuilderMock = $this->createMock(JobsStoreBuilder::class);
-        $this->authenticationDataTrackerBuilderMock =
-            $this->createMock(AuthenticationDataTrackerBuilder::class);
-
-        $this->jobsStoreMock = $this->createMock(Store::class);
-        $this->trackerMock = $this->createMock(Tracker::class);
-
-        $this->sampleState = StateArrays::FULL;
-
-        $this->filterConfig = [];
     }
 }

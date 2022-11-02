@@ -15,6 +15,8 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class FactoryTest extends TestCase
 {

@@ -54,6 +54,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Entities\Activity\Bag
  * @uses \SimpleSAML\Module\accounting\Entities\Activity
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawActivity
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  *
  * @psalm-suppress all
  */

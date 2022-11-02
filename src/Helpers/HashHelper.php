@@ -4,17 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Helpers;
 
-// TODO mivanci move to HelpersManager
 class HashHelper
 {
-    public static function getSha256(string $data): string
+    protected ArrayHelper $arrayHelper;
+
+    public function __construct(ArrayHelper $arrayHelper)
+    {
+        $this->arrayHelper = $arrayHelper;
+    }
+
+    public function getSha256(string $data): string
     {
         return hash('sha256', $data);
     }
 
-    public static function getSha256ForArray(array $array): string
+    public function getSha256ForArray(array $array): string
     {
-        ArrayHelper::recursivelySortByKey($array);
-        return self::getSha256(serialize($array));
+        $this->arrayHelper->recursivelySortByKey($array);
+        return $this->getSha256(serialize($array));
     }
 }

@@ -13,6 +13,7 @@ use ReflectionClass;
 use ReflectionException;
 use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
@@ -35,8 +36,10 @@ class Migrator extends AbstractMigrator
     /**
      * @throws StoreException
      */
-    public function __construct(Connection $connection, LoggerInterface $logger)
+    public function __construct(Connection $connection, LoggerInterface $logger, HelpersManager $helpersManager = null)
     {
+        parent::__construct($helpersManager);
+
         $this->connection = $connection;
         $this->logger = $logger;
 

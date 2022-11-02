@@ -1,32 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 
 use SimpleSAML\Module\accounting\Entities\Authentication\State;
-use SimpleSAML\Module\accounting\Helpers\HashHelper;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 class HashDecoratedState
 {
     protected State $state;
+    protected HelpersManager $helpersManager;
+
     protected string $identityProviderEntityIdHashSha256;
     protected string $serviceProviderEntityIdHashSha256;
     protected string $identityProviderMetadataArrayHashSha256;
     protected string $serviceProviderMetadataArrayHashSha256;
     protected string $attributesArrayHashSha256;
 
-    public function __construct(State $state)
+    public function __construct(State $state, HelpersManager $helpersManager = null)
     {
         $this->state = $state;
+        $this->helpersManager = $helpersManager ?? new HelpersManager();
 
-        $this->identityProviderEntityIdHashSha256 = HashHelper::getSha256($state->getIdentityProviderEntityId());
-        $this->identityProviderMetadataArrayHashSha256 =
-            HashHelper::getSha256ForArray($state->getIdentityProviderMetadata());
+        $this->identityProviderEntityIdHashSha256 = $this->helpersManager->getHashHelper()
+            ->getSha256($state->getIdentityProviderEntityId());
+        $this->identityProviderMetadataArrayHashSha256 = $this->helpersManager->getHashHelper()
+            ->getSha256ForArray($state->getIdentityProviderMetadata());
 
-        $this->serviceProviderEntityIdHashSha256 = HashHelper::getSha256($state->getServiceProviderEntityId());
-        $this->serviceProviderMetadataArrayHashSha256 =
-            HashHelper::getSha256ForArray($state->getServiceProviderMetadata());
+        $this->serviceProviderEntityIdHashSha256 = $this->helpersManager->getHashHelper()
+            ->getSha256($state->getServiceProviderEntityId());
+        $this->serviceProviderMetadataArrayHashSha256 = $this->helpersManager->getHashHelper()
+            ->getSha256ForArray($state->getServiceProviderMetadata());
 
-        $this->attributesArrayHashSha256 = HashHelper::getSha256ForArray($state->getAttributes());
+        $this->attributesArrayHashSha256 = $this->helpersManager->getHashHelper()
+            ->getSha256ForArray($state->getAttributes());
     }
 
     /**

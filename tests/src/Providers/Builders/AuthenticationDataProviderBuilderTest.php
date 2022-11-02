@@ -9,6 +9,7 @@ use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Providers\Builders\AuthenticationDataProviderBuilder;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned\Tracker;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
@@ -24,12 +25,15 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store
  * @uses \SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned\Tracker
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class AuthenticationDataProviderBuilderTest extends TestCase
 {
     protected \PHPUnit\Framework\MockObject\Stub $moduleConfigurationStub;
 
     protected \PHPUnit\Framework\MockObject\Stub $loggerStub;
+    protected HelpersManager $helpersManager;
 
     protected function setUp(): void
     {
@@ -39,6 +43,7 @@ class AuthenticationDataProviderBuilderTest extends TestCase
             ->willReturn($connectionParams);
 
         $this->loggerStub = $this->createStub(LoggerInterface::class);
+        $this->helpersManager = new HelpersManager();
     }
 
     public function testCanCreateInstance(): void
@@ -46,14 +51,22 @@ class AuthenticationDataProviderBuilderTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         $this->assertInstanceOf(
             AuthenticationDataProviderBuilder::class,
-            new AuthenticationDataProviderBuilder($this->moduleConfigurationStub, $this->loggerStub)
+            new AuthenticationDataProviderBuilder(
+                $this->moduleConfigurationStub,
+                $this->loggerStub,
+                $this->helpersManager
+            )
         );
     }
 
     public function testCanBuildDataProvider(): void
     {
         /** @psalm-suppress InvalidArgument */
-        $builder = new AuthenticationDataProviderBuilder($this->moduleConfigurationStub, $this->loggerStub);
+        $builder = new AuthenticationDataProviderBuilder(
+            $this->moduleConfigurationStub,
+            $this->loggerStub,
+            $this->helpersManager
+        );
 
         $this->assertInstanceOf(Tracker::class, $builder->build(Tracker::class));
     }
@@ -63,7 +76,10 @@ class AuthenticationDataProviderBuilderTest extends TestCase
         $this->expectException(Exception::class);
 
         /** @psalm-suppress InvalidArgument */
-        (new AuthenticationDataProviderBuilder($this->moduleConfigurationStub, $this->loggerStub))
-            ->build('invalid');
+        (new AuthenticationDataProviderBuilder(
+            $this->moduleConfigurationStub,
+            $this->loggerStub,
+            $this->helpersManager
+        ))->build('invalid');
     }
 }

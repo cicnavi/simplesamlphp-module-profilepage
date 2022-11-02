@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Builders;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Interfaces\StoreInterface;
@@ -22,12 +25,15 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
  * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class JobsStoreBuilderTest extends TestCase
 {
     protected \PHPUnit\Framework\MockObject\Stub $moduleConfigurationStub;
     protected \PHPUnit\Framework\MockObject\Stub $loggerStub;
     protected JobsStoreBuilder $jobsStoreBuilder;
+    protected HelpersManager $helpersManager;
 
     protected function setUp(): void
     {
@@ -38,8 +44,14 @@ class JobsStoreBuilderTest extends TestCase
 
         $this->loggerStub = $this->createStub(LoggerInterface::class);
 
+        $this->helpersManager = new HelpersManager();
+
         /** @psalm-suppress InvalidArgument */
-        $this->jobsStoreBuilder = new JobsStoreBuilder($this->moduleConfigurationStub, $this->loggerStub);
+        $this->jobsStoreBuilder = new JobsStoreBuilder(
+            $this->moduleConfigurationStub,
+            $this->loggerStub,
+            $this->helpersManager
+        );
     }
 
     public function testCanBuildJobsStore(): void
@@ -57,7 +69,11 @@ class JobsStoreBuilderTest extends TestCase
         };
 
         /** @psalm-suppress InvalidArgument */
-        $storeBuilder = new class ($moduleConfigurationStub, $this->loggerStub) extends AbstractStoreBuilder {
+        $storeBuilder = new class (
+            $moduleConfigurationStub,
+            $this->loggerStub,
+            $this->helpersManager
+        ) extends AbstractStoreBuilder {
             public function build(
                 string $class,
                 string $connectionKey = null,
@@ -82,7 +98,8 @@ class JobsStoreBuilderTest extends TestCase
         $this->expectException(StoreException::class);
 
         /** @psalm-suppress InvalidArgument */
-        (new JobsStoreBuilder($moduleConfigurationStub, $this->loggerStub))->build('invalid');
+        (new JobsStoreBuilder($moduleConfigurationStub, $this->loggerStub, $this->helpersManager))
+            ->build('invalid');
     }
 
     public function testJobsStoreBuilderOnlyReturnsJobsStores(): void
@@ -114,6 +131,7 @@ class JobsStoreBuilderTest extends TestCase
         $this->expectException(StoreException::class);
 
         /** @psalm-suppress InvalidArgument */
-        (new JobsStoreBuilder($moduleConfigurationStub, $this->loggerStub))->build(get_class($sampleStore));
+        (new JobsStoreBuilder($moduleConfigurationStub, $this->loggerStub, $this->helpersManager))
+            ->build(get_class($sampleStore));
     }
 }

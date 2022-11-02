@@ -12,8 +12,8 @@ use SimpleSAML\Module\accounting\Entities\ServiceProvider;
 use SimpleSAML\Module\accounting\Entities\User;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Helpers\HashHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\HashDecoratedState;
@@ -25,6 +25,7 @@ use SimpleSAML\Module\accounting\Stores\Interfaces\DataStoreInterface;
 class Store extends AbstractStore implements DataStoreInterface
 {
     protected Repository $repository;
+    protected HelpersManager $helpersManager;
 
     /**
      * @throws StoreException
@@ -35,11 +36,13 @@ class Store extends AbstractStore implements DataStoreInterface
         Factory $connectionFactory,
         string $connectionKey = null,
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
-        Repository $repository = null
+        Repository $repository = null,
+        HelpersManager $helpersManager = null
     ) {
         parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey, $connectionType);
 
         $this->repository = $repository ?? new Repository($this->connection, $this->logger);
+        $this->helpersManager = $helpersManager ?? new HelpersManager();
     }
 
     /**
@@ -311,7 +314,7 @@ class Store extends AbstractStore implements DataStoreInterface
             throw new UnexpectedValueException($message);
         }
 
-        $userIdentifierValueHashSha256 = HashHelper::getSha256($userIdentifierValue);
+        $userIdentifierValueHashSha256 = $this->helpersManager->getHashHelper()->getSha256($userIdentifierValue);
 
         // Check if it already exists.
         try {

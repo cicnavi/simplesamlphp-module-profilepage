@@ -10,10 +10,10 @@ use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Authentication\State;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
-use SimpleSAML\Module\accounting\Trackers\Interfaces\AuthenticationDataTrackerInterface;
 
 class Accounting extends ProcessingFilter
 {
@@ -21,19 +21,23 @@ class Accounting extends ProcessingFilter
     protected JobsStoreBuilder $jobsStoreBuilder;
     protected LoggerInterface $logger;
     protected AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder;
+    protected HelpersManager $helpersManager;
 
     /**
      * @param array $config
      * @param mixed $reserved
      * @param ModuleConfiguration|null $moduleConfiguration
      * @param LoggerInterface|null $logger
+     * @param HelpersManager|null $helpersManager
      * @param JobsStoreBuilder|null $jobsStoreBuilder
+     * @param AuthenticationDataTrackerBuilder|null $authenticationDataTrackerBuilder
      */
     public function __construct(
         array &$config,
         $reserved,
         ModuleConfiguration $moduleConfiguration = null,
         LoggerInterface $logger = null,
+        HelpersManager $helpersManager = null,
         JobsStoreBuilder $jobsStoreBuilder = null,
         AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder = null
     ) {
@@ -41,14 +45,15 @@ class Accounting extends ProcessingFilter
 
         $this->moduleConfiguration = $moduleConfiguration ?? new ModuleConfiguration();
         $this->logger = $logger ?? new Logger();
-        $this->jobsStoreBuilder = $jobsStoreBuilder ?? new JobsStoreBuilder($this->moduleConfiguration, $this->logger);
+        $this->helpersManager = $helpersManager ?? new HelpersManager();
+        $this->jobsStoreBuilder = $jobsStoreBuilder ??
+            new JobsStoreBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
 
         $this->authenticationDataTrackerBuilder = $authenticationDataTrackerBuilder ??
-            new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger);
+            new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
     }
 
     /**
-     * @throws StoreException
      */
     public function process(array &$state): void
     {

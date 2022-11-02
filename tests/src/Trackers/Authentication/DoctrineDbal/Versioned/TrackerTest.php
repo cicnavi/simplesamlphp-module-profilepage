@@ -9,6 +9,7 @@ use SimpleSAML\Module\accounting\Entities\Activity;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 use SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned\Tracker;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +27,8 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Repository
  * @uses \SimpleSAML\Module\accounting\Helpers\HashHelper
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  *
  * @psalm-suppress all
  */
@@ -43,6 +46,10 @@ class TrackerTest extends TestCase
      * @var \PHPUnit\Framework\MockObject\MockObject|Store
      */
     protected $dataStoreMock;
+    /**
+     * @var \PHPUnit\Framework\MockObject\Stub|HelpersManager
+     */
+    protected $helpersManagerStub;
 
     protected function setUp(): void
     {
@@ -51,6 +58,7 @@ class TrackerTest extends TestCase
             ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->dataStoreMock = $this->createMock(Store::class);
+        $this->helpersManagerStub = $this->createStub(HelpersManager::class);
     }
 
     /**
@@ -64,6 +72,7 @@ class TrackerTest extends TestCase
                 $this->moduleConfigurationStub,
                 $this->loggerMock,
                 ModuleConfiguration\ConnectionType::MASTER,
+                $this->helpersManagerStub,
                 $this->dataStoreMock
             )
         );
@@ -92,6 +101,7 @@ class TrackerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->loggerMock,
             ModuleConfiguration\ConnectionType::MASTER,
+            $this->helpersManagerStub,
             $this->dataStoreMock
         );
 
@@ -112,6 +122,7 @@ class TrackerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->loggerMock,
             ModuleConfiguration\ConnectionType::MASTER,
+            $this->helpersManagerStub,
             $this->dataStoreMock
         );
 
@@ -132,6 +143,7 @@ class TrackerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->loggerMock,
             ModuleConfiguration\ConnectionType::MASTER,
+            $this->helpersManagerStub,
             $this->dataStoreMock
         );
 
@@ -152,6 +164,7 @@ class TrackerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->loggerMock,
             ModuleConfiguration\ConnectionType::MASTER,
+            $this->helpersManagerStub,
             $this->dataStoreMock
         );
 
