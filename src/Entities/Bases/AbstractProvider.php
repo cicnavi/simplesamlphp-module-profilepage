@@ -8,7 +8,7 @@ abstract class AbstractProvider
 {
     public const METADATA_KEY_NAME = 'name';
     public const METADATA_KEY_ENTITY_ID = 'entityid';
-    public const METADATA_KEY_DESCRIPTION = 'name';
+    public const METADATA_KEY_DESCRIPTION = 'description';
 
     protected array $metadata;
     protected string $entityId;

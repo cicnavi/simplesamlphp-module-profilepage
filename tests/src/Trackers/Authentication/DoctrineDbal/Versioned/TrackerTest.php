@@ -131,6 +131,26 @@ class TrackerTest extends TestCase
         $tracker->runSetup();
     }
 
+    public function testRunningSetupIfNotNeededLogsWarning(): void
+    {
+        $this->dataStoreMock->method('needsSetup')
+            ->willReturn(false);
+
+        $this->loggerMock->expects($this->once())
+            ->method('warning');
+
+        /** @psalm-suppress PossiblyInvalidArgument */
+        $tracker = new Tracker(
+            $this->moduleConfigurationStub,
+            $this->loggerMock,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->helpersManagerStub,
+            $this->dataStoreMock
+        );
+
+        $tracker->runSetup();
+    }
+
     public function testGetConnectedServiceProviders(): void
     {
         $connectedOrganizationsBagStub = $this->createStub(ConnectedServiceProvider\Bag::class);

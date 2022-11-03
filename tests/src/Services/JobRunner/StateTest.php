@@ -105,4 +105,13 @@ class StateTest extends TestCase
         $this->assertSame(2, count($state->getStatusMessages()));
         $this->assertSame('test3', $state->getLastStatusMessage());
     }
+
+    public function testCanSetGracefulInterruptInitiatedFlag(): void
+    {
+        $state = new State($this->jobRunnerId);
+
+        $this->assertFalse($state->getIsGracefulInterruptInitiated());
+        $state->setIsGracefulInterruptInitiated(true);
+        $this->assertTrue($state->getIsGracefulInterruptInitiated());
+    }
 }

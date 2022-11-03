@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Helpers;
 
+use SimpleSAML\Module\accounting\Helpers\ArrayHelper;
 use SimpleSAML\Module\accounting\Helpers\HashHelper;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
@@ -11,10 +12,11 @@ use SimpleSAML\Module\accounting\Services\HelpersManager;
 /**
  * @covers \SimpleSAML\Module\accounting\Helpers\HashHelper
  * @uses \SimpleSAML\Module\accounting\Helpers\ArrayHelper
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class HashHelperTest extends TestCase
 {
+    protected HashHelper $hashHelper;
+
     protected string $data;
     protected string $dataSha256;
     /**
@@ -27,23 +29,22 @@ class HashHelperTest extends TestCase
      */
     protected array $sortedArrayData;
     protected string $sortedArrayDataSha256;
-    protected HelpersManager $helpersManager;
 
     protected function setUp(): void
     {
+        $this->hashHelper = new HashHelper(new ArrayHelper());
+
         $this->data = 'test';
         $this->dataSha256 = '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08';
         $this->unsortedArrayData = ['b' => [1 => 1, 0 => 0,], 'a' => [1 => 1, 0 => 0,],];
         $this->unsortedArraySha256 = 'c467191ddddcaa5a6cc3bac28c1fd0557eb9390dbb079195a2ae70c49ce62da7';
         $this->sortedArrayData = ['a' => [0 => 0, 1 => 1,], 'b' => [0 => 0, 1 => 1,],];
         $this->sortedArrayDataSha256 = 'c467191ddddcaa5a6cc3bac28c1fd0557eb9390dbb079195a2ae70c49ce62da7';
-
-        $this->helpersManager = new HelpersManager();
     }
 
     public function testCanGetSha256ForString(): void
     {
-        $this->assertSame($this->dataSha256, $this->helpersManager->getHashHelper()->getSha256($this->data));
+        $this->assertSame($this->dataSha256, $this->hashHelper->getSha256($this->data));
     }
 
     public function testCanGetSha256ForArray(): void
@@ -52,11 +53,11 @@ class HashHelperTest extends TestCase
         $this->assertSame($this->unsortedArraySha256, $this->sortedArrayDataSha256);
         $this->assertSame(
             $this->unsortedArraySha256,
-            $this->helpersManager->getHashHelper()->getSha256ForArray($this->unsortedArrayData)
+            $this->hashHelper->getSha256ForArray($this->unsortedArrayData)
         );
         $this->assertSame(
             $this->sortedArrayDataSha256,
-            $this->helpersManager->getHashHelper()->getSha256ForArray($this->sortedArrayData)
+            $this->hashHelper->getSha256ForArray($this->sortedArrayData)
         );
     }
 }

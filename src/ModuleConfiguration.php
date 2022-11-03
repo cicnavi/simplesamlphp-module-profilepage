@@ -44,11 +44,13 @@ class ModuleConfiguration
     /**
      * @throws Exception
      */
-    public function __construct(string $fileName = null)
+    public function __construct(string $fileName = null, array $overrides = [])
     {
         $fileName = $fileName ?? self::FILE_NAME;
 
-        $this->configuration = Configuration::getConfig($fileName);
+        $fullConfigArray = array_merge(Configuration::getConfig($fileName)->toArray(), $overrides);
+
+        $this->configuration = Configuration::loadFromArray($fullConfigArray);
 
         $this->validate();
     }

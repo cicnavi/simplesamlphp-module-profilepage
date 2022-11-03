@@ -46,5 +46,6 @@ class ActivityTest extends TestCase
         $this->assertSame($this->serviceProviderStub, $activity->getServiceProvider());
         $this->assertSame($this->userStub, $activity->getUser());
         $this->assertSame($this->happenedAt, $activity->getHappenedAt());
+        $this->assertSame($this->clientIpAddress, $activity->getClientIpAddress());
     }
 }

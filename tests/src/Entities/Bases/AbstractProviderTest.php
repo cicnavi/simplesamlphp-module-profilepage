@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Entities\Bases;
 
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
@@ -23,7 +25,10 @@ class AbstractProviderTest extends TestCase
         $this->metadata = [
             AbstractProvider::METADATA_KEY_ENTITY_ID => 'http//example.org/idp',
             AbstractProvider::METADATA_KEY_NAME => [
-                'en' => 'Test',
+                'en' => 'Example service',
+            ],
+            AbstractProvider::METADATA_KEY_DESCRIPTION => [
+                'en' => 'Example description'
             ],
         ];
     }
@@ -44,6 +49,30 @@ class AbstractProviderTest extends TestCase
             $this->metadata[AbstractProvider::METADATA_KEY_NAME]['en'],
             $identityProvider->getName()
         );
+        $this->assertSame(
+            $this->metadata[AbstractProvider::METADATA_KEY_DESCRIPTION]['en'],
+            $identityProvider->getDescription()
+        );
+    }
+
+    public function testCanResolveNonLocalizedString(): void
+    {
+        $metadata = $this->metadata;
+        $metadata[AbstractProvider::METADATA_KEY_DESCRIPTION] = 'Non localized description.';
+
+        $identityProvider = new IdentityProvider($metadata);
+
+        $this->assertSame($metadata[AbstractProvider::METADATA_KEY_DESCRIPTION], $identityProvider->getDescription());
+    }
+
+    public function testInvalidLocalizedDataResolvesToNull(): void
+    {
+        $metadata = $this->metadata;
+        $metadata[AbstractProvider::METADATA_KEY_DESCRIPTION] = false;
+
+        $identityProvider = new IdentityProvider($metadata);
+
+        $this->assertNull($identityProvider->getDescription());
     }
 
     public function testReturnsNullIfNameNotAvailable(): void

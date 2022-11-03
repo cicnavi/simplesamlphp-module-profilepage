@@ -24,6 +24,8 @@ class RawActivityTest extends TestCase
      */
     protected array $userAttributes;
     protected string $happenedAt;
+    protected string $clientIpAddress;
+
     protected array $rawRow;
     /**
      * @var AbstractPlatform|AbstractPlatform&\PHPUnit\Framework\MockObject\Stub|\PHPUnit\Framework\MockObject\Stub
@@ -35,10 +37,13 @@ class RawActivityTest extends TestCase
         $this->serviceProviderMetadata = ['sp' => 'metadata'];
         $this->userAttributes = ['user' => 'attribute'];
         $this->happenedAt = '2022-02-22 22:22:22';
+        $this->clientIpAddress = '123.123.123.123';
+
         $this->rawRow = [
             TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA => serialize($this->serviceProviderMetadata),
             TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES => serialize($this->userAttributes),
             TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT => $this->happenedAt,
+            TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS => $this->clientIpAddress,
         ];
         $this->abstractPlatformStub = $this->createStub(AbstractPlatform::class);
         $this->abstractPlatformStub->method('getDateTimeFormatString')->willReturn(DateTime::DEFAULT_FORMAT);
@@ -60,6 +65,16 @@ class RawActivityTest extends TestCase
         $this->assertInstanceOf(\DateTimeImmutable::class, $rawActivity->getHappenedAt());
         $this->assertSame($this->serviceProviderMetadata, $rawActivity->getServiceProviderMetadata());
         $this->assertSame($this->userAttributes, $rawActivity->getUserAttributes());
+        $this->assertSame($this->clientIpAddress, $rawActivity->getClientIpAddress());
+    }
+
+    public function testIpAddressCanBeMissing(): void
+    {
+        $rawRow = $this->rawRow;
+        unset($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]);
+
+        $rawActivity = new RawActivity($rawRow, $this->abstractPlatformStub);
+        $this->assertNull($rawActivity->getClientIpAddress());
     }
 
     public function testThrowsIfColumnNotPresent(): void

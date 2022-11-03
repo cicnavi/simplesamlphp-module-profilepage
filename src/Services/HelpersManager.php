@@ -25,7 +25,7 @@ class HelpersManager
     protected static ?HashHelper $hashHelper;
     protected static ?AttributesHelper $attributesHelper;
     protected static ?FilesystemHelper $filesystemHelper;
-    protected static ?InstanceBuilderUsingModuleConfigurationHelper $instanceBuilderUsingModuleConfigurationHelper;
+    protected static ?InstanceBuilderUsingModuleConfigurationHelper $instanceBuilderHelper;
     protected static ?NetworkHelper $networkHelper;
 
     public function getDateTimeHelper(): DateTimeHelper
@@ -70,8 +70,7 @@ class HelpersManager
 
     public function getInstanceBuilderUsingModuleConfigurationHelper(): InstanceBuilderUsingModuleConfigurationHelper
     {
-        return self::$instanceBuilderUsingModuleConfigurationHelper ??=
-            new InstanceBuilderUsingModuleConfigurationHelper();
+        return self::$instanceBuilderHelper ??= new InstanceBuilderUsingModuleConfigurationHelper();
     }
 
     public function getNetworkHelper(): NetworkHelper
