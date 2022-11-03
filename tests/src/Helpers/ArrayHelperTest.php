@@ -24,7 +24,7 @@ class ArrayHelperTest extends TestCase
 
         $this->assertNotSame($unsorted, $sorted);
 
-        ArrayHelper::recursivelySortByKey($unsorted);
+        (new ArrayHelper())->recursivelySortByKey($unsorted);
 
         $this->assertSame($unsorted, $sorted);
     }

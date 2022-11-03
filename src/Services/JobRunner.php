@@ -53,23 +53,24 @@ class JobRunner
         ModuleConfiguration $moduleConfiguration,
         SspConfiguration $sspConfiguration,
         LoggerInterface $logger = null,
+        HelpersManager $helpersManager = null,
         AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder = null,
         JobsStoreBuilder $jobsStoreBuilder = null,
         CacheInterface $cache = null,
         State $state = null,
-        RateLimiter $rateLimiter = null,
-        HelpersManager $helpersManager = null
+        RateLimiter $rateLimiter = null
     ) {
         $this->moduleConfiguration = $moduleConfiguration;
         $this->sspConfiguration = $sspConfiguration;
         $this->logger = $logger ?? new Logger();
+        $this->helpersManager = $helpersManager ?? new HelpersManager();
+
         $this->authenticationDataTrackerBuilder = $authenticationDataTrackerBuilder ??
-            new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger);
-        $this->jobsStoreBuilder = $jobsStoreBuilder ?? new JobsStoreBuilder($this->moduleConfiguration, $this->logger);
+            new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
+        $this->jobsStoreBuilder = $jobsStoreBuilder ??
+            new JobsStoreBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
 
         $this->cache = $cache ?? $this->resolveCache();
-
-        $this->helpersManager = $helpersManager ?? new HelpersManager();
 
         $this->jobRunnerId = $this->helpersManager->getRandomHelper()->getRandomInt();
 

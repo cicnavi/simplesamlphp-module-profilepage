@@ -11,6 +11,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @covers \SimpleSAML\Module\accounting\Entities\Authentication\Event
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
  * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class EventTest extends TestCase
 {

@@ -6,8 +6,8 @@ namespace SimpleSAML\Module\accounting\Stores\Builders\Bases;
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Interfaces\StoreInterface;
 use Throwable;
 
@@ -18,11 +18,16 @@ abstract class AbstractStoreBuilder
 {
     protected ModuleConfiguration $moduleConfiguration;
     protected LoggerInterface $logger;
+    protected HelpersManager $helpersManager;
 
-    public function __construct(ModuleConfiguration $moduleConfiguration, LoggerInterface $logger)
-    {
+    public function __construct(
+        ModuleConfiguration $moduleConfiguration,
+        LoggerInterface $logger,
+        HelpersManager $helpersManager
+    ) {
         $this->moduleConfiguration = $moduleConfiguration;
         $this->logger = $logger;
+        $this->helpersManager = $helpersManager;
     }
 
     abstract public function build(
@@ -44,7 +49,7 @@ abstract class AbstractStoreBuilder
 
             // Build store...
             /** @var StoreInterface $store */
-            $store = InstanceBuilderUsingModuleConfigurationHelper::build(
+            $store = $this->helpersManager->getInstanceBuilderUsingModuleConfigurationHelper()->build(
                 $class,
                 $this->moduleConfiguration,
                 $this->logger,

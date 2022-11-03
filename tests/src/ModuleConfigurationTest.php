@@ -63,14 +63,26 @@ class ModuleConfigurationTest extends TestCase
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        new ModuleConfiguration('invalid_module_accounting.php');
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE => 'invalid',
+            ]
+        );
     }
 
     public function testThrowsForInvalidJobsStore(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        new ModuleConfiguration('invalid_async_module_accounting.php');
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
+                    ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS,
+                ModuleConfiguration::OPTION_JOBS_STORE => 'invalid',
+            ]
+        );
     }
 
     public function testProperConnectionKeyIsReturned(): void
@@ -96,14 +108,30 @@ class ModuleConfigurationTest extends TestCase
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        new ModuleConfiguration('invalid_object_value_module_accounting.php');
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [
+                    'invalid-object-value' => new \stdClass(),
+                ]
+            ]
+        );
     }
 
     public function testThrowsForNonMasterInArrayConnection(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        new ModuleConfiguration('invalid_array_value_module_accounting.php');
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [
+                    'invalid-array-value' => [
+                        'no-master-key' => 'invalid',
+                    ],
+                ]
+            ]
+        );
     }
 
     public function testThrowsForInvalidConnectiontype(): void
@@ -155,6 +183,145 @@ class ModuleConfigurationTest extends TestCase
         $this->assertSame(
             dirname(__DIR__, 2),
             $this->moduleConfiguration->getModuleRootDirectory()
+        );
+    }
+
+    public function testCanGetCronTagForJobRunner(): void
+    {
+        $this->assertSame(
+            'accounting_job_runner',
+            $this->moduleConfiguration->getCronTagForJobRunner()
+        );
+    }
+
+    public function testCanGetJobRunnerMaximumExecutionTime(): void
+    {
+        $this->assertNull($this->moduleConfiguration->getJobRunnerMaximumExecutionTime());
+    }
+
+    public function testThrowsForNonStringJobRunnerMaximumExecutionTime(): void
+    {
+        $moduleConfiguration = new ModuleConfiguration(
+            null,
+            [ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => false]
+        );
+
+        $this->expectException(InvalidConfigurationException::class);
+
+        $moduleConfiguration->getJobRunnerMaximumExecutionTime();
+    }
+
+    public function testThrowsForInvalidStringJobRunnerMaximumExecutionTime(): void
+    {
+        $moduleConfiguration = new ModuleConfiguration(
+            null,
+            [ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => 'invalid']
+        );
+
+
+        $this->expectException(InvalidConfigurationException::class);
+
+        $moduleConfiguration->getJobRunnerMaximumExecutionTime();
+    }
+
+    public function testCanGetJobRunnerShouldPauseAfterNumberOfJobsProcessed(): void
+    {
+        $this->assertSame(10, $this->moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed());
+    }
+
+    public function testCanGetNullForJobRunnerShouldPauseAfterNumberOfJobsProcessed(): void
+    {
+        $moduleConfiguration = new ModuleConfiguration(
+            null,
+            [ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => null]
+        );
+
+        $this->assertNull($moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed());
+    }
+
+    public function testThrowsForNonIntegerJobRunnerShouldPauseAfterNumberOfJobsProcessed(): void
+    {
+        $moduleConfiguration = new ModuleConfiguration(
+            null,
+            [ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => false]
+        );
+
+        $this->expectException(InvalidConfigurationException::class);
+
+        $moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed();
+    }
+
+    public function testThrowsForNegativeIntegerJobRunnerShouldPauseAfterNumberOfJobsProcessed(): void
+    {
+        $moduleConfiguration = new ModuleConfiguration(
+            null,
+            [ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => -1]
+        );
+
+        $this->expectException(InvalidConfigurationException::class);
+
+        $moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed();
+    }
+
+    public function testThrowsOnInvalidCronTag(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
+                    ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS,
+                ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => -1
+            ]
+        );
+    }
+
+    public function testThrowsOnInvalidDefaultDataTrackerAndProvider(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER => 'invalid'
+            ]
+        );
+    }
+
+    public function testThrowsOnInvalidAdditionalTrackers(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_ADDITIONAL_TRACKERS => ['invalid']
+            ]
+        );
+    }
+
+    public function testThrowsOnNonStringAdditionalTracker(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_ADDITIONAL_TRACKERS => [-1]
+            ]
+        );
+    }
+
+    public function testThrowsWhenClassHasNoConnectionParametersSet(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_CONNECTIONS_AND_PARAMETERS => []
+            ]
         );
     }
 }

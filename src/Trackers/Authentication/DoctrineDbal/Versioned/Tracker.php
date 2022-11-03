@@ -8,9 +8,9 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Activity;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
-use SimpleSAML\Module\accounting\Helpers\HashHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Providers\Interfaces\AuthenticationDataProviderInterface;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Builders\DataStoreBuilder;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 use SimpleSAML\Module\accounting\Stores\Interfaces\DataStoreInterface;
@@ -21,19 +21,23 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
     protected ModuleConfiguration $moduleConfiguration;
     protected LoggerInterface $logger;
     protected DataStoreInterface $dataStore;
+    protected HelpersManager $helpersManager;
 
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
+        HelpersManager $helpersManager = null,
         DataStoreInterface $dataStore = null
     ) {
         $this->moduleConfiguration = $moduleConfiguration;
         $this->logger = $logger;
 
+        $this->helpersManager = $helpersManager ?? new HelpersManager();
+
         // Use provided store or initialize default store for this tracker.
         $this->dataStore = $dataStore ??
-            (new DataStoreBuilder($this->moduleConfiguration, $this->logger))
+            (new DataStoreBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager))
                 ->build(
                     Store::class,
                     $this->moduleConfiguration->getClassConnectionKey(self::class),
@@ -71,13 +75,13 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
 
     public function getConnectedServiceProviders(string $userIdentifier): ConnectedServiceProvider\Bag
     {
-        $userIdentifierHashSha256 = HashHelper::getSha256($userIdentifier);
+        $userIdentifierHashSha256 = $this->helpersManager->getHashHelper()->getSha256($userIdentifier);
         return $this->dataStore->getConnectedOrganizations($userIdentifierHashSha256);
     }
 
     public function getActivity(string $userIdentifier, int $maxResults, int $firstResult): Activity\Bag
     {
-        $userIdentifierHashSha256 = HashHelper::getSha256($userIdentifier);
+        $userIdentifierHashSha256 = $this->helpersManager->getHashHelper()->getSha256($userIdentifier);
         return $this->dataStore->getActivity($userIdentifierHashSha256, $maxResults, $firstResult);
     }
 }

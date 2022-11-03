@@ -7,6 +7,7 @@ use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Trackers\Interfaces\AuthenticationDataTrackerInterface;
 use Throwable;
 
@@ -14,11 +15,16 @@ class AuthenticationDataTrackerBuilder
 {
     protected ModuleConfiguration $moduleConfiguration;
     protected LoggerInterface $logger;
+    protected HelpersManager $helpersManager;
 
-    public function __construct(ModuleConfiguration $moduleConfiguration, LoggerInterface $logger)
-    {
+    public function __construct(
+        ModuleConfiguration $moduleConfiguration,
+        LoggerInterface $logger,
+        HelpersManager $helpersManager
+    ) {
         $this->moduleConfiguration = $moduleConfiguration;
         $this->logger = $logger;
+        $this->helpersManager = $helpersManager;
     }
 
     /**
@@ -39,7 +45,7 @@ class AuthenticationDataTrackerBuilder
 
             // Build...
             /** @var AuthenticationDataTrackerInterface $store */
-            $store = InstanceBuilderUsingModuleConfigurationHelper::build(
+            $store = $this->helpersManager->getInstanceBuilderUsingModuleConfigurationHelper()->build(
                 $class,
                 $this->moduleConfiguration,
                 $this->logger

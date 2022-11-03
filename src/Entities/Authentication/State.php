@@ -7,6 +7,7 @@ namespace SimpleSAML\Module\accounting\Entities\Authentication;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Helpers\NetworkHelper;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 class State
 {
@@ -28,10 +29,15 @@ class State
     protected array $identityProviderMetadata;
     protected array $serviceProviderMetadata;
     protected ?string $clientIpAddress;
+    protected HelpersManager $helpersManager;
 
-    public function __construct(array $state, \DateTimeImmutable $createdAt = null)
-    {
+    public function __construct(
+        array $state,
+        \DateTimeImmutable $createdAt = null,
+        HelpersManager $helpersManager = null
+    ) {
         $this->createdAt = $createdAt ?? new \DateTimeImmutable();
+        $this->helpersManager = $helpersManager ?? new HelpersManager();
 
         $this->identityProviderMetadata = $this->resolveIdentityProviderMetadata($state);
         $this->identityProviderEntityId = $this->resolveIdentityProviderEntityId();
@@ -175,7 +181,7 @@ class State
 
     protected function resolveClientIpAddress(array $state): ?string
     {
-        return NetworkHelper::resolveClientIpAddress(
+        return $this->helpersManager->getNetworkHelper()->resolveClientIpAddress(
             isset($state[self::KEY_ACCOUNTING][self::ACCOUNTING_KEY_CLIENT_IP_ADDRESS]) ?
                 (string)$state[self::KEY_ACCOUNTING][self::ACCOUNTING_KEY_CLIENT_IP_ADDRESS]
                 : null

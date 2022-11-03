@@ -12,6 +12,7 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\ModuleConfiguration\ConnectionType;
 use SimpleSAML\Module\accounting\Providers\Builders\AuthenticationDataProviderBuilder;
 use SimpleSAML\Module\accounting\Providers\Interfaces\AuthenticationDataProviderInterface;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Session;
 use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +30,7 @@ class Profile
     protected string $defaultAuthenticationSource;
     protected Simple $authSimple;
     protected AuthenticationDataProviderBuilder $authenticationDataProviderBuilder;
+    protected HelpersManager $helpersManager;
 
     /**
      * @param ModuleConfiguration $moduleConfiguration
@@ -37,6 +39,7 @@ class Profile
      * @param LoggerInterface $logger
      * @param Simple|null $authSimple
      * @param AuthenticationDataProviderBuilder|null $authenticationDataProviderBuilder
+     * @param HelpersManager|null $helpersManager
      */
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
@@ -44,7 +47,8 @@ class Profile
         Session $session,
         LoggerInterface $logger,
         Simple $authSimple = null,
-        AuthenticationDataProviderBuilder $authenticationDataProviderBuilder = null
+        AuthenticationDataProviderBuilder $authenticationDataProviderBuilder = null,
+        HelpersManager $helpersManager = null
     ) {
         $this->moduleConfiguration = $moduleConfiguration;
         $this->sspConfiguration = $sspConfiguration;
@@ -56,6 +60,8 @@ class Profile
 
         $this->authenticationDataProviderBuilder = $authenticationDataProviderBuilder ??
             new AuthenticationDataProviderBuilder($this->moduleConfiguration, $this->logger);
+
+        $this->helpersManager = $helpersManager ?? new HelpersManager();
 
         // Make sure the end user is authenticated.
         $this->authSimple->requireAuth();
@@ -162,7 +168,7 @@ class Profile
      */
     protected function prepareToNameAttributeMap(): array
     {
-        return AttributesHelper::getMergedAttributeMapForFiles(
+        return $this->helpersManager->getAttributesHelper()->getMergedAttributeMapForFiles(
             $this->sspConfiguration->getBaseDir(),
             AttributesHelper::MAP_FILES_TO_NAME
         );

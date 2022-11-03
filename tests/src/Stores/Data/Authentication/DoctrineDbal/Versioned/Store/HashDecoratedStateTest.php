@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 
 use SimpleSAML\Module\accounting\Entities\Authentication\State;
@@ -10,6 +12,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\HashDecoratedState
  * @uses \SimpleSAML\Module\accounting\Helpers\HashHelper
  * @uses \SimpleSAML\Module\accounting\Helpers\ArrayHelper
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class HashDecoratedStateTest extends TestCase
 {

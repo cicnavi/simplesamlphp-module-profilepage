@@ -7,12 +7,20 @@ namespace SimpleSAML\Module\accounting\Stores\Connections\Bases;
 use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Helpers\FilesystemHelper;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
 use Throwable;
 
 abstract class AbstractMigrator
 {
     public const DEFAULT_MIGRATIONS_DIRECTORY_NAME = 'Migrations';
+
+    protected HelpersManager $helpersManager;
+
+    public function __construct(HelpersManager $helpersManager = null)
+    {
+        $this->helpersManager = $helpersManager ?? new HelpersManager();
+    }
 
     /**
      * @param string $directory
@@ -21,7 +29,7 @@ abstract class AbstractMigrator
      */
     public function gatherMigrationClassesFromDirectory(string $directory, string $namespace): array
     {
-        $directory = FilesystemHelper::getRealPath($directory);
+        $directory = $this->helpersManager->getFilesystemHelper()->getRealPath($directory);
 
         // Get files without dot directories
         $files = array_values(array_diff(scandir($directory), ['..', '.']));

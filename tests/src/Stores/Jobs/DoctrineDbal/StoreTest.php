@@ -41,6 +41,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
  * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class StoreTest extends TestCase
 {
@@ -300,5 +301,29 @@ class StoreTest extends TestCase
         $jobsStore->runSetup();
 
         $this->assertNotNull($jobsStore->dequeue());
+    }
+
+    public function testCanMarkFailedJob(): void
+    {
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore = new Store($this->moduleConfiguration, $this->loggerStub, $this->factoryStub);
+        $jobsStore->runSetup();
+
+        $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $queryBuilder->select('COUNT(id) as jobsCount')
+            ->from($jobsStore->getPrefixedTableNameFailedJobs())
+            ->fetchOne();
+
+        $this->assertSame(0, (int) $queryBuilder->executeQuery()->fetchOne());
+
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore->markFailedJob($this->jobStub);
+
+        $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
+
+        /** @psalm-suppress InvalidArgument */
+        $jobsStore->markFailedJob($this->jobStub);
+
+        $this->assertSame(2, (int) $queryBuilder->executeQuery()->fetchOne());
     }
 }

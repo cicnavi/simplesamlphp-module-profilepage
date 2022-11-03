@@ -23,12 +23,14 @@ class ActivityTest extends TestCase
      */
     protected $userStub;
     protected \DateTimeImmutable $happenedAt;
+    protected string $clientIpAddress;
 
     public function setUp(): void
     {
         $this->serviceProviderStub = $this->createStub(ServiceProvider::class);
         $this->userStub = $this->createStub(User::class);
         $this->happenedAt = new \DateTimeImmutable();
+        $this->clientIpAddress = '123.123.123.123';
     }
 
     public function testCanCreateInstance(): void
@@ -37,11 +39,13 @@ class ActivityTest extends TestCase
         $activity = new Activity(
             $this->serviceProviderStub,
             $this->userStub,
-            $this->happenedAt
+            $this->happenedAt,
+            $this->clientIpAddress
         );
 
         $this->assertSame($this->serviceProviderStub, $activity->getServiceProvider());
         $this->assertSame($this->userStub, $activity->getUser());
         $this->assertSame($this->happenedAt, $activity->getHappenedAt());
+        $this->assertSame($this->clientIpAddress, $activity->getClientIpAddress());
     }
 }

@@ -5,10 +5,12 @@ namespace SimpleSAML\Test\Module\accounting\Helpers;
 use SimpleSAML\Module\accounting\Helpers\AttributesHelper;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Helpers\AttributesHelper
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class AttributesHelperTest extends TestCase
 {
@@ -21,6 +23,7 @@ class AttributesHelperTest extends TestCase
      * @var string[]
      */
     protected array $mapFiles;
+    protected HelpersManager $helpersManager;
 
     protected function setUp(): void
     {
@@ -28,11 +31,14 @@ class AttributesHelperTest extends TestCase
             DIRECTORY_SEPARATOR;
 
         $this->mapFiles = ['test.php', 'test2.php'];
+
+        $this->helpersManager = new HelpersManager();
     }
 
     public function testCanLoadAttributeMaps(): void
     {
-        $fullAttributeMap = AttributesHelper::getMergedAttributeMapForFiles($this->sspBaseDir, $this->mapFiles);
+        $fullAttributeMap = $this->helpersManager->getAttributesHelper()
+            ->getMergedAttributeMapForFiles($this->sspBaseDir, $this->mapFiles);
 
         $this->assertArrayHasKey('mobile', $fullAttributeMap);
         $this->assertArrayHasKey('phone', $fullAttributeMap);
@@ -40,7 +46,8 @@ class AttributesHelperTest extends TestCase
 
     public function testIgnoresNonExistentMaps(): void
     {
-        $fullAttributeMap = AttributesHelper::getMergedAttributeMapForFiles($this->sspBaseDir, ['invalid.php']);
+        $fullAttributeMap = $this->helpersManager->getAttributesHelper()
+            ->getMergedAttributeMapForFiles($this->sspBaseDir, ['invalid.php']);
 
         $this->assertEmpty($fullAttributeMap);
     }

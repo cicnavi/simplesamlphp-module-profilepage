@@ -62,7 +62,7 @@ class Configuration
             $moduleConfiguration = new ModuleConfiguration();
 
             $defaultDataTrackerAndProvider =
-                (new AuthenticationDataTrackerBuilder($moduleConfiguration, $this->logger))
+                (new AuthenticationDataTrackerBuilder($moduleConfiguration, $this->logger, $this->helpersManager))
                 ->build($moduleConfiguration->getDefaultDataTrackerAndProviderClass());
 
             if ($defaultDataTrackerAndProvider->needsSetup()) {
@@ -77,7 +77,7 @@ class Configuration
                 $moduleConfiguration->getAccountingProcessingType() ===
                 ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS
             ) {
-                $jobsStore = (new JobsStoreBuilder($moduleConfiguration, $this->logger))
+                $jobsStore = (new JobsStoreBuilder($moduleConfiguration, $this->logger, $this->helpersManager))
                     ->build($moduleConfiguration->getJobsStoreClass());
                 if ($jobsStore->needsSetup()) {
                     if ($runSetup) {

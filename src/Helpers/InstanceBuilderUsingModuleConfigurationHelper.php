@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Helpers;
 
 use Psr\Log\LoggerInterface;
@@ -9,7 +11,6 @@ use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 
-// TODO mivanci move to HelpersManager
 class InstanceBuilderUsingModuleConfigurationHelper
 {
     /**
@@ -21,7 +22,7 @@ class InstanceBuilderUsingModuleConfigurationHelper
      * @return BuildableUsingModuleConfigurationInterface
      * @throws Exception
      */
-    public static function build(
+    public function build(
         string $class,
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
@@ -29,7 +30,7 @@ class InstanceBuilderUsingModuleConfigurationHelper
         string $method = BuildableUsingModuleConfigurationInterface::BUILD_METHOD
     ): BuildableUsingModuleConfigurationInterface {
         try {
-            self::validateClass($class);
+            $this->validateClass($class);
 
             $allArguments = array_merge([$moduleConfiguration, $logger], $additionalArguments);
 
@@ -47,7 +48,7 @@ class InstanceBuilderUsingModuleConfigurationHelper
         return $instance;
     }
 
-    protected static function validateClass(string $class): void
+    protected function validateClass(string $class): void
     {
         if (!is_subclass_of($class, BuildableUsingModuleConfigurationInterface::class)) {
             $message = sprintf(

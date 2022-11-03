@@ -15,7 +15,7 @@ class FilesystemHelperTest extends TestCase
     {
         $path = __DIR__ . DIRECTORY_SEPARATOR . '..';
 
-        $realPath = FilesystemHelper::getRealPath($path);
+        $realPath = (new FilesystemHelper())->getRealPath($path);
 
         $this->assertSame(dirname(__DIR__), $realPath);
     }
@@ -26,6 +26,6 @@ class FilesystemHelperTest extends TestCase
 
         $this->expectException(InvalidValueException::class);
 
-        FilesystemHelper::getRealPath($path);
+        (new FilesystemHelper())->getRealPath($path);
     }
 }

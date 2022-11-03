@@ -128,12 +128,12 @@ class JobRunnerTest extends TestCase
                 $this->moduleConfigurationStub,
                 $this->sspConfigurationStub,
                 $this->loggerMock,
+                $this->helpersManagerStub,
                 $this->authenticationDataTrackerBuilderStub,
                 $this->jobsStoreBuilderStub,
                 $this->cacheMock,
                 $this->stateStub,
-                $this->rateLimiterMock,
-                $this->helpersManagerStub
+                $this->rateLimiterMock
             )
         );
     }
@@ -160,12 +160,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -193,12 +193,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -222,12 +222,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -256,12 +256,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -293,12 +293,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -325,12 +325,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -363,12 +363,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -401,12 +401,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -446,12 +446,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -481,12 +481,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -518,12 +518,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -555,12 +555,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -594,12 +594,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -634,12 +634,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -675,12 +675,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -726,12 +726,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -774,12 +774,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -838,12 +838,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -896,12 +896,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -965,12 +965,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -1028,12 +1028,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();
@@ -1072,12 +1072,12 @@ class JobRunnerTest extends TestCase
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
+            $this->helpersManagerStub,
             $this->authenticationDataTrackerBuilderStub,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
-            $this->rateLimiterMock,
-            $this->helpersManagerStub
+            $this->rateLimiterMock
         );
 
         $jobRunner->run();

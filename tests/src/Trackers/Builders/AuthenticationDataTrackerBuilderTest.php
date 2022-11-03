@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Trackers\Interfaces\AuthenticationDataTrackerInterface;
@@ -16,6 +17,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 /**
  * @covers \SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder
  * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  *
  * @psalm-suppress all
  */
@@ -31,6 +33,7 @@ class AuthenticationDataTrackerBuilderTest extends TestCase
     protected $moduleConfigurationStub;
 
     protected AuthenticationDataTrackerInterface $trackerStub;
+    protected HelpersManager $helpersManager;
 
     protected function setUp(): void
     {
@@ -38,6 +41,8 @@ class AuthenticationDataTrackerBuilderTest extends TestCase
         $this->moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
+
+        $this->helpersManager = new HelpersManager();
 
         $this->trackerStub = new class implements AuthenticationDataTrackerInterface {
             public static function build(
@@ -66,7 +71,11 @@ class AuthenticationDataTrackerBuilderTest extends TestCase
     {
         $this->assertInstanceOf(
             AuthenticationDataTrackerBuilder::class,
-            new AuthenticationDataTrackerBuilder($this->moduleConfigurationStub, $this->loggerMock)
+            new AuthenticationDataTrackerBuilder(
+                $this->moduleConfigurationStub,
+                $this->loggerMock,
+                $this->helpersManager
+            )
         );
     }
 
@@ -74,7 +83,8 @@ class AuthenticationDataTrackerBuilderTest extends TestCase
     {
         $authenticationDataTrackerBuilder = new AuthenticationDataTrackerBuilder(
             $this->moduleConfigurationStub,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->helpersManager
         );
 
         $trackerClass = get_class($this->trackerStub);
@@ -86,7 +96,8 @@ class AuthenticationDataTrackerBuilderTest extends TestCase
     {
         $authenticationDataTrackerBuilder = new AuthenticationDataTrackerBuilder(
             $this->moduleConfigurationStub,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->helpersManager
         );
 
         $this->expectException(Exception::class);

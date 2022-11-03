@@ -654,6 +654,7 @@ class Repository
     public function insertAuthenticationEvent(
         int $IdpSpUserVersionId,
         \DateTimeImmutable $happenedAt,
+        string $clientIpAddress = null,
         \DateTimeImmutable $createdAt = null
     ): void {
         try {
@@ -668,6 +669,8 @@ class Repository
                             TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_SP_USER_VERSION_ID,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT => ':' .
                             TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS => ':' .
+                            TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT => ':' .
                             TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT,
                     ]
@@ -677,6 +680,7 @@ class Repository
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_SP_USER_VERSION_ID =>
                             $IdpSpUserVersionId,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT => $happenedAt,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS => $clientIpAddress,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT => $createdAt,
                     ],
                     [
@@ -684,6 +688,8 @@ class Repository
                             Types::BIGINT,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT =>
                             Types::DATETIMETZ_IMMUTABLE,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS =>
+                            Types::STRING,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT =>
                             Types::DATETIMETZ_IMMUTABLE,
                     ]
@@ -961,6 +967,8 @@ class Repository
                 //'vae.happened_at',
                 TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
                 TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
+                TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
+                TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS,
                 //'vsv.metadata AS sp_metadata',
                 TableConstants::TABLE_ALIAS_SP_VERSION . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA .
                 ' AS ' . TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA,

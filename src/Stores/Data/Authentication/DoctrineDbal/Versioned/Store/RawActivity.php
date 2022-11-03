@@ -14,6 +14,7 @@ class RawActivity extends AbstractRawEntity
     protected array $serviceProviderMetadata;
     protected array $userAttributes;
     protected DateTimeImmutable $happenedAt;
+    protected ?string $clientIpAddress;
 
     public function __construct(array $rawRow, AbstractPlatform $abstractPlatform)
     {
@@ -30,6 +31,10 @@ class RawActivity extends AbstractRawEntity
         $this->happenedAt = $this->resolveDateTimeImmutable(
             $rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT]
         );
+
+        $this->clientIpAddress = empty($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]) ?
+            null :
+            (string)$rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS];
     }
 
     /**
@@ -54,6 +59,14 @@ class RawActivity extends AbstractRawEntity
     public function getUserAttributes(): array
     {
         return $this->userAttributes;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getClientIpAddress(): ?string
+    {
+        return $this->clientIpAddress;
     }
 
     /**

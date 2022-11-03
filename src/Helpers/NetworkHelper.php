@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Helpers;
 
-// TODO mivanci move to HelpersManager
 class NetworkHelper
 {
-    public static function resolveClientIpAddress(string $clientIpAddress = null): ?string
+    public function resolveClientIpAddress(string $clientIpAddress = null): ?string
     {
         /** @var string|null $clientIpAddress */
         $clientIpAddress = $clientIpAddress ??

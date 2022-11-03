@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Helpers;
 
+use SimpleSAML\Module\accounting\Helpers\ArrayHelper;
 use SimpleSAML\Module\accounting\Helpers\HashHelper;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Helpers\HashHelper
@@ -13,6 +15,8 @@ use PHPUnit\Framework\TestCase;
  */
 class HashHelperTest extends TestCase
 {
+    protected HashHelper $hashHelper;
+
     protected string $data;
     protected string $dataSha256;
     /**
@@ -28,6 +32,8 @@ class HashHelperTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->hashHelper = new HashHelper(new ArrayHelper());
+
         $this->data = 'test';
         $this->dataSha256 = '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08';
         $this->unsortedArrayData = ['b' => [1 => 1, 0 => 0,], 'a' => [1 => 1, 0 => 0,],];
@@ -38,14 +44,20 @@ class HashHelperTest extends TestCase
 
     public function testCanGetSha256ForString(): void
     {
-        $this->assertSame($this->dataSha256, HashHelper::getSha256($this->data));
+        $this->assertSame($this->dataSha256, $this->hashHelper->getSha256($this->data));
     }
 
     public function testCanGetSha256ForArray(): void
     {
         // Arrays are sorted before the hash is calculated, so the value must be the same.
         $this->assertSame($this->unsortedArraySha256, $this->sortedArrayDataSha256);
-        $this->assertSame($this->unsortedArraySha256, HashHelper::getSha256ForArray($this->unsortedArrayData));
-        $this->assertSame($this->sortedArrayDataSha256, HashHelper::getSha256ForArray($this->sortedArrayData));
+        $this->assertSame(
+            $this->unsortedArraySha256,
+            $this->hashHelper->getSha256ForArray($this->unsortedArrayData)
+        );
+        $this->assertSame(
+            $this->sortedArrayDataSha256,
+            $this->hashHelper->getSha256ForArray($this->sortedArrayData)
+        );
     }
 }
