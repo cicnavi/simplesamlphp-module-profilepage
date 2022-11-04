@@ -12,8 +12,8 @@ use PHPUnit\Framework\TestCase;
  */
 class EnvironmentHelperTest extends TestCase
 {
-   public function testConfirmIsCli(): void
-   {
+    public function testConfirmIsCli(): void
+    {
         $this->assertTrue((new EnvironmentHelper())->isCli());
-   }
+    }
 }

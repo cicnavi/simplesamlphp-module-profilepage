@@ -27,6 +27,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned\Tracker
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @uses \SimpleSAML\Module\accounting\Stores\Bases\AbstractStore
  */
 class AuthenticationDataProviderBuilderTest extends TestCase
 {

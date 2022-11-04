@@ -73,6 +73,7 @@ class RawActivityTest extends TestCase
         $rawRow = $this->rawRow;
         unset($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]);
 
+        /** @psalm-suppress PossiblyInvalidArgument */
         $rawActivity = new RawActivity($rawRow, $this->abstractPlatformStub);
         $this->assertNull($rawActivity->getClientIpAddress());
     }

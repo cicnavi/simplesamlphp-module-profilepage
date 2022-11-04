@@ -10,6 +10,12 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 interface JobsStoreInterface extends StoreInterface
 {
+    public static function build(
+        ModuleConfiguration $moduleConfiguration,
+        LoggerInterface $logger,
+        string $connectionKey = null
+    ): self;
+
     /**
      * Add job to queue
      * @param JobInterface $job
@@ -29,10 +35,4 @@ interface JobsStoreInterface extends StoreInterface
      * @return void
      */
     public function markFailedJob(JobInterface $job): void;
-
-    public static function build(
-        ModuleConfiguration $moduleConfiguration,
-        LoggerInterface $logger,
-        string $connectionKey = null
-    ): self;
 }

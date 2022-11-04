@@ -27,6 +27,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @uses \SimpleSAML\Module\accounting\Stores\Bases\AbstractStore
  */
 class JobsStoreBuilderTest extends TestCase
 {
