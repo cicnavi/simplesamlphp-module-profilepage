@@ -37,7 +37,6 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
 
         try {
             if (!$this->redis->isConnected()) {
-                // TODO mivanci remove context argument, call auth method sepparately.
                 $this->redis->connect(
                     (string)($connectionParameters['host'] ?? ''),
                     (int)($connectionParameters['port'] ?? 6379),
@@ -45,13 +44,22 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
                     null,
                     (int)($connectionParameters['retryInterval'] ?? 0),
                     (int)($connectionParameters['readTimeout'] ?? 0),
-                    (array)($connectionParameters['context'] ?? [])
                 );
             }
         } catch (Throwable $exception) {
             $message = sprintf('Error trying to connect to Redis DB. Error was: %s', $exception->getMessage());
             $this->logger->error($message);
             throw new StoreException($message, (int) $exception->getCode(), $exception);
+        }
+
+        try {
+            if (isset($connectionParameters['auth'])) {
+                $this->redis->auth($connectionParameters['auth']);
+            }
+        } catch (Throwable $exception) {
+            $message = sprintf('Error trying to set auth parameter for Redis. Error was: %s', $exception->getMessage());
+            $this->logger->error($message);
+            throw new StoreException($message);
         }
 
         try {
@@ -70,7 +78,8 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
     public function enqueue(JobInterface $job): void
     {
         try {
-            $this->redis->rPush(self::LIST_KEY_JOB, serialize($job));
+            $listKey = $this->resolveListKeyForType(self::LIST_KEY_JOB, $job->getType());
+            $this->redis->rPush($listKey, serialize($job));
         } catch (Throwable $exception) {
             $message = sprintf('Could not add job to Redis list. Error was: %s', $exception->getMessage());
             $this->logger->error($message);
@@ -82,10 +91,11 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
      * @inheritDoc
      * @throws StoreException
      */
-    public function dequeue(string $type = null): ?JobInterface
+    public function dequeue(string $type): ?JobInterface
     {
         try {
-            if (! is_string($serializedJob = $this->redis->lPop(self::LIST_KEY_JOB))) {
+            $listKey = $this->resolveListKeyForType(self::LIST_KEY_JOB, $type);
+            if (!is_string($serializedJob = $this->redis->lPop($listKey))) {
                 return null;
             }
         } catch (Throwable $exception) {
@@ -116,9 +126,10 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
     public function markFailedJob(JobInterface $job): void
     {
         try {
-            $this->redis->rPush(self::LIST_KEY_JOB_FAILED, serialize($job));
+            $listKey = $this->resolveListKeyForType(self::LIST_KEY_JOB_FAILED, $job->getType());
+            $this->redis->rPush($listKey, serialize($job));
         } catch (Throwable $exception) {
-            $message = sprintf('Could not add job to Redis list. Error was: %s', $exception->getMessage());
+            $message = sprintf('Could not mark job as failed. Error was: %s', $exception->getMessage());
             $this->logger->error($message);
             throw new StoreException($message);
         }
@@ -164,5 +175,15 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
         }
 
         return $connectionParameters;
+    }
+
+    /**
+     * @param string $list For example, job, job_failed...
+     * @param string $jobType For example, FQ class name of the job instance
+     * @return string Key with hashed type to conserve chars.
+     */
+    protected function resolveListKeyForType(string $list, string $jobType): string
+    {
+        return $list . ':' . sha1($jobType);
     }
 }

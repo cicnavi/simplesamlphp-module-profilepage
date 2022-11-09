@@ -59,7 +59,7 @@ class Store extends AbstractStore implements JobsStoreInterface
     /**
      * @throws StoreException
      */
-    public function dequeue(string $type = null): ?JobInterface
+    public function dequeue(string $type): ?JobInterface
     {
         /** @noinspection PhpUnusedLocalVariableInspection - psalm reports possibly undefined variable */
         $job = null;

@@ -25,10 +25,10 @@ interface JobsStoreInterface extends StoreInterface
 
     /**
      * Get job from queue
-     * @param string|null $type
+     * @param string $type Type of the job, typically FQ class name of job object.
      * @return ?JobInterface
      */
-    public function dequeue(string $type = null): ?JobInterface;
+    public function dequeue(string $type): ?JobInterface;
 
     /**
      * @param JobInterface $job

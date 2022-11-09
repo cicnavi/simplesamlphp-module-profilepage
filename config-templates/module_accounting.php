@@ -157,15 +157,7 @@ $config = [
             'connectTimeout' => 1, // (float): value in seconds (default is 0 meaning unlimited).
             //'retryInterval' => 500, // (int): value in milliseconds (optional, default 0)
             //'readTimeout' => 0, // (float): value in seconds (default is 0 meaning unlimited)
-            'context' => [
-                'auth' => ['phpredis', 'phpredis'], // (mixed): authentication information
-                'ssl' => ['verify_peer' => false], // (array): SSL context options
-//                'backoff' => [
-//                    'algorithm' => Redis::BACKOFF_ALGORITHM_DECORRELATED_JITTER,
-//                    'base' => 500,
-//                    'cap' => 750,
-//                ],
-            ],
+            'auth' => ['phpredis', 'phpredis'], // (mixed): authentication information
             'keyPrefix' => 'ssp_accounting:'
         ],
     ],

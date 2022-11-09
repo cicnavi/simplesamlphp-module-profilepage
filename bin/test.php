@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-
+// TODO mivanci remove this file
 declare(strict_types=1);
 
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
@@ -32,12 +32,13 @@ $numberOfItems = $options['c'] ?? 1000;
 echo 'Number of items: ' . $numberOfItems;
 echo $newLine;
 
+$spinnerChars = ['|', '/', '-', '\\'];
+
+/**
 echo 'Starting simulating MySQL: ';
 $mysqlStartTime = new DateTime();
 echo $mysqlStartTime->format(DateTime::ATOM);
 echo $newLine;
-
-$spinnerChars = ['|', '/', '-', '\\'];
 
 $mysqlParameters = [
     'driver' => 'pdo_mysql', // (string): The built-in driver implementation to use
@@ -86,7 +87,7 @@ for ($i = 1; $i <= $numberOfItems; $i++) {
 echo $newLine;
 echo $newLine;
 
-
+*/
 echo 'Starting simulating Redis: ';
 $redisStartTime = new DateTime();
 echo $redisStartTime->format(DateTime::ATOM);
@@ -131,7 +132,8 @@ for ($i = 1; $i <= $numberOfItems; $i++) {
     );
     echo $line;
     echo "\r";
-    $redisClient->rPush(RedisStore::LIST_KEY_JOB, serialize($job));
+    $redisClient->rPush(RedisStore::LIST_KEY_JOB . ':' . sha1($job->getType()), serialize($job));
+//    $redisClient->rPush(RedisStore::LIST_KEY_JOB, serializgit add .e($job));
 }
 echo $newLine;
 echo 'End: ' . (new DateTime())->format(DateTime::ATOM);

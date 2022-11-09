@@ -222,7 +222,8 @@ class StoreTest extends TestCase
 
         $this->assertSame(2, (int) $queryBuilder->executeQuery()->fetchOne());
 
-        $jobsStore->dequeue();
+        /** @psalm-suppress MixedArgument, UndefinedInterfaceMethod */
+        $jobsStore->dequeue($this->jobStub->getType());
 
         $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
     }
@@ -307,7 +308,8 @@ class StoreTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        $jobsStore->dequeue();
+        /** @psalm-suppress MixedArgument, UndefinedInterfaceMethod */
+        $jobsStore->dequeue($this->jobStub->getType());
     }
 
     public function testDequeThrowsAfterMaxDeleteAttempts(): void
@@ -329,7 +331,8 @@ class StoreTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        $jobsStore->dequeue();
+        /** @psalm-suppress MixedArgument, UndefinedInterfaceMethod */
+        $jobsStore->dequeue($this->jobStub->getType());
     }
 
     public function testCanContinueSearchingInCaseOfJobDeletion(): void
@@ -349,7 +352,8 @@ class StoreTest extends TestCase
         );
         $jobsStore->runSetup();
 
-        $this->assertNotNull($jobsStore->dequeue());
+        /** @psalm-suppress MixedArgument, UndefinedInterfaceMethod */
+        $this->assertNotNull($jobsStore->dequeue($this->jobStub->getType()));
     }
 
     public function testCanMarkFailedJob(): void
