@@ -33,13 +33,13 @@ class Store extends AbstractStore implements DataStoreInterface
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        Factory $connectionFactory,
         string $connectionKey = null,
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
+        Factory $connectionFactory = null,
         Repository $repository = null,
         HelpersManager $helpersManager = null
     ) {
-        parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey, $connectionType);
+        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType, $connectionFactory);
 
         $this->repository = $repository ?? new Repository($this->connection, $this->logger);
         $this->helpersManager = $helpersManager ?? new HelpersManager();
@@ -58,7 +58,6 @@ class Store extends AbstractStore implements DataStoreInterface
         return new self(
             $moduleConfiguration,
             $logger,
-            new Factory($moduleConfiguration, $logger),
             $connectionKey,
             $connectionType
         );

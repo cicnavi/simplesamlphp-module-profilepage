@@ -42,6 +42,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
  * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @uses \SimpleSAML\Module\accounting\Stores\Bases\AbstractStore
  */
 class RepositoryTest extends TestCase
 {
@@ -77,7 +78,13 @@ class RepositoryTest extends TestCase
         $this->jobStub->method('getCreatedAt')->willReturn(new \DateTimeImmutable());
 
         /** @psalm-suppress InvalidArgument */
-        $this->jobsStore = new Store($this->moduleConfiguration, $this->loggerServiceStub, $this->factoryStub);
+        $this->jobsStore = new Store(
+            $this->moduleConfiguration,
+            $this->loggerServiceStub,
+            null,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->factoryStub
+        );
 
         $this->jobsTableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOB);
     }

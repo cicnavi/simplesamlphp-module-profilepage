@@ -8,20 +8,17 @@ use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
-use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
-use SimpleSAML\Module\accounting\Interfaces\SetupableInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 
-abstract class AbstractStore implements BuildableUsingModuleConfigurationInterface, SetupableInterface
+abstract class AbstractStore extends \SimpleSAML\Module\accounting\Stores\Bases\AbstractStore
 {
-    protected ModuleConfiguration $moduleConfiguration;
     protected Connection $connection;
     protected Migrator $migrator;
-    protected LoggerInterface $logger;
+    protected Factory $connectionFactory;
 
     /**
      * @throws StoreException
@@ -29,35 +26,16 @@ abstract class AbstractStore implements BuildableUsingModuleConfigurationInterfa
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        Factory $connectionFactory,
         string $connectionKey = null,
-        string $connectionType = ModuleConfiguration\ConnectionType::MASTER
+        string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
+        Factory $connectionFactory = null
     ) {
-        $this->moduleConfiguration = $moduleConfiguration;
-        $this->logger = $logger;
+        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType);
 
-        $connectionKey = $connectionKey ??
-            $moduleConfiguration->getClassConnectionKey($this->getSelfClass(), $connectionType);
-        $this->connection = $connectionFactory->buildConnection($connectionKey);
-        $this->migrator = $connectionFactory->buildMigrator($this->connection);
-    }
+        $this->connectionFactory = $connectionFactory ?? new Factory($this->moduleConfiguration, $this->logger);
 
-    /**
-     * Get ReflectionClass of current store instance.
-     * @return ReflectionClass
-     */
-    protected function getReflection(): ReflectionClass
-    {
-        return new ReflectionClass($this);
-    }
-
-    /**
-     * Get class of the current store instance.
-     * @return string
-     */
-    protected function getSelfClass(): string
-    {
-        return $this->getReflection()->getName();
+        $this->connection = $this->connectionFactory->buildConnection($this->connectionKey);
+        $this->migrator = $this->connectionFactory->buildMigrator($this->connection);
     }
 
     protected function getMigrationsNamespace(): string

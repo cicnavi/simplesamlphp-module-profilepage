@@ -34,6 +34,7 @@ class ModuleRoutesHelperTest extends TestCase
         $path = 'sample-path';
         $moduleUrlWithPath = $this->moduleUrl . '/' . $path;
 
+        /** @psalm-suppress PossiblyInvalidArgument */
         $moduleRoutesHelper = new ModuleRoutesHelper($this->sspHttpUtilsStub);
 
         $this->assertSame($moduleUrlWithPath, $moduleRoutesHelper->getUrl($path));
@@ -45,7 +46,9 @@ class ModuleRoutesHelperTest extends TestCase
         $params = ['sample' => 'param'];
         $fullUrl = 'full-url-with-sample-param';
 
+        /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
         $this->sspHttpUtilsStub->method('addURLParameters')->willReturn($fullUrl);
+        /** @psalm-suppress PossiblyInvalidArgument */
         $moduleRoutesHelper = new ModuleRoutesHelper($this->sspHttpUtilsStub);
 
         $this->assertSame($fullUrl, $moduleRoutesHelper->getUrl($path, $params));

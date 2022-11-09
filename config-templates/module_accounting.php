@@ -57,6 +57,11 @@ $config = [
          * Default jobs store class which expects Doctrine DBAL compatible connection to be set below.
          */
         Stores\Jobs\DoctrineDbal\Store::class,
+        /**
+         * PhpRedis class Redis jobs store. Expects class Redis compatible connection to be set bellow.
+         * Note: PhpRedis must be installed: https://github.com/phpredis/phpredis#installation
+         */
+        //Stores\Jobs\PhpRedis\RedisStore::class,
 
     /**
      * Default data tracker and provider to be used for accounting and as a source for data display in SSP UI.
@@ -98,6 +103,7 @@ $config = [
          * Connection key to be used by jobs store class.
          */
         Stores\Jobs\DoctrineDbal\Store::class => 'doctrine_dbal_pdo_mysql',
+        Stores\Jobs\PhpRedis\RedisStore::class => 'phpredis_class_redis',
         /**
          * Connection key to be used by this data tracker and provider.
          */
@@ -119,7 +125,7 @@ $config = [
          * There are additional parameters for: table prefix.
          */
         'doctrine_dbal_pdo_mysql' => [
-            'driver' => 'pdo_mysql', // (string): The built-in driver implementation to use
+            'driver' => 'pdo_mysql', // (string): The built-in driver implementation to use.
             'user' => 'user', // (string): Username to use when connecting to the database.
             'password' => 'password', // (string): Password to use when connecting to the database.
             'host' => 'host', // (string): Hostname of the database to connect to.
@@ -132,7 +138,7 @@ $config = [
             'table_prefix' => '', // (string): Prefix for each table.
         ],
         'doctrine_dbal_pdo_sqlite' => [
-            'driver' => 'pdo_sqlite', // (string): The built-in driver implementation to use
+            'driver' => 'pdo_sqlite', // (string): The built-in driver implementation to use.
             'path' => '/path/to/db.sqlite', // (string): The filesystem path to the database file.
             // Mutually exclusive with memory. path takes precedence.
             'memory' => false, // (boolean): True if the SQLite database should be in-memory (non-persistent).
@@ -141,6 +147,18 @@ $config = [
             //'url' => 'sqlite:///:memory:' // ...alternative way of providing memory parameter.
             // Additional parameters not originally available in Doctrine DBAL
             'table_prefix' => '', // (string): Prefix for each table.
+        ],
+        /**
+         * Example for PhpRedis class Redis (https://github.com/phpredis/phpredis#class-redis).
+         */
+        'phpredis_class_redis' => [
+            'host' => '127.0.0.1', // (string): can be a host, or the path to a unix domain socket.
+            'port' => 6379, // (int): default port is 6379, should be -1 for unix domain socket.
+            'connectTimeout' => 1, // (float): value in seconds (default is 0 meaning unlimited).
+            //'retryInterval' => 500, // (int): value in milliseconds (optional, default 0)
+            //'readTimeout' => 0, // (float): value in seconds (default is 0 meaning unlimited)
+            'auth' => ['phpredis', 'phpredis'], // (mixed): authentication information
+            'keyPrefix' => 'ssp_accounting:'
         ],
     ],
 

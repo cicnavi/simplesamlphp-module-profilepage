@@ -41,7 +41,8 @@
         "simplesamlphp/simplesamlphp-test-framework": "^1"
     },
     "suggest": {
-        "ext-pcntl": "*"
+        "ext-pcntl": "Enables job runner to gracefully respond to SIGTERM signal.",
+        "ext-redis": "Mandatory if PhpRedis is to be used as a store."
     },
     "scripts": {
         "pre-commit": [

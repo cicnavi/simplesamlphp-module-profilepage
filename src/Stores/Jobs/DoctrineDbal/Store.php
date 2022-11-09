@@ -29,13 +29,13 @@ class Store extends AbstractStore implements JobsStoreInterface
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        Factory $connectionFactory,
         string $connectionKey = null,
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
+        Factory $connectionFactory = null,
         Repository $jobsRepository = null,
         Repository $failedJobsRepository = null
     ) {
-        parent::__construct($moduleConfiguration, $logger, $connectionFactory, $connectionKey, $connectionType);
+        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType, $connectionFactory);
 
         $this->prefixedTableNameJobs = $this->connection->preparePrefixedTableName(TableConstants::TABLE_NAME_JOB);
         $this->prefixedTableNameFailedJobs = $this->connection
@@ -59,7 +59,7 @@ class Store extends AbstractStore implements JobsStoreInterface
     /**
      * @throws StoreException
      */
-    public function dequeue(string $type = null): ?JobInterface
+    public function dequeue(string $type): ?JobInterface
     {
         /** @noinspection PhpUnusedLocalVariableInspection - psalm reports possibly undefined variable */
         $job = null;
@@ -127,21 +127,19 @@ class Store extends AbstractStore implements JobsStoreInterface
      * @param ModuleConfiguration $moduleConfiguration
      * @param LoggerInterface $logger
      * @param string|null $connectionKey
+     * @param string $connectionType
      * @return self
      * @throws StoreException
      */
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
-        string $connectionKey = null,
-        string $connectionType = ModuleConfiguration\ConnectionType::MASTER
+        string $connectionKey = null
     ): self {
         return new self(
             $moduleConfiguration,
             $logger,
-            new Factory($moduleConfiguration, $logger),
-            $connectionKey,
-            $connectionType
+            $connectionKey
         );
     }
 
