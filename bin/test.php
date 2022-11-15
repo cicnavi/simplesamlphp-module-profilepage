@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-// TODO mivanci remove this file
+// TODO mivanci remove this file before release
 declare(strict_types=1);
 
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;

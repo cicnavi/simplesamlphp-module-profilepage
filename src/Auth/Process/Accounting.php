@@ -72,7 +72,6 @@ class Accounting extends ProcessingFilter
                 $this->moduleConfiguration->getAdditionalTrackers()
             );
 
-            /** @var string $tracker */
             foreach ($configuredTrackers as $tracker) {
                 ($this->authenticationDataTrackerBuilder->build($tracker))->process($authenticationEvent);
             }

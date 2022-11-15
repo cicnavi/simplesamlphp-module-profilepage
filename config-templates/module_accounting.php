@@ -77,7 +77,6 @@ $config = [
      * These tracker classes must implement Trackers\Interfaces\AuthenticationDataTrackerInterface.
      */
     ModuleConfiguration::OPTION_ADDITIONAL_TRACKERS => [
-        // TODO mivanci at least one more tracker and its connection
         // tracker-class
     ],
 

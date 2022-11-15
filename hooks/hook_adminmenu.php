@@ -19,6 +19,10 @@ function accounting_hook_adminmenu(\SimpleSAML\XHTML\Template &$template): void
         ],
     ];
 
+    if (!isset($template->data[$menuKey]) || !is_array($template->data[$menuKey])) {
+        return;
+    }
+
     // Use array_splice to put our entry before the "Log out" entry.
     array_splice($template->data[$menuKey], -1, 0, $profilePageEntry);
 

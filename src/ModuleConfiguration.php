@@ -142,6 +142,10 @@ class ModuleConfiguration
         return $this->getConfiguration()->getArray(self::OPTION_CONNECTIONS_AND_PARAMETERS);
     }
 
+    /**
+     * @return string[]
+     * @psalm-suppress MixedReturnTypeCoercion We specifically check if valid class string are provided.
+     */
     public function getAdditionalTrackers(): array
     {
         return $this->getConfiguration()->getArray(self::OPTION_ADDITIONAL_TRACKERS);
@@ -353,9 +357,6 @@ class ModuleConfiguration
         $errors = [];
 
         // Validate additional trackers
-        /**
-         * @var string $trackerClass
-         */
         foreach ($this->getAdditionalTrackers() as $trackerClass) {
             /** @psalm-suppress DocblockTypeContradiction */
             if (!is_string($trackerClass)) {

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Psr\Log\LoggerInterface;
 use SimpleSAML\Configuration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\JobRunner;
@@ -14,7 +15,12 @@ function accounting_hook_cron(array &$cronInfo): void
     $moduleConfiguration = new ModuleConfiguration();
     $logger = new Logger();
 
+    /** @var ?string $currentCronTag */
     $currentCronTag = $cronInfo['tag'] ?? null;
+
+    if (!isset($cronInfo['summary']) || !is_array($cronInfo['summary'])) {
+        $cronInfo['summary'] = [];
+    }
 
     /**
      * Job runner handling.
@@ -39,6 +45,10 @@ function accounting_hook_cron(array &$cronInfo): void
         $cronInfo['summary'][] = $message;
     }
 
+    if (!isset($cronInfo['summary']) || !is_array($cronInfo['summary'])) {
+        $cronInfo['summary'] = [];
+    }
+
     /**
      * Tracker data retention policy handling.
      */
@@ -49,6 +59,9 @@ function accounting_hook_cron(array &$cronInfo): void
             ($retentionPolicy = $moduleConfiguration->getTrackerDataRetentionPolicy()) !== null
         ) {
             $helpersManager = new HelpersManager();
+            $message = sprintf('Handling data retention policy.');
+            $logger->info($message);
+            $cronInfo['summary'][] = $message;
             handleDataRetentionPolicy($moduleConfiguration, $logger, $helpersManager, $retentionPolicy);
         }
     } catch (Throwable $exception) {
@@ -59,7 +72,7 @@ function accounting_hook_cron(array &$cronInfo): void
 
 function handleDataRetentionPolicy(
     ModuleConfiguration $moduleConfiguration,
-    \Psr\Log\LoggerInterface $logger,
+    LoggerInterface $logger,
     HelpersManager $helpersManager,
     DateInterval $retentionPolicy
 ): void {
@@ -67,5 +80,12 @@ function handleDataRetentionPolicy(
     (new AuthenticationDataTrackerBuilder($moduleConfiguration, $logger, $helpersManager))
         ->build($moduleConfiguration->getDefaultDataTrackerAndProviderClass())
         ->enforceDataRetentionPolicy($retentionPolicy);
-    // TODO handle other configured trackers.
+
+    $additionalTrackers = $moduleConfiguration->getAdditionalTrackers();
+
+    foreach ($additionalTrackers as $tracker) {
+        (new AuthenticationDataTrackerBuilder($moduleConfiguration, $logger, $helpersManager))
+            ->build($tracker)
+            ->enforceDataRetentionPolicy($retentionPolicy);
+    }
 }

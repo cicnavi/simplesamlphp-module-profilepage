@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Http\Controllers\User;
 
 use Psr\Log\LoggerInterface;
@@ -18,9 +20,6 @@ use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @psalm-suppress all TODO mivanci remove this psalm suppress after testing
- */
 class Profile
 {
     protected ModuleConfiguration $moduleConfiguration;
@@ -58,10 +57,10 @@ class Profile
         $this->defaultAuthenticationSource = $moduleConfiguration->getDefaultAuthenticationSource();
         $this->authSimple = $authSimple ?? new Simple($this->defaultAuthenticationSource, $sspConfiguration, $session);
 
-        $this->authenticationDataProviderBuilder = $authenticationDataProviderBuilder ??
-            new AuthenticationDataProviderBuilder($this->moduleConfiguration, $this->logger);
-
         $this->helpersManager = $helpersManager ?? new HelpersManager();
+
+        $this->authenticationDataProviderBuilder = $authenticationDataProviderBuilder ??
+            new AuthenticationDataProviderBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
 
         // Make sure the end user is authenticated.
         $this->authSimple->requireAuth();
@@ -80,7 +79,7 @@ class Profile
         foreach ($this->authSimple->getAttributes() as $name => $value) {
             // Convert attribute names to user-friendly names.
             if (array_key_exists($name, $toNameAttributeMap)) {
-                $name = $toNameAttributeMap[$name];
+                $name = (string)$toNameAttributeMap[$name];
             }
             $normalizedAttributes[$name] = implode('; ', $value);
         }
@@ -114,7 +113,6 @@ class Profile
 
         $page = ($page = (int)$request->query->get('page', 1)) > 0 ? $page : 1;
 
-        // TODO mivanci make maxResults configurable
         $maxResults = 10;
         $firstResult = ($page - 1) * $maxResults;
 
@@ -177,9 +175,9 @@ class Profile
     /** TODO mivanci remove after debugging */
     protected function removeDebugDisplayLimits(): void
     {
-        ini_set('xdebug.var_display_max_depth', -1);
-        ini_set('xdebug.var_display_max_children', -1);
-        ini_set('xdebug.var_display_max_data', -1);
+        ini_set('xdebug.var_display_max_depth', '-1');
+        ini_set('xdebug.var_display_max_children', '-1');
+        ini_set('xdebug.var_display_max_data', '-1');
     }
 
     protected function resolveTemplate(string $template): Template

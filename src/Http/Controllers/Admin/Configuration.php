@@ -55,6 +55,7 @@ class Configuration
         $configurationValidationErrors = null;
         $jobsStore = null;
         $defaultDataTrackerAndProvider = null;
+        $additionalTrackers = [];
         $setupNeeded = false;
         $runSetup = $request->query->has('runSetup');
 
@@ -87,7 +88,21 @@ class Configuration
                     }
                 }
             }
-            // TODO mivanci setup for additional trackers from configuration
+
+            foreach ($moduleConfiguration->getAdditionalTrackers() as $trackerClass) {
+                $additionalTrackerInstance =
+                    (new AuthenticationDataTrackerBuilder($moduleConfiguration, $this->logger, $this->helpersManager))
+                    ->build($trackerClass);
+
+                if ($additionalTrackerInstance->needsSetup()) {
+                    if ($runSetup) {
+                        $additionalTrackerInstance->runSetup();
+                    } else {
+                        $setupNeeded = true;
+                    }
+                }
+                $additionalTrackers[$trackerClass] = $additionalTrackerInstance;
+            }
         } catch (Throwable $exception) {
             $configurationValidationErrors = $exception->getMessage();
         }
@@ -97,6 +112,7 @@ class Configuration
             'configurationValidationErrors' => $configurationValidationErrors,
             'jobsStore' => $jobsStore,
             'defaultDataTrackerAndProvider' => $defaultDataTrackerAndProvider,
+            'additionalTrackers' => $additionalTrackers,
             'setupNeeded' => $setupNeeded,
             'profilePageUri' => $this->helpersManager->getModuleRoutesHelper()
                 ->getUrl(ModuleRoutesHelper::PATH_USER_PERSONAL_DATA),

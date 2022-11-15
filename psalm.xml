@@ -11,6 +11,7 @@
         <directory name="config-templates" />
         <directory name="tests" />
         <directory name="www" />
+        <directory name="hooks" />
 
         <ignoreFiles>
             <directory name="vendor" />
