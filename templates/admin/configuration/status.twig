@@ -28,9 +28,19 @@
                 <strong>{{ 'Tracker and Provider Setup Needed'|trans }}</strong>:
                 {{ defaultDataTrackerAndProvider.needsSetup ? 'Yes'|trans : 'No'|trans }}
             </li>
+            {% if additionalTrackers is not empty %}
+                <li>
+                    <strong>{{ 'Additional Trackers and setup'|trans }}</strong>:
+                    <ul>
+                        {% for trackerClass, trackerInstance in additionalTrackers %}
+                            <li>
+                                {{ trackerClass }}: {{ trackerInstance.needsSetup ? 'Yes'|trans : 'No'|trans }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
         </ul>
-
-{#        TODO mivanci setup for additional trackers#}
 
         {% if moduleConfiguration.getAccountingProcessingType == 'asynchronous' %}
             <ul>

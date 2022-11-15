@@ -15,6 +15,9 @@ class State
     protected ?\DateTimeImmutable $endedAt = null;
     protected int $successfulJobsProcessed = 0;
     protected int $failedJobsProcessed = 0;
+    /**
+     * @var string[]
+     */
     protected array $statusMessages = [];
     protected int $numberOfStatusMessagesToKeep = 10;
     protected bool $isGracefulInterruptInitiated = false;
@@ -161,6 +164,9 @@ class State
         }
     }
 
+    /**
+     * @return string[]
+     */
     public function getStatusMessages(): array
     {
         return $this->statusMessages;
@@ -172,7 +178,7 @@ class State
             return null;
         }
 
-        $message = (string)end($this->statusMessages);
+        $message = end($this->statusMessages);
         reset($this->statusMessages);
 
         return $message;

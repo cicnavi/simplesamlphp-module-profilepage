@@ -11,7 +11,13 @@ function accounting_hook_configpage(Template &$template): void
 {
     $moduleRoutesHelper = new ModuleRoutesHelper();
 
-    $template->data['links'][] = [
+    $dataLinksKey = 'links';
+
+    if (!isset($template->data[$dataLinksKey]) || !is_array($template->data[$dataLinksKey])) {
+        return;
+    }
+
+    $template->data[$dataLinksKey][] = [
         'href' => $moduleRoutesHelper->getUrl(ModuleRoutesHelper::PATH_ADMIN_CONFIGURATION_STATUS),
         'text' => Translate::noop('Profile Page configuration status'),
     ];

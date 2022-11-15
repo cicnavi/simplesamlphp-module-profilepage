@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Helpers;
 
 class RandomHelper
@@ -8,8 +10,10 @@ class RandomHelper
     {
         try {
             return random_int($minimum, $maximum);
+            // @codeCoverageIgnoreStart
         } catch (\Throwable $exception) {
             return mt_rand($minimum, $maximum);
+            // @codeCoverageIgnoreEnd
         }
     }
 }

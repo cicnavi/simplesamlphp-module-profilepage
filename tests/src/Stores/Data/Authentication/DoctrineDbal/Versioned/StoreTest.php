@@ -69,15 +69,15 @@ class StoreTest extends TestCase
     protected Event $authenticationEvent;
     protected Store\HashDecoratedState $hashDecoratedState;
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|Store\Repository|Store\Repository&\PHPUnit\Framework\MockObject\Stub
+     * @var \PHPUnit\Framework\MockObject\MockObject|Store\Repository
      */
-    protected $repositoryStub;
+    protected $repositoryMock;
     /**
-     * @var Result|Result&\PHPUnit\Framework\MockObject\Stub|\PHPUnit\Framework\MockObject\Stub
+     * @var Result|\PHPUnit\Framework\MockObject\Stub
      */
     protected $resultStub;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface|LoggerInterface&\PHPUnit\Framework\MockObject\MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
      */
     protected $loggerMock;
 
@@ -105,7 +105,7 @@ class StoreTest extends TestCase
         $this->authenticationEvent = new Event($this->state);
 
         $this->hashDecoratedState = new Store\HashDecoratedState($this->state);
-        $this->repositoryStub = $this->createStub(Store\Repository::class);
+        $this->repositoryMock = $this->createMock(Store\Repository::class);
 
         $this->resultStub = $this->createStub(Result::class);
     }
@@ -240,7 +240,7 @@ class StoreTest extends TestCase
 
     public function testResolveIdpIdThrowsOnFirstGetIdpFailure(): void
     {
-        $this->repositoryStub->method('getIdp')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getIdp')->willThrowException(new \Exception('test'));
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
@@ -248,7 +248,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -259,8 +259,8 @@ class StoreTest extends TestCase
     public function testResolveIdpIdThrowsOnInsertAndGetIdpFailure(): void
     {
         $this->resultStub->method('fetchOne')->willReturn(false);
-        $this->repositoryStub->method('getIdp')->willReturn($this->resultStub);
-        $this->repositoryStub->method('insertIdp')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getIdp')->willReturn($this->resultStub);
+        $this->repositoryMock->method('insertIdp')->willThrowException(new \Exception('test'));
 
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
@@ -269,7 +269,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -280,7 +280,7 @@ class StoreTest extends TestCase
 
     public function testResolveIdpVersionIdThrowsOnFirstGetIdpVersionFailure(): void
     {
-        $this->repositoryStub->method('getIdpVersion')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getIdpVersion')->willThrowException(new \Exception('test'));
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
@@ -288,7 +288,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -299,8 +299,8 @@ class StoreTest extends TestCase
     public function testResolveIdpVersionIdThrowsOnInsertAndGetIdpVersionFailure(): void
     {
         $this->resultStub->method('fetchOne')->willReturn(false);
-        $this->repositoryStub->method('getIdpVersion')->willReturn($this->resultStub);
-        $this->repositoryStub->method('insertIdpVersion')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getIdpVersion')->willReturn($this->resultStub);
+        $this->repositoryMock->method('insertIdpVersion')->willThrowException(new \Exception('test'));
 
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
@@ -309,7 +309,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -320,7 +320,7 @@ class StoreTest extends TestCase
 
     public function testResolveSpIdThrowsOnFirstGetSpFailure(): void
     {
-        $this->repositoryStub->method('getSp')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getSp')->willThrowException(new \Exception('test'));
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
@@ -328,7 +328,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -339,8 +339,8 @@ class StoreTest extends TestCase
     public function testResolveSpIdThrowsOnInsertAndGetSpFailure(): void
     {
         $this->resultStub->method('fetchOne')->willReturn(false);
-        $this->repositoryStub->method('getSp')->willReturn($this->resultStub);
-        $this->repositoryStub->method('insertSp')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getSp')->willReturn($this->resultStub);
+        $this->repositoryMock->method('insertSp')->willThrowException(new \Exception('test'));
 
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
@@ -349,7 +349,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -360,7 +360,7 @@ class StoreTest extends TestCase
 
     public function testResolveSpVersionIdThrowsOnFirstGetSpVersionFailure(): void
     {
-        $this->repositoryStub->method('getSpVersion')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getSpVersion')->willThrowException(new \Exception('test'));
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
@@ -368,7 +368,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -379,8 +379,8 @@ class StoreTest extends TestCase
     public function testResolveSpVersionIdThrowsOnInsertAndGetSpVersionFailure(): void
     {
         $this->resultStub->method('fetchOne')->willReturn(false);
-        $this->repositoryStub->method('getSpVersion')->willReturn($this->resultStub);
-        $this->repositoryStub->method('insertSpVersion')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getSpVersion')->willReturn($this->resultStub);
+        $this->repositoryMock->method('insertSpVersion')->willThrowException(new \Exception('test'));
 
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
@@ -389,7 +389,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -410,7 +410,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(UnexpectedValueException::class);
@@ -420,7 +420,7 @@ class StoreTest extends TestCase
 
     public function testResolveUserIdThrowsOnFirstGetUserFailure(): void
     {
-        $this->repositoryStub->method('getUser')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getUser')->willThrowException(new \Exception('test'));
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
@@ -428,7 +428,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -439,8 +439,8 @@ class StoreTest extends TestCase
     public function testResolveUserIdThrowsOnInsertAndGetUserFailure(): void
     {
         $this->resultStub->method('fetchOne')->willReturn(false);
-        $this->repositoryStub->method('getUser')->willReturn($this->resultStub);
-        $this->repositoryStub->method('insertUser')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getUser')->willReturn($this->resultStub);
+        $this->repositoryMock->method('insertUser')->willThrowException(new \Exception('test'));
 
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
@@ -449,7 +449,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -460,7 +460,7 @@ class StoreTest extends TestCase
 
     public function testResolveUserVersionIdThrowsOnFirstGetUserVersionFailure(): void
     {
-        $this->repositoryStub->method('getUserVersion')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getUserVersion')->willThrowException(new \Exception('test'));
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
@@ -468,7 +468,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -479,8 +479,8 @@ class StoreTest extends TestCase
     public function testResolveUserVersionIdThrowsOnInsertAndGetUserVersionFailure(): void
     {
         $this->resultStub->method('fetchOne')->willReturn(false);
-        $this->repositoryStub->method('getUserVersion')->willReturn($this->resultStub);
-        $this->repositoryStub->method('insertUserVersion')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getUserVersion')->willReturn($this->resultStub);
+        $this->repositoryMock->method('insertUserVersion')->willThrowException(new \Exception('test'));
 
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
@@ -489,7 +489,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -500,7 +500,7 @@ class StoreTest extends TestCase
 
     public function testResolveIdpSpUserVersionIdThrowsOnFirstGetIdpSpUserVersionFailure(): void
     {
-        $this->repositoryStub->method('getIdpSpUserVersion')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getIdpSpUserVersion')->willThrowException(new \Exception('test'));
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
@@ -508,7 +508,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -519,8 +519,8 @@ class StoreTest extends TestCase
     public function testResolveIdpSpUserVersionIdThrowsOnInsertAndGetIdpSpUserVersionFailure(): void
     {
         $this->resultStub->method('fetchOne')->willReturn(false);
-        $this->repositoryStub->method('getIdpSpUserVersion')->willReturn($this->resultStub);
-        $this->repositoryStub->method('insertIdpSpUserVersion')->willThrowException(new \Exception('test'));
+        $this->repositoryMock->method('getIdpSpUserVersion')->willReturn($this->resultStub);
+        $this->repositoryMock->method('insertIdpSpUserVersion')->willThrowException(new \Exception('test'));
 
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
@@ -529,7 +529,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -540,7 +540,7 @@ class StoreTest extends TestCase
 
     public function testGetConnectedOrganizationsReturnsEmptyBagIfNoResults(): void
     {
-        $this->repositoryStub->method('getConnectedServiceProviders')->willReturn([]);
+        $this->repositoryMock->method('getConnectedServiceProviders')->willReturn([]);
 
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
@@ -549,7 +549,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $connectedServiceProviderBag = $store->getConnectedOrganizations('test');
@@ -559,7 +559,7 @@ class StoreTest extends TestCase
 
     public function testCanGetConnectedOrganizationsBag(): void
     {
-        $this->repositoryStub->method('getConnectedServiceProviders')
+        $this->repositoryMock->method('getConnectedServiceProviders')
             ->willReturn([RawRowResult::CONNECTED_ORGANIZATION]);
 
         /** @psalm-suppress InvalidArgument */
@@ -569,7 +569,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $connectedServiceProviderBag = $store->getConnectedOrganizations('test');
@@ -582,7 +582,7 @@ class StoreTest extends TestCase
         $rawResult = RawRowResult::CONNECTED_ORGANIZATION;
         unset($rawResult[TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]);
 
-        $this->repositoryStub->method('getConnectedServiceProviders')
+        $this->repositoryMock->method('getConnectedServiceProviders')
             ->willReturn([$rawResult]);
 
         /** @psalm-suppress InvalidArgument */
@@ -592,7 +592,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
@@ -601,7 +601,7 @@ class StoreTest extends TestCase
 
     public function testGetActivityReturnsEmptyBagIfNoResults(): void
     {
-        $this->repositoryStub->method('getActivity')->willReturn([]);
+        $this->repositoryMock->method('getActivity')->willReturn([]);
 
         /** @psalm-suppress InvalidArgument */
         $store = new Store(
@@ -610,7 +610,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $activityBag = $store->getActivity('test', 10, 0);
@@ -620,7 +620,7 @@ class StoreTest extends TestCase
 
     public function testCanGetActivityBag(): void
     {
-        $this->repositoryStub->method('getActivity')
+        $this->repositoryMock->method('getActivity')
             ->willReturn([RawRowResult::ACTIVITY]);
 
         /** @psalm-suppress InvalidArgument */
@@ -630,7 +630,7 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $activityBag = $store->getActivity('test', 10, 0);
@@ -643,7 +643,7 @@ class StoreTest extends TestCase
         $rawResult = RawRowResult::ACTIVITY;
         unset($rawResult[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT]);
 
-        $this->repositoryStub->method('getActivity')
+        $this->repositoryMock->method('getActivity')
             ->willReturn([$rawResult]);
 
         /** @psalm-suppress InvalidArgument */
@@ -653,10 +653,31 @@ class StoreTest extends TestCase
             null,
             ModuleConfiguration\ConnectionType::MASTER,
             $this->factoryStub,
-            $this->repositoryStub
+            $this->repositoryMock
         );
 
         $this->expectException(StoreException::class);
         $store->getActivity('test', 10, 0);
+    }
+
+    public function testCanDeleteDataOlderThan(): void
+    {
+        $dateTime = new \DateTimeImmutable();
+
+        $this->repositoryMock->expects($this->once())
+            ->method('deleteAuthenticationEventsOlderThan')
+            ->with($dateTime);
+
+        /** @psalm-suppress InvalidArgument */
+        $store = new Store(
+            $this->moduleConfigurationStub,
+            $this->loggerMock,
+            null,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->factoryStub,
+            $this->repositoryMock
+        );
+
+        $store->deleteDataOlderThan($dateTime);
     }
 }

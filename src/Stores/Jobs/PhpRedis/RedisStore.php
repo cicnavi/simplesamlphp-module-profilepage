@@ -137,6 +137,7 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
 
     /**
      * @throws StoreException
+     * @codeCoverageIgnore
      */
     public static function build(
         ModuleConfiguration $moduleConfiguration,

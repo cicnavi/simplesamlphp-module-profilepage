@@ -506,76 +506,6 @@ class Store extends AbstractStore implements DataStoreInterface
         }
 
         return $connectedServiceProviderBag;
-
-        // TODO mivanci remove after unit tests
-//        $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
-//        $lastMetadataAndAttributesQueryBuilder = $this->connection->dbal()->createQueryBuilder();
-//
-//        /** @psalm-suppress TooManyArguments */
-//        $authenticationEventsQueryBuilder->select(
-//            'vs.entity_id AS sp_entity_id',
-//            'COUNT(vae.id) AS number_of_authentications',
-//            'MAX(vae.happened_at) AS last_authentication_at',
-//            'MIN(vae.happened_at) AS first_authentication_at',
-//        )->from('vds_authentication_event', 'vae')
-//            ->leftJoin(
-//                'vae',
-//                'vds_idp_sp_user_version',
-//                'visuv',
-//                'vae.idp_sp_user_version_id = visuv.id'
-//            )
-//            ->leftJoin('visuv', 'vds_sp_version', 'vsv', 'visuv.sp_version_id = vsv.id')
-//            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
-//            ->leftJoin('visuv', 'vds_user_version', 'vuv', 'visuv.user_version_id = vuv.id')
-//            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
-//            ->where(
-//                'vu.identifier_hash_sha256 = ' .
-//                $authenticationEventsQueryBuilder->createNamedParameter($userIdentifierHashSha256)
-//            )
-//            ->groupBy('vs.id')
-//            ->orderBy('number_of_authentications', 'DESC');
-//
-//        /** @psalm-suppress TooManyArguments */
-//        $lastMetadataAndAttributesQueryBuilder->select(
-//            'vs.entity_id AS sp_entity_id',
-//            'vsv.metadata AS sp_metadata',
-//            'vuv.attributes AS user_attributes',
-//            //            'vsv.id AS sp_version_id',
-//            //            'vuv.id AS user_version_id',
-//        )->from('vds_authentication_event', 'vae')
-//            ->leftJoin(
-//                'vae',
-//                'vds_idp_sp_user_version',
-//                'visuv',
-//                'vae.idp_sp_user_version_id = visuv.id'
-//            )
-//            ->leftJoin('visuv', 'vds_sp_version', 'vsv', 'visuv.sp_version_id = vsv.id')
-//            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
-//            ->leftJoin('visuv', 'vds_user_version', 'vuv', 'visuv.user_version_id = vuv.id')
-//            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
-//            ->leftJoin('vsv', 'vds_sp_version', 'vsv2', 'vsv.id = vsv2.id AND vsv.id < vsv2.id')
-//            ->leftJoin('vuv', 'vds_user_version', 'vuv2', 'vuv.id = vuv2.id AND vuv.id < vuv2.id')
-//            ->where(
-//                'vu.identifier_hash_sha256 = ' .
-//                $lastMetadataAndAttributesQueryBuilder->createNamedParameter($userIdentifierHashSha256)
-//            )
-//            ->andWhere('vsv2.id IS NULL')
-//            ->andWhere('vuv2.id IS NULL');
-//
-//        try {
-//            $numberOfAuthentications =
-// $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
-//            $lastMetadataAndAttributes =
-//                $lastMetadataAndAttributesQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
-//
-//            return array_merge_recursive($numberOfAuthentications, $lastMetadataAndAttributes);
-//        } catch (\Throwable $exception) {
-//            $message = sprintf(
-//                'Error executing query to get connected organizations. Error was: %s.',
-//                $exception->getMessage()
-//            );
-//            throw new StoreException($message, (int)$exception->getCode(), $exception);
-//        }
     }
 
 
@@ -584,7 +514,6 @@ class Store extends AbstractStore implements DataStoreInterface
      */
     public function getActivity(string $userIdentifierHashSha256, int $maxResults, int $firstResult): Activity\Bag
     {
-        // TODO mivanci pagination
         $results =  $this->repository->getActivity($userIdentifierHashSha256, $maxResults, $firstResult);
 
         $activityBag = new Activity\Bag();
@@ -618,42 +547,11 @@ class Store extends AbstractStore implements DataStoreInterface
         }
 
         return $activityBag;
+    }
 
-        // TODO mivanci remove
-//        $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
-//
-//        /** @psalm-suppress TooManyArguments */
-//        $authenticationEventsQueryBuilder->select(
-//            'vae.happened_at',
-//            'vsv.metadata AS sp_metadata',
-//            'vuv.attributes AS user_attributes'
-//        )->from('vds_authentication_event', 'vae')
-//            ->leftJoin(
-//                'vae',
-//                'vds_idp_sp_user_version',
-//                'visuv',
-//                'vae.idp_sp_user_version_id = visuv.id'
-//            )
-//            ->leftJoin('visuv', 'vds_sp_version', 'vsv', 'visuv.sp_version_id = vsv.id')
-//            ->leftJoin('vsv', 'vds_sp', 'vs', 'vsv.sp_id = vs.id')
-//            ->leftJoin('visuv', 'vds_user_version', 'vuv', 'visuv.user_version_id = vuv.id')
-//            ->leftJoin('vuv', 'vds_user', 'vu', 'vuv.user_id = vu.id')
-//            ->where(
-//                'vu.identifier_hash_sha256 = ' .
-//                $authenticationEventsQueryBuilder->createNamedParameter($userIdentifierHashSha256)
-//            )
-//            ->orderBy('vae.id', 'DESC');
-//
-//        try {
-//            $numberOfAuthentications = $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociative();
-//
-//            return array_merge_recursive($numberOfAuthentications);
-//        } catch (\Throwable $exception) {
-//            $message = sprintf(
-//                'Error executing query to get connected organizations. Error was: %s.',
-//                $exception->getMessage()
-//            );
-//            throw new StoreException($message, (int)$exception->getCode(), $exception);
-//        }
+    public function deleteDataOlderThan(\DateTimeImmutable $dateTime): void
+    {
+        // Only delete authentication events. Versioned data (IdP / SP metadata, user attributes) remain.
+        $this->repository->deleteAuthenticationEventsOlderThan($dateTime);
     }
 }

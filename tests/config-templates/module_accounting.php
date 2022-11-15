@@ -16,8 +16,6 @@ $config = [
     ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
         ModuleConfiguration\AccountingProcessingType::VALUE_SYNCHRONOUS,
 
-    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
-
     ModuleConfiguration::OPTION_JOBS_STORE => Stores\Jobs\DoctrineDbal\Store::class,
 
     ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER =>
@@ -53,4 +51,11 @@ $config = [
     ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => null,
 
     ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => 10,
+
+    ModuleConfiguration::OPTION_TRACKER_DATA_RETENTION_POLICY => null,
+
+    ModuleConfiguration::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY =>
+        'accounting_tracker_data_retention_policy',
+
+    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
 ];

@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Activity;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
+use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Providers\Interfaces\AuthenticationDataProviderInterface;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
@@ -83,5 +84,23 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
     {
         $userIdentifierHashSha256 = $this->helpersManager->getHashHelper()->getSha256($userIdentifier);
         return $this->dataStore->getActivity($userIdentifierHashSha256, $maxResults, $firstResult);
+    }
+
+    public function enforceDataRetentionPolicy(\DateInterval $retentionPolicy): void
+    {
+        $dateTime = (new \DateTimeImmutable())->sub($retentionPolicy);
+
+        if ($dateTime === false) {
+            // @codeCoverageIgnoreStart
+            $message = sprintf(
+                'Could not create DateTime instance for data retention policy enforcement. Retention policy was: %s.',
+                var_export($retentionPolicy, true)
+            );
+            $this->logger->error($message);
+            throw new InvalidConfigurationException($message);
+            // @codeCoverageIgnoreEnd
+        }
+
+        $this->dataStore->deleteDataOlderThan($dateTime);
     }
 }

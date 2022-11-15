@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Trackers\Interfaces;
 
 use Psr\Log\LoggerInterface;
@@ -14,4 +16,6 @@ interface AuthenticationDataTrackerInterface extends BuildableUsingModuleConfigu
     public static function build(ModuleConfiguration $moduleConfiguration, LoggerInterface $logger): self;
 
     public function process(Event $authenticationEvent): void;
+
+    public function enforceDataRetentionPolicy(\DateInterval $retentionPolicy): void;
 }

@@ -64,6 +64,10 @@ class AuthenticationDataTrackerBuilderTest extends TestCase
             public function runSetup(): void
             {
             }
+
+            public function enforceDataRetentionPolicy(\DateInterval $retentionPolicy): void
+            {
+            }
         };
     }
 

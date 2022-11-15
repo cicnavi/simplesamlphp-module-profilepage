@@ -727,4 +727,63 @@ class RepositoryTest extends TestCase
 
         $repository->getActivity($this->userIdentifierHash, 10, 0);
     }
+
+    public function testCanDeleteAuthenticationEventsOlderThan(): void
+    {
+        $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);
+        $idpResult = $this->repository->getIdp($this->idpEntityIdHash)->fetchAssociative();
+        $idpId = (int)$idpResult[Store\TableConstants::TABLE_IDP_COLUMN_NAME_ID];
+        $this->repository->insertIdpVersion($idpId, $this->idpMetadata, $this->idpMetadataHash, $this->createdAt);
+        $idpVersionResult = $this->repository->getIdpVersion($idpId, $this->idpMetadataHash)->fetchAssociative();
+
+        $this->repository->insertSp($this->spEntityId, $this->spEntityIdHash, $this->createdAt);
+        $spResult = $this->repository->getSp($this->spEntityIdHash)->fetchAssociative();
+        $spId = (int)$spResult[Store\TableConstants::TABLE_SP_COLUMN_NAME_ID];
+        $this->repository->insertSpVersion($spId, $this->spMetadata, $this->spMetadataHash, $this->createdAt);
+        $spVersionResult = $this->repository->getSpVersion($spId, $this->spMetadataHash)->fetchAssociative();
+
+        $this->repository->insertUser($this->userIdentifier, $this->userIdentifierHash, $this->createdAt);
+        $userResult = $this->repository->getUser($this->userIdentifierHash)->fetchAssociative();
+        $userId = (int)$userResult[Store\TableConstants::TABLE_USER_COLUMN_NAME_ID];
+        $this->repository
+            ->insertUserVersion($userId, $this->userAttributes, $this->userAttributesHash, $this->createdAt);
+        $userVersionResult = $this->repository->getUserVersion($userId, $this->userAttributesHash)->fetchAssociative();
+
+        $idpVersionId = (int)$idpVersionResult[Store\TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_ID];
+        $spVersionId = (int)$spVersionResult[Store\TableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID];
+        $userVersionId = (int)$userVersionResult[Store\TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId, $this->createdAt);
+        $idpSpUserVersionResult = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId)
+            ->fetchAssociative();
+
+        $idpSpUserVersionId =
+            (int)$idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertAuthenticationEvent(
+            $idpSpUserVersionId,
+            $this->createdAt,
+            $this->clientIpAddress,
+            $this->createdAt
+        );
+
+        $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
+        $this->assertCount(1, $resultArray);
+
+        $dateTimeInFuture = $this->createdAt->add(new \DateInterval('P1D'));
+
+        $this->repository->deleteAuthenticationEventsOlderThan($dateTimeInFuture);
+
+        $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
+        $this->assertCount(0, $resultArray);
+    }
+
+    public function testDeleteAuthenticationEventsOlderThanThrowsOnInvalidDbal(): void
+    {
+        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $repository = new Repository($this->connectionStub, $this->loggerStub);
+        $this->expectException(StoreException::class);
+
+        $repository->deleteAuthenticationEventsOlderThan(new \DateTimeImmutable());
+    }
 }

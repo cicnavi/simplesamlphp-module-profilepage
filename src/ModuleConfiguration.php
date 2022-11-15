@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting;
 
+use DateInterval;
 use Exception;
 use SimpleSAML\Configuration;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
@@ -35,6 +36,8 @@ class ModuleConfiguration
     public const OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME = 'job_runner_maximum_execution_time';
     public const OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED =
         'job_runner_should_pause_after_number_of_jobs_processed';
+    public const OPTION_TRACKER_DATA_RETENTION_POLICY = 'tracker_data_retention_policy';
+    public const OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY = 'cron_tag_for_tracker_data_retention_policy';
 
     /**
      * Contains configuration from module configuration file.
@@ -80,7 +83,7 @@ class ModuleConfiguration
         return $this->getConfiguration()->getString(self::OPTION_JOBS_STORE);
     }
 
-    public function getJobRunnerMaximumExecutionTime(): ?\DateInterval
+    public function getJobRunnerMaximumExecutionTime(): ?DateInterval
     {
         $value = $this->get(self::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME);
 
@@ -95,7 +98,7 @@ class ModuleConfiguration
         }
 
         try {
-            return new \DateInterval($value);
+            return new DateInterval($value);
         } catch (Throwable $exception) {
             $message = sprintf('Can not create DateInterval instance using value %s as parameter.', $value);
             throw new InvalidConfigurationException($message);
@@ -139,6 +142,10 @@ class ModuleConfiguration
         return $this->getConfiguration()->getArray(self::OPTION_CONNECTIONS_AND_PARAMETERS);
     }
 
+    /**
+     * @return string[]
+     * @psalm-suppress MixedReturnTypeCoercion We specifically check if valid class string are provided.
+     */
     public function getAdditionalTrackers(): array
     {
         return $this->getConfiguration()->getArray(self::OPTION_ADDITIONAL_TRACKERS);
@@ -298,6 +305,13 @@ class ModuleConfiguration
             $errors[] = $exception->getMessage();
         }
 
+        try {
+            $this->validateTrackerDataRetentionPolicy();
+        } catch (Throwable $exception) {
+            $errors[] = $exception->getMessage();
+        }
+
+
         if (!empty($errors)) {
             $message = sprintf('Module configuration validation failed with errors: %s', implode(' ', $errors));
             throw new InvalidConfigurationException($message);
@@ -343,9 +357,6 @@ class ModuleConfiguration
         $errors = [];
 
         // Validate additional trackers
-        /**
-         * @var string $trackerClass
-         */
         foreach ($this->getAdditionalTrackers() as $trackerClass) {
             /** @psalm-suppress DocblockTypeContradiction */
             if (!is_string($trackerClass)) {
@@ -443,5 +454,35 @@ class ModuleConfiguration
     protected function validateCronTagForJobRunner(): void
     {
         $this->getCronTagForJobRunner();
+    }
+
+    protected function validateTrackerDataRetentionPolicy(): void
+    {
+        if ($this->getTrackerDataRetentionPolicy() !== null) {
+            $this->getCronTagForTrackerDataRetentionPolicy();
+        }
+    }
+
+    public function getTrackerDataRetentionPolicy(): ?DateInterval
+    {
+        /** @var string|null $value */
+        $value = $this->getConfiguration()
+            ->getOptionalString(self::OPTION_TRACKER_DATA_RETENTION_POLICY, null);
+
+        if (is_null($value)) {
+            return null;
+        }
+
+        try {
+            return new DateInterval($value);
+        } catch (Throwable $exception) {
+            $message = sprintf('Can not create DateInterval instance using value %s as parameter.', $value);
+            throw new InvalidConfigurationException($message);
+        }
+    }
+
+    public function getCronTagForTrackerDataRetentionPolicy(): string
+    {
+        return $this->getConfiguration()->getString(self::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY);
     }
 }

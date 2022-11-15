@@ -1066,4 +1066,28 @@ class Repository
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
+
+    /**
+     * @throws StoreException
+     */
+    public function deleteAuthenticationEventsOlderThan(\DateTimeImmutable $dateTime): void
+    {
+        try {
+            $queryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+            $queryBuilder->delete($this->tableNameAuthenticationEvent)
+                ->where(
+                    $queryBuilder->expr()->lt(
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
+                        $queryBuilder->createNamedParameter($dateTime, Types::DATETIME_IMMUTABLE)
+                    )
+                )->executeStatement();
+        } catch (Throwable $exception) {
+            $message = sprintf(
+                'Error executing query to delete old authentication events. Error was: %s.',
+                $exception->getMessage()
+            );
+            throw new StoreException($message, (int)$exception->getCode(), $exception);
+        }
+    }
 }

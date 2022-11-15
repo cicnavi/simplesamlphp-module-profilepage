@@ -493,7 +493,6 @@ class JobRunner
             $this->moduleConfiguration->getAdditionalTrackers()
         );
 
-        /** @var string $trackerClass */
         foreach ($configuredTrackerClasses as $trackerClass) {
             $trackers[$trackerClass] = $this->authenticationDataTrackerBuilder->build($trackerClass);
         }

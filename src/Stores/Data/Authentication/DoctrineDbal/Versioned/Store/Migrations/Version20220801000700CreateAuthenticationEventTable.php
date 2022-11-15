@@ -50,6 +50,9 @@ class Version20220801000700CreateAuthenticationEventTable extends AbstractMigrat
                 ['id']
             );
 
+            // Old data can be deleted using happened_at column, so add index for it.
+            $table->addIndex(['happened_at']);
+
             $this->schemaManager->createTable($table);
         } catch (\Throwable $exception) {
             throw $this->prepareGenericMigrationException(

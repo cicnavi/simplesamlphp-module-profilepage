@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-// TODO mivanci remove this file
+// TODO mivanci remove this file before release
 declare(strict_types=1);
 
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
@@ -34,7 +34,7 @@ echo $newLine;
 
 $spinnerChars = ['|', '/', '-', '\\'];
 
-/**
+/**/
 echo 'Starting simulating MySQL: ';
 $mysqlStartTime = new DateTime();
 echo $mysqlStartTime->format(DateTime::ATOM);
@@ -87,7 +87,7 @@ for ($i = 1; $i <= $numberOfItems; $i++) {
 echo $newLine;
 echo $newLine;
 
-*/
+
 echo 'Starting simulating Redis: ';
 $redisStartTime = new DateTime();
 echo $redisStartTime->format(DateTime::ATOM);
