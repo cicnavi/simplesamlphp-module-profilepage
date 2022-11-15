@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Activity;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
+use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
@@ -193,5 +194,23 @@ class TrackerTest extends TestCase
             Activity\Bag::class,
             $tracker->getActivity('test', 10, 0)
         );
+    }
+
+    public function testCanEnforceDataRetentionPolicy(): void
+    {
+        $retentionPolicy = new \DateInterval('P10D');
+
+        $this->dataStoreMock->expects($this->once())
+            ->method('deleteDataOlderThan');
+
+        $tracker = new Tracker(
+            $this->moduleConfigurationStub,
+            $this->loggerMock,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->helpersManagerStub,
+            $this->dataStoreMock
+        );
+
+        $tracker->enforceDataRetentionPolicy($retentionPolicy);
     }
 }

@@ -1,12 +1,8 @@
 
-accounting-setup:
-    path:       /setup
-    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::setup' }
-
-# TODO mivanci delete
-accounting-job-runner:
-    path:       /job-runner
-    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::jobRunner' }
+# TODO mivanci delete test route
+accounting-test:
+    path:       /test
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::test' }
 
 accounting-admin-configuration-status:
     path:       /admin/configuration/status

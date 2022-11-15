@@ -324,4 +324,29 @@ class ModuleConfigurationTest extends TestCase
             ]
         );
     }
+
+    public function testThrowsForInvalidTrackerDataRetentionPolicy(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_TRACKER_DATA_RETENTION_POLICY => 'invalid'
+            ]
+        );
+    }
+
+    public function testThrowsForInvalidCronTagForTrackerDataRetentionPolicy(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new ModuleConfiguration(
+            null,
+            [
+                ModuleConfiguration::OPTION_TRACKER_DATA_RETENTION_POLICY => 'P1D',
+                ModuleConfiguration::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY => false,
+            ]
+        );
+    }
 }

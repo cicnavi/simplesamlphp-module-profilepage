@@ -41,14 +41,6 @@ $config = [
         //ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS,
 
     /**
-     * Cron tags.
-     *
-     * Job runner tag designates the cron tag to use when running accounting jobs. Make sure to add this tag to
-     * the cron module configuration in case of the 'asynchronous' accounting processing type.
-     */
-    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
-
-    /**
      * Jobs store class. In case of the 'asynchronous' accounting processing type, this determines which class
      * will be used to store jobs. The class must implement Stores\Interfaces\JobsStoreInterface.
      */
@@ -78,7 +70,6 @@ $config = [
          * Stores\Data\DoctrineDbal\DoctrineDbal\Versioned\Store::class.
          */
         Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class,
-
 
     /**
      * Additional trackers to run besides default data tracker. These trackers will typically only process and
@@ -164,17 +155,13 @@ $config = [
 
     /**
      * Job runner fine-grained configuration options.
-     */
-
-    /**
-     * Maximum execution time for the job runner.
      *
-     * You can use this option to limit job runner activity by combining when the job runner will run (using
-     * cron configuration) and how long the job runner will be active (execution time). This can be null,
-     * meaning it will run indefinitely, or can be set as a duration for DateInterval, examples being
-     * below. Note that when the job runner is run using Cron user interface in SimpleSAMLphp, the
-     * duration will be taken from the 'max_execution_time' ini setting, and will override this
-     * setting if ini setting is shorter.
+     * Maximum execution time for the job runner. You can use this option to limit job runner activity by combining
+     * when the job runner will run (using cron configuration) and how long the job runner will be active
+     * (execution time). This can be null, meaning it will run indefinitely, or can be set as a duration
+     * for DateInterval, examples being below. Note that when the job runner is run using Cron user
+     * interface in SimpleSAMLphp, the duration will be taken from the 'max_execution_time' ini
+     * setting, and will override this setting if ini setting is shorter.
      * @see https://www.php.net/manual/en/dateinterval.construct.php
      */
     ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => null,
@@ -189,4 +176,32 @@ $config = [
      * backend store. If the value is null, there will be no pause.
      */
     ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => 10,
+
+    /**
+     * Tracker data retention policy.
+     *
+     * Determines how long the tracked data will be stored. If null, data will be stored indefinitely. Otherwise, it
+     * can be set as a duration for DateInterval, examples being below. For this to work, a cron tag must also
+     * be configured.
+     */
+    ModuleConfiguration::OPTION_TRACKER_DATA_RETENTION_POLICY => null,
+    //ModuleConfiguration::OPTION_TRACKER_DATA_RETENTION_POLICY => 'P30D', // 30 days
+    //ModuleConfiguration::OPTION_TRACKER_DATA_RETENTION_POLICY => 'P6M', // 6 months
+    //ModuleConfiguration::OPTION_TRACKER_DATA_RETENTION_POLICY => 'P1Y', // 1 year
+
+
+    /**
+     * Cron tags.
+     *
+     * Job runner tag designates the cron tag to use when running accounting jobs. Make sure to add this tag to
+     * the cron module configuration in case of the 'asynchronous' accounting processing type.
+     */
+    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
+
+    /**
+     * Tracker data retention policy tag designates the cron tag to use for enforcing data retention policy. Make sure
+     * to add this tag to the cron module configuration if data retention policy is different to null.
+     */
+    ModuleConfiguration::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY =>
+        'accounting_tracker_data_retention_policy',
 ];
