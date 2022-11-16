@@ -1,14 +1,22 @@
 # simplesamlphp-module-accounting
 SimpleSAMLphp module providing user accounting functionality.
 
-**Module is in development and is not production ready.**
+## Features
+- enables tracking of authentication events, synchronously (during authentication event) or
+asynchronously (in a separate process using SimpleSAMLphp Cron feature)
+- provides endpoints for end users to check their personal data, summary on connected
+Service Providers, and list of authentication events
+
+## Installation
+Module is installable using Composer:
+```shell
+composer require cicnavi/simplesamlphp-module-accounting
+```
+
+## Configuration
+
 
 ## TODO
-- [x] Data stores
-- [ ] Cron hook
-  - [ ] explain specific cron tag for accounting (it should have its own tag which should be
-added to cron config 
-- [ ] Profile page UI
 - [ ] Translation
 
 ## Tests
