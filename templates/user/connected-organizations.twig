@@ -8,50 +8,52 @@
 {% set pageMenuItem = 'connected-organizations' %}
 
 {% block content %}
-
-    <h2>{{ pagetitle }} </h2>
-
-    <table class="pure-table pure-table-striped pure-table-attributes">
-        <thead>
+    <table>
+        <!-- fixed table header -->
         <tr>
             <th><strong>{{ 'Name'|trans }}</strong></th>
             <th><strong>{{ 'All access'|trans }}</strong></th>
             <th><strong>{{ 'Last access'|trans }}</strong></th>
         </tr>
-        </thead>
-        <tbody>
+
         {% for connectedServiceProvider in connectedServiceProviderBag.getAll %}
-            <tr class="accordion">
+            <tr>
                 <td>{{ connectedServiceProvider.getServiceProvider.getName|e }}</td>
                 <td>{{ connectedServiceProvider.getNumberOfAuthentications|e }}</td>
                 <td>{{ connectedServiceProvider.getLastAuthenticationAt|date() }}</td>
             </tr>
-            <tr class="panel">
-                <td colspan="3">
-                    <strong>{{ 'Service details'|trans }}</strong>
-                    <ul>
-                        <li>{{ 'Entity ID'|trans }}: {{ connectedServiceProvider.getServiceProvider.getEntityId|e }}</li>
-                        <li>{{ 'Description'|trans }}: {{ connectedServiceProvider.getServiceProvider.getDescription|e|default(' / ') }}</li>
-                    </ul>
+            <tr>
+                <td class="dropdown-container" colspan="3">
+                    <input type="checkbox" id="dropdown-toggle-{{ loop.index }}" class="dropdown-toggle">
+                    <label class="dropdown-label" for="dropdown-toggle-{{ loop.index }}">
+                        <img src="{{ asset('css/src/icons/dropdown.svg', 'accounting') }}" alt="Dropdown icon">
+                    </label>
+                    <div class="dropdown-box">
+                        <strong>{{ 'Service details'|trans }}</strong>
+                        <ul>
+                            <li>{{ 'Entity ID'|trans }}: {{ connectedServiceProvider.getServiceProvider.getEntityId|e }}</li>
+                            <li>{{ 'Description'|trans }}: {{ connectedServiceProvider.getServiceProvider.getDescription|e|default(' / ') }}</li>
+                        </ul>
 
-                    <strong>{{ 'Information transfered to service'|trans }}</strong>
-                    <ul>
-                        {% for name, value in connectedServiceProvider.getUser.getAttributes %}
+                        <strong>{{ 'Information transfered to service'|trans }}</strong>
+                        <ul>
+                            {% for name, value in connectedServiceProvider.getUser.getAttributes %}
+                                <li>
+                                    {{ name|trans }}: {{ value|join(', ') }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        <strong>{{ 'Login details'|trans }}</strong>
+                        <ul>
                             <li>
-                                {{ name|trans }}: {{ value|join(', ') }}
+                                {{ 'First access'|trans }}: {{ connectedServiceProvider.getFirstAuthenticationAt|date() }}
                             </li>
-                        {% endfor %}
-                    </ul>
-
-                    <strong>{{ 'Login details'|trans }}</strong>
-                    <ul>
-                        <li>
-                            {{ 'First access'|trans }}: {{ connectedServiceProvider.getFirstAuthenticationAt|date() }}
-                        </li>
-                        <li>
-                            {{ 'Last access'|trans }}: {{ connectedServiceProvider.getLastAuthenticationAt|date() }}
-                        </li>
-                    </ul>
+                            <li>
+                                {{ 'Last access'|trans }}: {{ connectedServiceProvider.getLastAuthenticationAt|date() }}
+                            </li>
+                        </ul>
+                    </div>
                 </td>
             </tr>
         {% else %}
@@ -59,12 +61,6 @@
                 <td colspan="3">{{ 'No data available'|trans }}</td>
             </tr>
         {% endfor %}
-        </tbody>
+        <!-- end of repeating item -->
     </table>
-
-{% endblock %}
-
-{% block postload %}
-    {{ parent() }}
-    {% include '@accounting/includes/_js-accordion.twig' %}
 {% endblock %}

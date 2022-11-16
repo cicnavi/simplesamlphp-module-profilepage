@@ -5,31 +5,30 @@
 
 {% set pageMenuItem = 'personal-data' %}
 
-{% block content %}
-
-    <h2>{{ pagetitle }} </h2>
-
+{% block banner %}
     <section id="banner">
         <div>
             {% trans %}This is what we know about you...{% endtrans %}
         </div>
     </section>
+{% endblock %}
 
-    <table class="pure-table pure-table-striped pure-table-attributes">
-        <thead>
+{% block content %}
+    <table>
+        <!-- fixed table header -->
+        <tr>
+            <th>{{ 'Attribute'|trans }}</th>
+            <th>{{ 'Your value'|trans }}</th>
+        </tr>
+
+        {% for name, value in normalizedAttributes %}
             <tr>
-                <th><strong>Attribute</strong></th>
-                <th><strong>Your value</strong></th>
+                <td>
+                    {{ name|trans }}
+                    <a href="#"><img src="{{ asset('css/src/icons/i.svg', 'accounting') }}" alt="Info icon"></a>
+                </td>
+                <td>{{ value }}</td>
             </tr>
-        </thead>
-        <tbody>
-            {% for name, value in normalizedAttributes %}
-                <tr>
-                    <td>{{ name|trans }}</td>
-                    <td>{{ value }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
+        {% endfor %}
     </table>
-
 {% endblock %}

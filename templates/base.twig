@@ -1,44 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{ currentLanguage }}">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+{#    <meta name="viewport" content="initial-scale=1.0">#}
+{#    <meta http-equiv="X-UA-Compatible" content="IE=Edge">#}
+    <title>{{ pagetitle }}</title>
+    <link rel="stylesheet" href="{{ asset('css/src/default.css', 'accounting') }}">
+    <link rel="icon" href="{{ asset("icons/favicon.ico") }}">
+    <meta name="robots" content="noindex, nofollow">
+</head>
+<body id="{{ templateId }}">
 
-{% extends "base.twig" %}
+{% include '@accounting/includes/_header.twig' %}
 
-{% block preload %}
-{#    TODO mivanci apply new CSS from Mihaly#}
-{#    <link rel="stylesheet" href="{{ asset('css/src/default.css', 'accounting') }}">#}
-    <link rel="stylesheet" href="{{ asset('css/src/custom.css', 'accounting') }}">
-{% endblock %}
+{% include '@accounting/includes/_navigation.twig' %}
 
-{% block contentwrapper %}
-    <div class="pure-g">
-        <div class="pure-u-1">
-            {% include '@accounting/includes/_header.twig' %}
-        </div>
+{% block banner %}{% endblock %}
+
+<section id="main">
+    {% block content %}{% endblock %}
+</section>
+
+<footer>
+    <div>
+        {% trans %}
+        As part of the GÉANT 2020 Framework Partnership Agreement (FPA), the project receives funding from the European
+        Union’s Horizon 2020 research and innovation programme under Grant Agreement No. 856726 (GN4-3).
+        {% endtrans %}
     </div>
-
-    <div class="pure-g">
-        <div class="pure-u-1-5">
-            {% include '@accounting/includes/_navigation.twig' %}
-        </div>
-        <div class="pure-u-4-5">
-            {{ block('content') }}
-        </div>
-    </div>
-{% endblock %}
-
-{% block footer %}
-    <footer style="text-align: center;">
-        <div>
-            {% trans %}
-                As part of the GÉANT 2020 Framework Partnership Agreement (FPA), the project receives funding
-                from the European Union’s Horizon 2020 research and innovation programme under Grant
-                Agreement No. 856726 (GN4-3).
-            {% endtrans %}
-        </div>
-    </footer>
-
-    {{ parent() }}
-{% endblock %}
-
-{% block postload %}
-{#    TODO mivanci add JS#}
-{#    <script src="{{ asset('js/src/default.js', 'accounting') }}"></script>#}
-{% endblock %}
+</footer>
+</body>
+</html>
