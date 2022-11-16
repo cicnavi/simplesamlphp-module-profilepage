@@ -152,7 +152,6 @@ class Profile
 
     public function logout(): Response
     {
-        // TODO mivanci make logout button available using HTTP POST
         return new RunnableResponse([$this->authSimple, 'logout'], [$this->getLogoutUrl()]);
     }
 

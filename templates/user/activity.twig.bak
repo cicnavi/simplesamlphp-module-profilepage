@@ -8,13 +8,18 @@
 {% set pageMenuItem = 'activity' %}
 
 {% block content %}
-    <table>
+
+    <h2>{{ pagetitle }} </h2>
+
+    <table class="pure-table pure-table-striped pure-table-attributes">
+        <thead>
         <tr>
             <th><strong>{{ 'Time'|trans }}</strong></th>
             <th><strong>{{ 'Access'|trans }}</strong></th>
             <th><strong>{{ 'Sent data'|trans }}</strong></th>
         </tr>
-
+        </thead>
+        <tbody>
         {% for activity in activityBag.getAll %}
             <tr class="accordion">
                 <td>{{ activity.getHappenedAt|date() }}</td>
@@ -25,25 +30,19 @@
                     {% endfor %}
                 </td>
             </tr>
-            <tr>
-                <td class="dropdown-container" colspan="3">
-                    <input type="checkbox" id="dropdown-toggle-{{ loop.index }}" class="dropdown-toggle">
-                    <label class="dropdown-label" for="dropdown-toggle-{{ loop.index }}">
-                        <img src="{{ asset('css/src/icons/dropdown.svg', 'accounting') }}" alt="Dropdown icon">
-                    </label>
-                    <div class="dropdown-box">
-                        <strong>{{ 'IP address'|trans }}</strong>
-                        <ul><li>{{ activity.getClientIpAddress|default(' / ') }}</li></ul>
+            <tr class="panel">
+                <td colspan="3">
+                    <strong>{{ 'IP address'|trans }}</strong>
+                    <ul><li>{{ activity.getClientIpAddress }}</li></ul>
 
-                        <strong>{{ 'Information transfered to service'|trans }}</strong>
-                        <ul>
-                            {% for name, value in activity.getUser.getAttributes %}
-                                <li>
-                                    {{ name|trans }}: {{ value|join(', ') }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                    <strong>{{ 'Information transfered to service'|trans }}</strong>
+                    <ul>
+                        {% for name, value in activity.getUser.getAttributes %}
+                            <li>
+                                {{ name|trans }}: {{ value|join(', ') }}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </td>
             </tr>
         {% else %}
@@ -51,6 +50,7 @@
                 <td colspan="3">{{ 'No data available'|trans }}</td>
             </tr>
         {% endfor %}
+        </tbody>
     </table>
     <br>
     <div class="center">
@@ -65,4 +65,9 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block postload %}
+    {{ parent() }}
+    {% include '@accounting/includes/_js-accordion.twig' %}
 {% endblock %}

@@ -23,5 +23,6 @@ accounting-user-activity:
 accounting-user-logout:
     path: /user/logout
     methods:
+        - GET
         - POST
     defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::logout' }
