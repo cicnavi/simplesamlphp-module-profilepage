@@ -2,18 +2,81 @@
 SimpleSAMLphp module providing user accounting functionality.
 
 ## Features
-- enables tracking of authentication events, synchronously (during authentication event) or
+- Enables tracking of authentication events, synchronously (during authentication event) or
 asynchronously (in a separate process using SimpleSAMLphp Cron feature)
-- provides endpoints for end users to check their personal data, summary on connected
+- Provides endpoints for end users to check their personal data, summary on connected
 Service Providers, and list of authentication events
+- Comes with default [DBAL backend storage](https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/index.html),
+meaning the following database vendors can be used: MySQL, Oracle, Microsoft SQL Server, PostgreSQL, SQLite. Other
+backend storages can be added by following proper interfaces.
+- Comes with setup procedure which sets up backend storage. In case of Doctrine DBAL this means running SQL migrations
+which create proper tables in configured database.
+- Each backend storage connection can have master and slave configuration (master for writing, slave for reading)
+- Has "trackers" which persist authentication data to backend storage. Currently, there is one default Doctrine DBAL
+compatible tracker which stores authentication events, versioned Idp and SP metadata, and versioned user attributes.
+Other trackers can be added by following proper interfaces.
+- Trackers can run in two ways:
+  - synchronously - authentication data persisted during authentication event typically with multiple
+  queries / inserts / updates to backend storage.
+  - asynchronously - only authentication event job is persisted during authentication event
+  (one insert to backend storage). With this approach, authentication event jobs can be executed later in a separate
+  process using SimpleSAMLphp cron module
 
 ## Installation
+Module requires SimpleSAMLphp version 2 or higher.
+
 Module is installable using Composer:
+
 ```shell
 composer require cicnavi/simplesamlphp-module-accounting
 ```
 
+Depending on used features, module also requires:
+- ext-redis: if PhpRedis is to be used as a store
+
 ## Configuration
+As usual with SimpleSAMLphp modules, copy the module template configuration
+to the SimpleSAMLphp config directory:
+
+```shell
+cp modules/accounting/config-templates/module_accounting.php config/
+```
+
+Next step is configuring available options in file config/module_accounting.php. Each option has an explanation,
+however, the description of the overall concept follows.
+
+For accounting processing, the default data tracker and data provider class must be set. This tracker will be used
+to persist tracking data and also to show data in the SimpleSAMLphp user interface. Here is an example excerpt
+of setting the Doctrine DBAL compatible tracker class which will store authentication events, versioned Idp
+and SP metadata, and versioned user attributes in a relational database:
+
+```php
+use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Trackers;
+
+// ...
+ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER =>
+    Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class,
+// ...
+```
+
+The deployer can choose if the accounting processing will be performed during authentication event(synchronously),
+or in a separate process (asynchronously), for example:
+
+```php
+use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\ModuleConfiguration\AccountingProcessingType;
+
+// ...
+ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
+    ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS,
+// ...
+```
+
+If the processing type is asynchronous, then the deployer must also configure the job store related options:
+- Jobs store class which will be used to store and fetch jobs from the backend store
+- Accounting cron tag for job runner
+- Cron module configuration (if the used tag is different from the ones available in cron module)
 
 
 ## TODO
