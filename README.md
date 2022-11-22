@@ -1,5 +1,6 @@
 # simplesamlphp-module-accounting
-SimpleSAMLphp module providing user accounting functionality.
+SimpleSAMLphp module providing user accounting functionality using SimpleSAMLphp authentication processing 
+filters feature.
 
 ## Features
 - Enables tracking of authentication events, synchronously (during authentication event) or
@@ -60,7 +61,7 @@ ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER =>
 // ...
 ```
 
-The deployer can choose if the accounting processing will be performed during authentication event(synchronously),
+The deployer can choose if the accounting processing will be performed during authentication event (synchronously),
 or in a separate process (asynchronously), for example:
 
 ```php
@@ -76,8 +77,41 @@ ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
 If the processing type is asynchronous, then the deployer must also configure the job store related options:
 - Jobs store class which will be used to store and fetch jobs from the backend store
 - Accounting cron tag for job runner
-- Cron module configuration (if the used tag is different from the ones available in cron module)
+- Cron module configuration (if the used tag is different from the ones available in cron module, which is the case
+by default)
 
+For each tracker or job store, the "connection key" must be set. Connection key determines which connection
+parameters will be forwarded for tracker / job store initialization process.
+
+Also review / edit all other configuration options, and set appropriate values. 
+
+### Running Setup
+
+After you have configured everything in config/module_accounting.php, go to the SimpleSAMLphp Admin > Configuration
+Page. There you will find a link "Accounting configuration status", which will take you on the 
+module configuration overview page.
+
+If the configured trackers / jobs store require any setup, you will see a "Run Setup" button, so go ahead
+and click it. In the case of default Doctrine DBAL tracker / jobs store, the setup will run all migration
+classes used to create necessary tables in the database.
+
+When the setup is finished, you'll be presented with the "Profile Page" link, which can be used by end
+users to see their activity.
+
+### Adding Authentication Processing Filter
+Last step to start tracking user data using the configured tracker classes / jobs store is to add an [authentication
+processing filter](https://simplesamlphp.org/docs/stable/simplesamlphp-authproc.html) from the accounting module
+to the right place in SimpleSAMLphp configuration. Here is an example of setting it globally for all IdPs 
+in config/config.php:
+
+```php
+// ...
+'authproc.idp' => [
+        // ... 
+        1000 => 'accounting:Accounting',
+    ],
+// ...
+```
 
 ## TODO
 - [ ] Translation
