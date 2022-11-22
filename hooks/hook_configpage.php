@@ -19,7 +19,7 @@ function accounting_hook_configpage(Template &$template): void
 
     $template->data[$dataLinksKey][] = [
         'href' => $moduleRoutesHelper->getUrl(ModuleRoutesHelper::PATH_ADMIN_CONFIGURATION_STATUS),
-        'text' => Translate::noop('Profile Page configuration status'),
+        'text' => Translate::noop('Accounting configuration status'),
     ];
 
     $template->getLocalization()->addModuleDomain(ModuleConfiguration::MODULE_NAME);
