@@ -1,0 +1,77 @@
+{# @var moduleConfiguration \SimpleSAML\Module\accounting\ModuleConfiguration #}
+
+{% set pagetitle = 'Configuration Status'|trans %}
+{% set frontpage_section = 'main' %}
+
+{% extends "base.twig" %}
+
+{% block content %}
+
+    <h2>{{ pagetitle }} </h2>
+
+    {% if configurationValidationErrors is not null %}
+        <p>{{ configurationValidationErrors }}</p>
+    {% elseif moduleConfiguration is not null %}
+        <ul>
+            <li>
+                <strong>{{ 'User ID Attribute Name'|trans }}</strong>: {{ moduleConfiguration.getUserIdAttributeName }}
+            </li>
+            <li>
+                <strong>{{ 'Accounting Processing Type'|trans }}</strong>:
+                {{ moduleConfiguration.getAccountingProcessingType }}
+            </li>
+            <li>
+                <strong>{{ 'Default Data Tracker and Provider Class'|trans }}</strong>:
+                {{ moduleConfiguration.getDefaultDataTrackerAndProviderClass }}
+            </li>
+            <li>
+                <strong>{{ 'Tracker and Provider Setup Needed'|trans }}</strong>:
+                {{ defaultDataTrackerAndProvider.needsSetup ? 'Yes'|trans : 'No'|trans }}
+            </li>
+            {% if additionalTrackers is not empty %}
+                <li>
+                    <strong>{{ 'Additional Trackers and setup'|trans }}</strong>:
+                    <ul>
+                        {% for trackerClass, trackerInstance in additionalTrackers %}
+                            <li>
+                                {{ trackerClass }}: {{ trackerInstance.needsSetup ? 'Yes'|trans : 'No'|trans }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
+        </ul>
+
+        {% if moduleConfiguration.getAccountingProcessingType == 'asynchronous' %}
+            <ul>
+                <li>
+                    <strong>{{ 'Jobs Store Class'|trans }}</strong>: {{ moduleConfiguration.getJobsStoreClass }}
+                </li>
+                <li>
+                    {% if jobsStore is not null %}
+                        <strong>{{ 'Jobs Store Setup Needed'|trans }}</strong>:
+                        {{ jobsStore.needsSetup ? 'Yes'|trans : 'No'|trans }}
+                    {% else %}
+                        {{ 'Could not initialize jobs store.'|trans }}
+                    {% endif %}
+                </li>
+            </ul>
+        {% endif %}
+    {% else %}
+        <p>{{ 'Could not initialize module configuration.'|trans }}</p>
+    {% endif %}
+
+    <br>
+
+    {% if setupNeeded %}
+        <p>{{ 'Run setup before using the module.'|trans }}</p>
+        <a class="pure-button pure-button-warning" href="?runSetup=1">{{ 'Run Setup'|trans }}</a>
+    {% else %}
+        <p>
+            {{ 'Everything seems good to go.'|trans }}
+            <br>
+            <br>
+            {{ ' Profile page URL is'|trans }}: <a href="{{ profilePageUri }}">{{ profilePageUri }}</a>
+        </p>
+    {% endif %}
+{% endblock %}
