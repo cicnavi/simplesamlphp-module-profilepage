@@ -199,7 +199,7 @@ $config = [
 
     /**
      * Tracker data retention policy tag designates the cron tag to use for enforcing data retention policy. Make sure
-     * to add this tag to the cron module configuration if data retention policy is different to null.
+     * to add this tag to the cron module configuration if data retention policy is different from null.
      */
     ModuleConfiguration::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY =>
         'accounting_tracker_data_retention_policy',
