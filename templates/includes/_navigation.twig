@@ -1,0 +1,40 @@
+<div id="nav">
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <nav role="navigation" aria-label="XXX-pagedesc-XXX">
+        <ul>
+            <li>
+                <a href="personal-data">
+                    <span class="navicon">
+                        <img src="{{ asset('css/src/icons/prof-page.svg', 'accounting') }}" alt="Profile Page Icon"/>
+                    </span>
+                    <span>{{ 'Personal Data'|trans }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="connected-organizations">
+                    <span class="navicon">
+                        <img src="{{ asset('css/src/icons/conn-orgs.svg', 'accounting') }}"
+                             alt="Connected Organizations Icon"/>
+                    </span>
+                    <span>{{ 'Connected Organizations'|trans }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="activity">
+                    <span class="navicon">
+                        <img src="{{ asset('css/src/icons/activity.svg', 'accounting') }}" alt="Activity Icon"/>
+                    </span>
+                    <span>{{ 'Activity'|trans }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="logout">
+                    <span class="navicon">
+                        <img src="{{ asset('css/src/icons/logout.svg', 'accounting') }}" alt="Logout Icon"/>
+                    </span>
+                    <span>{{ 'Log out'|trans }}</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

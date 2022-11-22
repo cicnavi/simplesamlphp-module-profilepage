@@ -1,0 +1,35 @@
+
+{% extends "@accounting/base.twig" %}
+
+{% set pagetitle = 'Personal Data'|trans %}
+
+{% set pageMenuItem = 'personal-data' %}
+
+{% block content %}
+
+    <h2>{{ pagetitle }} </h2>
+
+    <section id="banner">
+        <div>
+            {% trans %}This is what we know about you...{% endtrans %}
+        </div>
+    </section>
+
+    <table class="pure-table pure-table-striped pure-table-attributes">
+        <thead>
+            <tr>
+                <th><strong>Attribute</strong></th>
+                <th><strong>Your value</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for name, value in normalizedAttributes %}
+                <tr>
+                    <td>{{ name|trans }}</td>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

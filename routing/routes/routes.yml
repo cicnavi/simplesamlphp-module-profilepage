@@ -1,0 +1,28 @@
+
+# TODO mivanci delete test route
+accounting-test:
+    path:       /test
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::test' }
+
+accounting-admin-configuration-status:
+    path:       /admin/configuration/status
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Admin\Configuration::status' }
+
+accounting-user-personal-data:
+    path: /user/personal-data
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::personalData' }
+
+accounting-user-connected-organizations:
+    path: /user/connected-organizations
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::connectedOrganizations' }
+
+accounting-user-activity:
+    path: /user/activity
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::activity' }
+
+accounting-user-logout:
+    path: /user/logout
+    methods:
+        - GET
+        - POST
+    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\User\Profile::logout' }
