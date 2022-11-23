@@ -112,6 +112,19 @@ in config/config.php:
     ],
 // ...
 ```
+## Job Runner
+If accounting processing is asynchronous, a job runner will have to be used in order to process jobs that have
+been created during authentication events.
+
+Job runner can be executed using [SimpleSAMLphp Cron module](https://github.com/simplesamlphp/simplesamlphp/blob/master/modules/cron/docs/cron.md).
+As you can see in Cron documentation, a cron tag can be invoked using HTTP or CLI. When it comes to Job Runner, using
+CLI is the preferred way, since the job runner can run in a long-running fashion, even indefinitely. However,
+you are free to test execution using the HTTP version, in which case the maximum job runner execution time
+will correspond to the 'max_execution_time' INI setting. 
+
+Only one job runner instance can run at given point in time. By maintaining internal state, job runner can first check
+if there is another job runner active. If yes, the latter will simply exit and let the active job runner do its work.
+This way one is free to invoke the cron tag at any time, since only one job runner will ever be active.
 
 ## TODO
 - [ ] Translation
