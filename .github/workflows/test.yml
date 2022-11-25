@@ -23,7 +23,7 @@ jobs:
           path: vendor
           key: ${{ runner.os }}-${{ job.container.id }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-php-
+            ${{ runner.os }}-${{ job.container.id }}-php-
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-progress --no-suggest
@@ -47,7 +47,7 @@ jobs:
           path: vendor
           key: ${{ runner.os }}-${{ job.container.id }}-php-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-php-
+            ${{ runner.os }}-${{ job.container.id }}-php-
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-progress --no-suggest
