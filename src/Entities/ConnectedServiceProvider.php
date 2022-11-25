@@ -16,7 +16,6 @@ class ConnectedServiceProvider
     protected User $user;
 
     /**
-     * TODO mivanci make sortable by name (or entity ID if not present), number of authns, last/first authn.
      * @param ServiceProvider $serviceProvider
      * @param int $numberOfAuthentications
      * @param \DateTimeImmutable $lastAuthenticationAt

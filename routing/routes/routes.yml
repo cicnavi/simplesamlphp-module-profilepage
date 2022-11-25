@@ -1,9 +1,4 @@
 
-# TODO mivanci delete test route
-accounting-test:
-    path:       /test
-    defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Test::test' }
-
 accounting-admin-configuration-status:
     path:       /admin/configuration/status
     defaults:   { _controller: 'SimpleSAML\Module\accounting\Http\Controllers\Admin\Configuration::status' }
