@@ -485,7 +485,7 @@ class RepositoryTest extends TestCase
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
 
         $this->assertCount(1, $resultArray);
-        $this->assertSame(
+        $this->assertEquals(
             '1',
             $resultArray[$this->spEntityId]
             [Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
@@ -512,7 +512,7 @@ class RepositoryTest extends TestCase
         );
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
         $this->assertCount(1, $resultArray);
-        $this->assertSame(
+        $this->assertEquals(
             '2',
             $resultArray[$this->spEntityId]
             [Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
@@ -555,7 +555,7 @@ class RepositoryTest extends TestCase
 
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
         $this->assertCount(2, $resultArray);
-        $this->assertSame(
+        $this->assertEquals(
             '1',
             $resultArray[$spEntityIdNew]
             [Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
@@ -594,7 +594,7 @@ class RepositoryTest extends TestCase
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
 
         $this->assertCount(2, $resultArray);
-        $this->assertSame(
+        $this->assertEquals(
             '2',
             $resultArray[$spEntityIdNew]
             [Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]

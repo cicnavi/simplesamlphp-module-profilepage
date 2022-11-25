@@ -29,6 +29,10 @@ class RawJobTest extends TestCase
     protected function setUp(): void
     {
         $this->abstractPlatformStub = $this->createStub(AbstractPlatform::class);
+
+        $this->abstractPlatformStub->method('getDateTimeFormatString')
+            ->willReturn('YYYY-MM-DD HH:MM:SS');
+
         $this->authenticationEvent = new Event(new State(StateArrays::FULL));
         $this->validRawRow = [
             Store\TableConstants::COLUMN_NAME_ID => 1,

@@ -182,7 +182,7 @@ class JobRunner
                     $jobsProcessedSincePause++;
                 }
             } catch (\Throwable $exception) {
-                $message = sprintf('Error while processing jobs. Error was: %', $exception->getMessage());
+                $message = sprintf('Error while processing jobs. Error was: %s', $exception->getMessage());
                 $context = [];
                 if (isset($job)) {
                     $context = ['job' => $job];
