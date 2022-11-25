@@ -18,7 +18,7 @@ jobs:
         run: composer validate
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: vendor
           key: ${{ runner.os }}-${{ job.container.image }}-php-${{ hashFiles('**/composer.lock') }}
@@ -42,7 +42,7 @@ jobs:
         run: composer validate
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: vendor
           key: ${{ runner.os }}-${{ job.container.image }}-php-${{ hashFiles('**/composer.lock') }}
