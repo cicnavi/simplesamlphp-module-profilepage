@@ -1,3 +1,5 @@
+[![Test](https://github.com/cicnavi/simplesamlphp-module-accounting/actions/workflows/test.yml/badge.svg)](https://github.com/cicnavi/simplesamlphp-module-accounting/actions/workflows/test.yml)
+
 # simplesamlphp-module-accounting
 SimpleSAMLphp module providing user accounting functionality using SimpleSAMLphp authentication processing 
 filters feature.
