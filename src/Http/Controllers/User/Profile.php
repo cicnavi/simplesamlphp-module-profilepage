@@ -96,7 +96,6 @@ class Profile
 
         $authenticationDataProvider = $this->resolveAuthenticationDataProvider();
 
-        $this->removeDebugDisplayLimits();
         $connectedServiceProviderBag = $authenticationDataProvider->getConnectedServiceProviders($userIdentifier);
 
         $template = $this->resolveTemplate('accounting:user/connected-organizations.twig');
@@ -116,7 +115,6 @@ class Profile
         $maxResults = 10;
         $firstResult = ($page - 1) * $maxResults;
 
-        $this->removeDebugDisplayLimits();
         $activityBag = $authenticationDataProvider->getActivity($userIdentifier, $maxResults, $firstResult);
 
         $template = $this->resolveTemplate('accounting:user/activity.twig');
