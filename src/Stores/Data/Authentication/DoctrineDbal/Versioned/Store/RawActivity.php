@@ -86,6 +86,7 @@ class RawActivity extends AbstractRawEntity
             }
         }
 
+        /** @noinspection DuplicatedCode */
         if (! is_string($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA])) {
             $message = sprintf(
                 'Column %s must be string.',

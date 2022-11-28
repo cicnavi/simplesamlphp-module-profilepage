@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Entities\Authentication;
 
+use DateTimeImmutable;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 
 class Event extends AbstractPayload
 {
     protected State $state;
-    protected \DateTimeImmutable $happenedAt;
+    protected DateTimeImmutable $happenedAt;
 
-    public function __construct(State $state, \DateTimeImmutable $happenedAt = null)
+    public function __construct(State $state, DateTimeImmutable $happenedAt = null)
     {
         $this->state = $state;
-        $this->happenedAt = $happenedAt ?? new \DateTimeImmutable();
+        $this->happenedAt = $happenedAt ?? new DateTimeImmutable();
     }
 
     public function getState(): State
@@ -22,7 +23,7 @@ class Event extends AbstractPayload
         return $this->state;
     }
 
-    public function getHappenedAt(): \DateTimeImmutable
+    public function getHappenedAt(): DateTimeImmutable
     {
         return $this->happenedAt;
     }

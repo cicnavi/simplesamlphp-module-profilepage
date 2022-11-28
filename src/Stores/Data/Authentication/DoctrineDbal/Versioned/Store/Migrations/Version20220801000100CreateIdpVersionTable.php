@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations;
 
 use Doctrine\DBAL\Schema\Table;
-use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\TableConstants;
+use Throwable;
 
 class Version20220801000100CreateIdpVersionTable extends AbstractMigration
 {
@@ -49,7 +51,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
             $table->addUniqueConstraint(['metadata_hash_sha256']);
 
             $this->schemaManager->createTable($table);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw $this->prepareGenericMigrationException(
                 \sprintf('Error creating table \'%s.', $tableName),
                 $exception
@@ -67,7 +69,7 @@ class Version20220801000100CreateIdpVersionTable extends AbstractMigration
 
         try {
             $this->schemaManager->dropTable($tableName);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw $this->prepareGenericMigrationException(\sprintf('Could not drop table %s.', $tableName), $exception);
         }
     }

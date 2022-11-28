@@ -7,6 +7,7 @@ use SimpleSAML\Module\accounting\Helpers\ModuleRoutesHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\XHTML\Template;
 
+/** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection Reference is used by SimpleSAMLphp */
 function accounting_hook_configpage(Template &$template): void
 {
     $moduleRoutesHelper = new ModuleRoutesHelper();

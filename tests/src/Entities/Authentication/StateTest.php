@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Entities\Authentication;
 
+use DateTimeImmutable;
 use SimpleSAML\Module\accounting\Entities\Authentication\State;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
@@ -183,6 +184,6 @@ class StateTest extends TestCase
     public function testCanGetCreatedAt(): void
     {
         $state = new State(StateArrays::FULL);
-        $this->assertInstanceOf(\DateTimeImmutable::class, $state->getCreatedAt());
+        $this->assertInstanceOf(DateTimeImmutable::class, $state->getCreatedAt());
     }
 }

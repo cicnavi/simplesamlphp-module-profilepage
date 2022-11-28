@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Entities\ConnectedServiceProvider;
 
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Helpers;
 
+use PHPUnit\Framework\MockObject\Stub;
 use SimpleSAML\Module\accounting\Helpers\ModuleRoutesHelper;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
@@ -16,7 +17,7 @@ class ModuleRoutesHelperTest extends TestCase
 {
     protected const BASE_URL = 'https://example.org/ssp/';
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|HTTP
+     * @var Stub|HTTP
      */
     protected $sspHttpUtilsStub;
     protected string $moduleUrl;

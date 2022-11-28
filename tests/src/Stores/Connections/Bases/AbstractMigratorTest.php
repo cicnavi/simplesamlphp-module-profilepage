@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\Bases;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
@@ -33,13 +36,12 @@ class AbstractMigratorTest extends TestCase
     protected Connection $connection;
     protected AbstractSchemaManager $schemaManager;
     protected string $tableName;
-
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $loggerServiceMock;
+    protected MockObject $loggerServiceMock;
     protected ModuleConfiguration $moduleConfiguration;
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -54,6 +56,9 @@ class AbstractMigratorTest extends TestCase
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanGatherMigrationClassesFromDirectory(): void
     {
         /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
@@ -68,6 +73,11 @@ class AbstractMigratorTest extends TestCase
         $this->assertTrue(in_array($namespace . '\Version20220601000000CreateJobTable', $migrationClasses));
     }
 
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     * @throws MigrationException
+     */
     public function testCanRunMigrationClasses(): void
     {
         /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
@@ -90,6 +100,9 @@ class AbstractMigratorTest extends TestCase
         $this->assertTrue($this->schemaManager->tablesExist($jobsTableName));
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanGatherOnlyMigrationClasses(): void
     {
         /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
@@ -101,13 +114,16 @@ class AbstractMigratorTest extends TestCase
         $this->assertEmpty($migrator->gatherMigrationClassesFromDirectory($directory, $namespace));
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testMigrationExceptionHaltsExecution(): void
     {
         $migration = new class ($this->connection) extends AbstractMigration
         {
             public function run(): void
             {
-                throw new \Exception('Something went wrong.');
+                throw new Exception('Something went wrong.');
             }
 
             public function revert(): void
@@ -123,6 +139,9 @@ class AbstractMigratorTest extends TestCase
         $migrator->runMigrationClasses([get_class($migration)]);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanGetNonImplementedMigrationClasses(): void
     {
         /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
@@ -141,6 +160,9 @@ class AbstractMigratorTest extends TestCase
         ));
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanFindOutIfNonImplementedMigrationClassesExist(): void
     {
         /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
@@ -154,6 +176,10 @@ class AbstractMigratorTest extends TestCase
         ));
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function testCanRunNonImplementedMigrationClasses(): void
     {
         /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */

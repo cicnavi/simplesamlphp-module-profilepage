@@ -70,6 +70,9 @@ function accounting_hook_cron(array &$cronInfo): void
     }
 }
 
+/**
+ * @throws \SimpleSAML\Module\accounting\Exceptions\Exception
+ */
 function handleDataRetentionPolicy(
     ModuleConfiguration $moduleConfiguration,
     LoggerInterface $logger,

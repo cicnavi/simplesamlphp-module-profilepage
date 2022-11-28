@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 
+use DateInterval;
+use DateTimeImmutable;
+use Exception;
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
@@ -41,7 +46,7 @@ class RepositoryTest extends TestCase
     protected Connection $connection;
     protected \Doctrine\DBAL\Connection $dbal;
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|LoggerInterface|LoggerInterface&\PHPUnit\Framework\MockObject\Stub
+     * @var Stub|LoggerInterface
      */
     protected $loggerStub;
     protected Migrator $migrator;
@@ -57,15 +62,19 @@ class RepositoryTest extends TestCase
     protected string $userAttributes;
     protected string $userAttributesHash;
     protected Repository $repository;
-    protected \DateTimeImmutable $createdAt;
+    protected DateTimeImmutable $createdAt;
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|Connection|Connection&\PHPUnit\Framework\MockObject\Stub
+     * @var Stub|Connection
      */
     protected $connectionStub;
     protected string $spEntityIdHash;
     protected string $spMetadata;
     protected string $clientIpAddress;
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     protected function setUp(): void
     {
         // For stubbing.
@@ -108,7 +117,7 @@ class RepositoryTest extends TestCase
         $this->userAttributes = 'user-attributes';
         $this->userAttributesHash = 'user-attributes-hash';
 
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new DateTimeImmutable();
         $this->clientIpAddress = '123.123.123.123';
     }
 
@@ -120,6 +129,10 @@ class RepositoryTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function testCanInsertAndGetIdp(): array
     {
         $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);
@@ -150,7 +163,7 @@ class RepositoryTest extends TestCase
 
     public function testGetIdpThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
@@ -159,6 +172,9 @@ class RepositoryTest extends TestCase
 
     /**
      * @depends testCanInsertAndGetIdp
+     * @throws StoreException
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function testCanInsertAndGetIdpVersion(array $idpResult): array
     {
@@ -191,13 +207,17 @@ class RepositoryTest extends TestCase
 
     public function testGetIdpVersionThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
         $repository->getIdpVersion(1, $this->idpMetadataHash);
     }
 
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function testCanInsertAndGetSp(): array
     {
         $this->repository->insertSp($this->spEntityId, $this->spEntityIdHash, $this->createdAt);
@@ -227,7 +247,7 @@ class RepositoryTest extends TestCase
 
     public function testGetSpThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
@@ -236,6 +256,9 @@ class RepositoryTest extends TestCase
 
     /**
      * @depends testCanInsertAndGetSp
+     * @throws StoreException
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function testCanInsertAndGetSpVersion(array $spResult): array
     {
@@ -268,13 +291,17 @@ class RepositoryTest extends TestCase
 
     public function testGetSpVersionThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
         $repository->getSpVersion(1, $this->spMetadataHash);
     }
 
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function testCanInsertAndGetUser(): array
     {
         $this->repository->insertUser($this->userIdentifier, $this->userIdentifierHash, $this->createdAt);
@@ -303,7 +330,7 @@ class RepositoryTest extends TestCase
 
     public function testGetUserThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
@@ -312,6 +339,9 @@ class RepositoryTest extends TestCase
 
     /**
      * @depends testCanInsertAndGetUser
+     * @throws StoreException
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function testCanInsertAndGetUserVersion(array $userResult): array
     {
@@ -349,7 +379,7 @@ class RepositoryTest extends TestCase
 
     public function testGetUserVersionThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
@@ -360,6 +390,9 @@ class RepositoryTest extends TestCase
      * @depends testCanInsertAndGetIdpVersion
      * @depends testCanInsertAndGetSpVersion
      * @depends testCanInsertAndGetUserVersion
+     * @throws StoreException
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function testCanInsertAndGetIdpSpUserVersion(
         array $idpVersionResult,
@@ -403,7 +436,7 @@ class RepositoryTest extends TestCase
 
     public function testGetIdpSpUserVersionThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
@@ -412,12 +445,17 @@ class RepositoryTest extends TestCase
 
     /**
      * @depends testCanInsertAndGetIdpSpUserVersion
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \Doctrine\DBAL\Exception
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \Doctrine\DBAL\Exception
      */
     public function testCanInsertAuthenticationEvent(array $idpSpUserVersionResult): void
     {
         $idpSpUserVersionId =
             (int)$idpSpUserVersionResult[Store\TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
-        $createdAt = $happenedAt = new \DateTimeImmutable();
+        $createdAt = $happenedAt = new DateTimeImmutable();
 
         $authenticationEventCounterQueryBuilder = $this->connection->dbal()->createQueryBuilder();
         $authenticationEventCounterQueryBuilder->select('COUNT(id) as authenticationEventCount')
@@ -436,13 +474,17 @@ class RepositoryTest extends TestCase
 
     public function testInsertAuthenticationEventThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
         $repository->insertAuthenticationEvent(1, $this->createdAt);
     }
 
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function testCanGetConnectedServiceProviders(): void
     {
         $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);
@@ -485,7 +527,7 @@ class RepositoryTest extends TestCase
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
 
         $this->assertCount(1, $resultArray);
-        $this->assertSame(
+        $this->assertEquals(
             '1',
             $resultArray[$this->spEntityId]
             [Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
@@ -512,7 +554,7 @@ class RepositoryTest extends TestCase
         );
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
         $this->assertCount(1, $resultArray);
-        $this->assertSame(
+        $this->assertEquals(
             '2',
             $resultArray[$this->spEntityId]
             [Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
@@ -555,7 +597,7 @@ class RepositoryTest extends TestCase
 
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
         $this->assertCount(2, $resultArray);
-        $this->assertSame(
+        $this->assertEquals(
             '1',
             $resultArray[$spEntityIdNew]
             [Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
@@ -594,7 +636,7 @@ class RepositoryTest extends TestCase
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
 
         $this->assertCount(2, $resultArray);
-        $this->assertSame(
+        $this->assertEquals(
             '2',
             $resultArray[$spEntityIdNew]
             [Store\TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
@@ -621,13 +663,17 @@ class RepositoryTest extends TestCase
 
     public function testGetConnectedServiceProvidersThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
         $repository->getConnectedServiceProviders($this->userIdentifierHash);
     }
 
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function testCanGetActivity(): void
     {
         $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);
@@ -721,13 +767,17 @@ class RepositoryTest extends TestCase
 
     public function testGetActivityThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
         $repository->getActivity($this->userIdentifierHash, 10, 0);
     }
 
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function testCanDeleteAuthenticationEventsOlderThan(): void
     {
         $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);
@@ -770,7 +820,7 @@ class RepositoryTest extends TestCase
         $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
         $this->assertCount(1, $resultArray);
 
-        $dateTimeInFuture = $this->createdAt->add(new \DateInterval('P1D'));
+        $dateTimeInFuture = $this->createdAt->add(new DateInterval('P1D'));
 
         $this->repository->deleteAuthenticationEventsOlderThan($dateTimeInFuture);
 
@@ -780,10 +830,10 @@ class RepositoryTest extends TestCase
 
     public function testDeleteAuthenticationEventsOlderThanThrowsOnInvalidDbal(): void
     {
-        $this->connectionStub->method('dbal')->willThrowException(new \Exception('test'));
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
-        $repository->deleteAuthenticationEventsOlderThan(new \DateTimeImmutable());
+        $repository->deleteAuthenticationEventsOlderThan(new DateTimeImmutable());
     }
 }

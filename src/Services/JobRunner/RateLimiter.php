@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Services\JobRunner;
 
+use DateInterval;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 class RateLimiter
@@ -16,17 +19,17 @@ class RateLimiter
     protected int $currentBackoffPauseInSeconds = 1;
 
     public function __construct(
-        \DateInterval $maxPauseInterval = null,
-        \DateInterval $maxBackoffInterval = null,
+        DateInterval $maxPauseInterval = null,
+        DateInterval $maxBackoffInterval = null,
         HelpersManager $helpersManager = null
     ) {
         $this->helpersManager = $helpersManager ?? new HelpersManager();
 
         $this->maxPauseInSeconds = $this->helpersManager->getDateTimeHelper()->convertDateIntervalToSeconds(
-            $maxPauseInterval ?? new \DateInterval(self::DEFAULT_MAX_PAUSE_DURATION)
+            $maxPauseInterval ?? new DateInterval(self::DEFAULT_MAX_PAUSE_DURATION)
         );
         $this->maxBackoffPauseInSeconds = $this->helpersManager->getDateTimeHelper()->convertDateIntervalToSeconds(
-            $maxBackoffInterval ?? new \DateInterval(self::DEFAULT_MAX_BACKOFF_PAUSE_DURATION)
+            $maxBackoffInterval ?? new DateInterval(self::DEFAULT_MAX_BACKOFF_PAUSE_DURATION)
         );
     }
 

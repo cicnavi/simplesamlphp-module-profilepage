@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal;
 
+use Doctrine\DBAL\Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
@@ -58,6 +59,7 @@ class Store extends AbstractStore implements JobsStoreInterface
 
     /**
      * @throws StoreException
+     * @throws Exception|Exception
      */
     public function dequeue(string $type): ?JobInterface
     {
@@ -127,7 +129,6 @@ class Store extends AbstractStore implements JobsStoreInterface
      * @param ModuleConfiguration $moduleConfiguration
      * @param LoggerInterface $logger
      * @param string|null $connectionKey
-     * @param string $connectionType
      * @return self
      * @throws StoreException
      */

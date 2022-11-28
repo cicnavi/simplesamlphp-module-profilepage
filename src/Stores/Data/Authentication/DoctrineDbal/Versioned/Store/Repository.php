@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Types\Types;
@@ -85,11 +86,11 @@ class Repository
     public function insertIdp(
         string $entityId,
         string $entityIdHashSha256,
-        \DateTimeImmutable $createdAt = null
+        DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new \DateTimeImmutable();
+        $createdAt = $createdAt ?? new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameIdp)
             ->values(
@@ -172,11 +173,11 @@ class Repository
         int $idpId,
         string $metadata,
         string $metadataHashSha256,
-        \DateTimeImmutable $createdAt = null
+        DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new \DateTimeImmutable();
+        $createdAt = $createdAt ?? new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameIdpVersion)
             ->values(
@@ -246,14 +247,17 @@ class Repository
         }
     }
 
+    /**
+     * @throws StoreException
+     */
     public function insertSp(
         string $entityId,
         string $entityIdHashSha256,
-        \DateTimeImmutable $createdAt = null
+        DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new \DateTimeImmutable();
+        $createdAt = $createdAt ?? new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameSp)
             ->values(
@@ -336,11 +340,11 @@ class Repository
         int $spId,
         string $metadata,
         string $metadataHashSha256,
-        \DateTimeImmutable $createdAt = null
+        DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new \DateTimeImmutable();
+        $createdAt = $createdAt ?? new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameSpVersion)
             ->values(
@@ -416,11 +420,11 @@ class Repository
     public function insertUser(
         string $identifier,
         string $identifierHashSha256,
-        \DateTimeImmutable $createdAt = null
+        DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new \DateTimeImmutable();
+        $createdAt = $createdAt ?? new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameUser)
             ->values(
@@ -503,11 +507,11 @@ class Repository
         int $userId,
         string $attributes,
         string $attributesHashSha256,
-        \DateTimeImmutable $createdAt = null
+        DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new \DateTimeImmutable();
+        $createdAt = $createdAt ?? new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameUserVersion)
             ->values(
@@ -603,11 +607,11 @@ class Repository
         int $idpVersionId,
         int $spVersionId,
         int $userVersionId,
-        \DateTimeImmutable $createdAt = null
+        DateTimeImmutable $createdAt = null
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new \DateTimeImmutable();
+        $createdAt = $createdAt ?? new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameIdpSpUserVersion)
             ->values(
@@ -653,14 +657,14 @@ class Repository
      */
     public function insertAuthenticationEvent(
         int $IdpSpUserVersionId,
-        \DateTimeImmutable $happenedAt,
+        DateTimeImmutable $happenedAt,
         string $clientIpAddress = null,
-        \DateTimeImmutable $createdAt = null
+        DateTimeImmutable $createdAt = null
     ): void {
         try {
             $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-            $createdAt = $createdAt ?? new \DateTimeImmutable();
+            $createdAt = $createdAt ?? new DateTimeImmutable();
 
             $queryBuilder->insert($this->tableNameAuthenticationEvent)
                 ->values(
@@ -945,7 +949,7 @@ class Repository
                 $lastMetadataAndAttributesQueryBuilder->executeQuery()->fetchAllAssociativeIndexed();
 
             return array_merge_recursive($numberOfAuthentications, $lastMetadataAndAttributes);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error executing query to get connected organizations. Error was: %s.',
                 $exception->getMessage()
@@ -1058,7 +1062,7 @@ class Repository
             ->setFirstResult($firstResult);
 
             return $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociative();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error executing query to get connected organizations. Error was: %s.',
                 $exception->getMessage()
@@ -1070,7 +1074,7 @@ class Repository
     /**
      * @throws StoreException
      */
-    public function deleteAuthenticationEventsOlderThan(\DateTimeImmutable $dateTime): void
+    public function deleteAuthenticationEventsOlderThan(DateTimeImmutable $dateTime): void
     {
         try {
             $queryBuilder = $this->connection->dbal()->createQueryBuilder();

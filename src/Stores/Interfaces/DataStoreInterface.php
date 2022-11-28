@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Interfaces;
 
+use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
@@ -25,5 +26,5 @@ interface DataStoreInterface extends StoreInterface
 
     public function getActivity(string $userIdentifierHashSha256, int $maxResults, int $firstResult): Activity\Bag;
 
-    public function deleteDataOlderThan(\DateTimeImmutable $dateTime): void;
+    public function deleteDataOlderThan(DateTimeImmutable $dateTime): void;
 }

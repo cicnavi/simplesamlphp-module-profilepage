@@ -7,8 +7,11 @@ namespace SimpleSAML\Module\accounting\Http\Controllers\User;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Auth\Simple;
 use SimpleSAML\Configuration as SspConfiguration;
+use SimpleSAML\Error\ConfigurationError;
+use SimpleSAML\Error\CriticalConfigurationError;
 use SimpleSAML\HTTP\RunnableResponse;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
+use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Helpers\AttributesHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\ModuleConfiguration\ConnectionType;
@@ -66,6 +69,9 @@ class Profile
         $this->authSimple->requireAuth();
     }
 
+    /**
+     * @throws ConfigurationError
+     */
     public function personalData(Request $request): Response
     {
         $normalizedAttributes = [];
@@ -90,13 +96,16 @@ class Profile
         return $template;
     }
 
+    /**
+     * @throws Exception
+     * @throws ConfigurationError
+     */
     public function connectedOrganizations(Request $request): Template
     {
         $userIdentifier = $this->resolveUserIdentifier();
 
         $authenticationDataProvider = $this->resolveAuthenticationDataProvider();
 
-        $this->removeDebugDisplayLimits();
         $connectedServiceProviderBag = $authenticationDataProvider->getConnectedServiceProviders($userIdentifier);
 
         $template = $this->resolveTemplate('accounting:user/connected-organizations.twig');
@@ -105,6 +114,10 @@ class Profile
         return $template;
     }
 
+    /**
+     * @throws Exception
+     * @throws ConfigurationError
+     */
     public function activity(Request $request): Template
     {
         $userIdentifier = $this->resolveUserIdentifier();
@@ -116,7 +129,6 @@ class Profile
         $maxResults = 10;
         $firstResult = ($page - 1) * $maxResults;
 
-        $this->removeDebugDisplayLimits();
         $activityBag = $authenticationDataProvider->getActivity($userIdentifier, $maxResults, $firstResult);
 
         $template = $this->resolveTemplate('accounting:user/activity.twig');
@@ -125,6 +137,9 @@ class Profile
         return $template;
     }
 
+    /**
+     * @throws Exception
+     */
     protected function resolveUserIdentifier(): string
     {
         $attributes = $this->authSimple->getAttributes();
@@ -157,7 +172,12 @@ class Profile
 
     protected function getLogoutUrl(): string
     {
-        return $this->sspConfiguration->getBasePath() . 'logout.php';
+        try {
+            return $this->sspConfiguration->getBasePath() . 'logout.php';
+        } catch (CriticalConfigurationError $exception) {
+            $message = \sprintf('Could not resolve SimpleSAMLphp base path. Error was: %s', $exception->getMessage());
+            throw new InvalidConfigurationException($message, (int)$exception->getCode(), $exception);
+        }
     }
 
     /**
@@ -171,14 +191,9 @@ class Profile
         );
     }
 
-    /** TODO mivanci remove after debugging */
-    protected function removeDebugDisplayLimits(): void
-    {
-        ini_set('xdebug.var_display_max_depth', '-1');
-        ini_set('xdebug.var_display_max_children', '-1');
-        ini_set('xdebug.var_display_max_data', '-1');
-    }
-
+    /**
+     * @throws ConfigurationError
+     */
     protected function resolveTemplate(string $template): Template
     {
         $templateInstance = new Template($this->sspConfiguration, $template);

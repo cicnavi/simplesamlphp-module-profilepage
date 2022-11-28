@@ -10,6 +10,7 @@ use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores;
 use SimpleSAML\Module\accounting\Trackers;
+use stdClass;
 
 /**
  * @covers \SimpleSAML\Module\accounting\ModuleConfiguration
@@ -59,6 +60,9 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsForInvalidConfig(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -71,6 +75,9 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsForInvalidJobsStore(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -104,6 +111,9 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsForNonStringAndNonArrayConnectionKey(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -112,12 +122,15 @@ class ModuleConfigurationTest extends TestCase
             null,
             [
                 ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [
-                    'invalid-object-value' => new \stdClass(),
+                    'invalid-object-value' => new stdClass(),
                 ]
             ]
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsForNonMasterInArrayConnection(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -199,6 +212,9 @@ class ModuleConfigurationTest extends TestCase
         $this->assertNull($this->moduleConfiguration->getJobRunnerMaximumExecutionTime());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsForNonStringJobRunnerMaximumExecutionTime(): void
     {
         $moduleConfiguration = new ModuleConfiguration(
@@ -211,6 +227,9 @@ class ModuleConfigurationTest extends TestCase
         $moduleConfiguration->getJobRunnerMaximumExecutionTime();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsForInvalidStringJobRunnerMaximumExecutionTime(): void
     {
         $moduleConfiguration = new ModuleConfiguration(
@@ -229,6 +248,9 @@ class ModuleConfigurationTest extends TestCase
         $this->assertSame(10, $this->moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testCanGetNullForJobRunnerShouldPauseAfterNumberOfJobsProcessed(): void
     {
         $moduleConfiguration = new ModuleConfiguration(
@@ -239,6 +261,9 @@ class ModuleConfigurationTest extends TestCase
         $this->assertNull($moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsForNonIntegerJobRunnerShouldPauseAfterNumberOfJobsProcessed(): void
     {
         $moduleConfiguration = new ModuleConfiguration(
@@ -251,6 +276,9 @@ class ModuleConfigurationTest extends TestCase
         $moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsForNegativeIntegerJobRunnerShouldPauseAfterNumberOfJobsProcessed(): void
     {
         $moduleConfiguration = new ModuleConfiguration(
@@ -263,6 +291,9 @@ class ModuleConfigurationTest extends TestCase
         $moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsOnInvalidCronTag(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -277,6 +308,9 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsOnInvalidDefaultDataTrackerAndProvider(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -289,6 +323,9 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsOnInvalidAdditionalTrackers(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -301,6 +338,9 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsOnNonStringAdditionalTracker(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -313,6 +353,9 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsWhenClassHasNoConnectionParametersSet(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -325,6 +368,9 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsForInvalidTrackerDataRetentionPolicy(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -337,6 +383,9 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThrowsForInvalidCronTagForTrackerDataRetentionPolicy(): void
     {
         $this->expectException(InvalidConfigurationException::class);

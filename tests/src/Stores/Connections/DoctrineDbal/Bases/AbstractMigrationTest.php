@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal\Bases;
 
+use Exception;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +27,9 @@ class AbstractMigrationTest extends TestCase
         $this->connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanInstantiateMigrationClass(): void
     {
         $this->assertInstanceOf(
@@ -50,7 +56,7 @@ class AbstractMigrationTest extends TestCase
         $migration = new class ($this->connection) extends AbstractMigration {
             public function run(): void
             {
-                throw $this->prepareGenericMigrationException('test', new \Exception('test'));
+                throw $this->prepareGenericMigrationException('test', new Exception('test'));
             }
 
             public function revert(): void
@@ -72,7 +78,7 @@ class AbstractMigrationTest extends TestCase
         $migration = new class ($connectionStub) extends AbstractMigration {
             public function run(): void
             {
-                throw new \Exception($this->preparePrefixedTableName('table-name'));
+                throw new Exception($this->preparePrefixedTableName('table-name'));
             }
             public function revert(): void
             {
@@ -85,7 +91,7 @@ class AbstractMigrationTest extends TestCase
 
         try {
             $migration->run();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->assertStringContainsString('prefix-connection', $exception->getMessage());
         }
     }
@@ -99,7 +105,7 @@ class AbstractMigrationTest extends TestCase
         $migration = new class ($connectionStub) extends AbstractMigration {
             public function run(): void
             {
-                throw new \Exception($this->getLocalTablePrefix());
+                throw new Exception($this->getLocalTablePrefix());
             }
             public function revert(): void
             {
@@ -108,7 +114,7 @@ class AbstractMigrationTest extends TestCase
 
         try {
             $migration->run();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->assertEmpty($exception->getMessage());
         }
     }

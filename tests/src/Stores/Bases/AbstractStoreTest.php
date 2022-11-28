@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Bases;
 
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Stores\Bases\AbstractStore;
@@ -12,16 +15,13 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractStoreTest extends TestCase
 {
+    protected AbstractStore $abstractStore;
     /**
-     * @var AbstractStore
-     */
-    protected $abstractStore;
-    /**
-     * @var \PHPUnit\Framework\MockObject\Stub|ModuleConfiguration
+     * @var Stub|ModuleConfiguration
      */
     protected $moduleConfigurationStub;
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|LoggerInterface
+     * @var Stub|LoggerInterface
      */
     protected $loggerStub;
 

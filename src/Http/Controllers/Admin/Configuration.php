@@ -14,7 +14,6 @@ use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
 use SimpleSAML\Session;
 use SimpleSAML\Utils;
-use SimpleSAML\Utils\Auth;
 use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
@@ -27,6 +26,9 @@ class Configuration
     protected Utils\Auth $sspAuthUtils;
     protected HelpersManager $helpersManager;
 
+    /**
+     * @throws \SimpleSAML\Error\Exception
+     */
     public function __construct(
         SspConfiguration $sspConfiguration,
         Session $session,

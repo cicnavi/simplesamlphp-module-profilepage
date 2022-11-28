@@ -1,12 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal;
 
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator;
@@ -36,12 +41,12 @@ class MigratorTest extends TestCase
     protected AbstractSchemaManager $schemaManager;
     protected string $tableName;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $loggerServiceMock;
+    protected MockObject $loggerServiceMock;
     protected ModuleConfiguration $moduleConfiguration;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -56,6 +61,10 @@ class MigratorTest extends TestCase
         $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testCanCreateMigrationsTable(): void
     {
         $this->assertFalse($this->schemaManager->tablesExist([$this->tableName]));
@@ -71,6 +80,9 @@ class MigratorTest extends TestCase
         $this->assertTrue($this->schemaManager->tablesExist([$this->tableName]));
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testRunningMigratorSetupMultipleTimesLogsWarning(): void
     {
         $this->loggerServiceMock
@@ -87,6 +99,11 @@ class MigratorTest extends TestCase
         $migrator->runSetup();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     * @throws MigrationException
+     */
     public function testCanRunMigrationClasses(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -102,6 +119,10 @@ class MigratorTest extends TestCase
         $this->assertTrue($this->schemaManager->tablesExist($tableNameJobs));
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function testCanOnlyRunDoctrineDbalMigrationClasses(): void
     {
         $migration = new class implements MigrationInterface {
@@ -123,6 +144,10 @@ class MigratorTest extends TestCase
         $migrator->runMigrationClasses([get_class($migration)]);
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function testCanGetImplementedMigrationClasses(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -143,7 +168,7 @@ class MigratorTest extends TestCase
     public function testThrowsStoreExceptionOnInitialization(): void
     {
         $dbalStub = $this->createStub(\Doctrine\DBAL\Connection::class);
-        $dbalStub->method('createSchemaManager')->willThrowException(new \Doctrine\DBAL\Exception('test'));
+        $dbalStub->method('createSchemaManager')->willThrowException(new Exception('test'));
         $connectionStub = $this->createStub(Connection::class);
         $connectionStub->method('dbal')->willReturn($dbalStub);
 
@@ -153,11 +178,14 @@ class MigratorTest extends TestCase
         (new Migrator($connectionStub, $this->loggerServiceMock));
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testThrowsStoreExceptionOnNeedsSetup(): void
     {
         $schemaManagerStub = $this->createStub(AbstractSchemaManager::class);
         $schemaManagerStub->method('tablesExist')
-            ->willThrowException(new \Doctrine\DBAL\Exception('test'));
+            ->willThrowException(new Exception('test'));
         $dbalStub = $this->createStub(\Doctrine\DBAL\Connection::class);
         $dbalStub->method('createSchemaManager')->willReturn($schemaManagerStub);
         $connectionStub = $this->createStub(Connection::class);
@@ -171,6 +199,9 @@ class MigratorTest extends TestCase
         $migrator->needsSetup();
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testThrowsStoreExceptionOnCreateMigrationsTable(): void
     {
         $schemaManagerStub = $this->createStub(AbstractSchemaManager::class);
@@ -189,11 +220,15 @@ class MigratorTest extends TestCase
         $migrator->runSetup();
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function testThrowsStoreExceptionOnMarkingImplementedClass(): void
     {
         $queryBuilderStub = $this->createStub(QueryBuilder::class);
         $queryBuilderStub->method('insert')
-            ->willThrowException(new \Doctrine\DBAL\Exception('test'));
+            ->willThrowException(new Exception('test'));
         $dbalStub = $this->createStub(\Doctrine\DBAL\Connection::class);
         $dbalStub->method('createQueryBuilder')->willReturn($queryBuilderStub);
         $connectionStub = $this->createStub(Connection::class);
@@ -213,7 +248,7 @@ class MigratorTest extends TestCase
     {
         $schemaManagerStub = $this->createStub(AbstractSchemaManager::class);
         $dbalStub = $this->createStub(\Doctrine\DBAL\Connection::class);
-        $dbalStub->method('createQueryBuilder')->willThrowException(new \Doctrine\DBAL\Exception('test'));
+        $dbalStub->method('createQueryBuilder')->willThrowException(new Exception('test'));
         $dbalStub->method('createSchemaManager')->willReturn($schemaManagerStub);
         $connectionStub = $this->createStub(Connection::class);
         $connectionStub->method('dbal')->willReturn($dbalStub);

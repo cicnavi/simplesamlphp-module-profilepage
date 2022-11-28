@@ -1,0 +1,57 @@
+name: Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+
+jobs:
+  test-74:
+    runs-on: ubuntu-latest
+    container:
+      image: cicnavi/dap:74
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-${{ job.container.id }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ job.container.id }}-php-
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Run test suite
+        run: composer run-script pre-commit
+      - name: Show PHP version
+        run: php -v
+
+  test-latest:
+    runs-on: ubuntu-latest
+    container:
+      image: cicnavi/dap:08
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-${{ job.container.id }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ job.container.id }}-php-
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Run test suite
+        run: composer run-script pre-commit
+      - name: Show PHP version
+        run: php -v

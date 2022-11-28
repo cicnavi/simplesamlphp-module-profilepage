@@ -1,8 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations;
 
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use PHPUnit\Framework\MockObject\Stub;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
 use PHPUnit\Framework\TestCase;
@@ -17,12 +22,15 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 class Version20220801000600CreateIdpSpUserVersionTableTest extends TestCase
 {
     protected Connection $connection;
-    protected \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager;
+    protected AbstractSchemaManager $schemaManager;
     protected string $tableName;
-    protected \PHPUnit\Framework\MockObject\Stub $connectionStub;
-    protected \PHPUnit\Framework\MockObject\Stub $dbalStub;
-    protected \PHPUnit\Framework\MockObject\Stub $schemaManagerStub;
+    protected Stub $connectionStub;
+    protected Stub $dbalStub;
+    protected Stub $schemaManagerStub;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $this->connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
@@ -34,6 +42,11 @@ class Version20220801000600CreateIdpSpUserVersionTableTest extends TestCase
         $this->schemaManagerStub = $this->createStub(AbstractSchemaManager::class);
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     * @throws Exception
+     */
     public function testCanRunMigration(): void
     {
         $this->assertFalse($this->schemaManager->tablesExist($this->tableName));
@@ -45,11 +58,14 @@ class Version20220801000600CreateIdpSpUserVersionTableTest extends TestCase
         $this->assertFalse($this->schemaManager->tablesExist($this->tableName));
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testRunThrowsMigrationException(): void
     {
         $this->connectionStub->method('preparePrefixedTableName')->willReturn($this->tableName);
         $this->schemaManagerStub->method('createTable')
-            ->willThrowException(new \Doctrine\DBAL\Exception('test'));
+            ->willThrowException(new Exception('test'));
         $this->dbalStub->method('createSchemaManager')->willReturn($this->schemaManagerStub);
         $this->connectionStub->method('dbal')->willReturn($this->dbalStub);
 
@@ -60,10 +76,13 @@ class Version20220801000600CreateIdpSpUserVersionTableTest extends TestCase
         $migration->run();
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testRevertThrowsMigrationException(): void
     {
         $this->schemaManagerStub->method('dropTable')
-            ->willThrowException(new \Doctrine\DBAL\Exception('test'));
+            ->willThrowException(new Exception('test'));
         $this->dbalStub->method('createSchemaManager')->willReturn($this->schemaManagerStub);
         $this->connectionStub->method('dbal')->willReturn($this->dbalStub);
 
@@ -74,6 +93,9 @@ class Version20220801000600CreateIdpSpUserVersionTableTest extends TestCase
         $migration->revert();
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testRunThrowsOnIvalidTableNameIdp(): void
     {
         $this->connectionStub->method('preparePrefixedTableName')

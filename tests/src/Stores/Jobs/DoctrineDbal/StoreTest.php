@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal;
 
+use DateTimeImmutable;
+use Doctrine\DBAL\Exception;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Authentication\State;
@@ -11,6 +14,7 @@ use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
@@ -47,13 +51,16 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 class StoreTest extends TestCase
 {
     protected ModuleConfiguration $moduleConfiguration;
-    protected \PHPUnit\Framework\MockObject\Stub $factoryStub;
+    protected Stub $factoryStub;
     protected Connection $connection;
-    protected \PHPUnit\Framework\MockObject\Stub $loggerStub;
+    protected Stub $loggerStub;
     protected Migrator $migrator;
-    protected \PHPUnit\Framework\MockObject\Stub $payloadStub;
-    protected \PHPUnit\Framework\MockObject\Stub $jobStub;
+    protected Stub $payloadStub;
+    protected Stub $jobStub;
 
+    /**
+     * @throws StoreException
+     */
     protected function setUp(): void
     {
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
@@ -73,10 +80,14 @@ class StoreTest extends TestCase
         $this->jobStub = $this->createStub(GenericJob::class);
         $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
         $this->jobStub->method('getType')->willReturn(GenericJob::class);
-        $this->jobStub->method('getCreatedAt')->willReturn(new \DateTimeImmutable());
+        $this->jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
         $this->jobStub->method('getId')->willReturn(1);
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function testSetupDependsOnMigratorSetup(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -97,6 +108,10 @@ class StoreTest extends TestCase
         $this->assertFalse($this->migrator->needsSetup());
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function testSetupDependsOnMigrations(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -117,6 +132,9 @@ class StoreTest extends TestCase
         $this->assertFalse($jobsStore->needsSetup());
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanGetPrefixedTableNames(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -137,6 +155,9 @@ class StoreTest extends TestCase
         $this->assertSame($tableNameFailedJobs, $jobsStore->getPrefixedTableNameFailedJobs());
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanBuildInstanceStatically(): void
     {
         $moduleConfiguration = $this->createStub(ModuleConfiguration::class);
@@ -146,6 +167,11 @@ class StoreTest extends TestCase
         $this->assertInstanceOf(Store::class, Store::build($moduleConfiguration, $this->loggerStub));
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     * @throws MigrationException
+     */
     public function testCanEnqueueJob(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -176,6 +202,9 @@ class StoreTest extends TestCase
         $this->assertSame(3, (int) $queryBuilder->executeQuery()->fetchOne());
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testEnqueueThrowsStoreExceptionOnNonSetupRun(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -198,6 +227,11 @@ class StoreTest extends TestCase
         $jobsStore->enqueue($jobStub);
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     * @throws MigrationException
+     */
     public function testCanDequeueJob(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -228,6 +262,11 @@ class StoreTest extends TestCase
         $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     * @throws MigrationException
+     */
     public function testCanDequeueSpecificJobType(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -263,6 +302,10 @@ class StoreTest extends TestCase
         $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testDequeueThrowsWhenSetupNotRun(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -284,12 +327,17 @@ class StoreTest extends TestCase
         $jobsStore->dequeue('test-type');
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     * @throws MigrationException
+     */
     public function testDequeueThrowsForJobWithInvalidId(): void
     {
         $repositoryStub = $this->createStub(Store\Repository::class);
         $jobStub = $this->createStub(GenericJob::class);
         $jobStub->method('getPayload')->willReturn($this->payloadStub);
-        $jobStub->method('getCreatedAt')->willReturn(new \DateTimeImmutable());
+        $jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
         $jobStub->method('getType')->willReturn(GenericJob::class);
         $jobStub->method('getId')->willReturn(null); // Invalid ID value...
 
@@ -312,6 +360,11 @@ class StoreTest extends TestCase
         $jobsStore->dequeue($this->jobStub->getType());
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     * @throws Exception
+     */
     public function testDequeThrowsAfterMaxDeleteAttempts(): void
     {
         $repositoryStub = $this->createStub(Store\Repository::class);
@@ -335,6 +388,11 @@ class StoreTest extends TestCase
         $jobsStore->dequeue($this->jobStub->getType());
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     * @throws Exception
+     */
     public function testCanContinueSearchingInCaseOfJobDeletion(): void
     {
         $repositoryStub = $this->createStub(Store\Repository::class);
@@ -356,6 +414,11 @@ class StoreTest extends TestCase
         $this->assertNotNull($jobsStore->dequeue($this->jobStub->getType()));
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     * @throws MigrationException
+     */
     public function testCanMarkFailedJob(): void
     {
         /** @psalm-suppress InvalidArgument */

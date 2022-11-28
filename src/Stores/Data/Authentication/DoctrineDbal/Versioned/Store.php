@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned;
 
+use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Activity;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
@@ -21,6 +22,7 @@ use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Version
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawConnectedServiceProvider;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Repository;
 use SimpleSAML\Module\accounting\Stores\Interfaces\DataStoreInterface;
+use Throwable;
 
 class Store extends AbstractStore implements DataStoreInterface
 {
@@ -100,7 +102,7 @@ class Store extends AbstractStore implements DataStoreInterface
             if ($idpId !== false) {
                 return (int)$idpId;
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving Idp ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -111,7 +113,7 @@ class Store extends AbstractStore implements DataStoreInterface
                 $hashDecoratedState->getState()->getIdentityProviderEntityId(),
                 $idpEntityIdHashSha256
             );
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error inserting new IdP, however, continuing in case of race condition. Error was: %s.',
                 $exception->getMessage()
@@ -133,7 +135,7 @@ class Store extends AbstractStore implements DataStoreInterface
                 $idpEntityIdHashSha256
             );
             throw new StoreException($message);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving Idp ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -154,7 +156,7 @@ class Store extends AbstractStore implements DataStoreInterface
             if ($idpVersionId !== false) {
                 return (int)$idpVersionId;
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving IdP Version ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -166,7 +168,7 @@ class Store extends AbstractStore implements DataStoreInterface
                 serialize($hashDecoratedState->getState()->getIdentityProviderMetadata()),
                 $idpMetadataArrayHashSha256
             );
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error inserting new IdP Version, however, continuing in case of race condition. Error was: %s.',
                 $exception->getMessage()
@@ -188,12 +190,15 @@ class Store extends AbstractStore implements DataStoreInterface
                 $idpId
             );
             throw new StoreException($message);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving Idp Version ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
 
+    /**
+     * @throws StoreException
+     */
     protected function resolveSpId(HashDecoratedState $hashDecoratedState): int
     {
         $spEntityIdHashSha256 = $hashDecoratedState->getServiceProviderEntityIdHashSha256();
@@ -206,7 +211,7 @@ class Store extends AbstractStore implements DataStoreInterface
             if ($spId !== false) {
                 return (int)$spId;
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving SP ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -217,7 +222,7 @@ class Store extends AbstractStore implements DataStoreInterface
                 $hashDecoratedState->getState()->getServiceProviderEntityId(),
                 $spEntityIdHashSha256
             );
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error inserting new SP, however, continuing in case of race condition. Error was: %s.',
                 $exception->getMessage()
@@ -239,7 +244,7 @@ class Store extends AbstractStore implements DataStoreInterface
                 $spEntityIdHashSha256
             );
             throw new StoreException($message);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving SP ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -260,7 +265,7 @@ class Store extends AbstractStore implements DataStoreInterface
             if ($spVersionId !== false) {
                 return (int)$spVersionId;
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving SP Version ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -272,7 +277,7 @@ class Store extends AbstractStore implements DataStoreInterface
                 serialize($hashDecoratedState->getState()->getServiceProviderMetadata()),
                 $spMetadataArrayHashSha256
             );
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error inserting new SP Version, however, continuing in case of race condition. Error was: %s.',
                 $exception->getMessage()
@@ -294,7 +299,7 @@ class Store extends AbstractStore implements DataStoreInterface
                 $spId
             );
             throw new StoreException($message);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving SP Version ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -323,7 +328,7 @@ class Store extends AbstractStore implements DataStoreInterface
             if ($userId !== false) {
                 return (int)$userId;
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving user ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -331,7 +336,7 @@ class Store extends AbstractStore implements DataStoreInterface
         // Create new
         try {
             $this->repository->insertUser($userIdentifierValue, $userIdentifierValueHashSha256);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error inserting new user, however, continuing in case of race condition. Error was: %s.',
                 $exception->getMessage()
@@ -353,7 +358,7 @@ class Store extends AbstractStore implements DataStoreInterface
                 $userIdentifierValueHashSha256
             );
             throw new StoreException($message);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving user ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -374,7 +379,7 @@ class Store extends AbstractStore implements DataStoreInterface
             if ($userVersionId !== false) {
                 return (int)$userVersionId;
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving user version ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -386,7 +391,7 @@ class Store extends AbstractStore implements DataStoreInterface
                 serialize($hashDecoratedState->getState()->getAttributes()),
                 $attributeArrayHashSha256
             );
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error inserting new user version, however, continuing in case of race condition. Error was: %s.',
                 $exception->getMessage()
@@ -408,12 +413,15 @@ class Store extends AbstractStore implements DataStoreInterface
                 $userId
             );
             throw new StoreException($message);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving user version ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
 
+    /**
+     * @throws StoreException
+     */
     protected function resolveIdpSpUserVersionId(int $idpVersionId, int $spVersionId, int $userVersionId): int
     {
         // Check if it already exists.
@@ -424,7 +432,7 @@ class Store extends AbstractStore implements DataStoreInterface
             if ($IdpSpUserVersionId !== false) {
                 return (int)$IdpSpUserVersionId;
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving IdpSpUserVersion ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -432,7 +440,7 @@ class Store extends AbstractStore implements DataStoreInterface
         // Create new
         try {
             $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error inserting new IdpSpUserVersion, however, continuing in case of race condition. ' .
                 'Error was: %s.',
@@ -458,7 +466,7 @@ class Store extends AbstractStore implements DataStoreInterface
                 $userVersionId
             );
             throw new StoreException($message);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error resolving IdpSpUserVersion ID. Error was: %s.', $exception->getMessage());
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
@@ -497,7 +505,7 @@ class Store extends AbstractStore implements DataStoreInterface
                     )
                 );
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error populating connected service provider bag. Error was: %s',
                 $exception->getMessage()
@@ -538,7 +546,7 @@ class Store extends AbstractStore implements DataStoreInterface
                     )
                 );
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error populating activity bag. Error was: %s',
                 $exception->getMessage()
@@ -549,7 +557,10 @@ class Store extends AbstractStore implements DataStoreInterface
         return $activityBag;
     }
 
-    public function deleteDataOlderThan(\DateTimeImmutable $dateTime): void
+    /**
+     * @throws StoreException
+     */
+    public function deleteDataOlderThan(DateTimeImmutable $dateTime): void
     {
         // Only delete authentication events. Versioned data (IdP / SP metadata, user attributes) remain.
         $this->repository->deleteAuthenticationEventsOlderThan($dateTime);

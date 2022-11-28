@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Connections\DoctrineDbal;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
@@ -22,10 +26,7 @@ class FactoryTest extends TestCase
 {
     protected ModuleConfiguration $moduleConfiguration;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $loggerServiceMock;
+    protected MockObject $loggerServiceMock;
 
     protected function setUp(): void
     {
@@ -42,6 +43,9 @@ class FactoryTest extends TestCase
         $this->assertInstanceOf(Connection::class, $factory->buildConnection('doctrine_dbal_pdo_sqlite'));
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanBuildMigrator(): void
     {
         /** @psalm-suppress InvalidArgument */

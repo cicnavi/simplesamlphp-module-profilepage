@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Entities\Authentication;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Authentication\State;
@@ -17,7 +20,7 @@ class EventTest extends TestCase
 {
     public function testCanGetState(): void
     {
-        $dateTime = new \DateTimeImmutable();
+        $dateTime = new DateTimeImmutable();
         $authenticationEvent = new Event(new State(StateArrays::FULL), $dateTime);
 
         $this->assertInstanceOf(State::class, $authenticationEvent->getState());

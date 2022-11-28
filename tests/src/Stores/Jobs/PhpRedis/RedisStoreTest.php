@@ -1,11 +1,16 @@
 <?php
 
+/** @noinspection PhpComposerExtensionStubsInspection ext-redis should only be installed if used. */
+
 declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\PhpRedis;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
 use Redis;
+use RedisException;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
@@ -21,19 +26,19 @@ use PHPUnit\Framework\TestCase;
 class RedisStoreTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|ModuleConfiguration
+     * @var Stub|ModuleConfiguration
      */
     protected $moduleConfigurationStub;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
+     * @var MockObject|LoggerInterface
      */
     protected $loggerMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Redis
+     * @var MockObject|Redis
      */
     protected $redisMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|JobInterface
+     * @var Stub|JobInterface
      */
     protected $jobStub;
 
@@ -46,6 +51,9 @@ class RedisStoreTest extends TestCase
         $this->jobStub->method('getType')->willReturn(GenericJob::class);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanCreateInstance(): void
     {
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
@@ -65,6 +73,9 @@ class RedisStoreTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testThrowsIfHostConnectionParameterNotSet(): void
     {
         $this->expectException(InvalidConfigurationException::class);
@@ -96,7 +107,7 @@ class RedisStoreTest extends TestCase
             ->willReturn(['host' => 'sample']);
 
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
-        $this->redisMock->method('connect')->willThrowException(new \RedisException('test'));
+        $this->redisMock->method('connect')->willThrowException(new RedisException('test'));
 
         /** @psalm-suppress PossiblyInvalidArgument */
         $this->assertInstanceOf(
@@ -125,7 +136,7 @@ class RedisStoreTest extends TestCase
             ->willReturn(['host' => 'sample', 'auth' => 'test']);
 
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
-        $this->redisMock->method('auth')->willThrowException(new \RedisException('test'));
+        $this->redisMock->method('auth')->willThrowException(new RedisException('test'));
 
         /** @psalm-suppress PossiblyInvalidArgument */
         $this->assertInstanceOf(
@@ -153,7 +164,7 @@ class RedisStoreTest extends TestCase
             ->willReturn(['host' => 'sample']);
 
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
-        $this->redisMock->method('setOption')->willThrowException(new \RedisException('test'));
+        $this->redisMock->method('setOption')->willThrowException(new RedisException('test'));
 
         /** @psalm-suppress PossiblyInvalidArgument */
         $this->assertInstanceOf(
@@ -168,6 +179,9 @@ class RedisStoreTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanCallRPushMethod(): void
     {
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
@@ -206,7 +220,7 @@ class RedisStoreTest extends TestCase
             ->with($this->stringContains('Could not add job to Redis list.'));
 
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
-        $this->redisMock->method('rPush')->willThrowException(new \RedisException('test'));
+        $this->redisMock->method('rPush')->willThrowException(new RedisException('test'));
 
         /** @psalm-suppress PossiblyInvalidArgument */
         $redisStore = new RedisStore(
@@ -221,6 +235,9 @@ class RedisStoreTest extends TestCase
         $redisStore->enqueue($this->jobStub);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanDequeueJob(): void
     {
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
@@ -252,7 +269,7 @@ class RedisStoreTest extends TestCase
 
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
         $this->redisMock->method('lPop')
-            ->willThrowException(new \RedisException('test'));
+            ->willThrowException(new RedisException('test'));
 
         $this->expectException(StoreException::class);
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
@@ -303,6 +320,9 @@ class RedisStoreTest extends TestCase
         @$redisStore->dequeue($this->jobStub->getType());
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanMarkFailedJob(): void
     {
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
@@ -335,7 +355,7 @@ class RedisStoreTest extends TestCase
 
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
         $this->redisMock->method('rPush')
-            ->willThrowException(new \RedisException('test'));
+            ->willThrowException(new RedisException('test'));
 
         $this->expectException(StoreException::class);
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */
@@ -356,6 +376,9 @@ class RedisStoreTest extends TestCase
         $redisStore->markFailedJob($this->jobStub);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testSetupIsNotNeeded(): void
     {
         /** @psalm-suppress PossiblyUndefinedMethod, MixedMethodCall */

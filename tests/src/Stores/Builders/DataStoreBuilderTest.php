@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Builders;
 
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
@@ -27,8 +30,8 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  */
 class DataStoreBuilderTest extends TestCase
 {
-    protected \PHPUnit\Framework\MockObject\Stub $moduleConfigurationStub;
-    protected \PHPUnit\Framework\MockObject\Stub $loggerStub;
+    protected Stub $moduleConfigurationStub;
+    protected Stub $loggerStub;
     protected DataStoreBuilder $dataStoreBuilder;
     protected HelpersManager $helpersManager;
 
@@ -50,6 +53,9 @@ class DataStoreBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanBuildDataStore(): void
     {
         $this->assertInstanceOf(Store::class, $this->dataStoreBuilder->build(Store::class));

@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Services\JobRunner;
 
+use DateInterval;
+use DateTimeImmutable;
 use SimpleSAML\Module\accounting\Services\JobRunner\State;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +23,7 @@ class StateTest extends TestCase
 
     public function testCanCreateInstance(): void
     {
-        $startedAt = $updatedAt = new \DateTimeImmutable();
+        $startedAt = $updatedAt = new DateTimeImmutable();
 
         $state = new State($this->jobRunnerId);
         $this->assertInstanceOf(State::class, $state);
@@ -37,11 +41,11 @@ class StateTest extends TestCase
 
     public function testCanWorkWithTimestamps(): void
     {
-        $startedAt = $updatedAt = $endedAt = new \DateTimeImmutable();
+        $startedAt = $updatedAt = $endedAt = new DateTimeImmutable();
 
         $state = new State($this->jobRunnerId);
         $this->assertNull($state->getStartedAt());
-        $this->assertInstanceOf(\DateTimeImmutable::class, $state->getUpdatedAt());
+        $this->assertInstanceOf(DateTimeImmutable::class, $state->getUpdatedAt());
         $this->assertNull($state->getEndedAt());
 
         $this->assertTrue($state->setStartedAt($startedAt));
@@ -78,11 +82,11 @@ class StateTest extends TestCase
     public function testCanCheckIfStateIsStale(): void
     {
         $state = new State($this->jobRunnerId);
-        $freshnessDuration = new \DateInterval('PT5M');
+        $freshnessDuration = new DateInterval('PT5M');
 
         $this->assertFalse($state->isStale($freshnessDuration));
 
-        $dateTimeInHistory = new \DateTimeImmutable('-9 minutes');
+        $dateTimeInHistory = new DateTimeImmutable('-9 minutes');
         $state->setUpdatedAt($dateTimeInHistory);
 
         $this->assertTrue($state->isStale($freshnessDuration));

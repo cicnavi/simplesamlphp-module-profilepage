@@ -10,6 +10,9 @@ use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use Throwable;
+
+use function sprintf;
 
 class InstanceBuilderUsingModuleConfigurationHelper
 {
@@ -37,8 +40,8 @@ class InstanceBuilderUsingModuleConfigurationHelper
             $reflectionMethod = new ReflectionMethod($class, $method);
             /** @var BuildableUsingModuleConfigurationInterface $instance */
             $instance = $reflectionMethod->invoke(null, ...$allArguments);
-        } catch (\Throwable $exception) {
-            $message = \sprintf(
+        } catch (Throwable $exception) {
+            $message = sprintf(
                 'Error building instance using module configuration. Error was: %s.',
                 $exception->getMessage()
             );

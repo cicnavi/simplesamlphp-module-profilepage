@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases;
 
 use Doctrine\DBAL\Schema\Table;
@@ -8,6 +10,8 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\TableConstants;
 use Throwable;
+
+use function sprintf;
 
 abstract class AbstractCreateJobsTable extends AbstractMigration
 {
@@ -36,7 +40,7 @@ abstract class AbstractCreateJobsTable extends AbstractMigration
             $this->schemaManager->createTable($table);
         } catch (Throwable $exception) {
             throw $this->prepareGenericMigrationException(
-                \sprintf('Could not create table %s.', $tableName),
+                sprintf('Could not create table %s.', $tableName),
                 $exception
             );
         }
@@ -52,7 +56,7 @@ abstract class AbstractCreateJobsTable extends AbstractMigration
         try {
             $this->schemaManager->dropTable($tableName);
         } catch (Throwable $exception) {
-            throw $this->prepareGenericMigrationException(\sprintf('Could not drop table %s.', $tableName), $exception);
+            throw $this->prepareGenericMigrationException(sprintf('Could not drop table %s.', $tableName), $exception);
         }
     }
 

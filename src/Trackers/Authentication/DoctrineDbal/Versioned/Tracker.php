@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned;
 
+use DateInterval;
+use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Activity;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Providers\Interfaces\AuthenticationDataProviderInterface;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
@@ -24,6 +27,9 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
     protected DataStoreInterface $dataStore;
     protected HelpersManager $helpersManager;
 
+    /**
+     * @throws StoreException
+     */
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
@@ -46,6 +52,9 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
                 );
     }
 
+    /**
+     * @throws StoreException
+     */
     public static function build(
         ModuleConfiguration $moduleConfiguration,
         LoggerInterface $logger,
@@ -86,9 +95,9 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
         return $this->dataStore->getActivity($userIdentifierHashSha256, $maxResults, $firstResult);
     }
 
-    public function enforceDataRetentionPolicy(\DateInterval $retentionPolicy): void
+    public function enforceDataRetentionPolicy(DateInterval $retentionPolicy): void
     {
-        $dateTime = (new \DateTimeImmutable())->sub($retentionPolicy);
+        $dateTime = (new DateTimeImmutable())->sub($retentionPolicy);
 
         if ($dateTime === false) {
             // @codeCoverageIgnoreStart

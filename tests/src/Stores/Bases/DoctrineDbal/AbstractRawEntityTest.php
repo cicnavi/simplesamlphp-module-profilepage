@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\Module\accounting\Stores\Bases\DoctrineDbal;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\MockObject\Stub;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +17,7 @@ use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 class AbstractRawEntityTest extends TestCase
 {
     /**
-     * @var AbstractPlatform|AbstractPlatform&\PHPUnit\Framework\MockObject\Stub|\PHPUnit\Framework\MockObject\Stub
+     * @var AbstractPlatform|Stub
      */
     protected $abstractPlatformStub;
     /**

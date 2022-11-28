@@ -6,13 +6,10 @@ namespace SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Type;
-use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
-use Throwable;
 
 use function sprintf;
 

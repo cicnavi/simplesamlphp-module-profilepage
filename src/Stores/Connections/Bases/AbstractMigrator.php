@@ -6,7 +6,6 @@ namespace SimpleSAML\Module\accounting\Stores\Connections\Bases;
 
 use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
-use SimpleSAML\Module\accounting\Helpers\FilesystemHelper;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Interfaces\MigrationInterface;
 use Throwable;

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Trackers\Builders;
 
+use DateInterval;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
@@ -24,11 +27,11 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 class AuthenticationDataTrackerBuilderTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface|LoggerInterface&\PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject|LoggerInterface
      */
     protected $loggerMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|ModuleConfiguration|ModuleConfiguration&\PHPUnit\Framework\MockObject\Stub
+     * @var Stub|ModuleConfiguration
      */
     protected $moduleConfigurationStub;
 
@@ -65,7 +68,7 @@ class AuthenticationDataTrackerBuilderTest extends TestCase
             {
             }
 
-            public function enforceDataRetentionPolicy(\DateInterval $retentionPolicy): void
+            public function enforceDataRetentionPolicy(DateInterval $retentionPolicy): void
             {
             }
         };
@@ -83,6 +86,9 @@ class AuthenticationDataTrackerBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCanBuildAuthenticationDataTracker(): void
     {
         $authenticationDataTrackerBuilder = new AuthenticationDataTrackerBuilder(

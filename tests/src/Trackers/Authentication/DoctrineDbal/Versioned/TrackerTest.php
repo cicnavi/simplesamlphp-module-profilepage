@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned;
 
+use DateInterval;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Activity;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
@@ -37,19 +40,19 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 class TrackerTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|ModuleConfiguration
+     * @var Stub|ModuleConfiguration
      */
     protected $moduleConfigurationStub;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
+     * @var MockObject|LoggerInterface
      */
     protected $loggerMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Store
+     * @var MockObject|Store
      */
     protected $dataStoreMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|HelpersManager
+     * @var Stub|HelpersManager
      */
     protected $helpersManagerStub;
 
@@ -65,6 +68,7 @@ class TrackerTest extends TestCase
 
     /**
      * @psalm-suppress PossiblyInvalidArgument
+     * @throws StoreException
      */
     public function testCanCreateInstance(): void
     {
@@ -90,6 +94,9 @@ class TrackerTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testProcessCallsPersistOnDataStore(): void
     {
         $authenticationEventStub = $this->createStub(Event::class);
@@ -110,6 +117,9 @@ class TrackerTest extends TestCase
         $tracker->process($authenticationEventStub);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testSetupDependsOnDataStore(): void
     {
         $this->dataStoreMock->expects($this->exactly(2))
@@ -133,6 +143,9 @@ class TrackerTest extends TestCase
         $tracker->runSetup();
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testRunningSetupIfNotNeededLogsWarning(): void
     {
         $this->dataStoreMock->method('needsSetup')
@@ -153,6 +166,9 @@ class TrackerTest extends TestCase
         $tracker->runSetup();
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testGetConnectedServiceProviders(): void
     {
         $connectedOrganizationsBagStub = $this->createStub(ConnectedServiceProvider\Bag::class);
@@ -175,6 +191,9 @@ class TrackerTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testGetActivity(): void
     {
         $activityBag = $this->createStub(Activity\Bag::class);
@@ -196,9 +215,12 @@ class TrackerTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanEnforceDataRetentionPolicy(): void
     {
-        $retentionPolicy = new \DateInterval('P10D');
+        $retentionPolicy = new DateInterval('P10D');
 
         $this->dataStoreMock->expects($this->once())
             ->method('deleteDataOlderThan');

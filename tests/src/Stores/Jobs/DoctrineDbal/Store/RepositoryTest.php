@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 
+use DateTimeImmutable;
+use Exception;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Authentication\State;
@@ -11,6 +14,7 @@ use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
@@ -48,14 +52,17 @@ class RepositoryTest extends TestCase
 {
     protected ModuleConfiguration $moduleConfiguration;
     protected Connection $connection;
-    protected \PHPUnit\Framework\MockObject\Stub $loggerServiceStub;
+    protected Stub $loggerServiceStub;
     protected Migrator $migrator;
-    protected \PHPUnit\Framework\MockObject\Stub $factoryStub;
-    protected \PHPUnit\Framework\MockObject\Stub $payloadStub;
-    protected \PHPUnit\Framework\MockObject\Stub $jobStub;
+    protected Stub $factoryStub;
+    protected Stub $payloadStub;
+    protected Stub $jobStub;
     protected Store $jobsStore;
     protected string $jobsTableName;
 
+    /**
+     * @throws StoreException
+     */
     protected function setUp(): void
     {
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
@@ -75,7 +82,7 @@ class RepositoryTest extends TestCase
         $this->jobStub = $this->createStub(GenericJob::class);
         $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
         $this->jobStub->method('getType')->willReturn(GenericJob::class);
-        $this->jobStub->method('getCreatedAt')->willReturn(new \DateTimeImmutable());
+        $this->jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
 
         /** @psalm-suppress InvalidArgument */
         $this->jobsStore = new Store(
@@ -89,6 +96,10 @@ class RepositoryTest extends TestCase
         $this->jobsTableName = $this->connection->preparePrefixedTableName(Store\TableConstants::TABLE_NAME_JOB);
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function testCanInsertAndGetJob(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -104,6 +115,9 @@ class RepositoryTest extends TestCase
         $this->assertNotNull($repository->getNext());
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testInsertThrowsIfJobsStoreSetupNotRan(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -117,6 +131,10 @@ class RepositoryTest extends TestCase
         $repository->insert($this->jobStub);
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function testInsertThrowsForInvalidJobType(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -130,12 +148,15 @@ class RepositoryTest extends TestCase
         $jobStub = $this->createStub(GenericJob::class);
         $jobStub->method('getPayload')->willReturn($this->payloadStub);
         $jobStub->method('getType')->willReturn($invalidType);
-        $jobStub->method('getCreatedAt')->willReturn(new \DateTimeImmutable());
+        $jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
 
         /** @psalm-suppress InvalidArgument */
         $repository->insert($jobStub);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testGetNextThrowsIfJobsStoreSetupNotRan(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -148,6 +169,10 @@ class RepositoryTest extends TestCase
         $repository->getNext();
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function testGetNextThrowsForInvalidJobType(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -159,7 +184,7 @@ class RepositoryTest extends TestCase
         $jobStub = $this->createStub(AbstractJob::class); // Abstract classes can't be initialized..
         $jobStub->method('getPayload')->willReturn($payloadStub);
         $jobStub->method('getType')->willReturn(AbstractJob::class);
-        $jobStub->method('getCreatedAt')->willReturn(new \DateTimeImmutable());
+        $jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
 
         /** @psalm-suppress InvalidArgument */
         $repository->insert($jobStub);
@@ -169,6 +194,11 @@ class RepositoryTest extends TestCase
         $repository->getNext();
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     * @throws Exception
+     */
     public function testCanDeleteJob(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -181,16 +211,19 @@ class RepositoryTest extends TestCase
         $repository->insert($this->jobStub);
         $job = $repository->getNext();
         if ($job === null) {
-            throw new \Exception('Invalid job.');
+            throw new Exception('Invalid job.');
         }
         $jobId = $job->getId();
         if ($jobId === null) {
-            throw new \Exception('Invalid job ID.');
+            throw new Exception('Invalid job ID.');
         }
         $this->assertTrue($repository->delete($jobId));
         $this->assertFalse($repository->delete($jobId));
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testDeleteThrowsWhenJobsStoreSetupNotRan(): void
     {
         /** @psalm-suppress InvalidArgument */
@@ -203,6 +236,10 @@ class RepositoryTest extends TestCase
         $repository->delete(1);
     }
 
+    /**
+     * @throws StoreException
+     * @throws MigrationException
+     */
     public function testCanGetSpecificJobType(): void
     {
         /** @psalm-suppress InvalidArgument */

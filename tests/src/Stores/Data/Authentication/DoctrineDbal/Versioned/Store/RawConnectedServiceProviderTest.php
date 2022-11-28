@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\MockObject\Stub;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawConnectedServiceProvider;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +32,7 @@ class RawConnectedServiceProviderTest extends TestCase
     protected array $userAttributes;
     protected array $rawRow;
     /**
-     * @var AbstractPlatform|AbstractPlatform&\PHPUnit\Framework\MockObject\Stub|\PHPUnit\Framework\MockObject\Stub
+     * @var AbstractPlatform|Stub
      */
     protected $abstractPlatformStub;
     protected string $dateTimeFormat;
@@ -73,12 +77,12 @@ class RawConnectedServiceProviderTest extends TestCase
         $rawConnectedServiceProvider = new RawConnectedServiceProvider($this->rawRow, $this->abstractPlatformStub);
 
         $this->assertSame($this->numberOfAuthentications, $rawConnectedServiceProvider->getNumberOfAuthentications());
-        $this->assertInstanceOf(\DateTimeImmutable::class, $rawConnectedServiceProvider->getLastAuthenticationAt());
+        $this->assertInstanceOf(DateTimeImmutable::class, $rawConnectedServiceProvider->getLastAuthenticationAt());
         $this->assertSame(
             $this->lastAuthenticationAt,
             $rawConnectedServiceProvider->getLastAuthenticationAt()->format($this->dateTimeFormat)
         );
-        $this->assertInstanceOf(\DateTimeImmutable::class, $rawConnectedServiceProvider->getFirstAuthenticationAt());
+        $this->assertInstanceOf(DateTimeImmutable::class, $rawConnectedServiceProvider->getFirstAuthenticationAt());
         $this->assertSame(
             $this->firstAuthenticationAt,
             $rawConnectedServiceProvider->getFirstAuthenticationAt()->format($this->dateTimeFormat)

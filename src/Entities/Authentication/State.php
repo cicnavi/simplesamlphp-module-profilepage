@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Entities\Authentication;
 
+use DateTimeImmutable;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Helpers\NetworkHelper;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
+use Throwable;
 
 class State
 {
@@ -24,8 +25,8 @@ class State
     protected string $identityProviderEntityId;
     protected string $serviceProviderEntityId;
     protected array $attributes;
-    protected \DateTimeImmutable $createdAt;
-    protected ?\DateTimeImmutable $authenticationInstant;
+    protected DateTimeImmutable $createdAt;
+    protected ?DateTimeImmutable $authenticationInstant;
     protected array $identityProviderMetadata;
     protected array $serviceProviderMetadata;
     protected ?string $clientIpAddress;
@@ -33,10 +34,10 @@ class State
 
     public function __construct(
         array $state,
-        \DateTimeImmutable $createdAt = null,
+        DateTimeImmutable $createdAt = null,
         HelpersManager $helpersManager = null
     ) {
-        $this->createdAt = $createdAt ?? new \DateTimeImmutable();
+        $this->createdAt = $createdAt ?? new DateTimeImmutable();
         $this->helpersManager = $helpersManager ?? new HelpersManager();
 
         $this->identityProviderMetadata = $this->resolveIdentityProviderMetadata($state);
@@ -105,12 +106,12 @@ class State
         return null;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    protected function resolveAuthenticationInstant(array $state): ?\DateTimeImmutable
+    protected function resolveAuthenticationInstant(array $state): ?DateTimeImmutable
     {
         if (empty($state[self::KEY_AUTHENTICATION_INSTANT])) {
             return null;
@@ -119,8 +120,8 @@ class State
         $authInstant = (string)$state[self::KEY_AUTHENTICATION_INSTANT];
 
         try {
-            return new \DateTimeImmutable('@' . $authInstant);
-        } catch (\Throwable $exception) {
+            return new DateTimeImmutable('@' . $authInstant);
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Unable to create DateTimeImmutable using AuthInstant value \'%s\'. Error was: %s.',
                 $authInstant,
@@ -130,7 +131,7 @@ class State
         }
     }
 
-    public function getAuthenticationInstant(): ?\DateTimeImmutable
+    public function getAuthenticationInstant(): ?DateTimeImmutable
     {
         return $this->authenticationInstant;
     }

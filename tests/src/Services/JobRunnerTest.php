@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Services;
 
+use DateInterval;
+use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
@@ -13,6 +15,7 @@ use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Helpers\DateTimeHelper;
 use SimpleSAML\Module\accounting\Helpers\EnvironmentHelper;
 use SimpleSAML\Module\accounting\Helpers\RandomHelper;
@@ -117,6 +120,9 @@ class JobRunnerTest extends TestCase
         $this->payloadStub = $this->createStub(Event::class);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCanCreateInstance(): void
     {
         $this->randomHelperStub->method('getRandomInt')->willReturn(123);
@@ -138,6 +144,10 @@ class JobRunnerTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testPreRunValidationFailsForSameJobRunnerId(): void
     {
         $this->randomHelperStub->method('getRandomInt')->willReturn(123);
@@ -171,6 +181,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testPreRunValidationFailsForStaleState(): void
     {
         $this->randomHelperStub->method('getRandomInt')->willReturn(123);
@@ -204,6 +218,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testPreRunValidationPassesWhenStateIsNull(): void
     {
         $this->randomHelperStub->method('getRandomInt')->willReturn(123);
@@ -233,6 +251,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testValidateRunConditionsFailsIfAnotherJobRunnerIsActive(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -267,6 +289,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testAssumeTrueOnJobRunnerActivityIfThrown(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -304,6 +330,9 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanLogCacheClearingError(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -336,6 +365,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testValidateRunConditionsSuccessIfStaleStateEncountered(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -374,20 +407,24 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testShouldRunCheckFailsIfMaximumExecutionTimeIsReached(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
         $this->moduleConfigurationStub->method('getJobRunnerMaximumExecutionTime')
-            ->willReturn(new \DateInterval('PT1S'));
+            ->willReturn(new DateInterval('PT1S'));
 
         $this->randomHelperStub->method('getRandomInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandomHelper')->willReturn($this->randomHelperStub);
 
         $this->cacheMock->method('get')->willReturn(null);
 
-        $this->stateStub->method('getStartedAt')->willReturn(new \DateTimeImmutable('-2 seconds'));
+        $this->stateStub->method('getStartedAt')->willReturn(new DateTimeImmutable('-2 seconds'));
 
         $this->cacheMock->expects($this->once())->method('delete');
 
@@ -412,13 +449,17 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testCanUseIniSettingForMaximumExecutionTime(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
         $this->moduleConfigurationStub->method('getJobRunnerMaximumExecutionTime')
-            ->willReturn(new \DateInterval('PT20S'));
+            ->willReturn(new DateInterval('PT20S'));
 
         $this->randomHelperStub->method('getRandomInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandomHelper')->willReturn($this->randomHelperStub);
@@ -431,7 +472,7 @@ class JobRunnerTest extends TestCase
 
         $this->cacheMock->method('get')->willReturn(null);
 
-        $this->stateStub->method('getStartedAt')->willReturn(new \DateTimeImmutable('-30 seconds'));
+        $this->stateStub->method('getStartedAt')->willReturn(new DateTimeImmutable('-30 seconds'));
 
         $this->cacheMock->expects($this->once())->method('delete');
 
@@ -457,6 +498,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testShouldRunCheckFailsIfMaximumNumberOfProcessedJobsIsReached(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -492,6 +537,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testValidateSelfStateFailsIfRunHasNotStartedButCachedStateExists(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -529,6 +578,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testValidateSelfStateFailsIfRunHasStartedButCachedStateDoesNotExist(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -566,6 +619,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testValidateSelfStateFailsIfRunHasStartedButDifferentJobRunnerIdEncountered(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -605,6 +662,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testValidateSelfStateFailsIfRunHasStartedButStaleCachedStateEncountered(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -645,6 +706,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testValidateSelfStateFailsIfRunHasStartedButGracefulInterruptIsInitiated(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -686,6 +751,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testCanDoBackoffPauseIfNoJobsInCli(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -737,6 +806,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testCanBreakImmediatelyIfNoJobsInWeb(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -785,6 +858,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testCanProcessJob(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -849,6 +926,9 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanLogCacheUpdateError(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -907,6 +987,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testCanPauseProcessingBasedOnConfiguration(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -976,6 +1060,10 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function testCanMarkFailedJobOnError(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
@@ -1039,6 +1127,9 @@ class JobRunnerTest extends TestCase
         $jobRunner->run();
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testThrowsOnAlreadyInitializedState(): void
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
