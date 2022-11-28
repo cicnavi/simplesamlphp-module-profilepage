@@ -22,11 +22,13 @@ test-74:
   stage: test
   image: cicnavi/dap:74
   script:
-    - *common-commands
+    - composer install --prefer-dist --no-progress --no-suggest
+    - composer run-script pre-commit
 
 # PHP latest
 test-08:
   stage: test
   image: cicnavi/dap:08
   script:
-    - *common-commands
+    - composer install --prefer-dist --no-progress --no-suggest
+    - composer run-script pre-commit
