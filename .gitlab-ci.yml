@@ -12,11 +12,6 @@ cache:
 stages:
   - test
 
-# Reusable commands
-.common-commands: &common-commands:
-  - composer install --prefer-dist --no-progress --no-suggest
-  - composer run-script pre-commit
-
 # PHP v7.4
 test-74:
   stage: test
