@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Helpers;
 
-use SimpleSAML\Module\accounting\Helpers\AttributesHelper;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;

@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Helpers;
 
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper
@@ -18,8 +20,8 @@ class InstanceBuilderUsingModuleConfigurationHelperTest extends TestCase
     protected BuildableUsingModuleConfigurationInterface $stub;
     /** @var class-string */
     protected string $stubClass;
-    protected \PHPUnit\Framework\MockObject\Stub $moduleConfigurationStub;
-    protected \PHPUnit\Framework\MockObject\Stub $loggerStub;
+    protected Stub $moduleConfigurationStub;
+    protected Stub $loggerStub;
 
     protected function setUp(): void
     {
@@ -38,6 +40,9 @@ class InstanceBuilderUsingModuleConfigurationHelperTest extends TestCase
         $this->loggerStub = $this->createStub(LoggerInterface::class);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCanBuildClassInstance(): void
     {
         /** @psalm-suppress InvalidArgument */

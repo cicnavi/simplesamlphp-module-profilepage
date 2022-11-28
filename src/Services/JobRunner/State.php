@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Services\JobRunner;
 
+use DateInterval;
+use DateTimeImmutable;
+
 class State
 {
     public const MAX_NUMBER_OF_MESSAGES_TO_KEEP = 100;
     public const DEFAULT_NUMBER_OF_MESSAGES_TO_KEEP = 10;
 
     protected int $jobRunnerId;
-    protected ?\DateTimeImmutable $startedAt;
-    protected \DateTimeImmutable $updatedAt;
-    protected ?\DateTimeImmutable $endedAt = null;
+    protected ?DateTimeImmutable $startedAt;
+    protected DateTimeImmutable $updatedAt;
+    protected ?DateTimeImmutable $endedAt = null;
     protected int $successfulJobsProcessed = 0;
     protected int $failedJobsProcessed = 0;
     /**
@@ -24,13 +27,13 @@ class State
 
     public function __construct(
         int $jobRunnerId,
-        \DateTimeImmutable $startedAt = null,
-        \DateTimeImmutable $updatedAt = null,
+        DateTimeImmutable $startedAt = null,
+        DateTimeImmutable $updatedAt = null,
         int $numberOfStatusMessagesToKeep = self::DEFAULT_NUMBER_OF_MESSAGES_TO_KEEP
     ) {
         $this->jobRunnerId = $jobRunnerId;
         $this->startedAt = $startedAt;
-        $this->updatedAt = $updatedAt ?? new \DateTimeImmutable();
+        $this->updatedAt = $updatedAt ?? new DateTimeImmutable();
 
         $this->numberOfStatusMessagesToKeep =
             $numberOfStatusMessagesToKeep > 0 && $numberOfStatusMessagesToKeep <= self::MAX_NUMBER_OF_MESSAGES_TO_KEEP ?
@@ -47,19 +50,19 @@ class State
     }
 
     /**
-     * @return ?\DateTimeImmutable
+     * @return ?DateTimeImmutable
      */
-    public function getStartedAt(): ?\DateTimeImmutable
+    public function getStartedAt(): ?DateTimeImmutable
     {
         return $this->startedAt;
     }
 
     /**
      * Set startedAt if not already set.
-     * @param \DateTimeImmutable $startedAt
+     * @param DateTimeImmutable $startedAt
      * @return bool True if set, false otherwise.
      */
-    public function setStartedAt(\DateTimeImmutable $startedAt): bool
+    public function setStartedAt(DateTimeImmutable $startedAt): bool
     {
         if ($this->startedAt === null) {
             $this->startedAt = $startedAt;
@@ -70,27 +73,27 @@ class State
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return DateTimeImmutable
      */
-    public function getUpdatedAt(): \DateTimeImmutable
+    public function getUpdatedAt(): DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
     /**
-     * @param \DateTimeImmutable $updatedAt
+     * @param DateTimeImmutable $updatedAt
      */
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
     /**
      * Set endedAt if not already set.
-     * @param \DateTimeImmutable $endedAt
+     * @param DateTimeImmutable $endedAt
      * @return bool True if set, false otherwise.
      */
-    public function setEndedAt(\DateTimeImmutable $endedAt): bool
+    public function setEndedAt(DateTimeImmutable $endedAt): bool
     {
         if ($this->endedAt === null) {
             $this->endedAt = $endedAt;
@@ -101,9 +104,9 @@ class State
     }
 
     /**
-     * @return ?\DateTimeImmutable
+     * @return ?DateTimeImmutable
      */
-    public function getEndedAt(): ?\DateTimeImmutable
+    public function getEndedAt(): ?DateTimeImmutable
     {
         return $this->endedAt;
     }
@@ -139,9 +142,9 @@ class State
         return $this->failedJobsProcessed;
     }
 
-    public function isStale(\DateInterval $threshold): bool
+    public function isStale(DateInterval $threshold): bool
     {
-        $minDateTime = (new \DateTimeImmutable())->sub($threshold);
+        $minDateTime = (new DateTimeImmutable())->sub($threshold);
 
         if ($this->getUpdatedAt() < $minDateTime) {
             return true;

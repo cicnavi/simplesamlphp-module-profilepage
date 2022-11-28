@@ -41,7 +41,7 @@ In config.php, search for the "module.enable" key and set 'accounting' to true:
 'module.enable' => [
     'accounting' => true,
     // ...
-    ],
+],
 // ...
 ```
 

@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 
+use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\MockObject\Stub;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawActivity;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +32,7 @@ class RawActivityTest extends TestCase
 
     protected array $rawRow;
     /**
-     * @var AbstractPlatform|AbstractPlatform&\PHPUnit\Framework\MockObject\Stub|\PHPUnit\Framework\MockObject\Stub
+     * @var AbstractPlatform|Stub
      */
     protected $abstractPlatformStub;
 
@@ -62,7 +66,7 @@ class RawActivityTest extends TestCase
         /** @psalm-suppress PossiblyInvalidArgument */
         $rawActivity = new RawActivity($this->rawRow, $this->abstractPlatformStub);
 
-        $this->assertInstanceOf(\DateTimeImmutable::class, $rawActivity->getHappenedAt());
+        $this->assertInstanceOf(DateTimeImmutable::class, $rawActivity->getHappenedAt());
         $this->assertSame($this->serviceProviderMetadata, $rawActivity->getServiceProviderMetadata());
         $this->assertSame($this->userAttributes, $rawActivity->getUserAttributes());
         $this->assertSame($this->clientIpAddress, $rawActivity->getClientIpAddress());

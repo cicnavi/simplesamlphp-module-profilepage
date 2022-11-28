@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Entities;
 
+use DateTimeImmutable;
+use PHPUnit\Framework\MockObject\Stub;
 use SimpleSAML\Module\accounting\Entities\Activity;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\ServiceProvider;
@@ -15,21 +17,21 @@ use SimpleSAML\Module\accounting\Entities\User;
 class ActivityTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|ServiceProvider|ServiceProvider&\PHPUnit\Framework\MockObject\Stub
+     * @var Stub|ServiceProvider
      */
     protected $serviceProviderStub;
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|User|User&\PHPUnit\Framework\MockObject\Stub
+     * @var Stub|User
      */
     protected $userStub;
-    protected \DateTimeImmutable $happenedAt;
+    protected DateTimeImmutable $happenedAt;
     protected string $clientIpAddress;
 
     public function setUp(): void
     {
         $this->serviceProviderStub = $this->createStub(ServiceProvider::class);
         $this->userStub = $this->createStub(User::class);
-        $this->happenedAt = new \DateTimeImmutable();
+        $this->happenedAt = new DateTimeImmutable();
         $this->clientIpAddress = '123.123.123.123';
     }
 

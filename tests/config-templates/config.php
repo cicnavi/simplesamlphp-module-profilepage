@@ -4,7 +4,11 @@
  * The configuration of SimpleSAMLphp
  */
 
-$httpUtils = new \SimpleSAML\Utils\HTTP();
+declare(strict_types=1);
+
+use SimpleSAML\Utils\HTTP;
+
+$httpUtils = new HTTP();
 
 $config = [
 

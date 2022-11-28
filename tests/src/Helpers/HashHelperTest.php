@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\Module\accounting\Helpers;
 use SimpleSAML\Module\accounting\Helpers\ArrayHelper;
 use SimpleSAML\Module\accounting\Helpers\HashHelper;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Helpers\HashHelper
@@ -20,12 +19,12 @@ class HashHelperTest extends TestCase
     protected string $data;
     protected string $dataSha256;
     /**
-     * @var \int[][]
+     * @var int[][]
      */
     protected array $unsortedArrayData;
     protected string $unsortedArraySha256;
     /**
-     * @var \int[][]
+     * @var int[][]
      */
     protected array $sortedArrayData;
     protected string $sortedArrayDataSha256;

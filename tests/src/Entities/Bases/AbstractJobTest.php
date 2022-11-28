@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Entities\Bases;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
@@ -24,7 +27,7 @@ class AbstractJobTest extends TestCase
     public function testCanInitializeProperties(): void
     {
         $id = 1;
-        $createdAt = new \DateTimeImmutable();
+        $createdAt = new DateTimeImmutable();
         $job = new class ($this->payload, $id, $createdAt) extends AbstractJob  {
             public function getType(): string
             {

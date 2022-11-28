@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Entities;
 
+use DateTimeImmutable;
+use PHPUnit\Framework\MockObject\Stub;
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\ServiceProvider;
@@ -13,21 +17,21 @@ use SimpleSAML\Module\accounting\Entities\User;
 class ConnectedServiceProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|ServiceProvider|ServiceProvider&\PHPUnit\Framework\MockObject\Stub
+     * @var Stub|ServiceProvider
      */
     protected $serviceProviderStub;
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|User|User&\PHPUnit\Framework\MockObject\Stub
+     * @var Stub|User
      */
     protected $userStub;
-    protected \DateTimeImmutable $dateTime;
+    protected DateTimeImmutable $dateTime;
     protected int $numberOfAuthentications;
 
     public function setUp(): void
     {
         $this->serviceProviderStub = $this->createStub(ServiceProvider::class);
         $this->userStub = $this->createStub(User::class);
-        $this->dateTime = new \DateTimeImmutable();
+        $this->dateTime = new DateTimeImmutable();
         $this->numberOfAuthentications = 1;
     }
 

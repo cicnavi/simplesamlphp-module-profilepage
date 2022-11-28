@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Providers\Builders;
 
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
@@ -31,9 +32,9 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  */
 class AuthenticationDataProviderBuilderTest extends TestCase
 {
-    protected \PHPUnit\Framework\MockObject\Stub $moduleConfigurationStub;
+    protected Stub $moduleConfigurationStub;
 
-    protected \PHPUnit\Framework\MockObject\Stub $loggerStub;
+    protected Stub $loggerStub;
     protected HelpersManager $helpersManager;
 
     protected function setUp(): void
@@ -60,6 +61,9 @@ class AuthenticationDataProviderBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCanBuildDataProvider(): void
     {
         /** @psalm-suppress InvalidArgument */

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal;
 
 use Psr\Log\LoggerInterface;
-use ReflectionClass;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;

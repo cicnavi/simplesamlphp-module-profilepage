@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Trackers\Builders;
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Trackers\Interfaces\AuthenticationDataTrackerInterface;

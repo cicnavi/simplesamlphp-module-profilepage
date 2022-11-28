@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Stores\Builders;
 
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
@@ -31,8 +32,8 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  */
 class JobsStoreBuilderTest extends TestCase
 {
-    protected \PHPUnit\Framework\MockObject\Stub $moduleConfigurationStub;
-    protected \PHPUnit\Framework\MockObject\Stub $loggerStub;
+    protected Stub $moduleConfigurationStub;
+    protected Stub $loggerStub;
     protected JobsStoreBuilder $jobsStoreBuilder;
     protected HelpersManager $helpersManager;
 
@@ -55,6 +56,9 @@ class JobsStoreBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanBuildJobsStore(): void
     {
         $this->assertInstanceOf(Store::class, $this->jobsStoreBuilder->build(Store::class));

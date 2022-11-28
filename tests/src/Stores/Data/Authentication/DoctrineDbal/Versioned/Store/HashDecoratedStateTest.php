@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 
+use PHPUnit\Framework\MockObject\Stub;
 use SimpleSAML\Module\accounting\Entities\Authentication\State;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\HashDecoratedState;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class HashDecoratedStateTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub|State|State&\PHPUnit\Framework\MockObject\Stub
+     * @var Stub|State
      */
     protected $stateStub;
     protected string $identityProviderEntityId;

@@ -14,6 +14,7 @@ use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
+use Throwable;
 
 class Accounting extends ProcessingFilter
 {
@@ -54,6 +55,7 @@ class Accounting extends ProcessingFilter
     }
 
     /**
+     * @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection Reference is actually used by SimpleSAMLphp
      */
     public function process(array &$state): void
     {
@@ -75,7 +77,7 @@ class Accounting extends ProcessingFilter
             foreach ($configuredTrackers as $tracker) {
                 ($this->authenticationDataTrackerBuilder->build($tracker))->process($authenticationEvent);
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Accounting error, skipping... Error was: %s.', $exception->getMessage());
             $this->logger->error($message, $state);
         }

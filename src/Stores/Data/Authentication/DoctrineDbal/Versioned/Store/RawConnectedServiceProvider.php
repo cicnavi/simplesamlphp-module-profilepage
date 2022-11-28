@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 
 use DateTimeImmutable;
@@ -109,6 +111,7 @@ class RawConnectedServiceProvider extends AbstractRawEntity
             throw new UnexpectedValueException($message);
         }
 
+        /** @noinspection DuplicatedCode */
         if (! is_string($rawRow[TableConstants::ENTITY_CONNECTED_ORGANIZATION_COLUMN_NAME_LAST_AUTHENTICATION_AT])) {
             $message = sprintf(
                 'Column %s must be string.',

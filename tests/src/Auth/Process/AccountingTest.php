@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Auth\Process;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Auth\Process\Accounting;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Authentication\State;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory;
-use SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 use SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned\Tracker;
 use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
@@ -36,13 +34,13 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  */
 class AccountingTest extends TestCase
 {
-    protected \PHPUnit\Framework\MockObject\Stub $moduleConfigurationStub;
-    protected \PHPUnit\Framework\MockObject\MockObject $loggerMock;
+    protected Stub $moduleConfigurationStub;
+    protected MockObject $loggerMock;
     protected array $filterConfig;
-    protected \PHPUnit\Framework\MockObject\MockObject $jobsStoreBuilderMock;
-    protected \PHPUnit\Framework\MockObject\MockObject $authenticationDataTrackerBuilderMock;
-    protected \PHPUnit\Framework\MockObject\MockObject $jobsStoreMock;
-    protected \PHPUnit\Framework\MockObject\MockObject $trackerMock;
+    protected MockObject $jobsStoreBuilderMock;
+    protected MockObject $authenticationDataTrackerBuilderMock;
+    protected MockObject $jobsStoreMock;
+    protected MockObject $trackerMock;
     protected array $sampleState;
     protected HelpersManager $helpersManager;
 

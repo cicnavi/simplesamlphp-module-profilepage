@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\accounting\Services;
 
 use Cicnavi\SimpleFileCache\SimpleFileCache;
+use DateInterval;
+use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -19,6 +21,7 @@ use SimpleSAML\Module\accounting\Services\JobRunner\State;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
 use SimpleSAML\Module\accounting\Trackers\Interfaces\AuthenticationDataTrackerInterface;
+use Throwable;
 
 class JobRunner
 {
@@ -43,12 +46,16 @@ class JobRunner
      */
     protected int $jobRunnerId;
     protected array $trackers;
-    protected \DateInterval $stateStaleThresholdInterval;
+    protected DateInterval $stateStaleThresholdInterval;
     protected RateLimiter $rateLimiter;
     protected HelpersManager $helpersManager;
-    protected ?\DateInterval $maximumExecutionTime;
+    protected ?DateInterval $maximumExecutionTime;
     protected ?int $shouldPauseAfterNumberOfJobsProcessed;
 
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
     public function __construct(
         ModuleConfiguration $moduleConfiguration,
         SspConfiguration $sspConfiguration,
@@ -77,7 +84,7 @@ class JobRunner
         $this->state = $state ?? new State($this->jobRunnerId);
 
         $this->trackers = $this->resolveTrackers();
-        $this->stateStaleThresholdInterval = new \DateInterval(self::STATE_STALE_THRESHOLD_INTERVAL);
+        $this->stateStaleThresholdInterval = new DateInterval(self::STATE_STALE_THRESHOLD_INTERVAL);
         $this->rateLimiter = $rateLimiter ?? new RateLimiter();
 
         $this->maximumExecutionTime = $this->resolveMaximumExecutionTime();
@@ -94,7 +101,7 @@ class JobRunner
     {
         try {
             $this->validatePreRunState();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Pre-run state validation failed. Clearing cached state and continuing. Error was %s',
                 $exception->getMessage()
@@ -106,7 +113,7 @@ class JobRunner
 
         try {
             $this->validateRunConditions();
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Run conditions are not met, stopping. Reason was: %s', $exception->getMessage());
             $this->logger->info($message);
             $this->state->addStatusMessage($message);
@@ -181,7 +188,7 @@ class JobRunner
                 } else {
                     $jobsProcessedSincePause++;
                 }
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 $message = sprintf('Error while processing jobs. Error was: %s', $exception->getMessage());
                 $context = [];
                 if (isset($job)) {
@@ -196,7 +203,7 @@ class JobRunner
 
         $this->clearCachedState();
 
-        $this->state->setEndedAt(new \DateTimeImmutable());
+        $this->state->setEndedAt(new DateTimeImmutable());
         return $this->state;
     }
 
@@ -222,7 +229,7 @@ class JobRunner
 
             try {
                 $this->validateSelfState();
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 $message = sprintf(
                     'Job runner state is not valid. Message was: %s',
                     $exception->getMessage()
@@ -246,13 +253,13 @@ class JobRunner
             if ($this->getCachedState() !== null) {
                 throw new UnexpectedValueException('Job runner state already initialized.');
             }
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf('Error initializing job runner state. Error was: %s.', $exception->getMessage());
             $this->logger->error($message);
             throw new Exception($message, (int)$exception->getCode(), $exception);
         }
 
-        $startedAt = new \DateTimeImmutable();
+        $startedAt = new DateTimeImmutable();
         $this->state->setStartedAt($startedAt);
         $this->updateCachedState($this->state, $startedAt);
     }
@@ -340,7 +347,7 @@ class JobRunner
             }
 
             return $cachedState->getJobRunnerId() !== $this->jobRunnerId;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error checking if another job runner is active. To play safe, we will assume true. ' .
                 'Error was: %s',
@@ -364,7 +371,7 @@ class JobRunner
             );
             $this->logger->debug('Successfully initialized cache using SSP datadir.');
             return $cache;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error initializing job runner cache using datadir. Error was: %s',
                 $exception->getMessage()
@@ -380,7 +387,7 @@ class JobRunner
             );
             $this->logger->debug('Successfully initialized job runner cache using SSP tempdir.');
             return $cache;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error initializing job runner cache using tempdir. Error was: %s.',
                 $exception->getMessage()
@@ -393,7 +400,7 @@ class JobRunner
             $cache = new SimpleFileCache(self::CACHE_NAME);
             $this->logger->debug('Successfully initialized cache using system tmp dir.');
             return $cache;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $message = sprintf(
                 'Error initializing job runner cache. Error was: %s.',
                 $exception->getMessage()
@@ -411,7 +418,7 @@ class JobRunner
         /** @psalm-suppress InvalidCatch */
         try {
             $this->cache->delete(self::CACHE_KEY_STATE);
-        } catch (\Throwable | InvalidArgumentException $exception) {
+        } catch (Throwable | InvalidArgumentException $exception) {
             $message = sprintf(
                 'Error clearing job runner cache. Error was: %s.',
                 $exception->getMessage()
@@ -435,7 +442,7 @@ class JobRunner
             } else {
                 return null;
             }
-        } catch (\Throwable | InvalidArgumentException $exception) {
+        } catch (Throwable | InvalidArgumentException $exception) {
             $message = sprintf('Error getting job runner state from cache. Error was: %s', $exception->getMessage());
             throw new Exception($message, (int)$exception->getCode(), $exception);
         }
@@ -444,15 +451,15 @@ class JobRunner
     /**
      * @throws Exception
      */
-    protected function updateCachedState(State $state, \DateTimeImmutable $updatedAt = null): void
+    protected function updateCachedState(State $state, DateTimeImmutable $updatedAt = null): void
     {
-        $updatedAt = $updatedAt ?? new \DateTimeImmutable();
+        $updatedAt = $updatedAt ?? new DateTimeImmutable();
         $state->setUpdatedAt($updatedAt);
 
         /** @psalm-suppress InvalidCatch */
         try {
             $this->cache->set(self::CACHE_KEY_STATE, $state);
-        } catch (\Throwable | InvalidArgumentException $exception) {
+        } catch (Throwable | InvalidArgumentException $exception) {
             $message = sprintf('Error setting job runner state. Error was: %s.', $exception->getMessage());
             $this->logger->error($message);
             throw new Exception($message, (int)$exception->getCode(), $exception);
@@ -527,7 +534,9 @@ class JobRunner
             return;
         }
 
+        /** @noinspection PhpComposerExtensionStubsInspection Module is still usable without this.*/
         pcntl_signal(SIGINT, [$this, 'handleInterrupt']);
+        /** @noinspection PhpComposerExtensionStubsInspection Module is still usable without this.*/
         pcntl_signal(SIGTERM, [$this, 'handleInterrupt']);
     }
 
@@ -543,7 +552,10 @@ class JobRunner
         $this->updateCachedState($this->state);
     }
 
-    protected function resolveMaximumExecutionTime(): ?\DateInterval
+    /**
+     * @throws \Exception
+     */
+    protected function resolveMaximumExecutionTime(): ?DateInterval
     {
         $maximumExecutionTime = $this->moduleConfiguration->getJobRunnerMaximumExecutionTime();
 
@@ -554,7 +566,7 @@ class JobRunner
 
         // We are in a "web" environment, so take max execution time ini setting into account.
         $iniMaximumExecutionTimeSeconds = (int)floor((int)ini_get('max_execution_time') * 0.8);
-        $iniMaximumExecutionTime = new \DateInterval('PT' . $iniMaximumExecutionTimeSeconds . 'S');
+        $iniMaximumExecutionTime = new DateInterval('PT' . $iniMaximumExecutionTimeSeconds . 'S');
 
         // If the module setting is null (meaning infinite), use the ini setting.
         if ($maximumExecutionTime === null) {
@@ -588,7 +600,7 @@ class JobRunner
         }
 
         $maxDateTime = $startedAt->add($this->maximumExecutionTime);
-        if ($maxDateTime > (new \DateTimeImmutable())) {
+        if ($maxDateTime > (new DateTimeImmutable())) {
             // Maximum has not been reached yet.
             return false;
         }

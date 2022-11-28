@@ -5,8 +5,10 @@ declare(strict_types=1);
 use SimpleSAML\Locale\Translate;
 use SimpleSAML\Module\accounting\Helpers\ModuleRoutesHelper;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\XHTML\Template;
 
-function accounting_hook_adminmenu(\SimpleSAML\XHTML\Template &$template): void
+/** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection Reference is actually used by SimpleSAMLphp */
+function accounting_hook_adminmenu(Template &$template): void
 {
     $menuKey = 'menu';
 
