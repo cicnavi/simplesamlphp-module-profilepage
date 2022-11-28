@@ -34,6 +34,17 @@ Module is installable using Composer:
 composer require cicnavi/simplesamlphp-module-accounting
 ```
 
+In config.php, search for the "module.enable" key and set 'accounting' to true:
+
+```php
+// ...
+'module.enable' => [
+    'accounting' => true,
+    // ...
+    ],
+// ...
+```
+
 Depending on used features, module also requires:
 - ext-redis: if PhpRedis is to be used as a store
 
