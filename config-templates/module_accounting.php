@@ -157,13 +157,13 @@ $config = [
      *
      * Maximum execution time for the job runner. You can use this option to limit job runner activity by combining
      * when the job runner will run (using cron configuration) and how long the job runner will be active
-     * (execution time). This can be null, meaning it will run indefinitely, or can be set as a duration
+     * (execution time). This can be false, meaning it will run indefinitely, or can be set as a duration
      * for DateInterval, examples being below. Note that when the job runner is run using Cron user
      * interface in SimpleSAMLphp, the duration will be taken from the 'max_execution_time' ini
      * setting, and will override this setting if ini setting is shorter.
      * @see https://www.php.net/manual/en/dateinterval.construct.php
      */
-    ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => null,
+    ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => false,
     //ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => 'PT9M', // 9 minutes
     //ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => 'PT59M', // 59 minutes
     //ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => 'P1D', // 1 day
@@ -172,7 +172,7 @@ $config = [
      * Number of processed jobs after which the job runner should take a 1-second pause.
      *
      * This option was introduced so that the job runner can act in a more resource friendly fashion when facing
-     * backend store. If the value is null, there will be no pause.
+     * backend store. If the value is false, there will be no pause.
      */
     ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => 10,
 

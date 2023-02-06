@@ -36,13 +36,13 @@
                         </ul>
 
                         <strong>{{ 'Information transfered to service'|trans }}</strong>
-                        <ul>
-                            {% for name, value in connectedServiceProvider.getUser.getAttributes %}
-                                <li>
-                                    {{ name|trans }}: {{ value|join(', ') }}
-                                </li>
-                            {% endfor %}
-                        </ul>
+
+                        {% for name, value in connectedServiceProvider.getUser.getAttributes %}
+                            <span class="label">
+                                {{ name|trans }}: {{ value|join(', ') }}
+                            </span>
+                        {% endfor %}
+
 
                         <strong>{{ 'Login details'|trans }}</strong>
                         <ul>

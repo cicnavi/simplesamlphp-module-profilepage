@@ -99,17 +99,6 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
     {
         $dateTime = (new DateTimeImmutable())->sub($retentionPolicy);
 
-        if ($dateTime === false) {
-            // @codeCoverageIgnoreStart
-            $message = sprintf(
-                'Could not create DateTime instance for data retention policy enforcement. Retention policy was: %s.',
-                var_export($retentionPolicy, true)
-            );
-            $this->logger->error($message);
-            throw new InvalidConfigurationException($message);
-            // @codeCoverageIgnoreEnd
-        }
-
         $this->dataStore->deleteDataOlderThan($dateTime);
     }
 }

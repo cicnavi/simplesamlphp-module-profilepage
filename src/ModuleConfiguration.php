@@ -87,7 +87,7 @@ class ModuleConfiguration
     {
         $value = $this->get(self::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME);
 
-        if (is_null($value)) {
+        if ($value === false) {
             return null;
         }
 
@@ -109,13 +109,13 @@ class ModuleConfiguration
     {
         $value = $this->get(self::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED);
 
-        if (is_null($value)) {
+        if ($value === false) {
             return null;
         }
 
         if (! is_int($value)) {
             $message = sprintf(
-                'Option \'%s\' must be defined either as null, or positive integer.',
+                'Option \'%s\' must be defined either as false, or positive integer.',
                 self::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED
             );
             throw new InvalidConfigurationException($message);
@@ -465,7 +465,6 @@ class ModuleConfiguration
 
     public function getTrackerDataRetentionPolicy(): ?DateInterval
     {
-        /** @var string|null $value */
         $value = $this->getConfiguration()
             ->getOptionalString(self::OPTION_TRACKER_DATA_RETENTION_POLICY, null);
 

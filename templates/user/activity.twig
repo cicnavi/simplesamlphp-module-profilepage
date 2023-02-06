@@ -36,13 +36,11 @@
                         <ul><li>{{ activity.getClientIpAddress|default(' / ') }}</li></ul>
 
                         <strong>{{ 'Information transfered to service'|trans }}</strong>
-                        <ul>
-                            {% for name, value in activity.getUser.getAttributes %}
-                                <li>
-                                    {{ name|trans }}: {{ value|join(', ') }}
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        {% for name, value in activity.getUser.getAttributes %}
+                            <span class="label">
+                                {{ name|trans }}: {{ value|join(', ') }}
+                            </span>
+                        {% endfor %}
                     </div>
                 </td>
             </tr>

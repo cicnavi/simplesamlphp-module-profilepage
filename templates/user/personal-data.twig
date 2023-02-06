@@ -25,9 +25,15 @@
             <tr>
                 <td>
                     {{ name|trans }}
-                    <a href="#"><img src="{{ asset('css/src/icons/i.svg', 'accounting') }}" alt="Info icon"></a>
+                    <div class="popup" onclick="doPopup('popup-{{ name }}')">
+                        <img src="{{ asset('css/src/icons/i.svg', 'accounting') }}" alt="Info icon"/>
+                        {% set helpId = 'help-attribute-' ~ name %}
+                        <span class="popuptext" id="popup-{{ name }}">
+                            {{ helpId|trans }}
+                        </span>
+                    </div>
                 </td>
-                <td>{{ value }}</td>
+                <td><span class="label">{{ value }}</span></td>
             </tr>
         {% endfor %}
     </table>
