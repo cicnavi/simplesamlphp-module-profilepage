@@ -219,7 +219,7 @@ class ModuleConfigurationTest extends TestCase
     {
         $moduleConfiguration = new ModuleConfiguration(
             null,
-            [ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => false]
+            [ModuleConfiguration::OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME => []]
         );
 
         $this->expectException(InvalidConfigurationException::class);
@@ -255,7 +255,7 @@ class ModuleConfigurationTest extends TestCase
     {
         $moduleConfiguration = new ModuleConfiguration(
             null,
-            [ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => null]
+            [ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => false]
         );
 
         $this->assertNull($moduleConfiguration->getJobRunnerShouldPauseAfterNumberOfJobsProcessed());
@@ -268,7 +268,7 @@ class ModuleConfigurationTest extends TestCase
     {
         $moduleConfiguration = new ModuleConfiguration(
             null,
-            [ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => false]
+            [ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => []]
         );
 
         $this->expectException(InvalidConfigurationException::class);

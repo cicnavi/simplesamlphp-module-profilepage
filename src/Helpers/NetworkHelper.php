@@ -8,7 +8,6 @@ class NetworkHelper
 {
     public function resolveClientIpAddress(string $clientIpAddress = null): ?string
     {
-        /** @var string|null $clientIpAddress */
         $clientIpAddress = $clientIpAddress ??
             $_SERVER['HTTP_CLIENT_IP'] ??
             $_SERVER['HTTP_X_FORWARDED_FOR'] ??

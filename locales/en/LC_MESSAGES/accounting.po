@@ -14,5 +14,3855 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
+msgid "help-attribute-hrEduPersonUniqueID"
+msgstr "Primjer prijevoda accounting"
+
 msgid "Accounting"
 msgstr "Accounting"
+
+msgid "Activity"
+msgstr "Activity"
+
+msgid "Time"
+msgstr "Time"
+
+msgid "Access"
+msgstr "Access"
+
+msgid "Sent data"
+msgstr "Sent data"
+
+
+
+
+# Attribute help messages
+msgid "help-attribute-hrEduPersonUniqueID"
+msgstr "Primjer prijevoda attr help"
+
+msgid "help-attribute-sn"
+msgstr "help-attribute-sn"
+
+msgid "help-attribute-telephoneNumber"
+msgstr "help-attribute-telephoneNumber"
+
+msgid "help-attribute-facsimileTelephoneNumber"
+msgstr "help-attribute-facsimileTelephoneNumber"
+
+msgid "help-attribute-postalAddress"
+msgstr "help-attribute-postalAddress"
+
+msgid "help-attribute-givenName"
+msgstr "help-attribute-givenName"
+
+msgid "help-attribute-homePhone"
+msgstr "help-attribute-homePhone"
+
+msgid "help-attribute-homePostalAddress"
+msgstr "help-attribute-homePostalAddress"
+
+msgid "help-attribute-mail"
+msgstr "help-attribute-mail"
+
+msgid "help-attribute-mobile"
+msgstr "help-attribute-mobile"
+
+msgid "help-attribute-preferredLanguage"
+msgstr "help-attribute-preferredLanguage"
+
+msgid "help-attribute-eduPersonPrincipalName"
+msgstr "help-attribute-eduPersonPrincipalName"
+
+msgid "help-attribute-eduPersonAffiliation"
+msgstr "help-attribute-eduPersonAffiliation"
+
+msgid "help-attribute-eduPersonScopedAffiliation"
+msgstr "help-attribute-eduPersonScopedAffiliation"
+
+msgid "help-attribute-eduPersonEntitlement"
+msgstr "help-attribute-eduPersonEntitlement"
+
+msgid "help-attribute-eduPersonOrgDN"
+msgstr "help-attribute-eduPersonOrgDN"
+
+msgid "help-attribute-eduPersonOrgUnitDN"
+msgstr "help-attribute-eduPersonOrgUnitDN"
+
+msgid "help-attribute-urn:schac:attribute-def:schacCountryOfCitizenship"
+msgstr "help-attribute-urn:schac:attribute-def:schacCountryOfCitizenship"
+
+msgid "help-attribute-urn:schac:attribute-def:schacCountryOfResidence"
+msgstr "help-attribute-urn:schac:attribute-def:schacCountryOfResidence"
+
+msgid "help-attribute-urn:schac:attribute-def:schacDateOfBirth"
+msgstr "help-attribute-urn:schac:attribute-def:schacDateOfBirth"
+
+msgid "help-attribute-urn:schac:attribute-def:schacExpiryDate"
+msgstr "help-attribute-urn:schac:attribute-def:schacExpiryDate"
+
+msgid "help-attribute-urn:schac:attribute-def:schacGender"
+msgstr "help-attribute-urn:schac:attribute-def:schacGender"
+
+msgid "help-attribute-urn:schac:attribute-def:schacHomeOrganization"
+msgstr "help-attribute-urn:schac:attribute-def:schacHomeOrganization"
+
+msgid "help-attribute-urn:schac:attribute-def:schacHomeOrganizationType"
+msgstr "help-attribute-urn:schac:attribute-def:schacHomeOrganizationType"
+
+msgid "help-attribute-urn:schac:attribute-def:schacMotherTongue"
+msgstr "help-attribute-urn:schac:attribute-def:schacMotherTongue"
+
+msgid "help-attribute-urn:schac:attribute-def:schacPersonalPosition"
+msgstr "help-attribute-urn:schac:attribute-def:schacPersonalPosition"
+
+msgid "help-attribute-urn:schac:attribute-def:schacPersonalTitle"
+msgstr "help-attribute-urn:schac:attribute-def:schacPersonalTitle"
+
+msgid "help-attribute-urn:schac:attribute-def:schacPersonalUniqueCode"
+msgstr "help-attribute-urn:schac:attribute-def:schacPersonalUniqueCode"
+
+msgid "help-attribute-urn:schac:attribute-def:schacPersonalUniqueID"
+msgstr "help-attribute-urn:schac:attribute-def:schacPersonalUniqueID"
+
+msgid "help-attribute-urn:schac:attribute-def:schacPlaceOfBirth"
+msgstr "help-attribute-urn:schac:attribute-def:schacPlaceOfBirth"
+
+msgid "help-attribute-urn:schac:attribute-def:schacProjectMembership"
+msgstr "help-attribute-urn:schac:attribute-def:schacProjectMembership"
+
+msgid "help-attribute-urn:schac:attribute-def:schacProjectSpecificRole"
+msgstr "help-attribute-urn:schac:attribute-def:schacProjectSpecificRole"
+
+msgid "help-attribute-urn:schac:attribute-def:schacSn1"
+msgstr "help-attribute-urn:schac:attribute-def:schacSn1"
+
+msgid "help-attribute-urn:schac:attribute-def:schacSn2"
+msgstr "help-attribute-urn:schac:attribute-def:schacSn2"
+
+msgid "help-attribute-urn:schac:attribute-def:schacUserPresenceID"
+msgstr "help-attribute-urn:schac:attribute-def:schacUserPresenceID"
+
+msgid "help-attribute-urn:schac:attribute-def:schacUserPrivateAttribute"
+msgstr "help-attribute-urn:schac:attribute-def:schacUserPrivateAttribute"
+
+msgid "help-attribute-urn:schac:attribute-def:schacUserStatus"
+msgstr "help-attribute-urn:schac:attribute-def:schacUserStatus"
+
+msgid "help-attribute-urn:schac:attribute-def:schacYearOfBirth"
+msgstr "help-attribute-urn:schac:attribute-def:schacYearOfBirth"
+
+msgid "help-attribute-facebook_user"
+msgstr "help-attribute-facebook_user"
+
+msgid "help-attribute-facebook_targetedID"
+msgstr "help-attribute-facebook_targetedID"
+
+msgid "help-attribute-facebook_cn"
+msgstr "help-attribute-facebook_cn"
+
+msgid "help-attribute-facebook.first_name"
+msgstr "help-attribute-facebook.first_name"
+
+msgid "help-attribute-facebook.last_name"
+msgstr "help-attribute-facebook.last_name"
+
+msgid "help-attribute-facebook.name"
+msgstr "help-attribute-facebook.name"
+
+msgid "help-attribute-facebook.email"
+msgstr "help-attribute-facebook.email"
+
+msgid "help-attribute-facebook.username"
+msgstr "help-attribute-facebook.username"
+
+msgid "help-attribute-facebook.profile_url"
+msgstr "help-attribute-facebook.profile_url"
+
+msgid "help-attribute-facebook.locale"
+msgstr "help-attribute-facebook.locale"
+
+msgid "help-attribute-facebook.about_me"
+msgstr "help-attribute-facebook.about_me"
+
+msgid "help-attribute-mobile"
+msgstr "help-attribute-mobile"
+
+msgid "help-attribute-displayName"
+msgstr "help-attribute-displayName"
+
+msgid "help-attribute-linkedin_user"
+msgstr "help-attribute-linkedin_user"
+
+msgid "help-attribute-linkedin_targetedID"
+msgstr "help-attribute-linkedin_targetedID"
+
+msgid "help-attribute-linkedin.firstName"
+msgstr "help-attribute-linkedin.firstName"
+
+msgid "help-attribute-linkedin.lastName"
+msgstr "help-attribute-linkedin.lastName"
+
+msgid "help-attribute-linkedin.id"
+msgstr "help-attribute-linkedin.id"
+
+msgid "help-attribute-linkedin.headline"
+msgstr "help-attribute-linkedin.headline"
+
+msgid "help-attribute-linkedin.summary"
+msgstr "help-attribute-linkedin.summary"
+
+msgid "help-attribute-c"
+msgstr "help-attribute-c"
+
+msgid "help-attribute-givenName"
+msgstr "help-attribute-givenName"
+
+msgid "help-attribute-mail"
+msgstr "help-attribute-mail"
+
+msgid "help-attribute-memberOf"
+msgstr "help-attribute-memberOf"
+
+msgid "help-attribute-postalcode"
+msgstr "help-attribute-postalcode"
+
+msgid "help-attribute-uid"
+msgstr "help-attribute-uid"
+
+msgid "help-attribute-sn"
+msgstr "help-attribute-sn"
+
+msgid "help-attribute-st"
+msgstr "help-attribute-st"
+
+msgid "help-attribute-streetaddress"
+msgstr "help-attribute-streetaddress"
+
+msgid "help-attribute-telephonenumber"
+msgstr "help-attribute-telephonenumber"
+
+msgid "help-attribute-aRecord"
+msgstr "help-attribute-aRecord"
+
+msgid "help-attribute-aliasedEntryName"
+msgstr "help-attribute-aliasedEntryName"
+
+msgid "help-attribute-aliasedObjectName"
+msgstr "help-attribute-aliasedObjectName"
+
+msgid "help-attribute-associatedDomain"
+msgstr "help-attribute-associatedDomain"
+
+msgid "help-attribute-associatedName"
+msgstr "help-attribute-associatedName"
+
+msgid "help-attribute-audio"
+msgstr "help-attribute-audio"
+
+msgid "help-attribute-authorityRevocationList"
+msgstr "help-attribute-authorityRevocationList"
+
+msgid "help-attribute-buildingName"
+msgstr "help-attribute-buildingName"
+
+msgid "help-attribute-businessCategory"
+msgstr "help-attribute-businessCategory"
+
+msgid "help-attribute-c"
+msgstr "help-attribute-c"
+
+msgid "help-attribute-cACertificate"
+msgstr "help-attribute-cACertificate"
+
+msgid "help-attribute-cNAMERecord"
+msgstr "help-attribute-cNAMERecord"
+
+msgid "help-attribute-carLicense"
+msgstr "help-attribute-carLicense"
+
+msgid "help-attribute-certificateRevocationList"
+msgstr "help-attribute-certificateRevocationList"
+
+msgid "help-attribute-cn"
+msgstr "help-attribute-cn"
+
+msgid "help-attribute-co"
+msgstr "help-attribute-co"
+
+msgid "help-attribute-commonName"
+msgstr "help-attribute-commonName"
+
+msgid "help-attribute-countryName"
+msgstr "help-attribute-countryName"
+
+msgid "help-attribute-crossCertificatePair"
+msgstr "help-attribute-crossCertificatePair"
+
+msgid "help-attribute-dITRedirect"
+msgstr "help-attribute-dITRedirect"
+
+msgid "help-attribute-dSAQuality"
+msgstr "help-attribute-dSAQuality"
+
+msgid "help-attribute-dc"
+msgstr "help-attribute-dc"
+
+msgid "help-attribute-deltaRevocationList"
+msgstr "help-attribute-deltaRevocationList"
+
+msgid "help-attribute-departmentNumber"
+msgstr "help-attribute-departmentNumber"
+
+msgid "help-attribute-description"
+msgstr "help-attribute-description"
+
+msgid "help-attribute-destinationIndicator"
+msgstr "help-attribute-destinationIndicator"
+
+msgid "help-attribute-displayName"
+msgstr "help-attribute-displayName"
+
+msgid "help-attribute-distinguishedName"
+msgstr "help-attribute-distinguishedName"
+
+msgid "help-attribute-dmdName"
+msgstr "help-attribute-dmdName"
+
+msgid "help-attribute-dnQualifier"
+msgstr "help-attribute-dnQualifier"
+
+msgid "help-attribute-documentAuthor"
+msgstr "help-attribute-documentAuthor"
+
+msgid "help-attribute-documentIdentifier"
+msgstr "help-attribute-documentIdentifier"
+
+msgid "help-attribute-documentLocation"
+msgstr "help-attribute-documentLocation"
+
+msgid "help-attribute-documentPublisher"
+msgstr "help-attribute-documentPublisher"
+
+msgid "help-attribute-documentTitle"
+msgstr "help-attribute-documentTitle"
+
+msgid "help-attribute-documentVersion"
+msgstr "help-attribute-documentVersion"
+
+msgid "help-attribute-domainComponent"
+msgstr "help-attribute-domainComponent"
+
+msgid "help-attribute-drink"
+msgstr "help-attribute-drink"
+
+msgid "help-attribute-eduOrgHomePageURI"
+msgstr "help-attribute-eduOrgHomePageURI"
+
+msgid "help-attribute-eduOrgIdentityAuthNPolicyURI"
+msgstr "help-attribute-eduOrgIdentityAuthNPolicyURI"
+
+msgid "help-attribute-eduOrgLegalName"
+msgstr "help-attribute-eduOrgLegalName"
+
+msgid "help-attribute-eduOrgSuperiorURI"
+msgstr "help-attribute-eduOrgSuperiorURI"
+
+msgid "help-attribute-eduOrgWhitePagesURI"
+msgstr "help-attribute-eduOrgWhitePagesURI"
+
+msgid "help-attribute-eduPersonAffiliation"
+msgstr "help-attribute-eduPersonAffiliation"
+
+msgid "help-attribute-eduPersonAssurance"
+msgstr "help-attribute-eduPersonAssurance"
+
+msgid "help-attribute-eduPersonEntitlement"
+msgstr "help-attribute-eduPersonEntitlement"
+
+msgid "help-attribute-eduPersonNickname"
+msgstr "help-attribute-eduPersonNickname"
+
+msgid "help-attribute-eduPersonOrgDN"
+msgstr "help-attribute-eduPersonOrgDN"
+
+msgid "help-attribute-eduPersonOrgUnitDN"
+msgstr "help-attribute-eduPersonOrgUnitDN"
+
+msgid "help-attribute-eduPersonPrimaryAffiliation"
+msgstr "help-attribute-eduPersonPrimaryAffiliation"
+
+msgid "help-attribute-eduPersonPrimaryOrgUnitDN"
+msgstr "help-attribute-eduPersonPrimaryOrgUnitDN"
+
+msgid "help-attribute-eduPersonPrincipalName"
+msgstr "help-attribute-eduPersonPrincipalName"
+
+msgid "help-attribute-eduPersonScopedAffiliation"
+msgstr "help-attribute-eduPersonScopedAffiliation"
+
+msgid "help-attribute-eduPersonTargetedID"
+msgstr "help-attribute-eduPersonTargetedID"
+
+msgid "help-attribute-eduPersonUniqueId"
+msgstr "help-attribute-eduPersonUniqueId"
+
+msgid "help-attribute-eduPersonOrcid"
+msgstr "help-attribute-eduPersonOrcid"
+
+msgid "help-attribute-email"
+msgstr "help-attribute-email"
+
+msgid "help-attribute-emailAddress"
+msgstr "help-attribute-emailAddress"
+
+msgid "help-attribute-employeeNumber"
+msgstr "help-attribute-employeeNumber"
+
+msgid "help-attribute-employeeType"
+msgstr "help-attribute-employeeType"
+
+msgid "help-attribute-enhancedSearchGuide"
+msgstr "help-attribute-enhancedSearchGuide"
+
+msgid "help-attribute-facsimileTelephoneNumber"
+msgstr "help-attribute-facsimileTelephoneNumber"
+
+msgid "help-attribute-favouriteDrink"
+msgstr "help-attribute-favouriteDrink"
+
+msgid "help-attribute-fax"
+msgstr "help-attribute-fax"
+
+msgid "help-attribute-federationFeideSchemaVersion"
+msgstr "help-attribute-federationFeideSchemaVersion"
+
+msgid "help-attribute-friendlyCountryName"
+msgstr "help-attribute-friendlyCountryName"
+
+msgid "help-attribute-generationQualifier"
+msgstr "help-attribute-generationQualifier"
+
+msgid "help-attribute-givenName"
+msgstr "help-attribute-givenName"
+
+msgid "help-attribute-gn"
+msgstr "help-attribute-gn"
+
+msgid "help-attribute-homePhone"
+msgstr "help-attribute-homePhone"
+
+msgid "help-attribute-homePostalAddress"
+msgstr "help-attribute-homePostalAddress"
+
+msgid "help-attribute-homeTelephoneNumber"
+msgstr "help-attribute-homeTelephoneNumber"
+
+msgid "help-attribute-host"
+msgstr "help-attribute-host"
+
+msgid "help-attribute-houseIdentifier"
+msgstr "help-attribute-houseIdentifier"
+
+msgid "help-attribute-info"
+msgstr "help-attribute-info"
+
+msgid "help-attribute-initials"
+msgstr "help-attribute-initials"
+
+msgid "help-attribute-internationaliSDNNumber"
+msgstr "help-attribute-internationaliSDNNumber"
+
+msgid "help-attribute-isMemberOf"
+msgstr "help-attribute-isMemberOf"
+
+msgid "help-attribute-janetMailbox"
+msgstr "help-attribute-janetMailbox"
+
+msgid "help-attribute-jpegPhoto"
+msgstr "help-attribute-jpegPhoto"
+
+msgid "help-attribute-knowledgeInformation"
+msgstr "help-attribute-knowledgeInformation"
+
+msgid "help-attribute-l"
+msgstr "help-attribute-l"
+
+msgid "help-attribute-labeledURI"
+msgstr "help-attribute-labeledURI"
+
+msgid "help-attribute-localityName"
+msgstr "help-attribute-localityName"
+
+msgid "help-attribute-mDRecord"
+msgstr "help-attribute-mDRecord"
+
+msgid "help-attribute-mXRecord"
+msgstr "help-attribute-mXRecord"
+
+msgid "help-attribute-mail"
+msgstr "help-attribute-mail"
+
+msgid "help-attribute-mailPreferenceOption"
+msgstr "help-attribute-mailPreferenceOption"
+
+msgid "help-attribute-manager"
+msgstr "help-attribute-manager"
+
+msgid "help-attribute-member"
+msgstr "help-attribute-member"
+
+msgid "help-attribute-mobile"
+msgstr "help-attribute-mobile"
+
+msgid "help-attribute-mobileTelephoneNumber"
+msgstr "help-attribute-mobileTelephoneNumber"
+
+msgid "help-attribute-nSRecord"
+msgstr "help-attribute-nSRecord"
+
+msgid "help-attribute-name"
+msgstr "help-attribute-name"
+
+msgid "help-attribute-norEduOrgAcronym"
+msgstr "help-attribute-norEduOrgAcronym"
+
+msgid "help-attribute-norEduOrgNIN"
+msgstr "help-attribute-norEduOrgNIN"
+
+msgid "help-attribute-norEduOrgSchemaVersion"
+msgstr "help-attribute-norEduOrgSchemaVersion"
+
+msgid "help-attribute-norEduOrgUniqueIdentifier"
+msgstr "help-attribute-norEduOrgUniqueIdentifier"
+
+msgid "help-attribute-norEduOrgUniqueNumber"
+msgstr "help-attribute-norEduOrgUniqueNumber"
+
+msgid "help-attribute-norEduOrgUnitUniqueIdentifier"
+msgstr "help-attribute-norEduOrgUnitUniqueIdentifier"
+
+msgid "help-attribute-norEduOrgUnitUniqueNumber"
+msgstr "help-attribute-norEduOrgUnitUniqueNumber"
+
+msgid "help-attribute-norEduPersonBirthDate"
+msgstr "help-attribute-norEduPersonBirthDate"
+
+msgid "help-attribute-norEduPersonLIN"
+msgstr "help-attribute-norEduPersonLIN"
+
+msgid "help-attribute-norEduPersonNIN"
+msgstr "help-attribute-norEduPersonNIN"
+
+msgid "help-attribute-o"
+msgstr "help-attribute-o"
+
+msgid "help-attribute-objectClass"
+msgstr "help-attribute-objectClass"
+
+msgid "help-attribute-organizationName"
+msgstr "help-attribute-organizationName"
+
+msgid "help-attribute-organizationalStatus"
+msgstr "help-attribute-organizationalStatus"
+
+msgid "help-attribute-organizationalUnitName"
+msgstr "help-attribute-organizationalUnitName"
+
+msgid "help-attribute-otherMailbox"
+msgstr "help-attribute-otherMailbox"
+
+msgid "help-attribute-ou"
+msgstr "help-attribute-ou"
+
+msgid "help-attribute-owner"
+msgstr "help-attribute-owner"
+
+msgid "help-attribute-pager"
+msgstr "help-attribute-pager"
+
+msgid "help-attribute-pagerTelephoneNumber"
+msgstr "help-attribute-pagerTelephoneNumber"
+
+msgid "help-attribute-personalSignature"
+msgstr "help-attribute-personalSignature"
+
+msgid "help-attribute-personalTitle"
+msgstr "help-attribute-personalTitle"
+
+msgid "help-attribute-photo"
+msgstr "help-attribute-photo"
+
+msgid "help-attribute-physicalDeliveryOfficeName"
+msgstr "help-attribute-physicalDeliveryOfficeName"
+
+msgid "help-attribute-pkcs9email"
+msgstr "help-attribute-pkcs9email"
+
+msgid "help-attribute-postOfficeBox"
+msgstr "help-attribute-postOfficeBox"
+
+msgid "help-attribute-postalAddress"
+msgstr "help-attribute-postalAddress"
+
+msgid "help-attribute-postalCode"
+msgstr "help-attribute-postalCode"
+
+msgid "help-attribute-preferredDeliveryMethod"
+msgstr "help-attribute-preferredDeliveryMethod"
+
+msgid "help-attribute-preferredLanguage"
+msgstr "help-attribute-preferredLanguage"
+
+msgid "help-attribute-presentationAddress"
+msgstr "help-attribute-presentationAddress"
+
+msgid "help-attribute-protocolInformation"
+msgstr "help-attribute-protocolInformation"
+
+msgid "help-attribute-pseudonym"
+msgstr "help-attribute-pseudonym"
+
+msgid "help-attribute-registeredAddress"
+msgstr "help-attribute-registeredAddress"
+
+msgid "help-attribute-rfc822Mailbox"
+msgstr "help-attribute-rfc822Mailbox"
+
+msgid "help-attribute-roleOccupant"
+msgstr "help-attribute-roleOccupant"
+
+msgid "help-attribute-roomNumber"
+msgstr "help-attribute-roomNumber"
+
+msgid "help-attribute-sOARecord"
+msgstr "help-attribute-sOARecord"
+
+msgid "help-attribute-schacCountryOfCitizenship"
+msgstr "help-attribute-schacCountryOfCitizenship"
+
+msgid "help-attribute-schacCountryOfResidence"
+msgstr "help-attribute-schacCountryOfResidence"
+
+msgid "help-attribute-schacDateOfBirth"
+msgstr "help-attribute-schacDateOfBirth"
+
+msgid "help-attribute-schacExpiryDate"
+msgstr "help-attribute-schacExpiryDate"
+
+msgid "help-attribute-schacGender"
+msgstr "help-attribute-schacGender"
+
+msgid "help-attribute-schacHomeOrganization"
+msgstr "help-attribute-schacHomeOrganization"
+
+msgid "help-attribute-schacHomeOrganizationType"
+msgstr "help-attribute-schacHomeOrganizationType"
+
+msgid "help-attribute-schacMotherTongue"
+msgstr "help-attribute-schacMotherTongue"
+
+msgid "help-attribute-schacPersonalPosition"
+msgstr "help-attribute-schacPersonalPosition"
+
+msgid "help-attribute-schacPersonalTitle"
+msgstr "help-attribute-schacPersonalTitle"
+
+msgid "help-attribute-schacPersonalUniqueCode"
+msgstr "help-attribute-schacPersonalUniqueCode"
+
+msgid "help-attribute-schacPersonalUniqueID"
+msgstr "help-attribute-schacPersonalUniqueID"
+
+msgid "help-attribute-schacPlaceOfBirth"
+msgstr "help-attribute-schacPlaceOfBirth"
+
+msgid "help-attribute-schacProjectMembership"
+msgstr "help-attribute-schacProjectMembership"
+
+msgid "help-attribute-schacProjectSpecificRole"
+msgstr "help-attribute-schacProjectSpecificRole"
+
+msgid "help-attribute-schacSn1"
+msgstr "help-attribute-schacSn1"
+
+msgid "help-attribute-schacSn2"
+msgstr "help-attribute-schacSn2"
+
+msgid "help-attribute-schacUserPresenceID"
+msgstr "help-attribute-schacUserPresenceID"
+
+msgid "help-attribute-schacUserPrivateAttribute"
+msgstr "help-attribute-schacUserPrivateAttribute"
+
+msgid "help-attribute-schacUserStatus"
+msgstr "help-attribute-schacUserStatus"
+
+msgid "help-attribute-schacYearOfBirth"
+msgstr "help-attribute-schacYearOfBirth"
+
+msgid "help-attribute-searchGuide"
+msgstr "help-attribute-searchGuide"
+
+msgid "help-attribute-secretary"
+msgstr "help-attribute-secretary"
+
+msgid "help-attribute-seeAlso"
+msgstr "help-attribute-seeAlso"
+
+msgid "help-attribute-serialNumber"
+msgstr "help-attribute-serialNumber"
+
+msgid "help-attribute-singleLevelQuality"
+msgstr "help-attribute-singleLevelQuality"
+
+msgid "help-attribute-sisSchoolGrade"
+msgstr "help-attribute-sisSchoolGrade"
+
+msgid "help-attribute-sisLegalGuardianFor"
+msgstr "help-attribute-sisLegalGuardianFor"
+
+msgid "help-attribute-sisOrgDepartment"
+msgstr "help-attribute-sisOrgDepartment"
+
+msgid "help-attribute-sisSchoolUnitCode"
+msgstr "help-attribute-sisSchoolUnitCode"
+
+msgid "help-attribute-sn"
+msgstr "help-attribute-sn"
+
+msgid "help-attribute-sshPublicKey"
+msgstr "help-attribute-sshPublicKey"
+
+msgid "help-attribute-st"
+msgstr "help-attribute-st"
+
+msgid "help-attribute-stateOrProvinceName"
+msgstr "help-attribute-stateOrProvinceName"
+
+msgid "help-attribute-street"
+msgstr "help-attribute-street"
+
+msgid "help-attribute-streetAddress"
+msgstr "help-attribute-streetAddress"
+
+msgid "help-attribute-subtreeMaximumQuality"
+msgstr "help-attribute-subtreeMaximumQuality"
+
+msgid "help-attribute-subtreeMinimumQuality"
+msgstr "help-attribute-subtreeMinimumQuality"
+
+msgid "help-attribute-supportedAlgorithms"
+msgstr "help-attribute-supportedAlgorithms"
+
+msgid "help-attribute-supportedApplicationContext"
+msgstr "help-attribute-supportedApplicationContext"
+
+msgid "help-attribute-surname"
+msgstr "help-attribute-surname"
+
+msgid "help-attribute-telephoneNumber"
+msgstr "help-attribute-telephoneNumber"
+
+msgid "help-attribute-teletexTerminalIdentifier"
+msgstr "help-attribute-teletexTerminalIdentifier"
+
+msgid "help-attribute-telexNumber"
+msgstr "help-attribute-telexNumber"
+
+msgid "help-attribute-textEncodedORAddress"
+msgstr "help-attribute-textEncodedORAddress"
+
+msgid "help-attribute-title"
+msgstr "help-attribute-title"
+
+msgid "help-attribute-uid"
+msgstr "help-attribute-uid"
+
+msgid "help-attribute-uniqueIdentifier"
+msgstr "help-attribute-uniqueIdentifier"
+
+msgid "help-attribute-uniqueMember"
+msgstr "help-attribute-uniqueMember"
+
+msgid "help-attribute-userCertificate"
+msgstr "help-attribute-userCertificate"
+
+msgid "help-attribute-userClass"
+msgstr "help-attribute-userClass"
+
+msgid "help-attribute-userPKCS12"
+msgstr "help-attribute-userPKCS12"
+
+msgid "help-attribute-userPassword"
+msgstr "help-attribute-userPassword"
+
+msgid "help-attribute-userSMIMECertificate"
+msgstr "help-attribute-userSMIMECertificate"
+
+msgid "help-attribute-userid"
+msgstr "help-attribute-userid"
+
+msgid "help-attribute-voPersonApplicationUID"
+msgstr "help-attribute-voPersonApplicationUID"
+
+msgid "help-attribute-voPersonAuthorName"
+msgstr "help-attribute-voPersonAuthorName"
+
+msgid "help-attribute-voPersonCertificateDN"
+msgstr "help-attribute-voPersonCertificateDN"
+
+msgid "help-attribute-voPersonCertificateIssuerDN"
+msgstr "help-attribute-voPersonCertificateIssuerDN"
+
+msgid "help-attribute-voPersonExternalID"
+msgstr "help-attribute-voPersonExternalID"
+
+msgid "help-attribute-voPersonID"
+msgstr "help-attribute-voPersonID"
+
+msgid "help-attribute-voPersonPolicyAgreement"
+msgstr "help-attribute-voPersonPolicyAgreement"
+
+msgid "help-attribute-voPersonSoRID"
+msgstr "help-attribute-voPersonSoRID"
+
+msgid "help-attribute-voPersonStatus"
+msgstr "help-attribute-voPersonStatus"
+
+msgid "help-attribute-voPersonAffiliation"
+msgstr "help-attribute-voPersonAffiliation"
+
+msgid "help-attribute-voPersonExternalAffiliation"
+msgstr "help-attribute-voPersonExternalAffiliation"
+
+msgid "help-attribute-voPersonScopedAffiliation"
+msgstr "help-attribute-voPersonScopedAffiliation"
+
+msgid "help-attribute-voPersonApplicationPassword"
+msgstr "help-attribute-voPersonApplicationPassword"
+
+msgid "help-attribute-voPersonVerifiedEmail"
+msgstr "help-attribute-voPersonVerifiedEmail"
+
+msgid "help-attribute-voPersonToken"
+msgstr "help-attribute-voPersonToken"
+
+msgid "help-attribute-voPosixAccountGecos"
+msgstr "help-attribute-voPosixAccountGecos"
+
+msgid "help-attribute-voPosixAccountGidNumber"
+msgstr "help-attribute-voPosixAccountGidNumber"
+
+msgid "help-attribute-voPosixAccountHomeDirectory"
+msgstr "help-attribute-voPosixAccountHomeDirectory"
+
+msgid "help-attribute-voPosixAccountLoginShell"
+msgstr "help-attribute-voPosixAccountLoginShell"
+
+msgid "help-attribute-voPosixAccountUidNumber"
+msgstr "help-attribute-voPosixAccountUidNumber"
+
+msgid "help-attribute-x121Address"
+msgstr "help-attribute-x121Address"
+
+msgid "help-attribute-x500UniqueIdentifier"
+msgstr "help-attribute-x500UniqueIdentifier"
+
+msgid "help-attribute-aRecord"
+msgstr "help-attribute-aRecord"
+
+msgid "help-attribute-aliasedEntryName"
+msgstr "help-attribute-aliasedEntryName"
+
+msgid "help-attribute-aliasedObjectName"
+msgstr "help-attribute-aliasedObjectName"
+
+msgid "help-attribute-associatedDomain"
+msgstr "help-attribute-associatedDomain"
+
+msgid "help-attribute-associatedName"
+msgstr "help-attribute-associatedName"
+
+msgid "help-attribute-audio"
+msgstr "help-attribute-audio"
+
+msgid "help-attribute-authorityRevocationList"
+msgstr "help-attribute-authorityRevocationList"
+
+msgid "help-attribute-buildingName"
+msgstr "help-attribute-buildingName"
+
+msgid "help-attribute-businessCategory"
+msgstr "help-attribute-businessCategory"
+
+msgid "help-attribute-c"
+msgstr "help-attribute-c"
+
+msgid "help-attribute-cACertificate"
+msgstr "help-attribute-cACertificate"
+
+msgid "help-attribute-cNAMERecord"
+msgstr "help-attribute-cNAMERecord"
+
+msgid "help-attribute-carLicense"
+msgstr "help-attribute-carLicense"
+
+msgid "help-attribute-certificateRevocationList"
+msgstr "help-attribute-certificateRevocationList"
+
+msgid "help-attribute-cn"
+msgstr "help-attribute-cn"
+
+msgid "help-attribute-co"
+msgstr "help-attribute-co"
+
+msgid "help-attribute-commonName"
+msgstr "help-attribute-commonName"
+
+msgid "help-attribute-countryName"
+msgstr "help-attribute-countryName"
+
+msgid "help-attribute-crossCertificatePair"
+msgstr "help-attribute-crossCertificatePair"
+
+msgid "help-attribute-dITRedirect"
+msgstr "help-attribute-dITRedirect"
+
+msgid "help-attribute-dSAQuality"
+msgstr "help-attribute-dSAQuality"
+
+msgid "help-attribute-dc"
+msgstr "help-attribute-dc"
+
+msgid "help-attribute-deltaRevocationList"
+msgstr "help-attribute-deltaRevocationList"
+
+msgid "help-attribute-departmentNumber"
+msgstr "help-attribute-departmentNumber"
+
+msgid "help-attribute-description"
+msgstr "help-attribute-description"
+
+msgid "help-attribute-destinationIndicator"
+msgstr "help-attribute-destinationIndicator"
+
+msgid "help-attribute-displayName"
+msgstr "help-attribute-displayName"
+
+msgid "help-attribute-distinguishedName"
+msgstr "help-attribute-distinguishedName"
+
+msgid "help-attribute-dmdName"
+msgstr "help-attribute-dmdName"
+
+msgid "help-attribute-dnQualifier"
+msgstr "help-attribute-dnQualifier"
+
+msgid "help-attribute-documentAuthor"
+msgstr "help-attribute-documentAuthor"
+
+msgid "help-attribute-documentIdentifier"
+msgstr "help-attribute-documentIdentifier"
+
+msgid "help-attribute-documentLocation"
+msgstr "help-attribute-documentLocation"
+
+msgid "help-attribute-documentPublisher"
+msgstr "help-attribute-documentPublisher"
+
+msgid "help-attribute-documentTitle"
+msgstr "help-attribute-documentTitle"
+
+msgid "help-attribute-documentVersion"
+msgstr "help-attribute-documentVersion"
+
+msgid "help-attribute-domainComponent"
+msgstr "help-attribute-domainComponent"
+
+msgid "help-attribute-drink"
+msgstr "help-attribute-drink"
+
+msgid "help-attribute-eduOrgHomePageURI"
+msgstr "help-attribute-eduOrgHomePageURI"
+
+msgid "help-attribute-eduOrgIdentityAuthNPolicyURI"
+msgstr "help-attribute-eduOrgIdentityAuthNPolicyURI"
+
+msgid "help-attribute-eduOrgLegalName"
+msgstr "help-attribute-eduOrgLegalName"
+
+msgid "help-attribute-eduOrgSuperiorURI"
+msgstr "help-attribute-eduOrgSuperiorURI"
+
+msgid "help-attribute-eduOrgWhitePagesURI"
+msgstr "help-attribute-eduOrgWhitePagesURI"
+
+msgid "help-attribute-eduPersonAffiliation"
+msgstr "help-attribute-eduPersonAffiliation"
+
+msgid "help-attribute-eduPersonAssurance"
+msgstr "help-attribute-eduPersonAssurance"
+
+msgid "help-attribute-eduPersonEntitlement"
+msgstr "help-attribute-eduPersonEntitlement"
+
+msgid "help-attribute-eduPersonNickname"
+msgstr "help-attribute-eduPersonNickname"
+
+msgid "help-attribute-eduPersonOrgDN"
+msgstr "help-attribute-eduPersonOrgDN"
+
+msgid "help-attribute-eduPersonOrgUnitDN"
+msgstr "help-attribute-eduPersonOrgUnitDN"
+
+msgid "help-attribute-eduPersonPrimaryAffiliation"
+msgstr "help-attribute-eduPersonPrimaryAffiliation"
+
+msgid "help-attribute-eduPersonPrimaryOrgUnitDN"
+msgstr "help-attribute-eduPersonPrimaryOrgUnitDN"
+
+msgid "help-attribute-eduPersonPrincipalName"
+msgstr "help-attribute-eduPersonPrincipalName"
+
+msgid "help-attribute-eduPersonScopedAffiliation"
+msgstr "help-attribute-eduPersonScopedAffiliation"
+
+msgid "help-attribute-eduPersonTargetedID"
+msgstr "help-attribute-eduPersonTargetedID"
+
+msgid "help-attribute-eduPersonUniqueId"
+msgstr "help-attribute-eduPersonUniqueId"
+
+msgid "help-attribute-email"
+msgstr "help-attribute-email"
+
+msgid "help-attribute-emailAddress"
+msgstr "help-attribute-emailAddress"
+
+msgid "help-attribute-employeeNumber"
+msgstr "help-attribute-employeeNumber"
+
+msgid "help-attribute-employeeType"
+msgstr "help-attribute-employeeType"
+
+msgid "help-attribute-enhancedSearchGuide"
+msgstr "help-attribute-enhancedSearchGuide"
+
+msgid "help-attribute-facsimileTelephoneNumber"
+msgstr "help-attribute-facsimileTelephoneNumber"
+
+msgid "help-attribute-favouriteDrink"
+msgstr "help-attribute-favouriteDrink"
+
+msgid "help-attribute-fax"
+msgstr "help-attribute-fax"
+
+msgid "help-attribute-federationFeideSchemaVersion"
+msgstr "help-attribute-federationFeideSchemaVersion"
+
+msgid "help-attribute-friendlyCountryName"
+msgstr "help-attribute-friendlyCountryName"
+
+msgid "help-attribute-generationQualifier"
+msgstr "help-attribute-generationQualifier"
+
+msgid "help-attribute-givenName"
+msgstr "help-attribute-givenName"
+
+msgid "help-attribute-gn"
+msgstr "help-attribute-gn"
+
+msgid "help-attribute-homePhone"
+msgstr "help-attribute-homePhone"
+
+msgid "help-attribute-homePostalAddress"
+msgstr "help-attribute-homePostalAddress"
+
+msgid "help-attribute-homeTelephoneNumber"
+msgstr "help-attribute-homeTelephoneNumber"
+
+msgid "help-attribute-host"
+msgstr "help-attribute-host"
+
+msgid "help-attribute-houseIdentifier"
+msgstr "help-attribute-houseIdentifier"
+
+msgid "help-attribute-info"
+msgstr "help-attribute-info"
+
+msgid "help-attribute-initials"
+msgstr "help-attribute-initials"
+
+msgid "help-attribute-internationaliSDNNumber"
+msgstr "help-attribute-internationaliSDNNumber"
+
+msgid "help-attribute-janetMailbox"
+msgstr "help-attribute-janetMailbox"
+
+msgid "help-attribute-jpegPhoto"
+msgstr "help-attribute-jpegPhoto"
+
+msgid "help-attribute-knowledgeInformation"
+msgstr "help-attribute-knowledgeInformation"
+
+msgid "help-attribute-l"
+msgstr "help-attribute-l"
+
+msgid "help-attribute-labeledURI"
+msgstr "help-attribute-labeledURI"
+
+msgid "help-attribute-localityName"
+msgstr "help-attribute-localityName"
+
+msgid "help-attribute-mDRecord"
+msgstr "help-attribute-mDRecord"
+
+msgid "help-attribute-mXRecord"
+msgstr "help-attribute-mXRecord"
+
+msgid "help-attribute-mail"
+msgstr "help-attribute-mail"
+
+msgid "help-attribute-mailPreferenceOption"
+msgstr "help-attribute-mailPreferenceOption"
+
+msgid "help-attribute-manager"
+msgstr "help-attribute-manager"
+
+msgid "help-attribute-member"
+msgstr "help-attribute-member"
+
+msgid "help-attribute-mobile"
+msgstr "help-attribute-mobile"
+
+msgid "help-attribute-mobileTelephoneNumber"
+msgstr "help-attribute-mobileTelephoneNumber"
+
+msgid "help-attribute-nSRecord"
+msgstr "help-attribute-nSRecord"
+
+msgid "help-attribute-name"
+msgstr "help-attribute-name"
+
+msgid "help-attribute-norEduOrgAcronym"
+msgstr "help-attribute-norEduOrgAcronym"
+
+msgid "help-attribute-norEduOrgNIN"
+msgstr "help-attribute-norEduOrgNIN"
+
+msgid "help-attribute-norEduOrgSchemaVersion"
+msgstr "help-attribute-norEduOrgSchemaVersion"
+
+msgid "help-attribute-norEduOrgUniqueIdentifier"
+msgstr "help-attribute-norEduOrgUniqueIdentifier"
+
+msgid "help-attribute-norEduOrgUniqueNumber"
+msgstr "help-attribute-norEduOrgUniqueNumber"
+
+msgid "help-attribute-norEduOrgUnitUniqueIdentifier"
+msgstr "help-attribute-norEduOrgUnitUniqueIdentifier"
+
+msgid "help-attribute-norEduOrgUnitUniqueNumber"
+msgstr "help-attribute-norEduOrgUnitUniqueNumber"
+
+msgid "help-attribute-norEduPersonBirthDate"
+msgstr "help-attribute-norEduPersonBirthDate"
+
+msgid "help-attribute-norEduPersonLIN"
+msgstr "help-attribute-norEduPersonLIN"
+
+msgid "help-attribute-norEduPersonNIN"
+msgstr "help-attribute-norEduPersonNIN"
+
+msgid "help-attribute-o"
+msgstr "help-attribute-o"
+
+msgid "help-attribute-objectClass"
+msgstr "help-attribute-objectClass"
+
+msgid "help-attribute-organizationName"
+msgstr "help-attribute-organizationName"
+
+msgid "help-attribute-organizationalStatus"
+msgstr "help-attribute-organizationalStatus"
+
+msgid "help-attribute-organizationalUnitName"
+msgstr "help-attribute-organizationalUnitName"
+
+msgid "help-attribute-otherMailbox"
+msgstr "help-attribute-otherMailbox"
+
+msgid "help-attribute-ou"
+msgstr "help-attribute-ou"
+
+msgid "help-attribute-owner"
+msgstr "help-attribute-owner"
+
+msgid "help-attribute-pager"
+msgstr "help-attribute-pager"
+
+msgid "help-attribute-pagerTelephoneNumber"
+msgstr "help-attribute-pagerTelephoneNumber"
+
+msgid "help-attribute-pairwise-id"
+msgstr "help-attribute-pairwise-id"
+
+msgid "help-attribute-personalSignature"
+msgstr "help-attribute-personalSignature"
+
+msgid "help-attribute-personalTitle"
+msgstr "help-attribute-personalTitle"
+
+msgid "help-attribute-photo"
+msgstr "help-attribute-photo"
+
+msgid "help-attribute-physicalDeliveryOfficeName"
+msgstr "help-attribute-physicalDeliveryOfficeName"
+
+msgid "help-attribute-pkcs9email"
+msgstr "help-attribute-pkcs9email"
+
+msgid "help-attribute-postOfficeBox"
+msgstr "help-attribute-postOfficeBox"
+
+msgid "help-attribute-postalAddress"
+msgstr "help-attribute-postalAddress"
+
+msgid "help-attribute-postalCode"
+msgstr "help-attribute-postalCode"
+
+msgid "help-attribute-preferredDeliveryMethod"
+msgstr "help-attribute-preferredDeliveryMethod"
+
+msgid "help-attribute-preferredLanguage"
+msgstr "help-attribute-preferredLanguage"
+
+msgid "help-attribute-presentationAddress"
+msgstr "help-attribute-presentationAddress"
+
+msgid "help-attribute-protocolInformation"
+msgstr "help-attribute-protocolInformation"
+
+msgid "help-attribute-pseudonym"
+msgstr "help-attribute-pseudonym"
+
+msgid "help-attribute-registeredAddress"
+msgstr "help-attribute-registeredAddress"
+
+msgid "help-attribute-rfc822Mailbox"
+msgstr "help-attribute-rfc822Mailbox"
+
+msgid "help-attribute-roleOccupant"
+msgstr "help-attribute-roleOccupant"
+
+msgid "help-attribute-roomNumber"
+msgstr "help-attribute-roomNumber"
+
+msgid "help-attribute-sOARecord"
+msgstr "help-attribute-sOARecord"
+
+msgid "help-attribute-schacCountryOfCitizenship"
+msgstr "help-attribute-schacCountryOfCitizenship"
+
+msgid "help-attribute-schacCountryOfResidence"
+msgstr "help-attribute-schacCountryOfResidence"
+
+msgid "help-attribute-schacDateOfBirth"
+msgstr "help-attribute-schacDateOfBirth"
+
+msgid "help-attribute-schacExpiryDate"
+msgstr "help-attribute-schacExpiryDate"
+
+msgid "help-attribute-schacGender"
+msgstr "help-attribute-schacGender"
+
+msgid "help-attribute-schacHomeOrganization"
+msgstr "help-attribute-schacHomeOrganization"
+
+msgid "help-attribute-schacHomeOrganizationType"
+msgstr "help-attribute-schacHomeOrganizationType"
+
+msgid "help-attribute-schacMotherTongue"
+msgstr "help-attribute-schacMotherTongue"
+
+msgid "help-attribute-schacPersonalPosition"
+msgstr "help-attribute-schacPersonalPosition"
+
+msgid "help-attribute-schacPersonalTitle"
+msgstr "help-attribute-schacPersonalTitle"
+
+msgid "help-attribute-schacPersonalUniqueCode"
+msgstr "help-attribute-schacPersonalUniqueCode"
+
+msgid "help-attribute-schacPersonalUniqueID"
+msgstr "help-attribute-schacPersonalUniqueID"
+
+msgid "help-attribute-schacPlaceOfBirth"
+msgstr "help-attribute-schacPlaceOfBirth"
+
+msgid "help-attribute-schacProjectMembership"
+msgstr "help-attribute-schacProjectMembership"
+
+msgid "help-attribute-schacProjectSpecificRole"
+msgstr "help-attribute-schacProjectSpecificRole"
+
+msgid "help-attribute-schacSn1"
+msgstr "help-attribute-schacSn1"
+
+msgid "help-attribute-schacSn2"
+msgstr "help-attribute-schacSn2"
+
+msgid "help-attribute-schacUserPresenceID"
+msgstr "help-attribute-schacUserPresenceID"
+
+msgid "help-attribute-schacUserPrivateAttribute"
+msgstr "help-attribute-schacUserPrivateAttribute"
+
+msgid "help-attribute-schacUserStatus"
+msgstr "help-attribute-schacUserStatus"
+
+msgid "help-attribute-schacYearOfBirth"
+msgstr "help-attribute-schacYearOfBirth"
+
+msgid "help-attribute-searchGuide"
+msgstr "help-attribute-searchGuide"
+
+msgid "help-attribute-secretary"
+msgstr "help-attribute-secretary"
+
+msgid "help-attribute-seeAlso"
+msgstr "help-attribute-seeAlso"
+
+msgid "help-attribute-serialNumber"
+msgstr "help-attribute-serialNumber"
+
+msgid "help-attribute-singleLevelQuality"
+msgstr "help-attribute-singleLevelQuality"
+
+msgid "help-attribute-sisSchoolGrade"
+msgstr "help-attribute-sisSchoolGrade"
+
+msgid "help-attribute-sisLegalGuardianFor"
+msgstr "help-attribute-sisLegalGuardianFor"
+
+msgid "help-attribute-sn"
+msgstr "help-attribute-sn"
+
+msgid "help-attribute-st"
+msgstr "help-attribute-st"
+
+msgid "help-attribute-stateOrProvinceName"
+msgstr "help-attribute-stateOrProvinceName"
+
+msgid "help-attribute-street"
+msgstr "help-attribute-street"
+
+msgid "help-attribute-streetAddress"
+msgstr "help-attribute-streetAddress"
+
+msgid "help-attribute-subject-id"
+msgstr "help-attribute-subject-id"
+
+msgid "help-attribute-subtreeMaximumQuality"
+msgstr "help-attribute-subtreeMaximumQuality"
+
+msgid "help-attribute-subtreeMinimumQuality"
+msgstr "help-attribute-subtreeMinimumQuality"
+
+msgid "help-attribute-supportedAlgorithms"
+msgstr "help-attribute-supportedAlgorithms"
+
+msgid "help-attribute-supportedApplicationContext"
+msgstr "help-attribute-supportedApplicationContext"
+
+msgid "help-attribute-surname"
+msgstr "help-attribute-surname"
+
+msgid "help-attribute-telephoneNumber"
+msgstr "help-attribute-telephoneNumber"
+
+msgid "help-attribute-teletexTerminalIdentifier"
+msgstr "help-attribute-teletexTerminalIdentifier"
+
+msgid "help-attribute-telexNumber"
+msgstr "help-attribute-telexNumber"
+
+msgid "help-attribute-textEncodedORAddress"
+msgstr "help-attribute-textEncodedORAddress"
+
+msgid "help-attribute-title"
+msgstr "help-attribute-title"
+
+msgid "help-attribute-uid"
+msgstr "help-attribute-uid"
+
+msgid "help-attribute-uniqueIdentifier"
+msgstr "help-attribute-uniqueIdentifier"
+
+msgid "help-attribute-uniqueMember"
+msgstr "help-attribute-uniqueMember"
+
+msgid "help-attribute-userCertificate"
+msgstr "help-attribute-userCertificate"
+
+msgid "help-attribute-userClass"
+msgstr "help-attribute-userClass"
+
+msgid "help-attribute-userPKCS12"
+msgstr "help-attribute-userPKCS12"
+
+msgid "help-attribute-userPassword"
+msgstr "help-attribute-userPassword"
+
+msgid "help-attribute-userSMIMECertificate"
+msgstr "help-attribute-userSMIMECertificate"
+
+msgid "help-attribute-userid"
+msgstr "help-attribute-userid"
+
+msgid "help-attribute-x121Address"
+msgstr "help-attribute-x121Address"
+
+msgid "help-attribute-x500UniqueIdentifier"
+msgstr "help-attribute-x500UniqueIdentifier"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfCitizenship"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfCitizenship"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfResidence"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfResidence"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacDateOfBirth"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacDateOfBirth"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacExpiryDate"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacExpiryDate"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacGender"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacGender"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganization"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganizationType"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganizationType"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacMotherTongue"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacMotherTongue"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalPosition"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalPosition"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalTitle"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalTitle"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueCode"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueCode"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueID"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueID"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPlaceOfBirth"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPlaceOfBirth"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacProjectMembership"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacProjectMembership"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacProjectSpecificRole"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacProjectSpecificRole"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacSn1"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacSn1"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacSn2"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacSn2"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacUserPresenceID"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacUserPresenceID"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacUserPrivateAttribute"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacUserPrivateAttribute"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacUserStatus"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacUserStatus"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacYearOfBirth"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacYearOfBirth"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.41"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.41"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.3"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.3"
+
+msgid "help-attribute-urn:oid:2.5.4.3"
+msgstr "help-attribute-urn:oid:2.5.4.3"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.241"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.241"
+
+msgid "help-attribute-urn:oid:2.5.4.4"
+msgstr "help-attribute-urn:oid:2.5.4.4"
+
+msgid "help-attribute-urn:oid:2.5.4.42"
+msgstr "help-attribute-urn:oid:2.5.4.42"
+
+msgid "help-attribute-urn:oid:2.16.756.1.2.5.1.1.1"
+msgstr "help-attribute-urn:oid:2.16.756.1.2.5.1.1.1"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.1"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.1"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.10"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.10"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.11"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.11"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.12"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.12"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.13"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.13"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.14"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.14"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.15"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.15"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.2"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.2"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.20"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.20"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.21"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.21"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.22"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.22"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.25"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.25"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.26"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.26"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.27"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.27"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.28"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.28"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.29"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.29"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.3"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.3"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.30"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.30"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.31"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.31"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.37"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.37"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.38"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.38"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.39"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.39"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.4"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.4"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.40"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.40"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.41"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.41"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.42"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.42"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.43"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.43"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.44"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.44"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.45"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.45"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.46"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.46"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.47"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.47"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.48"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.48"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.49"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.49"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.5"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.5"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.50"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.50"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.51"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.51"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.52"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.52"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.53"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.53"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.54"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.54"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.55"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.55"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.56"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.56"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.6"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.6"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.60"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.60"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.7"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.7"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.8"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.8"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.9"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.9"
+
+msgid "help-attribute-urn:oid:1.2.840.113549.1.9.1"
+msgstr "help-attribute-urn:oid:1.2.840.113549.1.9.1"
+
+msgid "help-attribute-urn:oid:1.2.752.194.10.2.2"
+msgstr "help-attribute-urn:oid:1.2.752.194.10.2.2"
+
+msgid "help-attribute-urn:oid:1.2.752.194.10.2.1"
+msgstr "help-attribute-urn:oid:1.2.752.194.10.2.1"
+
+msgid "help-attribute-urn:oid:1.2.752.194.10.3"
+msgstr "help-attribute-urn:oid:1.2.752.194.10.3"
+
+msgid "help-attribute-urn:oid:1.2.752.194.10.2.4"
+msgstr "help-attribute-urn:oid:1.2.752.194.10.2.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.1"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.1"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.11"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.11"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.12"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.12"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.2"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.2"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.4"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.5"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.5"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.6"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.6"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.7"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.7"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.8"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.8"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.9"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.9"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.24552.500.1.1.1.13"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.24552.500.1.1.1.13"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.250.1.57"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.250.1.57"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.1"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.1"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.11"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.11"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.10"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.10"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.13"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.13"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.16"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.16"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.2"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.2"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.4"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.5"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.5"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.8"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.8"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.9"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.9"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.2"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.2"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.4"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.5"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.5"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.6"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.6"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.5.1.1"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.5.1.1"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.0.2.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.0.2.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.1"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.1"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.2"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.2"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.4"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.5"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.5"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.6"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.6"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.7"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.7"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.8"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.8"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.9"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.9"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.10"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.10"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.11"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.11"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.12"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.12"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.13"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.13"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.14"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.14"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.15"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.15"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.17"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.17"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.18"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.18"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.19"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.19"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.20"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.20"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.21"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.21"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.1"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.1"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.2"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.2"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.4"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.5"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.5"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.6"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.6"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.7"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.7"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.8"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.8"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.9"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.9"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.10"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.10"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.11"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.11"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.12"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.12"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.13"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.13"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.14"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.14"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.15"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.1.15"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.2.1"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.2.1"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.2.2"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.2.2"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.2.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.2.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.2.4"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.2.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.2.5"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.4.2.5"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.1"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.1"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.2"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.2"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.216"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.216"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.241"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.241"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.3"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.3"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.39"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.39"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.4"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.4"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.40"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.40"
+
+msgid "help-attribute-urn:oid:2.5.4.0"
+msgstr "help-attribute-urn:oid:2.5.4.0"
+
+msgid "help-attribute-urn:oid:2.5.4.1"
+msgstr "help-attribute-urn:oid:2.5.4.1"
+
+msgid "help-attribute-urn:oid:2.5.4.10"
+msgstr "help-attribute-urn:oid:2.5.4.10"
+
+msgid "help-attribute-urn:oid:2.5.4.11"
+msgstr "help-attribute-urn:oid:2.5.4.11"
+
+msgid "help-attribute-urn:oid:2.5.4.12"
+msgstr "help-attribute-urn:oid:2.5.4.12"
+
+msgid "help-attribute-urn:oid:2.5.4.13"
+msgstr "help-attribute-urn:oid:2.5.4.13"
+
+msgid "help-attribute-urn:oid:2.5.4.14"
+msgstr "help-attribute-urn:oid:2.5.4.14"
+
+msgid "help-attribute-urn:oid:2.5.4.15"
+msgstr "help-attribute-urn:oid:2.5.4.15"
+
+msgid "help-attribute-urn:oid:2.5.4.16"
+msgstr "help-attribute-urn:oid:2.5.4.16"
+
+msgid "help-attribute-urn:oid:2.5.4.17"
+msgstr "help-attribute-urn:oid:2.5.4.17"
+
+msgid "help-attribute-urn:oid:2.5.4.18"
+msgstr "help-attribute-urn:oid:2.5.4.18"
+
+msgid "help-attribute-urn:oid:2.5.4.19"
+msgstr "help-attribute-urn:oid:2.5.4.19"
+
+msgid "help-attribute-urn:oid:2.5.4.2"
+msgstr "help-attribute-urn:oid:2.5.4.2"
+
+msgid "help-attribute-urn:oid:2.5.4.20"
+msgstr "help-attribute-urn:oid:2.5.4.20"
+
+msgid "help-attribute-urn:oid:2.5.4.21"
+msgstr "help-attribute-urn:oid:2.5.4.21"
+
+msgid "help-attribute-urn:oid:2.5.4.22"
+msgstr "help-attribute-urn:oid:2.5.4.22"
+
+msgid "help-attribute-urn:oid:2.5.4.23"
+msgstr "help-attribute-urn:oid:2.5.4.23"
+
+msgid "help-attribute-urn:oid:2.5.4.24"
+msgstr "help-attribute-urn:oid:2.5.4.24"
+
+msgid "help-attribute-urn:oid:2.5.4.25"
+msgstr "help-attribute-urn:oid:2.5.4.25"
+
+msgid "help-attribute-urn:oid:2.5.4.26"
+msgstr "help-attribute-urn:oid:2.5.4.26"
+
+msgid "help-attribute-urn:oid:2.5.4.27"
+msgstr "help-attribute-urn:oid:2.5.4.27"
+
+msgid "help-attribute-urn:oid:2.5.4.28"
+msgstr "help-attribute-urn:oid:2.5.4.28"
+
+msgid "help-attribute-urn:oid:2.5.4.29"
+msgstr "help-attribute-urn:oid:2.5.4.29"
+
+msgid "help-attribute-urn:oid:2.5.4.3"
+msgstr "help-attribute-urn:oid:2.5.4.3"
+
+msgid "help-attribute-urn:oid:2.5.4.30"
+msgstr "help-attribute-urn:oid:2.5.4.30"
+
+msgid "help-attribute-urn:oid:2.5.4.31"
+msgstr "help-attribute-urn:oid:2.5.4.31"
+
+msgid "help-attribute-urn:oid:2.5.4.32"
+msgstr "help-attribute-urn:oid:2.5.4.32"
+
+msgid "help-attribute-urn:oid:2.5.4.33"
+msgstr "help-attribute-urn:oid:2.5.4.33"
+
+msgid "help-attribute-urn:oid:2.5.4.34"
+msgstr "help-attribute-urn:oid:2.5.4.34"
+
+msgid "help-attribute-urn:oid:2.5.4.35"
+msgstr "help-attribute-urn:oid:2.5.4.35"
+
+msgid "help-attribute-urn:oid:2.5.4.36"
+msgstr "help-attribute-urn:oid:2.5.4.36"
+
+msgid "help-attribute-urn:oid:2.5.4.37"
+msgstr "help-attribute-urn:oid:2.5.4.37"
+
+msgid "help-attribute-urn:oid:2.5.4.38"
+msgstr "help-attribute-urn:oid:2.5.4.38"
+
+msgid "help-attribute-urn:oid:2.5.4.39"
+msgstr "help-attribute-urn:oid:2.5.4.39"
+
+msgid "help-attribute-urn:oid:2.5.4.4"
+msgstr "help-attribute-urn:oid:2.5.4.4"
+
+msgid "help-attribute-urn:oid:2.5.4.40"
+msgstr "help-attribute-urn:oid:2.5.4.40"
+
+msgid "help-attribute-urn:oid:2.5.4.41"
+msgstr "help-attribute-urn:oid:2.5.4.41"
+
+msgid "help-attribute-urn:oid:2.5.4.42"
+msgstr "help-attribute-urn:oid:2.5.4.42"
+
+msgid "help-attribute-urn:oid:2.5.4.43"
+msgstr "help-attribute-urn:oid:2.5.4.43"
+
+msgid "help-attribute-urn:oid:2.5.4.44"
+msgstr "help-attribute-urn:oid:2.5.4.44"
+
+msgid "help-attribute-urn:oid:2.5.4.45"
+msgstr "help-attribute-urn:oid:2.5.4.45"
+
+msgid "help-attribute-urn:oid:2.5.4.46"
+msgstr "help-attribute-urn:oid:2.5.4.46"
+
+msgid "help-attribute-urn:oid:2.5.4.47"
+msgstr "help-attribute-urn:oid:2.5.4.47"
+
+msgid "help-attribute-urn:oid:2.5.4.48"
+msgstr "help-attribute-urn:oid:2.5.4.48"
+
+msgid "help-attribute-urn:oid:2.5.4.49"
+msgstr "help-attribute-urn:oid:2.5.4.49"
+
+msgid "help-attribute-urn:oid:2.5.4.5"
+msgstr "help-attribute-urn:oid:2.5.4.5"
+
+msgid "help-attribute-urn:oid:2.5.4.50"
+msgstr "help-attribute-urn:oid:2.5.4.50"
+
+msgid "help-attribute-urn:oid:2.5.4.51"
+msgstr "help-attribute-urn:oid:2.5.4.51"
+
+msgid "help-attribute-urn:oid:2.5.4.52"
+msgstr "help-attribute-urn:oid:2.5.4.52"
+
+msgid "help-attribute-urn:oid:2.5.4.53"
+msgstr "help-attribute-urn:oid:2.5.4.53"
+
+msgid "help-attribute-urn:oid:2.5.4.54"
+msgstr "help-attribute-urn:oid:2.5.4.54"
+
+msgid "help-attribute-urn:oid:2.5.4.6"
+msgstr "help-attribute-urn:oid:2.5.4.6"
+
+msgid "help-attribute-urn:oid:2.5.4.65"
+msgstr "help-attribute-urn:oid:2.5.4.65"
+
+msgid "help-attribute-urn:oid:2.5.4.7"
+msgstr "help-attribute-urn:oid:2.5.4.7"
+
+msgid "help-attribute-urn:oid:2.5.4.8"
+msgstr "help-attribute-urn:oid:2.5.4.8"
+
+msgid "help-attribute-urn:oid:2.5.4.9"
+msgstr "help-attribute-urn:oid:2.5.4.9"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.1"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.1"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.10"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.10"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.11"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.11"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.12"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.12"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.13"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.13"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.14"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.14"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.15"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.15"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.2"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.2"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.20"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.20"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.21"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.21"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.22"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.22"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.25"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.25"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.26"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.26"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.27"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.27"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.28"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.28"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.29"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.29"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.3"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.3"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.30"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.30"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.31"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.31"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.37"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.37"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.38"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.38"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.39"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.39"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.4"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.4"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.40"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.40"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.41"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.41"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.42"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.42"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.43"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.43"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.44"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.44"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.45"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.45"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.46"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.46"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.47"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.47"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.48"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.48"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.49"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.49"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.5"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.5"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.50"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.50"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.51"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.51"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.52"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.52"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.53"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.53"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.54"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.54"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.55"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.55"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.56"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.56"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.6"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.6"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.60"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.60"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.7"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.7"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.8"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.8"
+
+msgid "help-attribute-urn:oid:0.9.2342.19200300.100.1.9"
+msgstr "help-attribute-urn:oid:0.9.2342.19200300.100.1.9"
+
+msgid "help-attribute-urn:oid:1.2.840.113549.1.9.1"
+msgstr "help-attribute-urn:oid:1.2.840.113549.1.9.1"
+
+msgid "help-attribute-urn:oid:1.2.752.194.10.2.2"
+msgstr "help-attribute-urn:oid:1.2.752.194.10.2.2"
+
+msgid "help-attribute-urn:oid:1.2.752.194.10.2.1"
+msgstr "help-attribute-urn:oid:1.2.752.194.10.2.1"
+
+msgid "help-attribute-urn:oid:1.2.752.194.10.3"
+msgstr "help-attribute-urn:oid:1.2.752.194.10.3"
+
+msgid "help-attribute-urn:oid:1.2.752.194.10.2.4"
+msgstr "help-attribute-urn:oid:1.2.752.194.10.2.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.1"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.1"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.11"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.11"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.12"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.12"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.2"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.2"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.4"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.5"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.5"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.6"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.6"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.7"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.7"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.8"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.8"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.9"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.2428.90.1.9"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.250.1.57"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.250.1.57"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.1"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.1"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.11"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.11"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.10"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.10"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.13"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.13"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.2"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.2"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.4"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.5"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.5"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.8"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.8"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.9"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.1.1.9"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.2"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.2"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.4"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.5"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.5"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.6"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.5923.1.2.1.6"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.0.2.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.0.2.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.1"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.1"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.2"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.2"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.3"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.3"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.4"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.4"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.5"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.5"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.6"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.6"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.7"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.7"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.8"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.8"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.9"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.9"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.10"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.10"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.11"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.11"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.12"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.12"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.13"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.13"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.14"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.14"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.15"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.15"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.17"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.17"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.18"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.18"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.19"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.19"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.20"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.20"
+
+msgid "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.21"
+msgstr "help-attribute-urn:oid:1.3.6.1.4.1.25178.1.2.21"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.1"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.1"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.2"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.2"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.216"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.216"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.241"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.241"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.3"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.3"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.39"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.39"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.4"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.4"
+
+msgid "help-attribute-urn:oid:2.16.840.1.113730.3.1.40"
+msgstr "help-attribute-urn:oid:2.16.840.1.113730.3.1.40"
+
+msgid "help-attribute-urn:oid:2.5.4.0"
+msgstr "help-attribute-urn:oid:2.5.4.0"
+
+msgid "help-attribute-urn:oid:2.5.4.1"
+msgstr "help-attribute-urn:oid:2.5.4.1"
+
+msgid "help-attribute-urn:oid:2.5.4.10"
+msgstr "help-attribute-urn:oid:2.5.4.10"
+
+msgid "help-attribute-urn:oid:2.5.4.11"
+msgstr "help-attribute-urn:oid:2.5.4.11"
+
+msgid "help-attribute-urn:oid:2.5.4.12"
+msgstr "help-attribute-urn:oid:2.5.4.12"
+
+msgid "help-attribute-urn:oid:2.5.4.13"
+msgstr "help-attribute-urn:oid:2.5.4.13"
+
+msgid "help-attribute-urn:oid:2.5.4.14"
+msgstr "help-attribute-urn:oid:2.5.4.14"
+
+msgid "help-attribute-urn:oid:2.5.4.15"
+msgstr "help-attribute-urn:oid:2.5.4.15"
+
+msgid "help-attribute-urn:oid:2.5.4.16"
+msgstr "help-attribute-urn:oid:2.5.4.16"
+
+msgid "help-attribute-urn:oid:2.5.4.17"
+msgstr "help-attribute-urn:oid:2.5.4.17"
+
+msgid "help-attribute-urn:oid:2.5.4.18"
+msgstr "help-attribute-urn:oid:2.5.4.18"
+
+msgid "help-attribute-urn:oid:2.5.4.19"
+msgstr "help-attribute-urn:oid:2.5.4.19"
+
+msgid "help-attribute-urn:oid:2.5.4.2"
+msgstr "help-attribute-urn:oid:2.5.4.2"
+
+msgid "help-attribute-urn:oid:2.5.4.20"
+msgstr "help-attribute-urn:oid:2.5.4.20"
+
+msgid "help-attribute-urn:oid:2.5.4.21"
+msgstr "help-attribute-urn:oid:2.5.4.21"
+
+msgid "help-attribute-urn:oid:2.5.4.22"
+msgstr "help-attribute-urn:oid:2.5.4.22"
+
+msgid "help-attribute-urn:oid:2.5.4.23"
+msgstr "help-attribute-urn:oid:2.5.4.23"
+
+msgid "help-attribute-urn:oid:2.5.4.24"
+msgstr "help-attribute-urn:oid:2.5.4.24"
+
+msgid "help-attribute-urn:oid:2.5.4.25"
+msgstr "help-attribute-urn:oid:2.5.4.25"
+
+msgid "help-attribute-urn:oid:2.5.4.26"
+msgstr "help-attribute-urn:oid:2.5.4.26"
+
+msgid "help-attribute-urn:oid:2.5.4.27"
+msgstr "help-attribute-urn:oid:2.5.4.27"
+
+msgid "help-attribute-urn:oid:2.5.4.28"
+msgstr "help-attribute-urn:oid:2.5.4.28"
+
+msgid "help-attribute-urn:oid:2.5.4.29"
+msgstr "help-attribute-urn:oid:2.5.4.29"
+
+msgid "help-attribute-urn:oid:2.5.4.3"
+msgstr "help-attribute-urn:oid:2.5.4.3"
+
+msgid "help-attribute-urn:oid:2.5.4.30"
+msgstr "help-attribute-urn:oid:2.5.4.30"
+
+msgid "help-attribute-urn:oid:2.5.4.31"
+msgstr "help-attribute-urn:oid:2.5.4.31"
+
+msgid "help-attribute-urn:oid:2.5.4.32"
+msgstr "help-attribute-urn:oid:2.5.4.32"
+
+msgid "help-attribute-urn:oid:2.5.4.33"
+msgstr "help-attribute-urn:oid:2.5.4.33"
+
+msgid "help-attribute-urn:oid:2.5.4.34"
+msgstr "help-attribute-urn:oid:2.5.4.34"
+
+msgid "help-attribute-urn:oid:2.5.4.35"
+msgstr "help-attribute-urn:oid:2.5.4.35"
+
+msgid "help-attribute-urn:oid:2.5.4.36"
+msgstr "help-attribute-urn:oid:2.5.4.36"
+
+msgid "help-attribute-urn:oid:2.5.4.37"
+msgstr "help-attribute-urn:oid:2.5.4.37"
+
+msgid "help-attribute-urn:oid:2.5.4.38"
+msgstr "help-attribute-urn:oid:2.5.4.38"
+
+msgid "help-attribute-urn:oid:2.5.4.39"
+msgstr "help-attribute-urn:oid:2.5.4.39"
+
+msgid "help-attribute-urn:oid:2.5.4.4"
+msgstr "help-attribute-urn:oid:2.5.4.4"
+
+msgid "help-attribute-urn:oid:2.5.4.40"
+msgstr "help-attribute-urn:oid:2.5.4.40"
+
+msgid "help-attribute-urn:oid:2.5.4.41"
+msgstr "help-attribute-urn:oid:2.5.4.41"
+
+msgid "help-attribute-urn:oid:2.5.4.42"
+msgstr "help-attribute-urn:oid:2.5.4.42"
+
+msgid "help-attribute-urn:oid:2.5.4.43"
+msgstr "help-attribute-urn:oid:2.5.4.43"
+
+msgid "help-attribute-urn:oid:2.5.4.44"
+msgstr "help-attribute-urn:oid:2.5.4.44"
+
+msgid "help-attribute-urn:oid:2.5.4.45"
+msgstr "help-attribute-urn:oid:2.5.4.45"
+
+msgid "help-attribute-urn:oid:2.5.4.46"
+msgstr "help-attribute-urn:oid:2.5.4.46"
+
+msgid "help-attribute-urn:oid:2.5.4.47"
+msgstr "help-attribute-urn:oid:2.5.4.47"
+
+msgid "help-attribute-urn:oid:2.5.4.48"
+msgstr "help-attribute-urn:oid:2.5.4.48"
+
+msgid "help-attribute-urn:oid:2.5.4.49"
+msgstr "help-attribute-urn:oid:2.5.4.49"
+
+msgid "help-attribute-urn:oid:2.5.4.5"
+msgstr "help-attribute-urn:oid:2.5.4.5"
+
+msgid "help-attribute-urn:oid:2.5.4.50"
+msgstr "help-attribute-urn:oid:2.5.4.50"
+
+msgid "help-attribute-urn:oid:2.5.4.51"
+msgstr "help-attribute-urn:oid:2.5.4.51"
+
+msgid "help-attribute-urn:oid:2.5.4.52"
+msgstr "help-attribute-urn:oid:2.5.4.52"
+
+msgid "help-attribute-urn:oid:2.5.4.53"
+msgstr "help-attribute-urn:oid:2.5.4.53"
+
+msgid "help-attribute-urn:oid:2.5.4.54"
+msgstr "help-attribute-urn:oid:2.5.4.54"
+
+msgid "help-attribute-urn:oid:2.5.4.6"
+msgstr "help-attribute-urn:oid:2.5.4.6"
+
+msgid "help-attribute-urn:oid:2.5.4.65"
+msgstr "help-attribute-urn:oid:2.5.4.65"
+
+msgid "help-attribute-urn:oid:2.5.4.7"
+msgstr "help-attribute-urn:oid:2.5.4.7"
+
+msgid "help-attribute-urn:oid:2.5.4.8"
+msgstr "help-attribute-urn:oid:2.5.4.8"
+
+msgid "help-attribute-urn:oid:2.5.4.9"
+msgstr "help-attribute-urn:oid:2.5.4.9"
+
+msgid "help-attribute-http://axschema.org/namePerson/friendly"
+msgstr "help-attribute-http://axschema.org/namePerson/friendly"
+
+msgid "help-attribute-openid.sreg.nickname"
+msgstr "help-attribute-openid.sreg.nickname"
+
+msgid "help-attribute-http://axschema.org/contact/email"
+msgstr "help-attribute-http://axschema.org/contact/email"
+
+msgid "help-attribute-openid.sreg.email"
+msgstr "help-attribute-openid.sreg.email"
+
+msgid "help-attribute-http://axschema.org/namePerson"
+msgstr "help-attribute-http://axschema.org/namePerson"
+
+msgid "help-attribute-openid.sreg.fullname"
+msgstr "help-attribute-openid.sreg.fullname"
+
+msgid "help-attribute-http://axschema.org/contact/postalCode/home"
+msgstr "help-attribute-http://axschema.org/contact/postalCode/home"
+
+msgid "help-attribute-openid.sreg.postcode"
+msgstr "help-attribute-openid.sreg.postcode"
+
+msgid "help-attribute-http://axschema.org/contact/country/home"
+msgstr "help-attribute-http://axschema.org/contact/country/home"
+
+msgid "help-attribute-openid.sreg.country"
+msgstr "help-attribute-openid.sreg.country"
+
+msgid "help-attribute-http://axschema.org/pref/language"
+msgstr "help-attribute-http://axschema.org/pref/language"
+
+msgid "help-attribute-openid.sreg.language"
+msgstr "help-attribute-openid.sreg.language"
+
+msgid "help-attribute-http://axschema.org/namePerson/prefix"
+msgstr "help-attribute-http://axschema.org/namePerson/prefix"
+
+msgid "help-attribute-http://axschema.org/namePerson/first"
+msgstr "help-attribute-http://axschema.org/namePerson/first"
+
+msgid "help-attribute-http://axschema.org/namePerson/last"
+msgstr "help-attribute-http://axschema.org/namePerson/last"
+
+msgid "help-attribute-http://axschema.org/company/name"
+msgstr "help-attribute-http://axschema.org/company/name"
+
+msgid "help-attribute-http://axschema.org/company/title"
+msgstr "help-attribute-http://axschema.org/company/title"
+
+msgid "help-attribute-http://axschema.org/contact/phone/default"
+msgstr "help-attribute-http://axschema.org/contact/phone/default"
+
+msgid "help-attribute-http://axschema.org/contact/phone/home"
+msgstr "help-attribute-http://axschema.org/contact/phone/home"
+
+msgid "help-attribute-http://axschema.org/contact/phone/business"
+msgstr "help-attribute-http://axschema.org/contact/phone/business"
+
+msgid "help-attribute-http://axschema.org/contact/phone/cell"
+msgstr "help-attribute-http://axschema.org/contact/phone/cell"
+
+msgid "help-attribute-http://axschema.org/contact/phone/fax"
+msgstr "help-attribute-http://axschema.org/contact/phone/fax"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sn"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sn"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:telephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:telephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:facsimileTelephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:facsimileTelephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:postalAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:postalAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:givenName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:givenName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:homePhone"
+msgstr "help-attribute-urn:mace:dir:attribute-def:homePhone"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:homePostalAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:homePostalAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mail"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mail"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mobile"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mobile"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:preferredLanguage"
+msgstr "help-attribute-urn:mace:dir:attribute-def:preferredLanguage"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonPrincipalName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonPrincipalName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonAffiliation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonAffiliation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonScopedAffiliation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonScopedAffiliation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonEntitlement"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonEntitlement"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgDN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgDN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgUnitDN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgUnitDN"
+
+msgid "help-attribute-mobile"
+msgstr "help-attribute-mobile"
+
+msgid "help-attribute-twitter_screen_n_realm"
+msgstr "help-attribute-twitter_screen_n_realm"
+
+msgid "help-attribute-twitter_targetedID"
+msgstr "help-attribute-twitter_targetedID"
+
+msgid "help-attribute-twitter.screen_name"
+msgstr "help-attribute-twitter.screen_name"
+
+msgid "help-attribute-twitter.name"
+msgstr "help-attribute-twitter.name"
+
+msgid "help-attribute-twitter.url"
+msgstr "help-attribute-twitter.url"
+
+msgid "help-attribute-twitter.lang"
+msgstr "help-attribute-twitter.lang"
+
+msgid "help-attribute-twitter.description"
+msgstr "help-attribute-twitter.description"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:aRecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:aRecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:aliasedEntryName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:aliasedEntryName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:aliasedObjectName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:aliasedObjectName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:associatedDomain"
+msgstr "help-attribute-urn:mace:dir:attribute-def:associatedDomain"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:associatedName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:associatedName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:audio"
+msgstr "help-attribute-urn:mace:dir:attribute-def:audio"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:authorityRevocationList"
+msgstr "help-attribute-urn:mace:dir:attribute-def:authorityRevocationList"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:buildingName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:buildingName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:businessCategory"
+msgstr "help-attribute-urn:mace:dir:attribute-def:businessCategory"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:c"
+msgstr "help-attribute-urn:mace:dir:attribute-def:c"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:cACertificate"
+msgstr "help-attribute-urn:mace:dir:attribute-def:cACertificate"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:cNAMERecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:cNAMERecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:carLicense"
+msgstr "help-attribute-urn:mace:dir:attribute-def:carLicense"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:certificateRevocationList"
+msgstr "help-attribute-urn:mace:dir:attribute-def:certificateRevocationList"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:cn"
+msgstr "help-attribute-urn:mace:dir:attribute-def:cn"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:co"
+msgstr "help-attribute-urn:mace:dir:attribute-def:co"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:commonName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:commonName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:countryName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:countryName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:crossCertificatePair"
+msgstr "help-attribute-urn:mace:dir:attribute-def:crossCertificatePair"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:dITRedirect"
+msgstr "help-attribute-urn:mace:dir:attribute-def:dITRedirect"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:dSAQuality"
+msgstr "help-attribute-urn:mace:dir:attribute-def:dSAQuality"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:dc"
+msgstr "help-attribute-urn:mace:dir:attribute-def:dc"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:deltaRevocationList"
+msgstr "help-attribute-urn:mace:dir:attribute-def:deltaRevocationList"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:departmentNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:departmentNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:description"
+msgstr "help-attribute-urn:mace:dir:attribute-def:description"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:destinationIndicator"
+msgstr "help-attribute-urn:mace:dir:attribute-def:destinationIndicator"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:displayName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:displayName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:distinguishedName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:distinguishedName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:dmdName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:dmdName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:dnQualifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:dnQualifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentAuthor"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentAuthor"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentLocation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentLocation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentPublisher"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentPublisher"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentTitle"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentTitle"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentVersion"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentVersion"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:domainComponent"
+msgstr "help-attribute-urn:mace:dir:attribute-def:domainComponent"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:drink"
+msgstr "help-attribute-urn:mace:dir:attribute-def:drink"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduOrgHomePageURI"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduOrgHomePageURI"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduOrgIdentityAuthNPolicyURI"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduOrgIdentityAuthNPolicyURI"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduOrgLegalName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduOrgLegalName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduOrgSuperiorURI"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduOrgSuperiorURI"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduOrgWhitePagesURI"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduOrgWhitePagesURI"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonAffiliation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonAffiliation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonAssurance"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonAssurance"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonEntitlement"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonEntitlement"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonNickname"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonNickname"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgDN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgDN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgUnitDN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgUnitDN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonPrimaryOrgUnitDN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonPrimaryOrgUnitDN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonPrincipalName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonPrincipalName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonScopedAffiliation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonScopedAffiliation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonTargetedID"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonTargetedID"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonUniqueId"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonUniqueId"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:email"
+msgstr "help-attribute-urn:mace:dir:attribute-def:email"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:emailAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:emailAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:employeeNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:employeeNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:employeeType"
+msgstr "help-attribute-urn:mace:dir:attribute-def:employeeType"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:enhancedSearchGuide"
+msgstr "help-attribute-urn:mace:dir:attribute-def:enhancedSearchGuide"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:facsimileTelephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:facsimileTelephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:favouriteDrink"
+msgstr "help-attribute-urn:mace:dir:attribute-def:favouriteDrink"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:fax"
+msgstr "help-attribute-urn:mace:dir:attribute-def:fax"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:federationFeideSchemaVersion"
+msgstr "help-attribute-urn:mace:dir:attribute-def:federationFeideSchemaVersion"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:friendlyCountryName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:friendlyCountryName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:generationQualifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:generationQualifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:givenName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:givenName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:gn"
+msgstr "help-attribute-urn:mace:dir:attribute-def:gn"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:homePhone"
+msgstr "help-attribute-urn:mace:dir:attribute-def:homePhone"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:homePostalAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:homePostalAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:homeTelephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:homeTelephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:host"
+msgstr "help-attribute-urn:mace:dir:attribute-def:host"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:houseIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:houseIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:info"
+msgstr "help-attribute-urn:mace:dir:attribute-def:info"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:initials"
+msgstr "help-attribute-urn:mace:dir:attribute-def:initials"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:internationaliSDNNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:internationaliSDNNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:janetMailbox"
+msgstr "help-attribute-urn:mace:dir:attribute-def:janetMailbox"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:jpegPhoto"
+msgstr "help-attribute-urn:mace:dir:attribute-def:jpegPhoto"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:knowledgeInformation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:knowledgeInformation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:l"
+msgstr "help-attribute-urn:mace:dir:attribute-def:l"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:labeledURI"
+msgstr "help-attribute-urn:mace:dir:attribute-def:labeledURI"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:localityName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:localityName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mDRecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mDRecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mXRecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mXRecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mail"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mail"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mailPreferenceOption"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mailPreferenceOption"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:manager"
+msgstr "help-attribute-urn:mace:dir:attribute-def:manager"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:member"
+msgstr "help-attribute-urn:mace:dir:attribute-def:member"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mobile"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mobile"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mobileTelephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mobileTelephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:nSRecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:nSRecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:name"
+msgstr "help-attribute-urn:mace:dir:attribute-def:name"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgAcronym"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgAcronym"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgNIN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgNIN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgSchemaVersion"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgSchemaVersion"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgUniqueIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgUniqueIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgUniqueNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgUniqueNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgUnitUniqueIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgUnitUniqueIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgUnitUniqueNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgUnitUniqueNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduPersonBirthDate"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduPersonBirthDate"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduPersonLIN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduPersonLIN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduPersonNIN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduPersonNIN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:o"
+msgstr "help-attribute-urn:mace:dir:attribute-def:o"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:objectClass"
+msgstr "help-attribute-urn:mace:dir:attribute-def:objectClass"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:organizationName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:organizationName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:organizationalStatus"
+msgstr "help-attribute-urn:mace:dir:attribute-def:organizationalStatus"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:organizationalUnitName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:organizationalUnitName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:otherMailbox"
+msgstr "help-attribute-urn:mace:dir:attribute-def:otherMailbox"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:ou"
+msgstr "help-attribute-urn:mace:dir:attribute-def:ou"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:owner"
+msgstr "help-attribute-urn:mace:dir:attribute-def:owner"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:pager"
+msgstr "help-attribute-urn:mace:dir:attribute-def:pager"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:pagerTelephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:pagerTelephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:personalSignature"
+msgstr "help-attribute-urn:mace:dir:attribute-def:personalSignature"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:personalTitle"
+msgstr "help-attribute-urn:mace:dir:attribute-def:personalTitle"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:photo"
+msgstr "help-attribute-urn:mace:dir:attribute-def:photo"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:physicalDeliveryOfficeName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:physicalDeliveryOfficeName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:pkcs9email"
+msgstr "help-attribute-urn:mace:dir:attribute-def:pkcs9email"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:postOfficeBox"
+msgstr "help-attribute-urn:mace:dir:attribute-def:postOfficeBox"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:postalAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:postalAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:postalCode"
+msgstr "help-attribute-urn:mace:dir:attribute-def:postalCode"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:preferredDeliveryMethod"
+msgstr "help-attribute-urn:mace:dir:attribute-def:preferredDeliveryMethod"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:preferredLanguage"
+msgstr "help-attribute-urn:mace:dir:attribute-def:preferredLanguage"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:presentationAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:presentationAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:protocolInformation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:protocolInformation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:pseudonym"
+msgstr "help-attribute-urn:mace:dir:attribute-def:pseudonym"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:registeredAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:registeredAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:rfc822Mailbox"
+msgstr "help-attribute-urn:mace:dir:attribute-def:rfc822Mailbox"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:roleOccupant"
+msgstr "help-attribute-urn:mace:dir:attribute-def:roleOccupant"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:roomNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:roomNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sOARecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sOARecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:schacGender"
+msgstr "help-attribute-urn:mace:dir:attribute-def:schacGender"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:searchGuide"
+msgstr "help-attribute-urn:mace:dir:attribute-def:searchGuide"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:secretary"
+msgstr "help-attribute-urn:mace:dir:attribute-def:secretary"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:seeAlso"
+msgstr "help-attribute-urn:mace:dir:attribute-def:seeAlso"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:serialNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:serialNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:singleLevelQuality"
+msgstr "help-attribute-urn:mace:dir:attribute-def:singleLevelQuality"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sisSchoolGrade"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sisSchoolGrade"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sisLegalGuardianFor"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sisLegalGuardianFor"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sn"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sn"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:st"
+msgstr "help-attribute-urn:mace:dir:attribute-def:st"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:stateOrProvinceName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:stateOrProvinceName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:street"
+msgstr "help-attribute-urn:mace:dir:attribute-def:street"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:streetAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:streetAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:subtreeMaximumQuality"
+msgstr "help-attribute-urn:mace:dir:attribute-def:subtreeMaximumQuality"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:subtreeMinimumQuality"
+msgstr "help-attribute-urn:mace:dir:attribute-def:subtreeMinimumQuality"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:supportedAlgorithms"
+msgstr "help-attribute-urn:mace:dir:attribute-def:supportedAlgorithms"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:supportedApplicationContext"
+msgstr "help-attribute-urn:mace:dir:attribute-def:supportedApplicationContext"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:surname"
+msgstr "help-attribute-urn:mace:dir:attribute-def:surname"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:telephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:telephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:teletexTerminalIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:teletexTerminalIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:telexNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:telexNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:textEncodedORAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:textEncodedORAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:title"
+msgstr "help-attribute-urn:mace:dir:attribute-def:title"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:uid"
+msgstr "help-attribute-urn:mace:dir:attribute-def:uid"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:uniqueIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:uniqueIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:uniqueMember"
+msgstr "help-attribute-urn:mace:dir:attribute-def:uniqueMember"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userCertificate"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userCertificate"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userClass"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userClass"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userPKCS12"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userPKCS12"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userPassword"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userPassword"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userSMIMECertificate"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userSMIMECertificate"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userid"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userid"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:x121Address"
+msgstr "help-attribute-urn:mace:dir:attribute-def:x121Address"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:x500UniqueIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:x500UniqueIdentifier"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfCitizenship"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfCitizenship"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfResidence"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfResidence"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacDateOfBirth"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacDateOfBirth"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacExpiryDate"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacExpiryDate"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacGender"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacGender"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganization"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganizationType"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganizationType"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacMotherTongue"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacMotherTongue"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalPosition"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalPosition"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalTitle"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalTitle"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueCode"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueCode"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueID"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueID"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPlaceOfBirth"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPlaceOfBirth"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacProjectMembership"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacProjectMembership"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacProjectSpecificRole"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacProjectSpecificRole"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacSn1"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacSn1"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacSn2"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacSn2"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacUserPresenceID"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacUserPresenceID"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacUserPrivateAttribute"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacUserPrivateAttribute"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacUserStatus"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacUserStatus"
+
+msgid "help-attribute-urn:oasis:names:tc:SAML:attribute:pairwise-id"
+msgstr "help-attribute-urn:oasis:names:tc:SAML:attribute:pairwise-id"
+
+msgid "help-attribute-urn:oasis:names:tc:SAML:attribute:subject-id"
+msgstr "help-attribute-urn:oasis:names:tc:SAML:attribute:subject-id"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:aRecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:aRecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:aliasedEntryName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:aliasedEntryName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:aliasedObjectName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:aliasedObjectName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:associatedDomain"
+msgstr "help-attribute-urn:mace:dir:attribute-def:associatedDomain"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:associatedName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:associatedName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:audio"
+msgstr "help-attribute-urn:mace:dir:attribute-def:audio"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:authorityRevocationList"
+msgstr "help-attribute-urn:mace:dir:attribute-def:authorityRevocationList"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:buildingName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:buildingName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:businessCategory"
+msgstr "help-attribute-urn:mace:dir:attribute-def:businessCategory"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:c"
+msgstr "help-attribute-urn:mace:dir:attribute-def:c"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:cACertificate"
+msgstr "help-attribute-urn:mace:dir:attribute-def:cACertificate"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:cNAMERecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:cNAMERecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:carLicense"
+msgstr "help-attribute-urn:mace:dir:attribute-def:carLicense"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:certificateRevocationList"
+msgstr "help-attribute-urn:mace:dir:attribute-def:certificateRevocationList"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:cn"
+msgstr "help-attribute-urn:mace:dir:attribute-def:cn"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:co"
+msgstr "help-attribute-urn:mace:dir:attribute-def:co"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:commonName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:commonName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:countryName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:countryName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:crossCertificatePair"
+msgstr "help-attribute-urn:mace:dir:attribute-def:crossCertificatePair"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:dITRedirect"
+msgstr "help-attribute-urn:mace:dir:attribute-def:dITRedirect"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:dSAQuality"
+msgstr "help-attribute-urn:mace:dir:attribute-def:dSAQuality"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:dc"
+msgstr "help-attribute-urn:mace:dir:attribute-def:dc"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:deltaRevocationList"
+msgstr "help-attribute-urn:mace:dir:attribute-def:deltaRevocationList"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:departmentNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:departmentNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:description"
+msgstr "help-attribute-urn:mace:dir:attribute-def:description"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:destinationIndicator"
+msgstr "help-attribute-urn:mace:dir:attribute-def:destinationIndicator"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:displayName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:displayName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:distinguishedName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:distinguishedName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:dmdName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:dmdName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:dnQualifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:dnQualifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentAuthor"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentAuthor"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentLocation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentLocation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentPublisher"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentPublisher"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentTitle"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentTitle"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:documentVersion"
+msgstr "help-attribute-urn:mace:dir:attribute-def:documentVersion"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:domainComponent"
+msgstr "help-attribute-urn:mace:dir:attribute-def:domainComponent"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:drink"
+msgstr "help-attribute-urn:mace:dir:attribute-def:drink"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduOrgHomePageURI"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduOrgHomePageURI"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduOrgIdentityAuthNPolicyURI"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduOrgIdentityAuthNPolicyURI"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduOrgLegalName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduOrgLegalName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduOrgSuperiorURI"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduOrgSuperiorURI"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduOrgWhitePagesURI"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduOrgWhitePagesURI"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonAffiliation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonAffiliation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonAssurance"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonAssurance"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonEntitlement"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonEntitlement"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonNickname"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonNickname"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgDN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgDN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgUnitDN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonOrgUnitDN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonPrimaryOrgUnitDN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonPrimaryOrgUnitDN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonPrincipalName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonPrincipalName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonScopedAffiliation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonScopedAffiliation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonTargetedID"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonTargetedID"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:eduPersonUniqueId"
+msgstr "help-attribute-urn:mace:dir:attribute-def:eduPersonUniqueId"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:email"
+msgstr "help-attribute-urn:mace:dir:attribute-def:email"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:emailAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:emailAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:employeeNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:employeeNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:employeeType"
+msgstr "help-attribute-urn:mace:dir:attribute-def:employeeType"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:enhancedSearchGuide"
+msgstr "help-attribute-urn:mace:dir:attribute-def:enhancedSearchGuide"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:facsimileTelephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:facsimileTelephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:favouriteDrink"
+msgstr "help-attribute-urn:mace:dir:attribute-def:favouriteDrink"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:fax"
+msgstr "help-attribute-urn:mace:dir:attribute-def:fax"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:federationFeideSchemaVersion"
+msgstr "help-attribute-urn:mace:dir:attribute-def:federationFeideSchemaVersion"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:friendlyCountryName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:friendlyCountryName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:generationQualifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:generationQualifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:givenName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:givenName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:gn"
+msgstr "help-attribute-urn:mace:dir:attribute-def:gn"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:homePhone"
+msgstr "help-attribute-urn:mace:dir:attribute-def:homePhone"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:homePostalAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:homePostalAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:homeTelephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:homeTelephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:host"
+msgstr "help-attribute-urn:mace:dir:attribute-def:host"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:houseIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:houseIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:info"
+msgstr "help-attribute-urn:mace:dir:attribute-def:info"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:initials"
+msgstr "help-attribute-urn:mace:dir:attribute-def:initials"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:internationaliSDNNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:internationaliSDNNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:janetMailbox"
+msgstr "help-attribute-urn:mace:dir:attribute-def:janetMailbox"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:jpegPhoto"
+msgstr "help-attribute-urn:mace:dir:attribute-def:jpegPhoto"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:knowledgeInformation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:knowledgeInformation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:l"
+msgstr "help-attribute-urn:mace:dir:attribute-def:l"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:labeledURI"
+msgstr "help-attribute-urn:mace:dir:attribute-def:labeledURI"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:localityName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:localityName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mDRecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mDRecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mXRecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mXRecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mail"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mail"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mailPreferenceOption"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mailPreferenceOption"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:manager"
+msgstr "help-attribute-urn:mace:dir:attribute-def:manager"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:member"
+msgstr "help-attribute-urn:mace:dir:attribute-def:member"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mobile"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mobile"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:mobileTelephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:mobileTelephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:nSRecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:nSRecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:name"
+msgstr "help-attribute-urn:mace:dir:attribute-def:name"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgAcronym"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgAcronym"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgNIN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgNIN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgSchemaVersion"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgSchemaVersion"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgUniqueIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgUniqueIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgUniqueNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgUniqueNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgUnitUniqueIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgUnitUniqueIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduOrgUnitUniqueNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduOrgUnitUniqueNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduPersonBirthDate"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduPersonBirthDate"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduPersonLIN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduPersonLIN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:norEduPersonNIN"
+msgstr "help-attribute-urn:mace:dir:attribute-def:norEduPersonNIN"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:o"
+msgstr "help-attribute-urn:mace:dir:attribute-def:o"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:objectClass"
+msgstr "help-attribute-urn:mace:dir:attribute-def:objectClass"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:organizationName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:organizationName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:organizationalStatus"
+msgstr "help-attribute-urn:mace:dir:attribute-def:organizationalStatus"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:organizationalUnitName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:organizationalUnitName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:otherMailbox"
+msgstr "help-attribute-urn:mace:dir:attribute-def:otherMailbox"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:ou"
+msgstr "help-attribute-urn:mace:dir:attribute-def:ou"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:owner"
+msgstr "help-attribute-urn:mace:dir:attribute-def:owner"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:pager"
+msgstr "help-attribute-urn:mace:dir:attribute-def:pager"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:pagerTelephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:pagerTelephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:personalSignature"
+msgstr "help-attribute-urn:mace:dir:attribute-def:personalSignature"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:personalTitle"
+msgstr "help-attribute-urn:mace:dir:attribute-def:personalTitle"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:photo"
+msgstr "help-attribute-urn:mace:dir:attribute-def:photo"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:physicalDeliveryOfficeName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:physicalDeliveryOfficeName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:pkcs9email"
+msgstr "help-attribute-urn:mace:dir:attribute-def:pkcs9email"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:postOfficeBox"
+msgstr "help-attribute-urn:mace:dir:attribute-def:postOfficeBox"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:postalAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:postalAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:postalCode"
+msgstr "help-attribute-urn:mace:dir:attribute-def:postalCode"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:preferredDeliveryMethod"
+msgstr "help-attribute-urn:mace:dir:attribute-def:preferredDeliveryMethod"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:preferredLanguage"
+msgstr "help-attribute-urn:mace:dir:attribute-def:preferredLanguage"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:presentationAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:presentationAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:protocolInformation"
+msgstr "help-attribute-urn:mace:dir:attribute-def:protocolInformation"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:pseudonym"
+msgstr "help-attribute-urn:mace:dir:attribute-def:pseudonym"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:registeredAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:registeredAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:rfc822Mailbox"
+msgstr "help-attribute-urn:mace:dir:attribute-def:rfc822Mailbox"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:roleOccupant"
+msgstr "help-attribute-urn:mace:dir:attribute-def:roleOccupant"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:roomNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:roomNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sOARecord"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sOARecord"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:searchGuide"
+msgstr "help-attribute-urn:mace:dir:attribute-def:searchGuide"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:secretary"
+msgstr "help-attribute-urn:mace:dir:attribute-def:secretary"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:seeAlso"
+msgstr "help-attribute-urn:mace:dir:attribute-def:seeAlso"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:serialNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:serialNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:singleLevelQuality"
+msgstr "help-attribute-urn:mace:dir:attribute-def:singleLevelQuality"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sisSchoolGrade"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sisSchoolGrade"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sisLegalGuardianFor"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sisLegalGuardianFor"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sisOrgDepartment"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sisOrgDepartment"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sisSchoolUnitCode"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sisSchoolUnitCode"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:sn"
+msgstr "help-attribute-urn:mace:dir:attribute-def:sn"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:st"
+msgstr "help-attribute-urn:mace:dir:attribute-def:st"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:stateOrProvinceName"
+msgstr "help-attribute-urn:mace:dir:attribute-def:stateOrProvinceName"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:street"
+msgstr "help-attribute-urn:mace:dir:attribute-def:street"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:streetAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:streetAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:subtreeMaximumQuality"
+msgstr "help-attribute-urn:mace:dir:attribute-def:subtreeMaximumQuality"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:subtreeMinimumQuality"
+msgstr "help-attribute-urn:mace:dir:attribute-def:subtreeMinimumQuality"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:supportedAlgorithms"
+msgstr "help-attribute-urn:mace:dir:attribute-def:supportedAlgorithms"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:supportedApplicationContext"
+msgstr "help-attribute-urn:mace:dir:attribute-def:supportedApplicationContext"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:surname"
+msgstr "help-attribute-urn:mace:dir:attribute-def:surname"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:telephoneNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:telephoneNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:teletexTerminalIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:teletexTerminalIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:telexNumber"
+msgstr "help-attribute-urn:mace:dir:attribute-def:telexNumber"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:textEncodedORAddress"
+msgstr "help-attribute-urn:mace:dir:attribute-def:textEncodedORAddress"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:title"
+msgstr "help-attribute-urn:mace:dir:attribute-def:title"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:uid"
+msgstr "help-attribute-urn:mace:dir:attribute-def:uid"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:uniqueIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:uniqueIdentifier"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:uniqueMember"
+msgstr "help-attribute-urn:mace:dir:attribute-def:uniqueMember"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userCertificate"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userCertificate"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userClass"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userClass"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userPKCS12"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userPKCS12"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userPassword"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userPassword"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userSMIMECertificate"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userSMIMECertificate"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:userid"
+msgstr "help-attribute-urn:mace:dir:attribute-def:userid"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:x121Address"
+msgstr "help-attribute-urn:mace:dir:attribute-def:x121Address"
+
+msgid "help-attribute-urn:mace:dir:attribute-def:x500UniqueIdentifier"
+msgstr "help-attribute-urn:mace:dir:attribute-def:x500UniqueIdentifier"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfCitizenship"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfCitizenship"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfResidence"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacCountryOfResidence"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacDateOfBirth"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacDateOfBirth"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacExpiryDate"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacExpiryDate"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacGender"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacGender"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganization"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganizationType"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacHomeOrganizationType"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacMotherTongue"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacMotherTongue"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalPosition"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalPosition"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalTitle"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalTitle"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueCode"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueCode"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueID"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPersonalUniqueID"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacPlaceOfBirth"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacPlaceOfBirth"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacProjectMembership"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacProjectMembership"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacProjectSpecificRole"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacProjectSpecificRole"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacSn1"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacSn1"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacSn2"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacSn2"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacUserPresenceID"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacUserPresenceID"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacUserPrivateAttribute"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacUserPrivateAttribute"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacUserStatus"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacUserStatus"
+
+msgid "help-attribute-urn:mace:terena.org:attribute-def:schacYearOfBirth"
+msgstr "help-attribute-urn:mace:terena.org:attribute-def:schacYearOfBirth"
+
+msgid "help-attribute-windowslive_user"
+msgstr "help-attribute-windowslive_user"
+
+msgid "help-attribute-windowslive_targetedID"
+msgstr "help-attribute-windowslive_targetedID"
+
+msgid "help-attribute-windowslive_uid"
+msgstr "help-attribute-windowslive_uid"
+
+msgid "help-attribute-windowslive_mail"
+msgstr "help-attribute-windowslive_mail"
+
+msgid "help-attribute-windowslive.FirstName"
+msgstr "help-attribute-windowslive.FirstName"
+
+msgid "help-attribute-windowslive.LastName"
+msgstr "help-attribute-windowslive.LastName"
+
+msgid "help-attribute-windowslive.Location"
+msgstr "help-attribute-windowslive.Location"
+
+msgid "help-attribute-windowslive.givenName"
+msgstr "help-attribute-windowslive.givenName"
+
+msgid "help-attribute-windowslive.surname"
+msgstr "help-attribute-windowslive.surname"
+
+msgid "help-attribute-windowslive.displayName"
+msgstr "help-attribute-windowslive.displayName"
+
+msgid "help-attribute-windowslive.id"
+msgstr "help-attribute-windowslive.id"
+
+msgid "help-attribute-windowslive.userPrincipalName"
+msgstr "help-attribute-windowslive.userPrincipalName"
+
+msgid "help-attribute-windowslive.mail"
+msgstr "help-attribute-windowslive.mail"
+
+msgid "help-attribute-windowslive.preferredLanguage"
+msgstr "help-attribute-windowslive.preferredLanguage"
