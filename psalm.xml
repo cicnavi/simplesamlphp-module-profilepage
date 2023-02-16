@@ -10,7 +10,7 @@
         <directory name="src" />
         <directory name="config-templates" />
         <directory name="tests" />
-        <directory name="www" />
+        <directory name="public" />
         <directory name="hooks" />
 
         <ignoreFiles>
