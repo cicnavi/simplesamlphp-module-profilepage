@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Activity;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
-use SimpleSAML\Module\accounting\Entities\ServiceProvider;
 use SimpleSAML\Module\accounting\Entities\User;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
@@ -83,7 +82,8 @@ class Store extends AbstractStore implements DataStoreInterface
         $this->repository->insertAuthenticationEvent(
             $idpSpUserVersionId,
             $authenticationEvent->getHappenedAt(),
-            $authenticationEvent->getState()->getClientIpAddress()
+            $authenticationEvent->getState()->getClientIpAddress(),
+            $authenticationEvent->getState()->getAuthenticationProtocol()->getDesignation()
         );
     }
 
@@ -312,13 +312,13 @@ class Store extends AbstractStore implements DataStoreInterface
     {
         $userIdentifierAttributeName = $this->moduleConfiguration->getUserIdAttributeName();
 
-        $userIdentifierValue = $hashDecoratedState->getState()->getAttributeValue($userIdentifierAttributeName);
+        $userIdentifierValue = $hashDecoratedState->getState()->getFirstAttributeValue($userIdentifierAttributeName);
         if ($userIdentifierValue === null) {
             $message = sprintf('Attributes do not contain user ID attribute %s.', $userIdentifierAttributeName);
             throw new UnexpectedValueException($message);
         }
 
-        $userIdentifierValueHashSha256 = $this->helpersManager->getHashHelper()->getSha256($userIdentifierValue);
+        $userIdentifierValueHashSha256 = $this->helpersManager->getHash()->getSha256($userIdentifierValue);
 
         // Check if it already exists.
         try {
@@ -492,7 +492,9 @@ class Store extends AbstractStore implements DataStoreInterface
             foreach ($results as $result) {
                 $rawConnectedServiceProvider = new RawConnectedServiceProvider($result, $databasePlatform);
 
-                $serviceProvider = new ServiceProvider($rawConnectedServiceProvider->getServiceProviderMetadata());
+                $serviceProvider = $this->helpersManager
+                    ->getProviderResolver()
+                    ->forServiceFromMetadataArray($rawConnectedServiceProvider->getServiceProviderMetadata());
                 $user = new User($rawConnectedServiceProvider->getUserAttributes());
 
                 $connectedServiceProviderBag->addOrReplace(
@@ -534,7 +536,9 @@ class Store extends AbstractStore implements DataStoreInterface
             /** @var array $result */
             foreach ($results as $result) {
                 $rawActivity = new RawActivity($result, $this->connection->dbal()->getDatabasePlatform());
-                $serviceProvider = new ServiceProvider($rawActivity->getServiceProviderMetadata());
+                $serviceProvider = $this->helpersManager
+                    ->getProviderResolver()
+                    ->forServiceFromMetadataArray($rawActivity->getServiceProviderMetadata());
                 $user = new User($rawActivity->getUserAttributes());
 
                 $activityBag->add(
@@ -542,7 +546,8 @@ class Store extends AbstractStore implements DataStoreInterface
                         $serviceProvider,
                         $user,
                         $rawActivity->getHappenedAt(),
-                        $rawActivity->getClientIpAddress()
+                        $rawActivity->getClientIpAddress(),
+                        $rawActivity->getAuthenticationProtocolDesignation()
                     )
                 );
             }

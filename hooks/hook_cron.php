@@ -10,6 +10,10 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
 
+/**
+ * @param array $cronInfo
+ * @return void
+ */
 function accounting_hook_cron(array &$cronInfo): void
 {
     $moduleConfiguration = new ModuleConfiguration();
@@ -18,7 +22,7 @@ function accounting_hook_cron(array &$cronInfo): void
     /** @var ?string $currentCronTag */
     $currentCronTag = $cronInfo['tag'] ?? null;
 
-    if (!isset($cronInfo['summary']) || !is_array($cronInfo['summary'])) {
+    if (!is_array($cronInfo['summary'])) {
         $cronInfo['summary'] = [];
     }
 
@@ -42,11 +46,8 @@ function accounting_hook_cron(array &$cronInfo): void
         }
     } catch (Throwable $exception) {
         $message = 'Job runner error: ' . $exception->getMessage();
+        /** @psalm-suppress MixedArrayAssignment */
         $cronInfo['summary'][] = $message;
-    }
-
-    if (!isset($cronInfo['summary']) || !is_array($cronInfo['summary'])) {
-        $cronInfo['summary'] = [];
     }
 
     /**
@@ -61,11 +62,13 @@ function accounting_hook_cron(array &$cronInfo): void
             $helpersManager = new HelpersManager();
             $message = sprintf('Handling data retention policy.');
             $logger->info($message);
+            /** @psalm-suppress MixedArrayAssignment */
             $cronInfo['summary'][] = $message;
             handleDataRetentionPolicy($moduleConfiguration, $logger, $helpersManager, $retentionPolicy);
         }
     } catch (Throwable $exception) {
         $message = 'Error enforcing tracker data retention policy: ' . $exception->getMessage();
+        /** @psalm-suppress MixedArrayAssignment */
         $cronInfo['summary'][] = $message;
     }
 }

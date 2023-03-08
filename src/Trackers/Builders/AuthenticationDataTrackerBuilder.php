@@ -46,7 +46,7 @@ class AuthenticationDataTrackerBuilder
 
             // Build...
             /** @var AuthenticationDataTrackerInterface $store */
-            $store = $this->helpersManager->getInstanceBuilderUsingModuleConfigurationHelper()->build(
+            $store = $this->helpersManager->getInstanceBuilderUsingModuleConfiguration()->build(
                 $class,
                 $this->moduleConfiguration,
                 $this->logger

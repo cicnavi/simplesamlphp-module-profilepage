@@ -7,7 +7,7 @@ namespace SimpleSAML\Module\accounting\Http\Controllers\Admin;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Configuration as SspConfiguration;
-use SimpleSAML\Module\accounting\Helpers\ModuleRoutesHelper;
+use SimpleSAML\Module\accounting\Helpers\ModuleRoutes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
@@ -18,6 +18,9 @@ use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
+/**
+ * @psalm-suppress UnusedClass Used as route controller.
+ */
 class Configuration
 {
     protected SspConfiguration $sspConfiguration;
@@ -116,8 +119,8 @@ class Configuration
             'defaultDataTrackerAndProvider' => $defaultDataTrackerAndProvider,
             'additionalTrackers' => $additionalTrackers,
             'setupNeeded' => $setupNeeded,
-            'profilePageUri' => $this->helpersManager->getModuleRoutesHelper()
-                ->getUrl(ModuleRoutesHelper::PATH_USER_PERSONAL_DATA),
+            'profilePageUri' => $this->helpersManager->getModuleRoutes()
+                ->getUrl(ModuleRoutes::PATH_USER_PERSONAL_DATA),
         ];
 
         $template = new Template($this->sspConfiguration, 'accounting:admin/configuration/status.twig');

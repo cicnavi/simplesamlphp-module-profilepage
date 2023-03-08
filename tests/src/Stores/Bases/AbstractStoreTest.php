@@ -17,11 +17,11 @@ class AbstractStoreTest extends TestCase
 {
     protected AbstractStore $abstractStore;
     /**
-     * @var Stub|ModuleConfiguration
+     * @var Stub
      */
     protected $moduleConfigurationStub;
     /**
-     * @var Stub|LoggerInterface
+     * @var Stub
      */
     protected $loggerStub;
 
@@ -54,7 +54,6 @@ class AbstractStoreTest extends TestCase
     public function testCanBuildInstance(): void
     {
         $this->assertInstanceOf(AbstractStore::class, $this->abstractStore);
-        /** @psalm-suppress PossiblyInvalidArgument */
         $this->assertInstanceOf(
             AbstractStore::class,
             $this->abstractStore::build($this->moduleConfigurationStub, $this->loggerStub)

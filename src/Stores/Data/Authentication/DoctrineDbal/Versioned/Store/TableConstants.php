@@ -13,6 +13,7 @@ class TableConstants
     public const COLUMN_ENTITY_ID_LENGTH = 1024;
     public const COLUMN_HASH_SHA265_HEXITS_LENGTH = 64;
     public const COLUMN_IP_ADDRESS_LENGTH = 45;
+    public const COLUMN_AUTHENTICATION_PROTOCOL_DESIGNATION_LENGTH = 16;
 
 
     // Table 'idp'
@@ -84,6 +85,8 @@ class TableConstants
     public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_SP_USER_VERSION_ID = 'idp_sp_user_version_id';
     public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT = 'happened_at';
     public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS = 'client_ip_address';
+    public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =
+        'authentication_protocol_designation';
     public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT = 'created_at';
 
     // Entity 'ConnectedOrganization' (service provider) related.
@@ -99,4 +102,6 @@ class TableConstants
     public const ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES = 'user_attributes';
     public const ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT = 'happened_at';
     public const ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS = 'client_ip_address';
+    public const ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =
+        'authentication_protocol_designation';
 }

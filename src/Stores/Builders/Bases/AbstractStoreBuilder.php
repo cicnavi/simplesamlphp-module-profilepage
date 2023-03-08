@@ -49,7 +49,7 @@ abstract class AbstractStoreBuilder
 
             // Build store...
             /** @var StoreInterface $store */
-            $store = $this->helpersManager->getInstanceBuilderUsingModuleConfigurationHelper()->build(
+            $store = $this->helpersManager->getInstanceBuilderUsingModuleConfiguration()->build(
                 $class,
                 $this->moduleConfiguration,
                 $this->logger,

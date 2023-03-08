@@ -64,7 +64,6 @@ class RawConnectedServiceProviderTest extends TestCase
 
     public function testCanCreateInstance(): void
     {
-        /** @psalm-suppress PossiblyInvalidArgument */
         $this->assertInstanceOf(
             RawConnectedServiceProvider::class,
             new RawConnectedServiceProvider($this->rawRow, $this->abstractPlatformStub)
@@ -73,7 +72,6 @@ class RawConnectedServiceProviderTest extends TestCase
 
     public function testCanGetProperties(): void
     {
-        /** @psalm-suppress PossiblyInvalidArgument */
         $rawConnectedServiceProvider = new RawConnectedServiceProvider($this->rawRow, $this->abstractPlatformStub);
 
         $this->assertSame($this->numberOfAuthentications, $rawConnectedServiceProvider->getNumberOfAuthentications());
@@ -98,7 +96,6 @@ class RawConnectedServiceProviderTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawConnectedServiceProvider($rawRow, $this->abstractPlatformStub);
     }
 
@@ -109,7 +106,6 @@ class RawConnectedServiceProviderTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawConnectedServiceProvider($rawRow, $this->abstractPlatformStub);
     }
 
@@ -120,7 +116,6 @@ class RawConnectedServiceProviderTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawConnectedServiceProvider($rawRow, $this->abstractPlatformStub);
     }
 
@@ -131,7 +126,6 @@ class RawConnectedServiceProviderTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawConnectedServiceProvider($rawRow, $this->abstractPlatformStub);
     }
 
@@ -142,7 +136,6 @@ class RawConnectedServiceProviderTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawConnectedServiceProvider($rawRow, $this->abstractPlatformStub);
     }
 
@@ -153,7 +146,6 @@ class RawConnectedServiceProviderTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawConnectedServiceProvider($rawRow, $this->abstractPlatformStub);
     }
 
@@ -164,7 +156,6 @@ class RawConnectedServiceProviderTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawConnectedServiceProvider($rawRow, $this->abstractPlatformStub);
     }
 
@@ -175,7 +166,6 @@ class RawConnectedServiceProviderTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawConnectedServiceProvider($rawRow, $this->abstractPlatformStub);
     }
 }

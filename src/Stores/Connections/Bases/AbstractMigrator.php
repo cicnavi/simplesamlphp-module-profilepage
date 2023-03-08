@@ -28,7 +28,7 @@ abstract class AbstractMigrator
      */
     public function gatherMigrationClassesFromDirectory(string $directory, string $namespace): array
     {
-        $directory = $this->helpersManager->getFilesystemHelper()->getRealPath($directory);
+        $directory = $this->helpersManager->getFilesystem()->getRealPath($directory);
 
         // Get files without dot directories
         $files = array_values(array_diff(scandir($directory), ['..', '.']));

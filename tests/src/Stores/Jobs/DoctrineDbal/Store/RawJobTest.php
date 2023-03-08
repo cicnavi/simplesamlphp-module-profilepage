@@ -10,7 +10,7 @@ use Doctrine\DBAL\Platforms\SqlitePlatform;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Authentication\State;
+use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
 use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\RawJob;
@@ -19,9 +19,10 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\RawJob
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
+ * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
- * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Network
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class RawJobTest extends TestCase
@@ -37,7 +38,7 @@ class RawJobTest extends TestCase
         $this->abstractPlatformStub->method('getDateTimeFormatString')
             ->willReturn('YYYY-MM-DD HH:MM:SS');
 
-        $this->authenticationEvent = new Event(new State(StateArrays::FULL));
+        $this->authenticationEvent = new Event(new State\Saml2(StateArrays::SAML2_FULL));
         $this->validRawRow = [
             Store\TableConstants::COLUMN_NAME_ID => 1,
             Store\TableConstants::COLUMN_NAME_PAYLOAD => serialize($this->authenticationEvent),
@@ -63,7 +64,6 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress InvalidArgument */
         new RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 
@@ -74,7 +74,6 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress InvalidArgument */
         new RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 
@@ -85,7 +84,6 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress InvalidArgument */
         new RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 
@@ -96,7 +94,6 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress InvalidArgument */
         new Store\RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 
@@ -107,7 +104,6 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress InvalidArgument */
         new Store\RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 
@@ -118,7 +114,6 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress InvalidArgument */
         new RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 
@@ -129,7 +124,6 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress InvalidArgument */
         new Store\RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 }

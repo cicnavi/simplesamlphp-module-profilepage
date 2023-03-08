@@ -37,7 +37,6 @@ class FactoryTest extends TestCase
 
     public function testCanBuildConnection(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $factory = new Factory($this->moduleConfiguration, $this->loggerServiceMock);
 
         $this->assertInstanceOf(Connection::class, $factory->buildConnection('doctrine_dbal_pdo_sqlite'));
@@ -48,7 +47,6 @@ class FactoryTest extends TestCase
      */
     public function testCanBuildMigrator(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $factory = new Factory($this->moduleConfiguration, $this->loggerServiceMock);
 
         $connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);

@@ -21,16 +21,18 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Auth\Process\Accounting
- * @uses   \SimpleSAML\Module\accounting\Entities\Authentication\Event
- * @uses   \SimpleSAML\Module\accounting\Entities\Authentication\State
- * @uses   \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
- * @uses   \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
- * @uses   \SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder
- * @uses   \SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder
- * @uses   \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
- * @uses   \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
- * @uses   \SimpleSAML\Module\accounting\Helpers\NetworkHelper
- * @uses   \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
+ * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
+ * @uses \SimpleSAML\Module\accounting\Helpers\AuthenticationEventStateResolver
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder
+ * @uses \SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
+ * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
+ * @uses \SimpleSAML\Module\accounting\Helpers\Network
+ * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class AccountingTest extends TestCase
 {
@@ -57,7 +59,7 @@ class AccountingTest extends TestCase
         $this->jobsStoreMock = $this->createMock(Store::class);
         $this->trackerMock = $this->createMock(Tracker::class);
 
-        $this->sampleState = StateArrays::FULL;
+        $this->sampleState = StateArrays::SAML2_FULL;
 
         $this->filterConfig = [];
 
@@ -66,7 +68,6 @@ class AccountingTest extends TestCase
 
     public function testCanCreateInstance(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $this->assertInstanceOf(
             Accounting::class,
             new Accounting(
@@ -77,7 +78,6 @@ class AccountingTest extends TestCase
             )
         );
 
-        /** @psalm-suppress InvalidArgument */
         $this->assertInstanceOf(
             Accounting::class,
             new Accounting(
@@ -112,7 +112,6 @@ class AccountingTest extends TestCase
             ->expects($this->never())
             ->method('build');
 
-        /** @psalm-suppress InvalidArgument */
         (new Accounting(
             $this->filterConfig,
             null,
@@ -147,7 +146,6 @@ class AccountingTest extends TestCase
             ->with($this->equalTo(Tracker::class))
             ->willReturn($this->trackerMock);
 
-        /** @psalm-suppress InvalidArgument */
         (new Accounting(
             $this->filterConfig,
             null,
@@ -166,7 +164,6 @@ class AccountingTest extends TestCase
 
         $this->loggerMock->expects($this->once())->method('error');
 
-        /** @psalm-suppress InvalidArgument */
         (new Accounting(
             $this->filterConfig,
             null,

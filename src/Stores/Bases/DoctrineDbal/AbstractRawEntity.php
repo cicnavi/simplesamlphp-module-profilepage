@@ -11,6 +11,9 @@ use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use Throwable;
 
+/**
+ * @psalm-api
+ */
 abstract class AbstractRawEntity
 {
     protected array $rawRow;

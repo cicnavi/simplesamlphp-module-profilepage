@@ -9,7 +9,7 @@ use Doctrine\DBAL\Exception;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Authentication\State;
+use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
@@ -32,7 +32,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
- * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Filesystem
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
@@ -42,9 +42,10 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
+ * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
- * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Network
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\AbstractStore
  */
@@ -69,7 +70,6 @@ class StoreTest extends TestCase
 
         $this->loggerStub = $this->createStub(Logger::class);
 
-        /** @psalm-suppress InvalidArgument */
         $this->migrator = new Migrator($this->connection, $this->loggerStub);
 
         $this->factoryStub = $this->createStub(Factory::class);
@@ -90,7 +90,6 @@ class StoreTest extends TestCase
      */
     public function testSetupDependsOnMigratorSetup(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -114,7 +113,6 @@ class StoreTest extends TestCase
      */
     public function testSetupDependsOnMigrations(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -137,7 +135,6 @@ class StoreTest extends TestCase
      */
     public function testCanGetPrefixedTableNames(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -163,7 +160,6 @@ class StoreTest extends TestCase
         $moduleConfiguration = $this->createStub(ModuleConfiguration::class);
         $moduleConfiguration->method('getConnectionParameters')
             ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
-        /** @psalm-suppress InvalidArgument */
         $this->assertInstanceOf(Store::class, Store::build($moduleConfiguration, $this->loggerStub));
     }
 
@@ -174,7 +170,6 @@ class StoreTest extends TestCase
      */
     public function testCanEnqueueJob(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -189,14 +184,11 @@ class StoreTest extends TestCase
 
         $this->assertSame(0, (int) $queryBuilder->executeQuery()->fetchOne());
 
-        /** @psalm-suppress InvalidArgument */
         $jobsStore->enqueue($this->jobStub);
 
         $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
 
-        /** @psalm-suppress InvalidArgument */
         $jobsStore->enqueue($this->jobStub);
-        /** @psalm-suppress InvalidArgument */
         $jobsStore->enqueue($this->jobStub);
 
         $this->assertSame(3, (int) $queryBuilder->executeQuery()->fetchOne());
@@ -207,7 +199,6 @@ class StoreTest extends TestCase
      */
     public function testEnqueueThrowsStoreExceptionOnNonSetupRun(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -234,7 +225,6 @@ class StoreTest extends TestCase
      */
     public function testCanDequeueJob(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -249,14 +239,11 @@ class StoreTest extends TestCase
 
         $this->assertSame(0, (int) $queryBuilder->executeQuery()->fetchOne());
 
-        /** @psalm-suppress InvalidArgument */
         $jobsStore->enqueue($this->jobStub);
-        /** @psalm-suppress InvalidArgument */
         $jobsStore->enqueue($this->jobStub);
 
         $this->assertSame(2, (int) $queryBuilder->executeQuery()->fetchOne());
 
-        /** @psalm-suppress MixedArgument, UndefinedInterfaceMethod */
         $jobsStore->dequeue($this->jobStub->getType());
 
         $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
@@ -269,7 +256,6 @@ class StoreTest extends TestCase
      */
     public function testCanDequeueSpecificJobType(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -279,7 +265,7 @@ class StoreTest extends TestCase
         );
         $jobsStore->runSetup();
 
-        $authenticationEvent = new Event(new State(StateArrays::FULL));
+        $authenticationEvent = new Event(new State\Saml2(StateArrays::SAML2_FULL));
         $authenticationEventJob = new Event\Job($authenticationEvent);
 
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -287,7 +273,6 @@ class StoreTest extends TestCase
 
         $this->assertSame(0, (int) $queryBuilder->executeQuery()->fetchOne());
 
-        /** @psalm-suppress InvalidArgument */
         $jobsStore->enqueue($this->jobStub);
         $jobsStore->enqueue($authenticationEventJob);
 
@@ -308,7 +293,6 @@ class StoreTest extends TestCase
      */
     public function testDequeueThrowsWhenSetupNotRun(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -343,7 +327,6 @@ class StoreTest extends TestCase
 
         $repositoryStub->method('getNext')->willReturn($jobStub);
 
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -356,7 +339,6 @@ class StoreTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        /** @psalm-suppress MixedArgument, UndefinedInterfaceMethod */
         $jobsStore->dequeue($this->jobStub->getType());
     }
 
@@ -371,7 +353,6 @@ class StoreTest extends TestCase
         $repositoryStub->method('getNext')->willReturn($this->jobStub);
         $repositoryStub->method('delete')->willReturn(false);
 
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -384,7 +365,6 @@ class StoreTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        /** @psalm-suppress MixedArgument, UndefinedInterfaceMethod */
         $jobsStore->dequeue($this->jobStub->getType());
     }
 
@@ -399,7 +379,6 @@ class StoreTest extends TestCase
         $repositoryStub->method('getNext')->willReturn($this->jobStub);
         $repositoryStub->method('delete')->willReturnOnConsecutiveCalls(false, true);
 
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -410,7 +389,6 @@ class StoreTest extends TestCase
         );
         $jobsStore->runSetup();
 
-        /** @psalm-suppress MixedArgument, UndefinedInterfaceMethod */
         $this->assertNotNull($jobsStore->dequeue($this->jobStub->getType()));
     }
 
@@ -421,7 +399,6 @@ class StoreTest extends TestCase
      */
     public function testCanMarkFailedJob(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerStub,
@@ -438,12 +415,10 @@ class StoreTest extends TestCase
 
         $this->assertSame(0, (int) $queryBuilder->executeQuery()->fetchOne());
 
-        /** @psalm-suppress InvalidArgument */
         $jobsStore->markFailedJob($this->jobStub);
 
         $this->assertSame(1, (int) $queryBuilder->executeQuery()->fetchOne());
 
-        /** @psalm-suppress InvalidArgument */
         $jobsStore->markFailedJob($this->jobStub);
 
         $this->assertSame(2, (int) $queryBuilder->executeQuery()->fetchOne());

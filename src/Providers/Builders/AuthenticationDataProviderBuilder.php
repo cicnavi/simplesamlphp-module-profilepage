@@ -48,7 +48,7 @@ class AuthenticationDataProviderBuilder
 
             // Build...
             /** @var AuthenticationDataProviderInterface $store */
-            $store = $this->helpersManager->getInstanceBuilderUsingModuleConfigurationHelper()->build(
+            $store = $this->helpersManager->getInstanceBuilderUsingModuleConfiguration()->build(
                 $class,
                 $this->moduleConfiguration,
                 $this->logger,

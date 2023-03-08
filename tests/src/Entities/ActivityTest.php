@@ -8,7 +8,8 @@ use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\Stub;
 use SimpleSAML\Module\accounting\Entities\Activity;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Entities\ServiceProvider;
+use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2;
+use SimpleSAML\Module\accounting\Entities\Interfaces\ServiceProviderInterface;
 use SimpleSAML\Module\accounting\Entities\User;
 
 /**
@@ -17,7 +18,7 @@ use SimpleSAML\Module\accounting\Entities\User;
 class ActivityTest extends TestCase
 {
     /**
-     * @var Stub|ServiceProvider
+     * @var Stub|ServiceProviderInterface
      */
     protected $serviceProviderStub;
     /**
@@ -26,28 +27,31 @@ class ActivityTest extends TestCase
     protected $userStub;
     protected DateTimeImmutable $happenedAt;
     protected string $clientIpAddress;
+    protected string $authenticationProtocolDesignation;
 
     public function setUp(): void
     {
-        $this->serviceProviderStub = $this->createStub(ServiceProvider::class);
+        $this->serviceProviderStub = $this->createStub(ServiceProviderInterface::class);
         $this->userStub = $this->createStub(User::class);
         $this->happenedAt = new DateTimeImmutable();
         $this->clientIpAddress = '123.123.123.123';
+        $this->authenticationProtocolDesignation = Saml2::DESIGNATION;
     }
 
     public function testCanCreateInstance(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $activity = new Activity(
             $this->serviceProviderStub,
             $this->userStub,
             $this->happenedAt,
-            $this->clientIpAddress
+            $this->clientIpAddress,
+            $this->authenticationProtocolDesignation
         );
 
         $this->assertSame($this->serviceProviderStub, $activity->getServiceProvider());
         $this->assertSame($this->userStub, $activity->getUser());
         $this->assertSame($this->happenedAt, $activity->getHappenedAt());
         $this->assertSame($this->clientIpAddress, $activity->getClientIpAddress());
+        $this->assertSame($this->authenticationProtocolDesignation, $activity->getAuthenticationProtocolDesignation());
     }
 }

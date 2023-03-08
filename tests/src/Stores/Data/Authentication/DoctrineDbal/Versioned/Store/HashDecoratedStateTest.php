@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store;
 
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Entities\Authentication\State;
+use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\HashDecoratedState;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\HashDecoratedState
- * @uses \SimpleSAML\Module\accounting\Helpers\HashHelper
- * @uses \SimpleSAML\Module\accounting\Helpers\ArrayHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Hash
+ * @uses \SimpleSAML\Module\accounting\Helpers\Arr
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
 class HashDecoratedStateTest extends TestCase
 {
     /**
-     * @var Stub|State
+     * @var Stub
      */
     protected $stateStub;
     protected string $identityProviderEntityId;
@@ -38,7 +38,7 @@ class HashDecoratedStateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->stateStub = $this->createStub(State::class);
+        $this->stateStub = $this->createStub(State\Saml2::class);
         $this->identityProviderEntityId = 'idpEntityId';
         $this->stateStub->method('getIdentityProviderEntityId')->willReturn($this->identityProviderEntityId);
         $this->identityProviderMetadata = ['idp' => 'metadata'];
@@ -53,13 +53,11 @@ class HashDecoratedStateTest extends TestCase
 
     public function testCanCreateInstance(): void
     {
-        /** @psalm-suppress PossiblyInvalidArgument */
         $this->assertInstanceOf(HashDecoratedState::class, new HashDecoratedState($this->stateStub));
     }
 
     public function testCanGetHashedProperties(): void
     {
-        /** @psalm-suppress PossiblyInvalidArgument */
         $hashDecoratedState = new HashDecoratedState($this->stateStub);
 
         $this->assertSame($this->stateStub, $hashDecoratedState->getState());

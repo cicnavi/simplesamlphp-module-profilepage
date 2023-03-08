@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Entities\Bases;
 
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Entities\Interfaces\ProviderInterface;
 
-abstract class AbstractProvider
+abstract class AbstractProvider implements ProviderInterface
 {
-    public const METADATA_KEY_NAME = 'name';
-    public const METADATA_KEY_ENTITY_ID = 'entityid';
-    public const METADATA_KEY_DESCRIPTION = 'description';
-
     protected array $metadata;
     protected string $entityId;
 
@@ -19,39 +15,6 @@ abstract class AbstractProvider
     {
         $this->metadata = $metadata;
         $this->entityId = $this->resolveEntityId();
-    }
-
-    public function getMetadata(): array
-    {
-        return $this->metadata;
-    }
-
-    public function getName(string $locale = 'en'): ?string
-    {
-        return $this->resolveOptionallyLocalizedString(self::METADATA_KEY_NAME, $locale);
-    }
-
-    public function getEntityId(): string
-    {
-        return $this->entityId;
-    }
-
-    public function getDescription(string $locale = 'en'): ?string
-    {
-        return $this->resolveOptionallyLocalizedString(self::METADATA_KEY_DESCRIPTION, $locale);
-    }
-
-
-    protected function resolveEntityId(): string
-    {
-        if (
-            !empty($this->metadata[self::METADATA_KEY_ENTITY_ID]) &&
-            is_string($this->metadata[self::METADATA_KEY_ENTITY_ID])
-        ) {
-            return $this->metadata[self::METADATA_KEY_ENTITY_ID];
-        }
-
-        throw new UnexpectedValueException('Provider entity metadata does not contain entity ID.');
     }
 
     protected function resolveOptionallyLocalizedString(string $key, string $locale = 'en'): ?string
@@ -75,4 +38,18 @@ abstract class AbstractProvider
 
         return null;
     }
+
+    public function getMetadata(): array
+    {
+        return $this->metadata;
+    }
+
+    public function getEntityId(): string
+    {
+        return $this->entityId;
+    }
+
+    abstract public function getName(string $locale = 'en'): ?string;
+    abstract public function getDescription(string $locale = 'en'): ?string;
+    abstract protected function resolveEntityId(): string;
 }

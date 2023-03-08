@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use SimpleSAML\Locale\Translate;
-use SimpleSAML\Module\accounting\Helpers\ModuleRoutesHelper;
+use SimpleSAML\Module\accounting\Helpers\ModuleRoutes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\XHTML\Template;
 
@@ -12,11 +12,11 @@ function accounting_hook_adminmenu(Template &$template): void
 {
     $menuKey = 'menu';
 
-    $moduleRoutesHelper = new ModuleRoutesHelper();
+    $moduleRoutesHelper = new ModuleRoutes();
 
     $profilePageEntry = [
         ModuleConfiguration::MODULE_NAME => [
-            'url' => $moduleRoutesHelper->getUrl(ModuleRoutesHelper::PATH_USER_PERSONAL_DATA),
+            'url' => $moduleRoutesHelper->getUrl(ModuleRoutes::PATH_USER_PERSONAL_DATA),
             'name' => Translate::noop('Profile Page'),
         ],
     ];

@@ -32,15 +32,18 @@
                         <img src="{{ asset('css/src/icons/dropdown.svg', 'accounting') }}" alt="Dropdown icon">
                     </label>
                     <div class="dropdown-box">
-                        <strong>{{ 'IP address'|trans }}</strong>
-                        <ul><li>{{ activity.getClientIpAddress|default(' / ') }}</li></ul>
-
-                        <strong>{{ 'Information transfered to service'|trans }}</strong>
+                        <strong>{{ 'Information transfered to service'|trans }}</strong>:
                         {% for name, value in activity.getUser.getAttributes %}
                             <span class="label">
                                 {{ name|trans }}: {{ value|join(', ') }}
                             </span>
                         {% endfor %}
+                        <br><br>
+                        <strong>{{ 'IP address'|trans }}</strong>: {{ activity.getClientIpAddress|default(' / ') }}
+                        <br>
+                        <strong>{{ 'Authentication protocol'|trans }}</strong>:
+                            {{ activity.getAuthenticationProtocolDesignation|default(' / ') }}
+                        <br>
                     </div>
                 </td>
             </tr>

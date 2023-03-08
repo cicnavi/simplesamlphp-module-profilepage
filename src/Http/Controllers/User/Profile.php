@@ -12,7 +12,7 @@ use SimpleSAML\Error\CriticalConfigurationError;
 use SimpleSAML\HTTP\RunnableResponse;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\Helpers\AttributesHelper;
+use SimpleSAML\Module\accounting\Helpers\Attributes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\ModuleConfiguration\ConnectionType;
 use SimpleSAML\Module\accounting\Providers\Builders\AuthenticationDataProviderBuilder;
@@ -23,6 +23,9 @@ use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @psalm-suppress UnusedClass Used as route controller.
+ */
 class Profile
 {
     protected ModuleConfiguration $moduleConfiguration;
@@ -72,7 +75,7 @@ class Profile
     /**
      * @throws ConfigurationError
      */
-    public function personalData(Request $request): Response
+    public function personalData(): Response
     {
         $normalizedAttributes = [];
 
@@ -100,7 +103,7 @@ class Profile
      * @throws Exception
      * @throws ConfigurationError
      */
-    public function connectedOrganizations(Request $request): Template
+    public function connectedOrganizations(): Template
     {
         $userIdentifier = $this->resolveUserIdentifier();
 
@@ -176,7 +179,7 @@ class Profile
             return $this->sspConfiguration->getBasePath() . 'logout.php';
         } catch (CriticalConfigurationError $exception) {
             $message = \sprintf('Could not resolve SimpleSAMLphp base path. Error was: %s', $exception->getMessage());
-            throw new InvalidConfigurationException($message, (int)$exception->getCode(), $exception);
+            throw new InvalidConfigurationException($message, $exception->getCode(), $exception);
         }
     }
 
@@ -185,9 +188,9 @@ class Profile
      */
     protected function prepareToNameAttributeMap(): array
     {
-        return $this->helpersManager->getAttributesHelper()->getMergedAttributeMapForFiles(
+        return $this->helpersManager->getAttributes()->getMergedAttributeMapForFiles(
             $this->sspConfiguration->getBaseDir(),
-            AttributesHelper::MAP_FILES_TO_NAME
+            Attributes::MAP_FILES_TO_NAME
         );
     }
 

@@ -233,14 +233,6 @@ class ModuleConfiguration
     /**
      * @throws InvalidConfigurationException
      */
-    public function getClassConnectionParameters(string $class, string $connectionType = ConnectionType::MASTER): array
-    {
-        return $this->getConnectionParameters($this->getClassConnectionKey($class, $connectionType));
-    }
-
-    /**
-     * @throws InvalidConfigurationException
-     */
     public function getConnectionParameters(string $connectionKey): array
     {
         $connections = $this->getConnectionsAndParameters();

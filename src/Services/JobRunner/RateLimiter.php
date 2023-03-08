@@ -25,10 +25,10 @@ class RateLimiter
     ) {
         $this->helpersManager = $helpersManager ?? new HelpersManager();
 
-        $this->maxPauseInSeconds = $this->helpersManager->getDateTimeHelper()->convertDateIntervalToSeconds(
+        $this->maxPauseInSeconds = $this->helpersManager->getDateTime()->convertDateIntervalToSeconds(
             $maxPauseInterval ?? new DateInterval(self::DEFAULT_MAX_PAUSE_DURATION)
         );
-        $this->maxBackoffPauseInSeconds = $this->helpersManager->getDateTimeHelper()->convertDateIntervalToSeconds(
+        $this->maxBackoffPauseInSeconds = $this->helpersManager->getDateTime()->convertDateIntervalToSeconds(
             $maxBackoffInterval ?? new DateInterval(self::DEFAULT_MAX_BACKOFF_PAUSE_DURATION)
         );
     }

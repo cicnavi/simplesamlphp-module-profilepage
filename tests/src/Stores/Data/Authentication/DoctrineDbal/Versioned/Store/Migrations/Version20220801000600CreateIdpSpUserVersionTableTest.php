@@ -69,7 +69,6 @@ class Version20220801000600CreateIdpSpUserVersionTableTest extends TestCase
         $this->dbalStub->method('createSchemaManager')->willReturn($this->schemaManagerStub);
         $this->connectionStub->method('dbal')->willReturn($this->dbalStub);
 
-        /** @psalm-suppress InvalidArgument */
         $migration =
             new Migrations\Version20220801000600CreateIdpSpUserVersionTable($this->connectionStub);
         $this->expectException(MigrationException::class);
@@ -86,7 +85,6 @@ class Version20220801000600CreateIdpSpUserVersionTableTest extends TestCase
         $this->dbalStub->method('createSchemaManager')->willReturn($this->schemaManagerStub);
         $this->connectionStub->method('dbal')->willReturn($this->dbalStub);
 
-        /** @psalm-suppress InvalidArgument */
         $migration =
             new Migrations\Version20220801000600CreateIdpSpUserVersionTable($this->connectionStub);
         $this->expectException(MigrationException::class);
@@ -101,7 +99,6 @@ class Version20220801000600CreateIdpSpUserVersionTableTest extends TestCase
         $this->connectionStub->method('preparePrefixedTableName')
             ->willReturnOnConsecutiveCalls(''); // Invalid (empty) name for table
 
-        /** @psalm-suppress InvalidArgument */
         $migration =
             new Migrations\Version20220801000600CreateIdpSpUserVersionTable($this->connectionStub);
         $this->expectException(MigrationException::class);
