@@ -147,7 +147,7 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
-    public function testThrowsForInvalidConnectiontype(): void
+    public function testThrowsForInvalidConnectionType(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -157,11 +157,11 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
-    public function testInvalidConnectionKeyThrows(): void
+    public function testThrowsIfConnectionForClassNotSet(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        $this->moduleConfiguration->getClassConnectionParameters('invalid');
+        $this->moduleConfiguration->getClassConnectionKey('invalid');
     }
 
     public function testCanGetDefinedConnections(): void

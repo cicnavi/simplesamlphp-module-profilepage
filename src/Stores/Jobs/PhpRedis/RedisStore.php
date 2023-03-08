@@ -156,6 +156,9 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
         return false;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function runSetup(): void
     {
         // No need for setup.

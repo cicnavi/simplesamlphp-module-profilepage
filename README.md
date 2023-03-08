@@ -1,5 +1,11 @@
 [![Test](https://github.com/cicnavi/simplesamlphp-module-accounting/actions/workflows/test.yml/badge.svg)](https://github.com/cicnavi/simplesamlphp-module-accounting/actions/workflows/test.yml)
 
+
+* TODO 
+* Consider config to enable / disable storing attribute values
+* IG Binary - consider using for data serialization
+
+
 # simplesamlphp-module-accounting
 SimpleSAMLphp module providing user accounting functionality using SimpleSAMLphp authentication processing 
 filters feature.

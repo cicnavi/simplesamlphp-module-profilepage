@@ -35,15 +35,6 @@
                             <li>{{ 'Description'|trans }}: {{ connectedServiceProvider.getServiceProvider.getDescription|e|default(' / ') }}</li>
                         </ul>
 
-                        <strong>{{ 'Information transfered to service'|trans }}</strong>
-
-                        {% for name, value in connectedServiceProvider.getUser.getAttributes %}
-                            <span class="label">
-                                {{ name|trans }}: {{ value|join(', ') }}
-                            </span>
-                        {% endfor %}
-
-
                         <strong>{{ 'Login details'|trans }}</strong>
                         <ul>
                             <li>

@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\Module\accounting\Stores\Data\Authentication\DoctrineD
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use PHPUnit\Framework\MockObject\Stub;
+use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawActivity;
 use PHPUnit\Framework\TestCase;
@@ -32,9 +33,10 @@ class RawActivityTest extends TestCase
 
     protected array $rawRow;
     /**
-     * @var AbstractPlatform|Stub
+     * @var Stub
      */
     protected $abstractPlatformStub;
+    protected string $authenticationProtocolDesignation;
 
     protected function setUp(): void
     {
@@ -42,12 +44,15 @@ class RawActivityTest extends TestCase
         $this->userAttributes = ['user' => 'attribute'];
         $this->happenedAt = '2022-02-22 22:22:22';
         $this->clientIpAddress = '123.123.123.123';
+        $this->authenticationProtocolDesignation = Saml2::DESIGNATION;
 
         $this->rawRow = [
             TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA => serialize($this->serviceProviderMetadata),
             TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES => serialize($this->userAttributes),
             TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT => $this->happenedAt,
             TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS => $this->clientIpAddress,
+            TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =>
+                $this->authenticationProtocolDesignation,
         ];
         $this->abstractPlatformStub = $this->createStub(AbstractPlatform::class);
         $this->abstractPlatformStub->method('getDateTimeFormatString')->willReturn(DateTime::DEFAULT_FORMAT);
@@ -55,7 +60,6 @@ class RawActivityTest extends TestCase
 
     public function testCanCreateInstance(): void
     {
-        /** @psalm-suppress PossiblyInvalidArgument */
         $rawActivity = new RawActivity($this->rawRow, $this->abstractPlatformStub);
 
         $this->assertInstanceOf(RawActivity::class, $rawActivity);
@@ -63,23 +67,34 @@ class RawActivityTest extends TestCase
 
     public function testCanGetProperties(): void
     {
-        /** @psalm-suppress PossiblyInvalidArgument */
         $rawActivity = new RawActivity($this->rawRow, $this->abstractPlatformStub);
 
         $this->assertInstanceOf(DateTimeImmutable::class, $rawActivity->getHappenedAt());
         $this->assertSame($this->serviceProviderMetadata, $rawActivity->getServiceProviderMetadata());
         $this->assertSame($this->userAttributes, $rawActivity->getUserAttributes());
         $this->assertSame($this->clientIpAddress, $rawActivity->getClientIpAddress());
+        $this->assertSame(
+            $this->authenticationProtocolDesignation,
+            $rawActivity->getAuthenticationProtocolDesignation()
+        );
     }
 
-    public function testIpAddressCanBeMissing(): void
+    public function testIpAddressCanBeNull(): void
     {
         $rawRow = $this->rawRow;
         unset($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         $rawActivity = new RawActivity($rawRow, $this->abstractPlatformStub);
         $this->assertNull($rawActivity->getClientIpAddress());
+    }
+
+    public function testAuthenticationProtocolDesignationCanBeNull(): void
+    {
+        $rawRow = $this->rawRow;
+        unset($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION]);
+
+        $rawActivity = new RawActivity($rawRow, $this->abstractPlatformStub);
+        $this->assertNull($rawActivity->getAuthenticationProtocolDesignation());
     }
 
     public function testThrowsIfColumnNotPresent(): void
@@ -89,7 +104,6 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawActivity($rawRow, $this->abstractPlatformStub);
     }
 
@@ -100,7 +114,6 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawActivity($rawRow, $this->abstractPlatformStub);
     }
 
@@ -111,7 +124,6 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawActivity($rawRow, $this->abstractPlatformStub);
     }
 
@@ -122,7 +134,6 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawActivity($rawRow, $this->abstractPlatformStub);
     }
 
@@ -133,7 +144,6 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawActivity($rawRow, $this->abstractPlatformStub);
     }
 
@@ -144,7 +154,6 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         new RawActivity($rawRow, $this->abstractPlatformStub);
     }
 }

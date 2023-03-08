@@ -80,6 +80,7 @@ class Repository
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
             $message = sprintf('Could not insert job (%s)', $exception->getMessage());
+            $this->logger->error($message);
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -117,6 +118,7 @@ class Repository
             $row = $result->fetchAssociative();
         } catch (Throwable $exception) {
             $message = 'Error while trying to execute query to get next available job.';
+            $this->logger->error($message);
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
 
@@ -138,6 +140,7 @@ class Repository
             }
         } catch (Throwable $exception) {
             $message = 'Could not create a job instance.';
+            $this->logger->error($message);
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
 
@@ -158,6 +161,7 @@ class Repository
                 );
         } catch (Throwable $exception) {
             $message = sprintf('Error while trying to delete a job with ID %s.', $id);
+            $this->logger->error($message, compact('id'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
 

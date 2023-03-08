@@ -79,7 +79,7 @@ class JobRunner
 
         $this->cache = $cache ?? $this->resolveCache();
 
-        $this->jobRunnerId = $this->helpersManager->getRandomHelper()->getRandomInt();
+        $this->jobRunnerId = $this->helpersManager->getRandom()->getRandomInt();
 
         $this->state = $state ?? new State($this->jobRunnerId);
 
@@ -291,6 +291,7 @@ class JobRunner
 
     /**
      * @throws Exception
+     * @psalm-suppress PossiblyUnusedMethod
      */
     protected function validateSelfState(): void
     {
@@ -509,7 +510,7 @@ class JobRunner
 
     protected function isCli(): bool
     {
-        return $this->helpersManager->getEnvironmentHelper()->isCli();
+        return $this->helpersManager->getEnvironment()->isCli();
     }
 
     /**
@@ -575,7 +576,7 @@ class JobRunner
 
         // Use the shorter interval from the two...
         $maximumExecutionTimeSeconds = $this->helpersManager
-            ->getDateTimeHelper()
+            ->getDateTime()
             ->convertDateIntervalToSeconds($maximumExecutionTime);
 
         if ($iniMaximumExecutionTimeSeconds < $maximumExecutionTimeSeconds) {
@@ -586,6 +587,9 @@ class JobRunner
         return $maximumExecutionTime;
     }
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     */
     protected function isMaximumExecutionTimeReached(): bool
     {
         if ($this->maximumExecutionTime === null) {

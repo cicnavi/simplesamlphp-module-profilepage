@@ -85,13 +85,13 @@ class Tracker implements AuthenticationDataTrackerInterface, AuthenticationDataP
 
     public function getConnectedServiceProviders(string $userIdentifier): ConnectedServiceProvider\Bag
     {
-        $userIdentifierHashSha256 = $this->helpersManager->getHashHelper()->getSha256($userIdentifier);
+        $userIdentifierHashSha256 = $this->helpersManager->getHash()->getSha256($userIdentifier);
         return $this->dataStore->getConnectedOrganizations($userIdentifierHashSha256);
     }
 
     public function getActivity(string $userIdentifier, int $maxResults, int $firstResult): Activity\Bag
     {
-        $userIdentifierHashSha256 = $this->helpersManager->getHashHelper()->getSha256($userIdentifier);
+        $userIdentifierHashSha256 = $this->helpersManager->getHash()->getSha256($userIdentifier);
         return $this->dataStore->getActivity($userIdentifierHashSha256, $maxResults, $firstResult);
     }
 

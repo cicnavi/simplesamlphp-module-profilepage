@@ -21,7 +21,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned\Tracker
- * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder
  * @uses \SimpleSAML\Module\accounting\Stores\Builders\DataStoreBuilder
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
@@ -30,29 +30,27 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Repository
- * @uses \SimpleSAML\Module\accounting\Helpers\HashHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Hash
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\AbstractStore
- *
- * @psalm-suppress all
  */
 class TrackerTest extends TestCase
 {
     /**
-     * @var Stub|ModuleConfiguration
+     * @var Stub
      */
     protected $moduleConfigurationStub;
     /**
-     * @var MockObject|LoggerInterface
+     * @var MockObject
      */
     protected $loggerMock;
     /**
-     * @var MockObject|Store
+     * @var MockObject
      */
     protected $dataStoreMock;
     /**
-     * @var Stub|HelpersManager
+     * @var Stub
      */
     protected $helpersManagerStub;
 
@@ -67,7 +65,6 @@ class TrackerTest extends TestCase
     }
 
     /**
-     * @psalm-suppress PossiblyInvalidArgument
      * @throws StoreException
      */
     public function testCanCreateInstance(): void
@@ -105,7 +102,6 @@ class TrackerTest extends TestCase
             ->method('persist')
             ->with($authenticationEventStub);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         $tracker = new Tracker(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -129,7 +125,6 @@ class TrackerTest extends TestCase
         $this->dataStoreMock->expects($this->once())
             ->method('runSetup');
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         $tracker = new Tracker(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -154,7 +149,6 @@ class TrackerTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('warning');
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         $tracker = new Tracker(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -176,7 +170,6 @@ class TrackerTest extends TestCase
             ->method('getConnectedOrganizations')
             ->willReturn($connectedOrganizationsBagStub);
 
-        /** @psalm-suppress PossiblyInvalidArgument */
         $tracker = new Tracker(
             $this->moduleConfigurationStub,
             $this->loggerMock,

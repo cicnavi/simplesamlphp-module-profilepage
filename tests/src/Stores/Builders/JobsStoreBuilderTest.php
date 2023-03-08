@@ -25,7 +25,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\AbstractStore
@@ -48,7 +48,6 @@ class JobsStoreBuilderTest extends TestCase
 
         $this->helpersManager = new HelpersManager();
 
-        /** @psalm-suppress InvalidArgument */
         $this->jobsStoreBuilder = new JobsStoreBuilder(
             $this->moduleConfigurationStub,
             $this->loggerStub,
@@ -73,7 +72,6 @@ class JobsStoreBuilderTest extends TestCase
         $invalidStore = new class {
         };
 
-        /** @psalm-suppress InvalidArgument */
         $storeBuilder = new class (
             $moduleConfigurationStub,
             $this->loggerStub,
@@ -90,7 +88,6 @@ class JobsStoreBuilderTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        /** @psalm-suppress InvalidArgument */
         $storeBuilder->build(get_class($invalidStore));
     }
 
@@ -102,7 +99,6 @@ class JobsStoreBuilderTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        /** @psalm-suppress InvalidArgument */
         (new JobsStoreBuilder($moduleConfigurationStub, $this->loggerStub, $this->helpersManager))
             ->build('invalid');
     }
@@ -135,7 +131,6 @@ class JobsStoreBuilderTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        /** @psalm-suppress InvalidArgument */
         (new JobsStoreBuilder($moduleConfigurationStub, $this->loggerStub, $this->helpersManager))
             ->build(get_class($sampleStore));
     }

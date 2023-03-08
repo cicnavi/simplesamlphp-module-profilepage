@@ -76,6 +76,7 @@ class Repository
                 $entityIdHashSha256,
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('entityIdHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -120,6 +121,7 @@ class Repository
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
             $message = sprintf('Error executing query to insert IdP. Error was: %s.', $exception->getMessage());
+            $this->logger->error($message, compact('entityId', 'entityIdHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -162,6 +164,7 @@ class Repository
                 $metadataHashSha256,
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('idpId', 'metadataHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -211,6 +214,7 @@ class Repository
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
             $message = sprintf('Error executing query to insert IdP Version. Error was: %s.', $exception->getMessage());
+            $this->logger->error($message, compact('idpId', 'metadataHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -243,6 +247,7 @@ class Repository
                 $entityIdHashSha256,
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('entityIdHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -287,6 +292,7 @@ class Repository
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
             $message = sprintf('Error executing query to insert SP. Error was: %s.', $exception->getMessage());
+            $this->logger->error($message, compact('entityId', 'entityIdHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -329,6 +335,7 @@ class Repository
                 $metadataHashSha256,
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('spId', 'metadataHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -378,6 +385,7 @@ class Repository
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
             $message = sprintf('Error executing query to insert SP Version. Error was: %s.', $exception->getMessage());
+            $this->logger->error($message, compact('spId', 'metadataHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -410,6 +418,7 @@ class Repository
                 $identifierHashSha256,
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('identifierHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -454,6 +463,7 @@ class Repository
             $queryBuilder->executeStatement();
         } catch (Throwable $exception) {
             $message = sprintf('Error executing query to insert user. Error was: %s.', $exception->getMessage());
+            $this->logger->error($message, compact('identifier', 'identifierHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -496,6 +506,7 @@ class Repository
                 $attributesHashSha256,
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('userId', 'attributesHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -548,6 +559,7 @@ class Repository
                 'Error executing query to insert user version. Error was: %s.',
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('userId', 'attributesHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -596,6 +608,7 @@ class Repository
                 $userVersionId,
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('idpVersionId', 'spVersionId', 'userVersionId'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -648,6 +661,7 @@ class Repository
                 'Error executing query to insert IdpSpUserVersion. Error was: %s.',
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('idpVersionId', 'spVersionId', 'userVersionId'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -656,9 +670,10 @@ class Repository
      * @throws StoreException
      */
     public function insertAuthenticationEvent(
-        int $IdpSpUserVersionId,
+        int $idpSpUserVersionId,
         DateTimeImmutable $happenedAt,
         string $clientIpAddress = null,
+        string $authenticationProtocolDesignation = null,
         DateTimeImmutable $createdAt = null
     ): void {
         try {
@@ -675,6 +690,9 @@ class Repository
                             TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS => ':' .
                             TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =>
+                            ':' .
+                            TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT => ':' .
                             TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT,
                     ]
@@ -682,9 +700,11 @@ class Repository
                 ->setParameters(
                     [
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_IDP_SP_USER_VERSION_ID =>
-                            $IdpSpUserVersionId,
+                            $idpSpUserVersionId,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT => $happenedAt,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS => $clientIpAddress,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =>
+                            $authenticationProtocolDesignation,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT => $createdAt,
                     ],
                     [
@@ -693,6 +713,8 @@ class Repository
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT =>
                             Types::DATETIMETZ_IMMUTABLE,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS =>
+                            Types::STRING,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =>
                             Types::STRING,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT =>
                             Types::DATETIMETZ_IMMUTABLE,
@@ -705,6 +727,7 @@ class Repository
                 'Error executing query to insert AuthenticationEvent. Error was: %s.',
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('idpSpUserVersionId'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -954,6 +977,7 @@ class Repository
                 'Error executing query to get connected organizations. Error was: %s.',
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('userIdentifierHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -973,6 +997,8 @@ class Repository
                 TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
                 TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
                 TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS,
+                TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
+                TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION,
                 //'vsv.metadata AS sp_metadata',
                 TableConstants::TABLE_ALIAS_SP_VERSION . '.' . TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA .
                 ' AS ' . TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA,
@@ -1067,6 +1093,7 @@ class Repository
                 'Error executing query to get connected organizations. Error was: %s.',
                 $exception->getMessage()
             );
+            $this->logger->error($message, compact('userIdentifierHashSha256'));
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
@@ -1091,6 +1118,7 @@ class Repository
                 'Error executing query to delete old authentication events. Error was: %s.',
                 $exception->getMessage()
             );
+            $this->logger->error($message);
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }

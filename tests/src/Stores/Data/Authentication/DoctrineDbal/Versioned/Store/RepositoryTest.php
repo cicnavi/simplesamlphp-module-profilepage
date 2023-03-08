@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
+use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
@@ -23,7 +24,7 @@ use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Repository
- * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Filesystem
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
@@ -38,15 +39,13 @@ use SimpleSAML\Test\Module\accounting\Constants\DateTime;
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000600CreateIdpSpUserVersionTable
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000700CreateAuthenticationEventTable
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
- *
- * @psalm-suppress all
  */
 class RepositoryTest extends TestCase
 {
     protected Connection $connection;
     protected \Doctrine\DBAL\Connection $dbal;
     /**
-     * @var Stub|LoggerInterface
+     * @var Stub
      */
     protected $loggerStub;
     protected Migrator $migrator;
@@ -64,12 +63,13 @@ class RepositoryTest extends TestCase
     protected Repository $repository;
     protected DateTimeImmutable $createdAt;
     /**
-     * @var Stub|Connection
+     * @var Stub
      */
     protected $connectionStub;
     protected string $spEntityIdHash;
     protected string $spMetadata;
     protected string $clientIpAddress;
+    protected string $authenticationProtocolDesignation;
 
     /**
      * @throws StoreException
@@ -119,6 +119,7 @@ class RepositoryTest extends TestCase
 
         $this->createdAt = new DateTimeImmutable();
         $this->clientIpAddress = '123.123.123.123';
+        $this->authenticationProtocolDesignation = Saml2::DESIGNATION;
     }
 
     public function testCanCreateInstance(): void
@@ -467,7 +468,7 @@ class RepositoryTest extends TestCase
 
         $this->assertSame(0, (int)$authenticationEventCounterQueryBuilder->executeQuery()->fetchOne());
 
-        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $happenedAt, null, $createdAt);
+        $this->repository->insertAuthenticationEvent($idpSpUserVersionId, $happenedAt, null, null, $createdAt);
 
         $this->assertSame(1, (int)$authenticationEventCounterQueryBuilder->executeQuery()->fetchOne());
     }
@@ -521,6 +522,7 @@ class RepositoryTest extends TestCase
             $idpSpUserVersionId,
             $this->createdAt,
             $this->clientIpAddress,
+            $this->authenticationProtocolDesignation,
             $this->createdAt
         );
 
@@ -550,6 +552,7 @@ class RepositoryTest extends TestCase
             $idpSpUserVersionId,
             $this->createdAt,
             $this->clientIpAddress,
+            $this->authenticationProtocolDesignation,
             $this->createdAt
         );
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
@@ -592,6 +595,7 @@ class RepositoryTest extends TestCase
             $idpSpUserVersionId,
             $this->createdAt,
             $this->clientIpAddress,
+            $this->authenticationProtocolDesignation,
             $this->createdAt
         );
 
@@ -631,6 +635,7 @@ class RepositoryTest extends TestCase
             $idpSpUserVersionId,
             $this->createdAt,
             $this->clientIpAddress,
+            $this->authenticationProtocolDesignation,
             $this->createdAt
         );
         $resultArray = $this->repository->getConnectedServiceProviders($this->userIdentifierHash);
@@ -710,6 +715,7 @@ class RepositoryTest extends TestCase
             $idpSpUserVersionId,
             $this->createdAt,
             $this->clientIpAddress,
+            $this->authenticationProtocolDesignation,
             $this->createdAt
         );
 
@@ -720,6 +726,7 @@ class RepositoryTest extends TestCase
             $idpSpUserVersionId,
             $this->createdAt,
             $this->clientIpAddress,
+            $this->authenticationProtocolDesignation,
             $this->createdAt
         );
         $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
@@ -729,6 +736,7 @@ class RepositoryTest extends TestCase
             $idpSpUserVersionId,
             $this->createdAt,
             $this->clientIpAddress,
+            $this->authenticationProtocolDesignation,
             $this->createdAt
         );
         $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
@@ -757,6 +765,7 @@ class RepositoryTest extends TestCase
             $idpSpUserVersionId,
             $this->createdAt,
             $this->clientIpAddress,
+            $this->authenticationProtocolDesignation,
             $this->createdAt
         );
         $resultArray = $this->repository->getActivity($this->userIdentifierHash, 10, 0);
@@ -814,6 +823,7 @@ class RepositoryTest extends TestCase
             $idpSpUserVersionId,
             $this->createdAt,
             $this->clientIpAddress,
+            $this->authenticationProtocolDesignation,
             $this->createdAt
         );
 

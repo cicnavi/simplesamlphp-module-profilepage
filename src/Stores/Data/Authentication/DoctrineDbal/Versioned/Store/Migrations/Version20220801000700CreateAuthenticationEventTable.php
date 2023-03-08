@@ -44,6 +44,10 @@ class Version20220801000700CreateAuthenticationEventTable extends AbstractMigrat
                 ->setLength(TableConstants::COLUMN_IP_ADDRESS_LENGTH)
                 ->setNotnull(false);
 
+            $table->addColumn('authentication_protocol_designation', Types::STRING)
+                ->setLength(TableConstants::COLUMN_AUTHENTICATION_PROTOCOL_DESIGNATION_LENGTH)
+                ->setNotnull(false);
+
             $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
 
             $table->setPrimaryKey(['id']);

@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\Module\accounting\Constants;
 
 final class StateArrays
 {
-    public const FULL = [
+    public const SAML2_FULL = [
         'Responder' => [0 => '\\SimpleSAML\\Module\\saml\\IdP\\SAML2', 1 => 'sendResponse',],
         '\\SimpleSAML\\Auth\\State.exceptionFunc' => [
             0 => '\\SimpleSAML\\Module\\saml\\IdP\\SAML2',
@@ -130,5 +130,109 @@ final class StateArrays
             'metadata-set' => 'saml20-idp-hosted',
         ],
         '\\SimpleSAML\\Auth\\ProcessingChain.filters' => [],
+    ];
+
+    public const OIDC_FULL = [
+        'Attributes' => [
+            'hrEduPersonUniqueID' => ['testuser@primjer2.hr'],
+            'uid' => ['testuser'],
+            'cn' => ['TestName TestSurname'],
+            'sn' => ['TestSurname', 'TestSurname2'],
+            'givenName' => ['TestName'],
+            'mail' => ['testusermail@primjer.hr', 'testusermail2@primjer.hr'],
+            'hrEduPersonPersistentID' => ['da4294fb4e5746d57ab6ad88d2daf275'],
+            'displayName' => ['testname123'],
+        ],
+        'Authority' => 'example-userpass',
+        'AuthnInstant' => 1677066265,
+        'Expire' => 1677095065,
+        'LogoutHandlers' => [
+            [
+                'SimpleSAML\Module\oidc\Controller\LogoutController',
+                'logoutHandler'
+            ],
+        ],
+        'Oidc' => [
+            'OpenIdProviderMetadata' => [
+                'issuer' => 'http://op.host.internal:8074',
+                'authorization_endpoint' => 'http://op.host.internal:8074/simplesamlphp/module.php/oidc/authorize.php',
+                'token_endpoint' => 'http://op.host.internal:8074/simplesamlphp/module.php/oidc/token.php',
+                'userinfo_endpoint' => 'http://op.host.internal:8074/simplesamlphp/module.php/oidc/userinfo.php',
+                'end_session_endpoint' => 'http://op.host.internal:8074/simplesamlphp/module.php/oidc/logout.php',
+                'jwks_uri' => 'http://op.host.internal:8074/simplesamlphp/module.php/oidc/jwks.php',
+                'scopes_supported' => [
+                    'openid',
+                    'offline_access',
+                    'profile',
+                    'email',
+                    'address',
+                    'phone',
+                ],
+                'response_types_supported' => [
+                    'code',
+                    'token',
+                    'id_token',
+                    'id_token token',
+                ],
+                'subject_types_supported' => [
+                    'public',
+                ],
+                'id_token_signing_alg_values_supported' => [
+                    'RS256',
+                ],
+                'code_challenge_methods_supported' => [
+                    'plain',
+                    'S256',
+                ],
+                'token_endpoint_auth_methods_supported' => [
+                    'client_secret_post',
+                    'client_secret_basic',
+                ],
+                'request_parameter_supported' => false,
+                'grant_types_supported' => [
+                    'authorization_code',
+                    'refresh_token',
+                ],
+                'claims_parameter_supported' => true,
+                'acr_values_supported' => [
+                    '1',
+                    '0',
+                ],
+                'backchannel_logout_supported' => true,
+                'backchannel_logout_session_supported' => true,
+            ],
+            'RelyingPartyMetadata' => [
+                'id' => 'd1ee56b4-5258-4088-a934-66963df2bcd7',
+                'name' => 'Sample RP',
+                'description' => 'Sample Relying Party',
+                'auth_source' => null,
+                'redirect_uri' => [
+                    'http://sp.host.internal:8074/callback.php',
+                ],
+                'scopes' => [
+                    'openid',
+                    'offline_access',
+                    'profile',
+                ],
+                'is_enabled' => true,
+                'is_confidential' => true,
+                'owner' => null,
+                'post_logout_redirect_uri' => [],
+                'backchannel_logout_uri' => 'http://sp.host.internal:8074/logout.php',
+            ],
+            'AuthorizationRequestParameters' => [
+                'response_type' => 'code',
+                'client_id' => 'd1ee56b4-5258-4088-a934-66963df2bcd7',
+                'redirect_uri' => 'http://sp.host.internal:8074/callback.php',
+                'scope' => 'openid offline_access profile',
+            ],
+            'Source' => [
+                'entityid' => 'http://op.host.internal:8074',
+            ],
+            'Destination' => [
+                'entityid' => 'd1ee56b4-5258-4088-a934-66963df2bcd7',
+            ],
+            '\SimpleSAML\Auth\State.restartURL' => 'http://op.host.internal:8074/simplesamlphp/module.php/oidc/authorize.php?response_type=code&client_id=d1ee56b4-5258-4088-a934-66963df2bcd7&redirect_uri=http%3A%2F%2Fsp.host.internal%3A8074%2Fcallback.php&scope=openid+offline_access+profile+&state=MLlISLjJMKunw0ddFv4ROuyam7Qwn6sNyBW5y9Yg&nonce=uh3nJez5y1SSch347j5PkDWEJXvCwqAI1PL1Kgi6',
+        ]
     ];
 }

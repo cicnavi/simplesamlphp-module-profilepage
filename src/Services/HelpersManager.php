@@ -4,77 +4,92 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Services;
 
-use SimpleSAML\Module\accounting\Helpers\ArrayHelper;
-use SimpleSAML\Module\accounting\Helpers\AttributesHelper;
-use SimpleSAML\Module\accounting\Helpers\DateTimeHelper;
-use SimpleSAML\Module\accounting\Helpers\EnvironmentHelper;
-use SimpleSAML\Module\accounting\Helpers\FilesystemHelper;
-use SimpleSAML\Module\accounting\Helpers\HashHelper;
-use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper;
-use SimpleSAML\Module\accounting\Helpers\NetworkHelper;
-use SimpleSAML\Module\accounting\Helpers\RandomHelper;
-use SimpleSAML\Module\accounting\Helpers\ModuleRoutesHelper;
+use SimpleSAML\Module\accounting\Helpers\Arr;
+use SimpleSAML\Module\accounting\Helpers\Attributes;
+use SimpleSAML\Module\accounting\Helpers\AuthenticationEventStateResolver;
+use SimpleSAML\Module\accounting\Helpers\DateTime;
+use SimpleSAML\Module\accounting\Helpers\Environment;
+use SimpleSAML\Module\accounting\Helpers\Filesystem;
+use SimpleSAML\Module\accounting\Helpers\Hash;
+use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration;
+use SimpleSAML\Module\accounting\Helpers\Network;
+use SimpleSAML\Module\accounting\Helpers\ProviderResolver;
+use SimpleSAML\Module\accounting\Helpers\Random;
+use SimpleSAML\Module\accounting\Helpers\ModuleRoutes;
 
 class HelpersManager
 {
-    protected static ?DateTimeHelper $dateTimeHelper;
-    protected static ?EnvironmentHelper $environmentHelper;
-    protected static ?RandomHelper $randomHelper;
-    protected static ?ModuleRoutesHelper $routesHelper;
-    protected static ?ArrayHelper $arrayHelper;
-    protected static ?HashHelper $hashHelper;
-    protected static ?AttributesHelper $attributesHelper;
-    protected static ?FilesystemHelper $filesystemHelper;
-    protected static ?InstanceBuilderUsingModuleConfigurationHelper $instanceBuilderHelper;
-    protected static ?NetworkHelper $networkHelper;
+    protected static ?DateTime $dateTime;
+    protected static ?Environment $environment;
+    protected static ?Random $random;
+    protected static ?ModuleRoutes $routes;
+    protected static ?Arr $arr;
+    protected static ?Hash $hash;
+    protected static ?Attributes $attributes;
+    protected static ?Filesystem $filesystem;
+    protected static ?InstanceBuilderUsingModuleConfiguration $instanceBuilder;
+    protected static ?Network $network;
+    protected static ?AuthenticationEventStateResolver $authenticationEventStateResolver;
+    protected static ?ProviderResolver $providerResolver;
 
-    public function getDateTimeHelper(): DateTimeHelper
+
+    public function getDateTime(): DateTime
     {
-        return self::$dateTimeHelper ??= new DateTimeHelper();
+        return self::$dateTime ??= new DateTime();
     }
 
-    public function getEnvironmentHelper(): EnvironmentHelper
+    public function getEnvironment(): Environment
     {
-        return self::$environmentHelper ??= new EnvironmentHelper();
+        return self::$environment ??= new Environment();
     }
 
-    public function getRandomHelper(): RandomHelper
+    public function getRandom(): Random
     {
-        return self::$randomHelper ??= new RandomHelper();
+        return self::$random ??= new Random();
     }
 
-    public function getModuleRoutesHelper(): ModuleRoutesHelper
+    public function getModuleRoutes(): ModuleRoutes
     {
-        return self::$routesHelper ??= new ModuleRoutesHelper();
+        return self::$routes ??= new ModuleRoutes();
     }
 
-    public function getArrayHelper(): ArrayHelper
+    public function getArr(): Arr
     {
-        return self::$arrayHelper ??= new ArrayHelper();
+        return self::$arr ??= new Arr();
     }
 
-    public function getHashHelper(): HashHelper
+    public function getHash(): Hash
     {
-        return self::$hashHelper ??= new HashHelper($this->getArrayHelper());
+        return self::$hash ??= new Hash($this->getArr());
     }
 
-    public function getAttributesHelper(): AttributesHelper
+    public function getAttributes(): Attributes
     {
-        return self::$attributesHelper ??= new AttributesHelper();
+        return self::$attributes ??= new Attributes();
     }
 
-    public function getFilesystemHelper(): FilesystemHelper
+    public function getFilesystem(): Filesystem
     {
-        return self::$filesystemHelper ??= new FilesystemHelper();
+        return self::$filesystem ??= new Filesystem();
     }
 
-    public function getInstanceBuilderUsingModuleConfigurationHelper(): InstanceBuilderUsingModuleConfigurationHelper
+    public function getInstanceBuilderUsingModuleConfiguration(): InstanceBuilderUsingModuleConfiguration
     {
-        return self::$instanceBuilderHelper ??= new InstanceBuilderUsingModuleConfigurationHelper();
+        return self::$instanceBuilder ??= new InstanceBuilderUsingModuleConfiguration();
     }
 
-    public function getNetworkHelper(): NetworkHelper
+    public function getNetwork(): Network
     {
-        return self::$networkHelper ??= new NetworkHelper();
+        return self::$network ??= new Network();
+    }
+
+    public function getAuthenticationEventStateResolver(): AuthenticationEventStateResolver
+    {
+        return self::$authenticationEventStateResolver ??= new AuthenticationEventStateResolver();
+    }
+
+    public function getProviderResolver(): ProviderResolver
+    {
+        return self::$providerResolver ??= new ProviderResolver();
     }
 }

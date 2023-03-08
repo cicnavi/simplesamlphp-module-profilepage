@@ -2,6 +2,8 @@
 <psalm
     errorLevel="1"
     resolveFromConfigFile="true"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
@@ -9,7 +11,6 @@
     <projectFiles>
         <directory name="src" />
         <directory name="config-templates" />
-        <directory name="tests" />
         <directory name="public" />
         <directory name="hooks" />
 
@@ -28,14 +29,9 @@
             </errorLevel>
         </UnusedVariable>
 
-        <!--
-        Ignore PropertyNotSetInConstructor for phpunit tests. For example, this will ignore things like
-        "Property SomeTestClass::$backupStaticAttributes is not defined in constructor of SomeTestClass..."
-        -->
-        <PropertyNotSetInConstructor>
-            <errorLevel type="suppress">
-                <directory name="tests" />
-            </errorLevel>
-        </PropertyNotSetInConstructor>
+        <!-- Ignore errors related to unused classes, methods... -->
+        <UnusedClass errorLevel="suppress" />
+        <PossiblyUnusedMethod errorLevel="suppress" />
+        <PossiblyUnusedReturnValue errorLevel="suppress" />
     </issueHandlers>
 </psalm>

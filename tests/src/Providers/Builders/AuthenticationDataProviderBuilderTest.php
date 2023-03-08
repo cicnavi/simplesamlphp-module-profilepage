@@ -16,7 +16,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Providers\Builders\AuthenticationDataProviderBuilder
- * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
  * @uses \SimpleSAML\Module\accounting\Stores\Builders\DataStoreBuilder
@@ -50,7 +50,6 @@ class AuthenticationDataProviderBuilderTest extends TestCase
 
     public function testCanCreateInstance(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $this->assertInstanceOf(
             AuthenticationDataProviderBuilder::class,
             new AuthenticationDataProviderBuilder(
@@ -66,7 +65,6 @@ class AuthenticationDataProviderBuilderTest extends TestCase
      */
     public function testCanBuildDataProvider(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $builder = new AuthenticationDataProviderBuilder(
             $this->moduleConfigurationStub,
             $this->loggerStub,
@@ -80,7 +78,6 @@ class AuthenticationDataProviderBuilderTest extends TestCase
     {
         $this->expectException(Exception::class);
 
-        /** @psalm-suppress InvalidArgument */
         (new AuthenticationDataProviderBuilder(
             $this->moduleConfigurationStub,
             $this->loggerStub,

@@ -31,7 +31,7 @@ use function PHPUnit\Framework\assertFalse;
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
- * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Filesystem
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
@@ -69,7 +69,6 @@ class MigratorTest extends TestCase
     {
         $this->assertFalse($this->schemaManager->tablesExist([$this->tableName]));
 
-        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $this->assertTrue($migrator->needsSetup());
@@ -90,7 +89,6 @@ class MigratorTest extends TestCase
             ->method('warning')
             ->with($this->stringContains('setup is not needed'));
 
-        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $this->assertTrue($migrator->needsSetup());
@@ -106,7 +104,6 @@ class MigratorTest extends TestCase
      */
     public function testCanRunMigrationClasses(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
@@ -134,7 +131,6 @@ class MigratorTest extends TestCase
             }
         };
 
-        /** @psalm-suppress InvalidArgument */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
@@ -150,7 +146,6 @@ class MigratorTest extends TestCase
      */
     public function testCanGetImplementedMigrationClasses(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
@@ -174,7 +169,6 @@ class MigratorTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        /** @psalm-suppress InvalidArgument */
         (new Migrator($connectionStub, $this->loggerServiceMock));
     }
 
@@ -191,7 +185,6 @@ class MigratorTest extends TestCase
         $connectionStub = $this->createStub(Connection::class);
         $connectionStub->method('dbal')->willReturn($dbalStub);
 
-        /** @psalm-suppress InvalidArgument */
         $migrator = new Migrator($connectionStub, $this->loggerServiceMock);
 
         $this->expectException(StoreException::class);
@@ -212,7 +205,6 @@ class MigratorTest extends TestCase
         $connectionStub = $this->createStub(Connection::class);
         $connectionStub->method('dbal')->willReturn($dbalStub);
 
-        /** @psalm-suppress InvalidArgument */
         $migrator = new Migrator($connectionStub, $this->loggerServiceMock);
 
         $this->expectException(StoreException::class);
@@ -235,7 +227,6 @@ class MigratorTest extends TestCase
         $connectionStub->method('dbal')->willReturn($dbalStub);
         $connectionStub->method('preparePrefixedTableName')->willReturn(Migrator::TABLE_NAME);
 
-        /** @psalm-suppress InvalidArgument */
         $migrator = new Migrator($connectionStub, $this->loggerServiceMock);
         $migrator->runSetup();
 
@@ -255,7 +246,6 @@ class MigratorTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        /** @psalm-suppress InvalidArgument */
         (new Migrator($connectionStub, $this->loggerServiceMock))->getImplementedMigrationClasses();
     }
 

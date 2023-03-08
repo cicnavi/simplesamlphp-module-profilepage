@@ -21,7 +21,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
- * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Filesystem
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
@@ -61,7 +61,6 @@ class AbstractMigratorTest extends TestCase
      */
     public function testCanGatherMigrationClassesFromDirectory(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $directory = $this->getSampleMigrationsDirectory();
@@ -80,7 +79,6 @@ class AbstractMigratorTest extends TestCase
      */
     public function testCanRunMigrationClasses(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
@@ -105,7 +103,6 @@ class AbstractMigratorTest extends TestCase
      */
     public function testCanGatherOnlyMigrationClasses(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $directory = __DIR__;
@@ -131,7 +128,6 @@ class AbstractMigratorTest extends TestCase
             }
         };
 
-        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $this->expectException(MigrationException::class);
@@ -144,7 +140,6 @@ class AbstractMigratorTest extends TestCase
      */
     public function testCanGetNonImplementedMigrationClasses(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
@@ -165,7 +160,6 @@ class AbstractMigratorTest extends TestCase
      */
     public function testCanFindOutIfNonImplementedMigrationClassesExist(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();
@@ -182,7 +176,6 @@ class AbstractMigratorTest extends TestCase
      */
     public function testCanRunNonImplementedMigrationClasses(): void
     {
-        /** @psalm-suppress InvalidArgument Using mock instead of Logger instance */
         $migrator = new Migrator($this->connection, $this->loggerServiceMock);
 
         $migrator->runSetup();

@@ -5,27 +5,28 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\accounting\Entities;
 
 use DateTimeImmutable;
+use SimpleSAML\Module\accounting\Entities\Interfaces\ServiceProviderInterface;
 
 /**
  * Represents a Service Provider to which a user has authenticated at least once.
  */
 class ConnectedServiceProvider
 {
-    protected ServiceProvider $serviceProvider;
+    protected ServiceProviderInterface $serviceProvider;
     protected int $numberOfAuthentications;
     protected DateTimeImmutable $lastAuthenticationAt;
     protected DateTimeImmutable $firstAuthenticationAt;
     protected User $user;
 
     /**
-     * @param ServiceProvider $serviceProvider
+     * @param ServiceProviderInterface $serviceProvider
      * @param int $numberOfAuthentications
      * @param DateTimeImmutable $lastAuthenticationAt
      * @param DateTimeImmutable $firstAuthenticationAt
      * @param User $user
      */
     public function __construct(
-        ServiceProvider $serviceProvider,
+        ServiceProviderInterface $serviceProvider,
         int $numberOfAuthentications,
         DateTimeImmutable $lastAuthenticationAt,
         DateTimeImmutable $firstAuthenticationAt,
@@ -39,9 +40,9 @@ class ConnectedServiceProvider
     }
 
     /**
-     * @return ServiceProvider
+     * @return ServiceProviderInterface
      */
-    public function getServiceProvider(): ServiceProvider
+    public function getServiceProvider(): ServiceProviderInterface
     {
         return $this->serviceProvider;
     }

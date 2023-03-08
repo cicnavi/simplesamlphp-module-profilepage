@@ -17,7 +17,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Builders\DataStoreBuilder
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store
- * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
  * @uses \SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
@@ -45,7 +45,6 @@ class DataStoreBuilderTest extends TestCase
 
         $this->helpersManager = new HelpersManager();
 
-        /** @psalm-suppress InvalidArgument */
         $this->dataStoreBuilder = new DataStoreBuilder(
             $this->moduleConfigurationStub,
             $this->loggerStub,

@@ -9,7 +9,5 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 interface BuildableUsingModuleConfigurationInterface
 {
-    public const BUILD_METHOD = 'build';
-
     public static function build(ModuleConfiguration $moduleConfiguration, LoggerInterface $logger): self;
 }

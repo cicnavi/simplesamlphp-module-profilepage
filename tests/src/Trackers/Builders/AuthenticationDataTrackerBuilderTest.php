@@ -19,19 +19,17 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder
- * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfigurationHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
- *
- * @psalm-suppress all
  */
 class AuthenticationDataTrackerBuilderTest extends TestCase
 {
     /**
-     * @var MockObject|LoggerInterface
+     * @var MockObject
      */
     protected $loggerMock;
     /**
-     * @var Stub|ModuleConfiguration
+     * @var Stub
      */
     protected $moduleConfigurationStub;
 

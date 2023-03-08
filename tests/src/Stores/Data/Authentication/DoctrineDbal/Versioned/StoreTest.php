@@ -11,7 +11,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Authentication\State;
+use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
@@ -28,13 +28,14 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store
- * @uses   \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
- * @uses   \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
- * @uses   \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
- * @uses   \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory
- * @uses   \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Repository
- * @uses   \SimpleSAML\Module\accounting\Entities\Authentication\Event
- * @uses   \SimpleSAML\Module\accounting\Entities\Authentication\State
+ * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Factory
+ * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Repository
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
+ * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000000CreateIdpTable
@@ -45,11 +46,11 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000500CreateUserVersionTable
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000600CreateIdpSpUserVersionTable
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\Migrations\Version20220801000700CreateAuthenticationEventTable
- * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Filesystem
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\HashDecoratedState
- * @uses \SimpleSAML\Module\accounting\Helpers\HashHelper
- * @uses \SimpleSAML\Module\accounting\Helpers\ArrayHelper
- * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Hash
+ * @uses \SimpleSAML\Module\accounting\Helpers\Arr
+ * @uses \SimpleSAML\Module\accounting\Helpers\Network
  * @uses \SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider\Bag
  * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
  * @uses \SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider
@@ -61,8 +62,9 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Stores\Data\Authentication\DoctrineDbal\Versioned\Store\RawActivity
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\AbstractStore
- *
- * @psalm-suppress all
+ * @uses \SimpleSAML\Module\accounting\Entities\Providers\Service\Saml2
+ * @uses \SimpleSAML\Module\accounting\Helpers\ProviderResolver
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2
  */
 class StoreTest extends TestCase
 {
@@ -70,19 +72,19 @@ class StoreTest extends TestCase
     protected Migrator $migrator;
     protected Stub $factoryStub;
     protected Connection $connection;
-    protected State $state;
+    protected State\Saml2 $state;
     protected Event $authenticationEvent;
     protected Store\HashDecoratedState $hashDecoratedState;
     /**
-     * @var MockObject|Store\Repository
+     * @var MockObject
      */
     protected $repositoryMock;
     /**
-     * @var Result|Stub
+     * @var Stub
      */
     protected $resultStub;
     /**
-     * @var MockObject|LoggerInterface
+     * @var MockObject
      */
     protected $loggerMock;
 
@@ -102,14 +104,13 @@ class StoreTest extends TestCase
 
         $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        /** @psalm-suppress InvalidArgument */
         $this->migrator = new Migrator($this->connection, $this->loggerMock);
 
         $this->factoryStub = $this->createStub(Factory::class);
         $this->factoryStub->method('buildConnection')->willReturn($this->connection);
         $this->factoryStub->method('buildMigrator')->willReturn($this->migrator);
 
-        $this->state = new State(StateArrays::FULL);
+        $this->state = new State\Saml2(StateArrays::SAML2_FULL);
         $this->authenticationEvent = new Event($this->state);
 
         $this->hashDecoratedState = new Store\HashDecoratedState($this->state);
@@ -123,7 +124,6 @@ class StoreTest extends TestCase
      */
     public function testCanConstructInstance(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $this->assertInstanceOf(
             Store::class,
             new Store(
@@ -141,7 +141,6 @@ class StoreTest extends TestCase
      */
     public function testCanBuildInstance(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $this->assertInstanceOf(
             Store::class,
             Store::build($this->moduleConfigurationStub, $this->loggerMock)
@@ -155,7 +154,6 @@ class StoreTest extends TestCase
      */
     public function testCanPersistAuthenticationEvent(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -263,7 +261,6 @@ class StoreTest extends TestCase
     public function testResolveIdpIdThrowsOnFirstGetIdpFailure(): void
     {
         $this->repositoryMock->method('getIdp')->willThrowException(new Exception('test'));
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -287,7 +284,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getIdp')->willReturn($this->resultStub);
         $this->repositoryMock->method('insertIdp')->willThrowException(new Exception('test'));
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -309,7 +305,6 @@ class StoreTest extends TestCase
     public function testResolveIdpVersionIdThrowsOnFirstGetIdpVersionFailure(): void
     {
         $this->repositoryMock->method('getIdpVersion')->willThrowException(new Exception('test'));
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -333,7 +328,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getIdpVersion')->willReturn($this->resultStub);
         $this->repositoryMock->method('insertIdpVersion')->willThrowException(new Exception('test'));
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -355,7 +349,6 @@ class StoreTest extends TestCase
     public function testResolveSpIdThrowsOnFirstGetSpFailure(): void
     {
         $this->repositoryMock->method('getSp')->willThrowException(new Exception('test'));
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -379,7 +372,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getSp')->willReturn($this->resultStub);
         $this->repositoryMock->method('insertSp')->willThrowException(new Exception('test'));
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -401,7 +393,6 @@ class StoreTest extends TestCase
     public function testResolveSpVersionIdThrowsOnFirstGetSpVersionFailure(): void
     {
         $this->repositoryMock->method('getSpVersion')->willThrowException(new Exception('test'));
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -425,7 +416,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getSpVersion')->willReturn($this->resultStub);
         $this->repositoryMock->method('insertSpVersion')->willThrowException(new Exception('test'));
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -449,7 +439,6 @@ class StoreTest extends TestCase
         $moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $moduleConfigurationStub->method('getUserIdAttributeName')->willReturn('invalid');
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $moduleConfigurationStub,
             $this->loggerMock,
@@ -470,7 +459,6 @@ class StoreTest extends TestCase
     public function testResolveUserIdThrowsOnFirstGetUserFailure(): void
     {
         $this->repositoryMock->method('getUser')->willThrowException(new Exception('test'));
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -494,7 +482,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getUser')->willReturn($this->resultStub);
         $this->repositoryMock->method('insertUser')->willThrowException(new Exception('test'));
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -516,7 +503,6 @@ class StoreTest extends TestCase
     public function testResolveUserVersionIdThrowsOnFirstGetUserVersionFailure(): void
     {
         $this->repositoryMock->method('getUserVersion')->willThrowException(new Exception('test'));
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -540,7 +526,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getUserVersion')->willReturn($this->resultStub);
         $this->repositoryMock->method('insertUserVersion')->willThrowException(new Exception('test'));
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -562,7 +547,6 @@ class StoreTest extends TestCase
     public function testResolveIdpSpUserVersionIdThrowsOnFirstGetIdpSpUserVersionFailure(): void
     {
         $this->repositoryMock->method('getIdpSpUserVersion')->willThrowException(new Exception('test'));
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -586,7 +570,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getIdpSpUserVersion')->willReturn($this->resultStub);
         $this->repositoryMock->method('insertIdpSpUserVersion')->willThrowException(new Exception('test'));
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -609,7 +592,6 @@ class StoreTest extends TestCase
     {
         $this->repositoryMock->method('getConnectedServiceProviders')->willReturn([]);
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -632,7 +614,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getConnectedServiceProviders')
             ->willReturn([RawRowResult::CONNECTED_ORGANIZATION]);
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -658,7 +639,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getConnectedServiceProviders')
             ->willReturn([$rawResult]);
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -679,7 +659,6 @@ class StoreTest extends TestCase
     {
         $this->repositoryMock->method('getActivity')->willReturn([]);
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -702,7 +681,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getActivity')
             ->willReturn([RawRowResult::ACTIVITY]);
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -728,7 +706,6 @@ class StoreTest extends TestCase
         $this->repositoryMock->method('getActivity')
             ->willReturn([$rawResult]);
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,
@@ -753,7 +730,6 @@ class StoreTest extends TestCase
             ->method('deleteAuthenticationEventsOlderThan')
             ->with($dateTime);
 
-        /** @psalm-suppress InvalidArgument */
         $store = new Store(
             $this->moduleConfigurationStub,
             $this->loggerMock,

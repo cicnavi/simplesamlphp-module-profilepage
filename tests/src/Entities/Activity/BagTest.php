@@ -20,7 +20,6 @@ class BagTest extends TestCase
 
         $this->assertEmpty($bag->getAll());
 
-        /** @psalm-suppress InvalidArgument */
         $bag->add($activityStub);
 
         $this->assertNotEmpty($bag->getAll());

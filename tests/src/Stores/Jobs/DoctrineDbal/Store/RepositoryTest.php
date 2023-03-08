@@ -9,7 +9,7 @@ use Exception;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Authentication\State;
+use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
@@ -29,7 +29,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @covers \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Repository
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
- * @uses \SimpleSAML\Module\accounting\Helpers\FilesystemHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Filesystem
  * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
@@ -42,9 +42,10 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
  * @uses \SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\State
+ * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\DoctrineDbal\AbstractRawEntity
- * @uses \SimpleSAML\Module\accounting\Helpers\NetworkHelper
+ * @uses \SimpleSAML\Module\accounting\Helpers\Network
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  * @uses \SimpleSAML\Module\accounting\Stores\Bases\AbstractStore
  */
@@ -71,7 +72,6 @@ class RepositoryTest extends TestCase
 
         $this->loggerServiceStub = $this->createStub(Logger::class);
 
-        /** @psalm-suppress InvalidArgument */
         $this->migrator = new Migrator($this->connection, $this->loggerServiceStub);
 
         $this->factoryStub = $this->createStub(Factory::class);
@@ -84,7 +84,6 @@ class RepositoryTest extends TestCase
         $this->jobStub->method('getType')->willReturn(GenericJob::class);
         $this->jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
 
-        /** @psalm-suppress InvalidArgument */
         $this->jobsStore = new Store(
             $this->moduleConfiguration,
             $this->loggerServiceStub,
@@ -102,14 +101,12 @@ class RepositoryTest extends TestCase
      */
     public function testCanInsertAndGetJob(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
 
         $this->assertNull($repository->getNext());
 
-        /** @psalm-suppress InvalidArgument */
         $repository->insert($this->jobStub);
 
         $this->assertNotNull($repository->getNext());
@@ -120,14 +117,12 @@ class RepositoryTest extends TestCase
      */
     public function testInsertThrowsIfJobsStoreSetupNotRan(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
         // Running setup will ensure that all migrations are ran.
         //$this->jobsStore->runSetup();
 
         $this->expectException(StoreException::class);
 
-        /** @psalm-suppress InvalidArgument */
         $repository->insert($this->jobStub);
     }
 
@@ -137,7 +132,6 @@ class RepositoryTest extends TestCase
      */
     public function testInsertThrowsForInvalidJobType(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
@@ -150,7 +144,6 @@ class RepositoryTest extends TestCase
         $jobStub->method('getType')->willReturn($invalidType);
         $jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
 
-        /** @psalm-suppress InvalidArgument */
         $repository->insert($jobStub);
     }
 
@@ -159,7 +152,6 @@ class RepositoryTest extends TestCase
      */
     public function testGetNextThrowsIfJobsStoreSetupNotRan(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
         // Running setup will ensure that all migrations are ran.
         //$this->jobsStore->runSetup();
@@ -175,7 +167,6 @@ class RepositoryTest extends TestCase
      */
     public function testGetNextThrowsForInvalidJobType(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
@@ -186,7 +177,6 @@ class RepositoryTest extends TestCase
         $jobStub->method('getType')->willReturn(AbstractJob::class);
         $jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
 
-        /** @psalm-suppress InvalidArgument */
         $repository->insert($jobStub);
 
         $this->expectException(StoreException::class);
@@ -201,13 +191,11 @@ class RepositoryTest extends TestCase
      */
     public function testCanDeleteJob(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
 
         $this->assertFalse($repository->delete(1));
-        /** @psalm-suppress InvalidArgument */
         $repository->insert($this->jobStub);
         $job = $repository->getNext();
         if ($job === null) {
@@ -226,7 +214,6 @@ class RepositoryTest extends TestCase
      */
     public function testDeleteThrowsWhenJobsStoreSetupNotRan(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
         // Running setup will ensure that all migrations are ran.
         //$this->jobsStore->runSetup();
@@ -242,17 +229,15 @@ class RepositoryTest extends TestCase
      */
     public function testCanGetSpecificJobType(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
 
         $this->assertNull($repository->getNext());
 
-        /** @psalm-suppress InvalidArgument */
         $repository->insert($this->jobStub);
 
-        $authenticationEvent = new Event(new State(StateArrays::FULL));
+        $authenticationEvent = new Event(new State\Saml2(StateArrays::SAML2_FULL));
         $authenticationEventJob = new Event\Job($authenticationEvent);
 
         $repository->insert($authenticationEventJob);
@@ -264,7 +249,6 @@ class RepositoryTest extends TestCase
     {
         $this->expectException(StoreException::class);
 
-        /** @psalm-suppress InvalidArgument */
         new Repository($this->connection, 'invalid-table-name', $this->loggerServiceStub);
     }
 }

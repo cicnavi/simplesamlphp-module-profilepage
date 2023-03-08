@@ -68,7 +68,6 @@ class Version20220801000500CreateUserVersionTableTest extends TestCase
         $this->dbalStub->method('createSchemaManager')->willReturn($this->schemaManagerStub);
         $this->connectionStub->method('dbal')->willReturn($this->dbalStub);
 
-        /** @psalm-suppress InvalidArgument */
         $migration = new Migrations\Version20220801000500CreateUserVersionTable($this->connectionStub);
         $this->expectException(MigrationException::class);
         $migration->run();
@@ -84,7 +83,6 @@ class Version20220801000500CreateUserVersionTableTest extends TestCase
         $this->dbalStub->method('createSchemaManager')->willReturn($this->schemaManagerStub);
         $this->connectionStub->method('dbal')->willReturn($this->dbalStub);
 
-        /** @psalm-suppress InvalidArgument */
         $migration = new Migrations\Version20220801000500CreateUserVersionTable($this->connectionStub);
         $this->expectException(MigrationException::class);
         $migration->revert();
@@ -98,7 +96,6 @@ class Version20220801000500CreateUserVersionTableTest extends TestCase
         $this->connectionStub->method('preparePrefixedTableName')
             ->willReturnOnConsecutiveCalls(''); // Invalid (empty) name for table
 
-        /** @psalm-suppress InvalidArgument */
         $migration = new Migrations\Version20220801000500CreateUserVersionTable($this->connectionStub);
         $this->expectException(MigrationException::class);
         $migration->run();

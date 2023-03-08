@@ -15,6 +15,7 @@ class RawActivity extends AbstractRawEntity
     protected array $userAttributes;
     protected DateTimeImmutable $happenedAt;
     protected ?string $clientIpAddress;
+    protected ?string $authenticationProtocolDesignation;
 
     public function __construct(array $rawRow, AbstractPlatform $abstractPlatform)
     {
@@ -35,6 +36,11 @@ class RawActivity extends AbstractRawEntity
         $this->clientIpAddress = empty($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]) ?
             null :
             (string)$rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS];
+
+        $this->authenticationProtocolDesignation =
+            empty($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION]) ?
+            null :
+            (string)$rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION];
     }
 
     /**
@@ -67,6 +73,14 @@ class RawActivity extends AbstractRawEntity
     public function getClientIpAddress(): ?string
     {
         return $this->clientIpAddress;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAuthenticationProtocolDesignation(): ?string
+    {
+        return $this->authenticationProtocolDesignation;
     }
 
     /**

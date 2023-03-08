@@ -35,7 +35,6 @@ class AbstractRawEntityTest extends TestCase
 
     public function testCanCreateInstance(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $rawEntityInstance = new class ($this->rawRow, $this->abstractPlatformStub) extends AbstractRawEntity {
             protected function validate(
                 array $rawRow
@@ -47,7 +46,6 @@ class AbstractRawEntityTest extends TestCase
 
     public function testCanResolveDateTimeImmutable(): void
     {
-        /** @psalm-suppress InvalidArgument */
         $rawEntityInstance = new class ($this->rawRow, $this->abstractPlatformStub) extends AbstractRawEntity {
             protected function validate(
                 array $rawRow
@@ -63,7 +61,6 @@ class AbstractRawEntityTest extends TestCase
     {
         $this->expectException(UnexpectedValueException::class);
 
-        /** @psalm-suppress InvalidArgument */
         new class ($this->rawRow, $this->abstractPlatformStub) extends AbstractRawEntity {
             protected function validate(
                 array $rawRow
