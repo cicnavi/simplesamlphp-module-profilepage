@@ -79,7 +79,7 @@ class JobRunner
 
         $this->cache = $cache ?? $this->resolveCache();
 
-        $this->jobRunnerId = $this->helpersManager->getRandom()->getRandomInt();
+        $this->jobRunnerId = $this->helpersManager->getRandom()->getInt();
 
         $this->state = $state ?? new State($this->jobRunnerId);
 

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Entities\Providers\Identity;
 
+use SimpleSAML\Module\accounting\Entities\Authentication;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
+use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
 use SimpleSAML\Module\accounting\Entities\Interfaces\IdentityProviderInterface;
 use SimpleSAML\Module\accounting\Exceptions\MetadataException;
 
@@ -37,5 +39,10 @@ class Saml2 extends AbstractProvider implements IdentityProviderInterface
         }
 
         throw new MetadataException('Identity provider metadata does not contain entity ID.');
+    }
+
+    public function getProtocol(): AuthenticationProtocolInterface
+    {
+        return new Authentication\Protocol\Saml2();
     }
 }

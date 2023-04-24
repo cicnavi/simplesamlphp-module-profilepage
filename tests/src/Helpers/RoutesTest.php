@@ -7,15 +7,15 @@ namespace SimpleSAML\Test\Module\accounting\Helpers;
 use PHPUnit\Framework\MockObject\Stub;
 use SimpleSAML\Error\CriticalConfigurationError;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\Helpers\ModuleRoutes;
+use SimpleSAML\Module\accounting\Helpers\Routes;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Utils\HTTP;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\ModuleRoutes
+ * @covers \SimpleSAML\Module\accounting\Helpers\Routes
  */
-class ModuleRoutesTest extends TestCase
+class RoutesTest extends TestCase
 {
     protected const BASE_URL = 'https://example.org/ssp/';
     /**
@@ -37,7 +37,7 @@ class ModuleRoutesTest extends TestCase
         $path = 'sample-path';
         $moduleUrlWithPath = $this->moduleUrl . '/' . $path;
 
-        $moduleRoutesHelper = new ModuleRoutes($this->sspHttpUtilsStub);
+        $moduleRoutesHelper = new Routes($this->sspHttpUtilsStub);
 
         $this->assertSame($moduleUrlWithPath, $moduleRoutesHelper->getUrl($path));
     }
@@ -49,7 +49,7 @@ class ModuleRoutesTest extends TestCase
         $fullUrl = 'full-url-with-sample-param';
 
         $this->sspHttpUtilsStub->method('addURLParameters')->willReturn($fullUrl);
-        $moduleRoutesHelper = new ModuleRoutes($this->sspHttpUtilsStub);
+        $moduleRoutesHelper = new Routes($this->sspHttpUtilsStub);
 
         $this->assertSame($fullUrl, $moduleRoutesHelper->getUrl($path, $params));
     }

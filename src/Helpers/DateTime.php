@@ -9,6 +9,7 @@ use DateTimeImmutable;
 
 class DateTime
 {
+    public const FORMAT_MYSQL = 'Y-m-d H:i:s';
     /**
      * Convert date interval to seconds, interval being minimum 1 second.
      * @param DateInterval $dateInterval Minimum is 1 second.
@@ -26,5 +27,14 @@ class DateTime
         }
 
         return $duration;
+    }
+
+    public function toFormattedString(
+        \DateTimeInterface $dateTime = null,
+        string $format = self::FORMAT_MYSQL
+    ): string {
+        $dateTime = $dateTime ?? new DateTimeImmutable();
+
+        return $dateTime->format($format);
     }
 }

@@ -13,4 +13,5 @@ interface ProviderInterface
     public function getName(string $locale = 'en'): ?string;
     public function getEntityId(): string;
     public function getDescription(string $locale = 'en'): ?string;
+    public function getProtocol(): AuthenticationProtocolInterface;
 }

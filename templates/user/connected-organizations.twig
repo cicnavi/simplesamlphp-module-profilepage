@@ -1,5 +1,7 @@
 {# @var connectedServiceProviderBag \SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider\Bag #}
 {# @var connectedServiceProvider \SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider #}
+{# @var accessTokensByClient array #}
+{# @var refreshTokensByClient array #}
 
 {% extends "@accounting/base.twig" %}
 
@@ -17,7 +19,7 @@
         </tr>
 
         {% for connectedServiceProvider in connectedServiceProviderBag.getAll %}
-            <tr>
+            <tr id="connected-service-provider-{{ loop.index }}">
                 <td>{{ connectedServiceProvider.getServiceProvider.getName|e }}</td>
                 <td>{{ connectedServiceProvider.getNumberOfAuthentications|e }}</td>
                 <td>{{ connectedServiceProvider.getLastAuthenticationAt|date() }}</td>
@@ -28,7 +30,7 @@
                     <label class="dropdown-label" for="dropdown-toggle-{{ loop.index }}">
                         <img src="{{ asset('css/src/icons/dropdown.svg', 'accounting') }}" alt="Dropdown icon">
                     </label>
-                    <div class="dropdown-box">
+                    <div class="dropdown-box" >
                         <strong>{{ 'Service details'|trans }}</strong>
                         <ul>
                             <li>{{ 'Entity ID'|trans }}: {{ connectedServiceProvider.getServiceProvider.getEntityId|e }}</li>
@@ -44,6 +46,50 @@
                                 {{ 'Last access'|trans }}: {{ connectedServiceProvider.getLastAuthenticationAt|date() }}
                             </li>
                         </ul>
+
+                        {% if connectedServiceProvider.serviceProvider.protocol.designation is same as oidcProtocolDesignation %}
+                            {% if accessTokensByClient is not empty and attribute(accessTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
+                                <strong>{{ 'Access Tokens'|trans }}</strong>
+                                <table>
+                                    {% for accessToken in attribute(accessTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
+                                        <tr>
+                                            <td>
+                                                {{ accessToken.id }}<br>
+                                                {{ 'Expires at'|trans }} {{ accessToken.expires_at|date }}
+                                            </td>
+                                            <td>
+                                                <form class="token-revoke-form" action="oidc-tokens/revoke-xhr">
+                                                    <input type="hidden" name="token-type" value="access">
+                                                    <input type="hidden" name="token-id" value="{{ accessToken.id }}">
+                                                    <input type="submit" value="Revoke">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            {% endif %}
+
+                            {% if refreshTokensByClient is not empty and attribute(refreshTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
+                                <strong>{{ 'Refresh Tokens'|trans }}</strong>
+                                <table>
+                                    {% for refreshToken in attribute(refreshTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
+                                        <tr>
+                                            <td>
+                                                {{ refreshToken.id }}<br>
+                                                {{ 'Expires at'|trans }} {{ refreshToken.expires_at|date }}
+                                            </td>
+                                            <td>
+                                                <form class="token-revoke-form" action="oidc-tokens/revoke-xhr">
+                                                    <input type="hidden" name="token-type" value="refresh">
+                                                    <input type="hidden" name="token-id" value="{{ refreshToken.id }}">
+                                                    <input type="submit" value="Revoke">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </td>
             </tr>
@@ -54,4 +100,46 @@
         {% endfor %}
         <!-- end of repeating item -->
     </table>
+{% endblock %}
+
+{% block tail %}
+
+    <script>
+        (function () {
+            document.querySelectorAll('.token-revoke-form').forEach(
+                element => element.addEventListener('submit', revokeToken)
+            );
+
+            function revokeToken(event) {
+                event.preventDefault();
+
+                const form = event.target;
+                const submitButton = event.submitter;
+                const formData = new FormData(form);
+
+                if (! confirm('{{ 'Are you sure?'|trans }}')) {
+                    return;
+                }
+
+                submitButton.disabled = true;
+
+                const request = new XMLHttpRequest();
+
+                request.open('POST', form.action);
+
+                request.onload = function () {
+                    if (this.status === 200) {
+                        accounting.removeElement(form.closest('tr'));
+                    } else {
+                        const response = JSON.parse(this.responseText);
+                        console.log(response);
+                        accounting.alert('{{ 'Oups, there was an error while trying to revoke token.'|trans }}');
+                    }
+                };
+
+                request.send(formData);
+            }
+        })();
+    </script>
+
 {% endblock %}

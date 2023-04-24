@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 use SimpleSAML\Locale\Translate;
-use SimpleSAML\Module\accounting\Helpers\ModuleRoutes;
+use SimpleSAML\Module\accounting\Helpers\Routes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\XHTML\Template;
 
 /** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection Reference is used by SimpleSAMLphp */
 function accounting_hook_configpage(Template &$template): void
 {
-    $moduleRoutesHelper = new ModuleRoutes();
+    $moduleRoutesHelper = new Routes();
 
     $dataLinksKey = 'links';
 
@@ -19,7 +19,7 @@ function accounting_hook_configpage(Template &$template): void
     }
 
     $template->data[$dataLinksKey][] = [
-        'href' => $moduleRoutesHelper->getUrl(ModuleRoutes::PATH_ADMIN_CONFIGURATION_STATUS),
+        'href' => $moduleRoutesHelper->getUrl(Routes::PATH_ADMIN_CONFIGURATION_STATUS),
         'text' => Translate::noop('Accounting configuration status'),
     ];
 

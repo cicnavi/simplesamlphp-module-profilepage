@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\Module\accounting\Entities\Bases;
 
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
 use SimpleSAML\Module\accounting\Entities\Providers\Identity\Saml2;
 
 /**
@@ -95,6 +96,21 @@ class AbstractProviderTest extends TestCase
             protected function resolveEntityId(): string
             {
                 return (string)($this->metadata['entityid'] ?? 'N/A');
+            }
+
+            public function getProtocol(): AuthenticationProtocolInterface
+            {
+                return new class implements AuthenticationProtocolInterface {
+                    public function getDesignation(): string
+                    {
+                        return 'designation';
+                    }
+
+                    public function getId(): int
+                    {
+                        return 999;
+                    }
+                };
             }
         };
     }

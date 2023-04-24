@@ -7,7 +7,7 @@ namespace SimpleSAML\Module\accounting\Http\Controllers\Admin;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Configuration as SspConfiguration;
-use SimpleSAML\Module\accounting\Helpers\ModuleRoutes;
+use SimpleSAML\Module\accounting\Helpers\Routes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
@@ -119,8 +119,8 @@ class Configuration
             'defaultDataTrackerAndProvider' => $defaultDataTrackerAndProvider,
             'additionalTrackers' => $additionalTrackers,
             'setupNeeded' => $setupNeeded,
-            'profilePageUri' => $this->helpersManager->getModuleRoutes()
-                ->getUrl(ModuleRoutes::PATH_USER_PERSONAL_DATA),
+            'profilePageUri' => $this->helpersManager->getRoutes()
+                ->getUrl(Routes::PATH_USER_PERSONAL_DATA),
         ];
 
         $template = new Template($this->sspConfiguration, 'accounting:admin/configuration/status.twig');
