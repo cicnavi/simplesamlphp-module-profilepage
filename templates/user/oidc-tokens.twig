@@ -1,0 +1,78 @@
+{# @var accessTokensByClient array #}
+{# @var refreshTokensByClient array #}
+{# @var clients array #}
+
+{% extends "@accounting/base.twig" %}
+
+{% set pagetitle = 'OIDC Tokens'|trans %}
+
+{% set pageMenuItem = 'oidc-tokens' %}
+
+{% block content %}
+    <section id="banner">
+        <div>
+            {% trans %}Overview of active OIDC Access / Refresh Tokens by OIDC client.{% endtrans %}
+        </div>
+    </section>
+
+    <table>
+        {% for clientId, clientInfo in clients %}
+            <tr>
+                <td colspan="2">
+                    <strong>{{ clientInfo.0.name }}</strong>
+                    <br>
+                    {{ clientInfo.0.description }}
+                </td>
+            </tr>
+
+            {% if accessTokensByClient is not empty and attribute(accessTokensByClient, clientId) %}
+                <tr>
+                    <td colspan="2">{{ 'Access Tokens'|trans }}</td>
+                </tr>
+                {% for accessToken in attribute(accessTokensByClient, clientId) %}
+                <tr>
+                    <td>
+                        {{ accessToken.id }}<br>
+                        {{ 'Expires at'|trans }} {{ accessToken.expires_at|date }}
+                    </td>
+                    <td>
+                        <form method="post" action="oidc-tokens/revoke">
+                            <input type="hidden" name="csrf-token" value="{{ csrfToken.get }}">
+                            <input type="hidden" name="token-type" value="access">
+                            <input type="hidden" name="token-id" value="{{ accessToken.id }}">
+                            <input type="submit" value="Revoke">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+
+            {% if refreshTokensByClient is not empty and attribute(refreshTokensByClient, clientId) %}
+                <tr>
+                    <td colspan="2">{{ 'Refresh Tokens'|trans }}</td>
+                </tr>
+                {% for refreshToken in attribute(refreshTokensByClient, clientId) %}
+                    <tr>
+                        <td>
+                            {{ refreshToken.id }}<br>
+                            {{ 'Expires at'|trans }} {{ refreshToken.expires_at|date }}
+                        </td>
+                        <td>
+                            <form method="post" action="oidc-tokens/revoke">
+                                <input type="hidden" name="csrf-token" value="{{ csrfToken.get }}">
+                                <input type="hidden" name="token-type" value="refresh">
+                                <input type="hidden" name="token-id" value="{{ refreshToken.id }}">
+                                <input type="submit" value="Revoke">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="3">{{ 'No data available'|trans }}</td>
+            </tr>
+        {% endfor %}
+        <!-- end of repeating item -->
+    </table>
+{% endblock %}

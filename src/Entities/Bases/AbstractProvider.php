@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Entities\Bases;
 
+use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
 use SimpleSAML\Module\accounting\Entities\Interfaces\ProviderInterface;
 
 abstract class AbstractProvider implements ProviderInterface
@@ -52,4 +53,5 @@ abstract class AbstractProvider implements ProviderInterface
     abstract public function getName(string $locale = 'en'): ?string;
     abstract public function getDescription(string $locale = 'en'): ?string;
     abstract protected function resolveEntityId(): string;
+    abstract public function getProtocol(): AuthenticationProtocolInterface;
 }

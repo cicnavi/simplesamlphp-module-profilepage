@@ -4,20 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Entities;
 
+use SimpleSAML\Module\accounting\Traits\HasUserAttributesTrait;
+
 class User
 {
-    protected array $attributes;
+    use HasUserAttributesTrait;
 
     public function __construct(array $attributes)
     {
         $this->attributes = $attributes;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
     }
 }

@@ -12,7 +12,7 @@ use SimpleSAML\Module\accounting\Helpers\Environment;
 use SimpleSAML\Module\accounting\Helpers\Filesystem;
 use SimpleSAML\Module\accounting\Helpers\Hash;
 use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration;
-use SimpleSAML\Module\accounting\Helpers\ModuleRoutes;
+use SimpleSAML\Module\accounting\Helpers\Routes;
 use SimpleSAML\Module\accounting\Helpers\Network;
 use SimpleSAML\Module\accounting\Helpers\ProviderResolver;
 use SimpleSAML\Module\accounting\Helpers\Random;
@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Services\HelpersManager
- * @uses \SimpleSAML\Module\accounting\Helpers\ModuleRoutes
+ * @uses \SimpleSAML\Module\accounting\Helpers\Routes
  * @uses \SimpleSAML\Module\accounting\Helpers\Hash
  */
 class HelpersManagerTest extends TestCase
@@ -42,7 +42,7 @@ class HelpersManagerTest extends TestCase
         );
         $this->assertInstanceOf(Network::class, $helpersManager->getNetwork());
         $this->assertInstanceOf(Random::class, $helpersManager->getRandom());
-        $this->assertInstanceOf(ModuleRoutes::class, $helpersManager->getModuleRoutes());
+        $this->assertInstanceOf(Routes::class, $helpersManager->getRoutes());
         $this->assertInstanceOf(
             AuthenticationEventStateResolver::class,
             $helpersManager->getAuthenticationEventStateResolver()

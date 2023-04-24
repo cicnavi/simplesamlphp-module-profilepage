@@ -1,40 +1,24 @@
+{# @var menuManager \SimpleSAML\Module\accounting\Services\MenuManager #}
+{# @var menuItem \SimpleSAML\Module\accounting\Services\MenuManager\MenuItem #}
+{# @var csrfToken \SimpleSAML\Module\accounting\Services\CsrfToken #}
+
 <div id="nav">
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
     <nav role="navigation" aria-label="XXX-pagedesc-XXX">
         <ul>
-            <li>
-                <a href="personal-data">
-                    <span class="navicon">
-                        <img src="{{ asset('css/src/icons/prof-page.svg', 'accounting') }}" alt="Profile Page Icon"/>
-                    </span>
-                    <span class="navlabel">{{ 'Personal Data'|trans }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="connected-organizations">
-                    <span class="navicon">
-                        <img src="{{ asset('css/src/icons/conn-orgs.svg', 'accounting') }}"
-                             alt="Connected Organizations Icon"/>
-                    </span>
-                    <span class="navlabel">{{ 'Connected Organizations'|trans }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="activity">
-                    <span class="navicon">
-                        <img src="{{ asset('css/src/icons/activity.svg', 'accounting') }}" alt="Activity Icon"/>
-                    </span>
-                    <span class="navlabel">{{ 'Activity'|trans }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="logout">
-                    <span class="navicon">
-                        <img src="{{ asset('css/src/icons/logout.svg', 'accounting') }}" alt="Logout Icon"/>
-                    </span>
-                    <span class="navlabel">{{ 'Log out'|trans }}</span>
-                </a>
-            </li>
+            {% for menuItem in menuManager.items %}
+                <li>
+                    <a href="{{ menuItem.hrefPath }}">
+                        {% if menuItem.iconAssetPath %}
+                            <span class="navicon">
+                                <img src="{{ asset(menuItem.iconAssetPath, 'accounting') }}"
+                                     alt="{{ menuItem.label|trans }} Icon"/>
+                            </span>
+                        {% endif %}
+                        <span class="navlabel">{{ menuItem.label|trans }}</span>
+                    </a>
+                </li>
+            {% endfor %}
         </ul>
     </nav>
 </div>

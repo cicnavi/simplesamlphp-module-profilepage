@@ -1,0 +1,14 @@
+
+{# @var alertsBag \SimpleSAML\Module\accounting\Services\AlertsBag #}
+{# @var alert \SimpleSAML\Module\accounting\Services\AlertsBag\Alert #}
+
+{% if alertsBag is defined and alertsBag.isNotEmpty %}
+    <div class="alerts">
+        {% for alert in alertsBag.getAll %}
+            <div class="alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                {{ alert.message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

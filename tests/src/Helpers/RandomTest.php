@@ -14,6 +14,6 @@ class RandomTest extends TestCase
 {
     public function testCanGetRandomInt(): void
     {
-        $this->assertIsInt((new Random())->getRandomInt());
+        $this->assertIsInt((new Random())->getInt());
     }
 }

@@ -123,7 +123,7 @@ class JobRunnerTest extends TestCase
      */
     public function testCanCreateInstance(): void
     {
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->assertInstanceOf(
@@ -148,7 +148,7 @@ class JobRunnerTest extends TestCase
      */
     public function testPreRunValidationFailsForSameJobRunnerId(): void
     {
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->stateStub->method('getJobRunnerId')->willReturn(123);
@@ -185,7 +185,7 @@ class JobRunnerTest extends TestCase
      */
     public function testPreRunValidationFailsForStaleState(): void
     {
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->stateStub->method('getJobRunnerId')->willReturn(321);
@@ -222,7 +222,7 @@ class JobRunnerTest extends TestCase
      */
     public function testPreRunValidationPassesWhenStateIsNull(): void
     {
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->cacheMock->method('get')->willReturn(null);
@@ -258,7 +258,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->stateStub->method('getJobRunnerId')->willReturn(321);
@@ -296,7 +296,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->stateStub->method('getJobRunnerId')->willReturn(321);
@@ -336,7 +336,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->stateStub->method('getJobRunnerId')->willReturn(321);
@@ -372,7 +372,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->stateStub->method('getJobRunnerId')->willReturn(321);
@@ -417,7 +417,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getJobRunnerMaximumExecutionTime')
             ->willReturn(new DateInterval('PT1S'));
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->cacheMock->method('get')->willReturn(null);
@@ -459,7 +459,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getJobRunnerMaximumExecutionTime')
             ->willReturn(new DateInterval('PT20S'));
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
         $this->environmentHelperStub->method('isCli')->willReturn(false);
         $this->helpersManagerStub->method('getEnvironment')->willReturn($this->environmentHelperStub);
@@ -505,7 +505,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->cacheMock->method('get')->willReturn(null);
@@ -544,7 +544,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->cacheMock->method('get')->willReturnOnConsecutiveCalls(
@@ -585,7 +585,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->cacheMock->method('get')->willReturnOnConsecutiveCalls(
@@ -626,7 +626,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->stateStub->method('getJobRunnerId')->willReturn(321);
@@ -669,7 +669,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->stateStub->method('getJobRunnerId')->willReturn(123);
@@ -713,7 +713,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
 
         $this->stateStub->method('getJobRunnerId')->willReturn(123);
@@ -758,7 +758,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
         $this->environmentHelperStub->method('isCli')->willReturn(true);
         $this->helpersManagerStub->method('getEnvironment')->willReturn($this->environmentHelperStub);
@@ -813,7 +813,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
         $this->environmentHelperStub->method('isCli')->willReturn(false);
         $this->helpersManagerStub->method('getEnvironment')->willReturn($this->environmentHelperStub);
@@ -867,7 +867,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getDefaultDataTrackerAndProviderClass')
             ->willReturn('mock');
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
         $this->environmentHelperStub->method('isCli')->willReturn(false);
         $this->helpersManagerStub->method('getEnvironment')->willReturn($this->environmentHelperStub);
@@ -934,7 +934,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getDefaultDataTrackerAndProviderClass')
             ->willReturn('mock');
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
         $this->environmentHelperStub->method('isCli')->willReturn(false);
         $this->helpersManagerStub->method('getEnvironment')->willReturn($this->environmentHelperStub);
@@ -998,7 +998,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getJobRunnerShouldPauseAfterNumberOfJobsProcessed')
             ->willReturn(0);
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
         $this->environmentHelperStub->method('isCli')->willReturn(false);
         $this->helpersManagerStub->method('getEnvironment')->willReturn($this->environmentHelperStub);
@@ -1069,7 +1069,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getDefaultDataTrackerAndProviderClass')
             ->willReturn('mock');
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
         $this->environmentHelperStub->method('isCli')->willReturn(false);
         $this->helpersManagerStub->method('getEnvironment')->willReturn($this->environmentHelperStub);
@@ -1135,7 +1135,7 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub->method('getDefaultDataTrackerAndProviderClass')
             ->willReturn('mock');
 
-        $this->randomHelperStub->method('getRandomInt')->willReturn(123);
+        $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
         $this->environmentHelperStub->method('isCli')->willReturn(false);
         $this->helpersManagerStub->method('getEnvironment')->willReturn($this->environmentHelperStub);

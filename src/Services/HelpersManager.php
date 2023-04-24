@@ -15,14 +15,15 @@ use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
 use SimpleSAML\Module\accounting\Helpers\Network;
 use SimpleSAML\Module\accounting\Helpers\ProviderResolver;
 use SimpleSAML\Module\accounting\Helpers\Random;
-use SimpleSAML\Module\accounting\Helpers\ModuleRoutes;
+use SimpleSAML\Module\accounting\Helpers\Routes;
+use SimpleSAML\Module\accounting\Helpers\SspModule;
 
 class HelpersManager
 {
     protected static ?DateTime $dateTime;
     protected static ?Environment $environment;
     protected static ?Random $random;
-    protected static ?ModuleRoutes $routes;
+    protected static ?Routes $routes;
     protected static ?Arr $arr;
     protected static ?Hash $hash;
     protected static ?Attributes $attributes;
@@ -31,6 +32,7 @@ class HelpersManager
     protected static ?Network $network;
     protected static ?AuthenticationEventStateResolver $authenticationEventStateResolver;
     protected static ?ProviderResolver $providerResolver;
+    protected static ?SspModule $sspModule;
 
 
     public function getDateTime(): DateTime
@@ -48,9 +50,9 @@ class HelpersManager
         return self::$random ??= new Random();
     }
 
-    public function getModuleRoutes(): ModuleRoutes
+    public function getRoutes(): Routes
     {
-        return self::$routes ??= new ModuleRoutes();
+        return self::$routes ??= new Routes();
     }
 
     public function getArr(): Arr
@@ -91,5 +93,10 @@ class HelpersManager
     public function getProviderResolver(): ProviderResolver
     {
         return self::$providerResolver ??= new ProviderResolver();
+    }
+
+    public function getSspModule(): SspModule
+    {
+        return self::$sspModule ??= new SspModule();
     }
 }

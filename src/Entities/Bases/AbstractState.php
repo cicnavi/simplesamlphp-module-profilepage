@@ -9,10 +9,13 @@ use SimpleSAML\Module\accounting\Entities\Interfaces\StateInterface;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use DateTimeImmutable;
+use SimpleSAML\Module\accounting\Traits\HasUserAttributesTrait;
 use Throwable;
 
 abstract class AbstractState implements StateInterface
 {
+    use HasUserAttributesTrait;
+
     public const KEY_ATTRIBUTES = 'Attributes';
     public const KEY_ACCOUNTING = 'accounting';
     public const ACCOUNTING_KEY_CLIENT_IP_ADDRESS = 'client_ip_address';
@@ -20,7 +23,6 @@ abstract class AbstractState implements StateInterface
 
     protected string $identityProviderEntityId;
     protected string $serviceProviderEntityId;
-    protected array $attributes;
     protected DateTimeImmutable $createdAt;
     protected ?DateTimeImmutable $authenticationInstant;
     protected array $identityProviderMetadata;
@@ -97,29 +99,6 @@ abstract class AbstractState implements StateInterface
     public function getServiceProviderEntityId(): string
     {
         return $this->serviceProviderEntityId;
-    }
-
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    public function getFirstAttributeValue(string $attributeName): ?string
-    {
-        if (($value = $this->getAttributeValue($attributeName)) !== null) {
-            return (string)reset($value);
-        }
-
-        return null;
-    }
-
-    public function getAttributeValue(string $attributeName): ?array
-    {
-        if (!empty($this->attributes[$attributeName]) && is_array($this->attributes[$attributeName])) {
-            return $this->attributes[$attributeName];
-        }
-
-        return null;
     }
 
     public function getCreatedAt(): DateTimeImmutable
