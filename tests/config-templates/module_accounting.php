@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use SimpleSAML\Module\accounting\Data\Providers;
+use SimpleSAML\Module\accounting\Data\Stores;
+use SimpleSAML\Module\accounting\Data\Trackers;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Providers;
-use SimpleSAML\Module\accounting\Stores;
-use SimpleSAML\Module\accounting\Trackers;
 
 $config = [
 
@@ -18,8 +18,11 @@ $config = [
 
     ModuleConfiguration::OPTION_JOBS_STORE => Stores\Jobs\DoctrineDbal\Store::class,
 
-    ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER =>
-        Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class,
+    ModuleConfiguration::OPTION_PROVIDER_FOR_ACTIVITY =>
+        Providers\Activity\DoctrineDbal\VersionedDataProvider::class,
+
+    ModuleConfiguration::OPTION_PROVIDER_FOR_CONNECTED_SERVICES =>
+        Providers\ConnectedServices\DoctrineDbal\VersionedDataProvider::class,
 
     ModuleConfiguration::OPTION_ADDITIONAL_TRACKERS => [
         //
@@ -27,7 +30,13 @@ $config = [
 
     ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [
         Stores\Jobs\DoctrineDbal\Store::class => 'doctrine_dbal_pdo_sqlite',
-        Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class => [
+        Providers\Activity\DoctrineDbal\VersionedDataProvider::class => [
+            ModuleConfiguration\ConnectionType::MASTER => 'doctrine_dbal_pdo_sqlite',
+            ModuleConfiguration\ConnectionType::SLAVE => [
+                'doctrine_dbal_pdo_sqlite_slave',
+            ],
+        ],
+        Providers\ConnectedServices\DoctrineDbal\VersionedDataProvider::class => [
             ModuleConfiguration\ConnectionType::MASTER => 'doctrine_dbal_pdo_sqlite',
             ModuleConfiguration\ConnectionType::SLAVE => [
                 'doctrine_dbal_pdo_sqlite_slave',

@@ -8,11 +8,14 @@ use DateInterval;
 use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use SimpleSAML\Configuration;
+use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\accounting\Data\Stores\Interfaces\JobsStoreInterface;
+use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
@@ -22,11 +25,7 @@ use SimpleSAML\Module\accounting\Helpers\Random;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\JobRunner;
-use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Stores\Interfaces\JobsStoreInterface;
-use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
-use SimpleSAML\Module\accounting\Trackers\Interfaces\AuthenticationDataTrackerInterface;
+use SimpleSAML\Module\accounting\Services\TrackerResolver;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Services\JobRunner
@@ -58,13 +57,13 @@ class JobRunnerTest extends TestCase
      */
     protected $rateLimiterMock;
     /**
-     * @var Stub
+     * @var MockObject
      */
-    protected $authenticationDataTrackerBuilderStub;
+    protected $trackerResolverMock;
     /**
      * @var MockObject
      */
-    protected $authenticationDataTrackerMock;
+    protected $dataTrackerMock;
     /**
      * @var Stub
      */
@@ -103,8 +102,8 @@ class JobRunnerTest extends TestCase
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $this->sspConfigurationStub = $this->createStub(Configuration::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->authenticationDataTrackerBuilderStub = $this->createStub(AuthenticationDataTrackerBuilder::class);
-        $this->authenticationDataTrackerMock = $this->createMock(AuthenticationDataTrackerInterface::class);
+        $this->trackerResolverMock = $this->createMock(TrackerResolver::class);
+        $this->dataTrackerMock = $this->createMock(DataTrackerInterface::class);
         $this->jobsStoreBuilderStub = $this->createStub(JobsStoreBuilder::class);
         $this->cacheMock = $this->createMock(CacheInterface::class);
         $this->stateStub = $this->createStub(JobRunner\State::class);
@@ -133,7 +132,7 @@ class JobRunnerTest extends TestCase
                 $this->sspConfigurationStub,
                 $this->loggerMock,
                 $this->helpersManagerStub,
-                $this->authenticationDataTrackerBuilderStub,
+                $this->trackerResolverMock,
                 $this->jobsStoreBuilderStub,
                 $this->cacheMock,
                 $this->stateStub,
@@ -169,7 +168,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -206,7 +205,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -239,7 +238,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -277,7 +276,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -318,7 +317,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -353,7 +352,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -395,7 +394,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -437,7 +436,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -486,7 +485,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -525,7 +524,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -566,7 +565,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -607,7 +606,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -643,14 +642,14 @@ class JobRunnerTest extends TestCase
         $this->cacheMock->expects($this->once())->method('delete');
 
         $this->loggerMock->expects($this->once())->method('warning')
-            ->with($this->stringContains('Current job runner ID differs from the ID in the cached state.'));
+            ->with($this->stringContains('CurrentDataProvider job runner ID differs from the ID in the cached state.'));
 
         $jobRunner = new JobRunner(
             $this->moduleConfigurationStub,
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -694,7 +693,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -739,7 +738,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -794,7 +793,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -846,7 +845,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -864,8 +863,8 @@ class JobRunnerTest extends TestCase
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
-        $this->moduleConfigurationStub->method('getDefaultDataTrackerAndProviderClass')
-            ->willReturn('mock');
+        $this->moduleConfigurationStub->method('getProviderClasses')
+            ->willReturn(['mocks']);
 
         $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
@@ -889,10 +888,8 @@ class JobRunnerTest extends TestCase
 
         $this->rateLimiterMock->expects($this->once())->method('resetBackoffPause');
 
-        $this->authenticationDataTrackerMock->expects($this->once())
-            ->method('process');
-        $this->authenticationDataTrackerBuilderStub->method('build')
-            ->willReturn($this->authenticationDataTrackerMock);
+        $this->dataTrackerMock->expects($this->once())->method('process');
+        $this->trackerResolverMock->method('fromModuleConfiguration')->willReturn([$this->dataTrackerMock]);
 
         $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
         $this->jobsStoreMock->method('dequeue')->willReturn($this->jobStub);
@@ -914,7 +911,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -931,8 +928,8 @@ class JobRunnerTest extends TestCase
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
-        $this->moduleConfigurationStub->method('getDefaultDataTrackerAndProviderClass')
-            ->willReturn('mock');
+        $this->moduleConfigurationStub->method('getProviderClasses')
+            ->willReturn(['mocks']);
 
         $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
@@ -975,7 +972,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -993,8 +990,8 @@ class JobRunnerTest extends TestCase
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
-        $this->moduleConfigurationStub->method('getDefaultDataTrackerAndProviderClass')
-            ->willReturn('mock');
+        $this->moduleConfigurationStub->method('getProviderClasses')
+            ->willReturn(['mocks']);
         $this->moduleConfigurationStub->method('getJobRunnerShouldPauseAfterNumberOfJobsProcessed')
             ->willReturn(0);
 
@@ -1022,10 +1019,9 @@ class JobRunnerTest extends TestCase
         $this->rateLimiterMock->expects($this->exactly(2))->method('resetBackoffPause');
         $this->rateLimiterMock->expects($this->once())->method('doPause');
 
-        $this->authenticationDataTrackerMock->expects($this->exactly(2))
+        $this->dataTrackerMock->expects($this->exactly(2))
             ->method('process');
-        $this->authenticationDataTrackerBuilderStub->method('build')
-            ->willReturn($this->authenticationDataTrackerMock);
+        $this->trackerResolverMock->method('fromModuleConfiguration')->willReturn([$this->dataTrackerMock]);
 
         $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
         $this->jobsStoreMock->method('dequeue')->willReturn($this->jobStub);
@@ -1048,7 +1044,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -1066,8 +1062,8 @@ class JobRunnerTest extends TestCase
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
-        $this->moduleConfigurationStub->method('getDefaultDataTrackerAndProviderClass')
-            ->willReturn('mock');
+        $this->moduleConfigurationStub->method('getProviderClasses')
+            ->willReturn(['mocks']);
 
         $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
@@ -1091,11 +1087,10 @@ class JobRunnerTest extends TestCase
 
         $this->rateLimiterMock->expects($this->once())->method('resetBackoffPause');
 
-        $this->authenticationDataTrackerMock->expects($this->once())
+        $this->dataTrackerMock->expects($this->once())
             ->method('process')
             ->willThrowException(new Exception('test'));
-        $this->authenticationDataTrackerBuilderStub->method('build')
-            ->willReturn($this->authenticationDataTrackerMock);
+        $this->trackerResolverMock->method('fromModuleConfiguration')->willReturn([$this->dataTrackerMock]);
 
         $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
         $this->jobsStoreMock->method('dequeue')->willReturn($this->jobStub);
@@ -1115,7 +1110,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,
@@ -1132,8 +1127,8 @@ class JobRunnerTest extends TestCase
     {
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS);
-        $this->moduleConfigurationStub->method('getDefaultDataTrackerAndProviderClass')
-            ->willReturn('mock');
+        $this->moduleConfigurationStub->method('getProviderClasses')
+            ->willReturn(['mocks']);
 
         $this->randomHelperStub->method('getInt')->willReturn(123);
         $this->helpersManagerStub->method('getRandom')->willReturn($this->randomHelperStub);
@@ -1162,7 +1157,7 @@ class JobRunnerTest extends TestCase
             $this->sspConfigurationStub,
             $this->loggerMock,
             $this->helpersManagerStub,
-            $this->authenticationDataTrackerBuilderStub,
+            $this->trackerResolverMock,
             $this->jobsStoreBuilderStub,
             $this->cacheMock,
             $this->stateStub,

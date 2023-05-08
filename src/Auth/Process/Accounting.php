@@ -6,13 +6,13 @@ namespace SimpleSAML\Module\accounting\Auth\Process;
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Auth\ProcessingFilter;
+use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\Logger;
-use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
+use SimpleSAML\Module\accounting\Services\TrackerResolver;
 use Throwable;
 
 class Accounting extends ProcessingFilter
@@ -20,8 +20,8 @@ class Accounting extends ProcessingFilter
     protected ModuleConfiguration $moduleConfiguration;
     protected JobsStoreBuilder $jobsStoreBuilder;
     protected LoggerInterface $logger;
-    protected AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder;
     protected HelpersManager $helpersManager;
+    protected TrackerResolver $trackerResolver;
 
     /**
      * @param array $config
@@ -30,7 +30,7 @@ class Accounting extends ProcessingFilter
      * @param LoggerInterface|null $logger
      * @param HelpersManager|null $helpersManager
      * @param JobsStoreBuilder|null $jobsStoreBuilder
-     * @param AuthenticationDataTrackerBuilder|null $authenticationDataTrackerBuilder
+     * @param TrackerResolver|null $trackerResolver
      */
     public function __construct(
         array &$config,
@@ -39,7 +39,7 @@ class Accounting extends ProcessingFilter
         LoggerInterface $logger = null,
         HelpersManager $helpersManager = null,
         JobsStoreBuilder $jobsStoreBuilder = null,
-        AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder = null
+        TrackerResolver $trackerResolver = null
     ) {
         parent::__construct($config, $reserved);
 
@@ -49,8 +49,11 @@ class Accounting extends ProcessingFilter
         $this->jobsStoreBuilder = $jobsStoreBuilder ??
             new JobsStoreBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
 
-        $this->authenticationDataTrackerBuilder = $authenticationDataTrackerBuilder ??
-            new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
+        $this->trackerResolver = $trackerResolver ?? new TrackerResolver(
+            $this->moduleConfiguration,
+            $this->logger,
+            $this->helpersManager
+        );
     }
 
     /**
@@ -58,26 +61,28 @@ class Accounting extends ProcessingFilter
      */
     public function process(array &$state): void
     {
-        try {
-            $resolvedState = $this->helpersManager->getAuthenticationEventStateResolver()->fromStateArray($state);
+        $this->logger->debug('Accounting started.', $state);
 
-            $authenticationEvent = new Event($resolvedState);
+        try {
+            $authenticationEvent = new Event(
+                $this->helpersManager->getAuthenticationEventStateResolver()->fromStateArray($state)
+            );
 
             if ($this->isAccountingProcessingTypeAsynchronous()) {
                 // Only create authentication event job for later processing...
+                $this->logger->debug('Accounting type is asynchronous, creating job for later processing.');
                 $this->createAuthenticationEventJob($authenticationEvent);
                 return;
             }
 
-            // Accounting type is synchronous, so do the processing right away...
-            $configuredTrackers = array_merge(
-                [$this->moduleConfiguration->getDefaultDataTrackerAndProviderClass()],
-                $this->moduleConfiguration->getAdditionalTrackers()
-            );
+            $this->logger->debug('Accounting type is synchronous, processing now.');
 
-            foreach ($configuredTrackers as $tracker) {
-                ($this->authenticationDataTrackerBuilder->build($tracker))->process($authenticationEvent);
+            foreach ($this->trackerResolver->fromModuleConfiguration() as $trackerClass => $tracker) {
+                    $this->logger->debug(sprintf('Processing tracker for class %s.', $trackerClass));
+                    $tracker->process($authenticationEvent);
             }
+
+            $this->logger->debug('Finished with tracker processing.');
         } catch (Throwable $exception) {
             $message = sprintf('Accounting error, skipping... Error was: %s.', $exception->getMessage());
             $this->logger->error($message, $state);

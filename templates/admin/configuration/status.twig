@@ -10,24 +10,40 @@
     <h2>{{ pagetitle }} </h2>
 
     {% if configurationValidationErrors is not null %}
+
+        <p>There wre some errors. Check your configuration and try again.</p>
+
         <p>{{ configurationValidationErrors }}</p>
+
+        <br>
+
+        {% if runSetup %}
+            <a class="pure-button pure-button-warning" href="?runSetup=1">{{ 'Try again'|trans }}</a>
+        {% endif %}
     {% elseif moduleConfiguration is not null %}
         <ul>
             <li>
                 <strong>{{ 'User ID Attribute Name'|trans }}</strong>: {{ moduleConfiguration.getUserIdAttributeName }}
             </li>
+
             <li>
                 <strong>{{ 'Accounting Processing Type'|trans }}</strong>:
                 {{ moduleConfiguration.getAccountingProcessingType }}
             </li>
-            <li>
-                <strong>{{ 'Default Data Tracker and Provider Class'|trans }}</strong>:
-                {{ moduleConfiguration.getDefaultDataTrackerAndProviderClass }}
-            </li>
-            <li>
-                <strong>{{ 'Tracker and Provider Setup Needed'|trans }}</strong>:
-                {{ defaultDataTrackerAndProvider.needsSetup ? 'Yes'|trans : 'No'|trans }}
-            </li>
+
+            {% if providers is not empty %}
+                <li>
+                    <strong>{{ 'Providers setup'|trans }}</strong>:
+                    <ul>
+                        {% for providerClass, providerInstance in providers %}
+                            <li>
+                                {{ providerClass }}: {{ providerInstance.needsSetup ? 'Yes'|trans : 'No'|trans }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
+
             {% if additionalTrackers is not empty %}
                 <li>
                     <strong>{{ 'Additional Trackers and setup'|trans }}</strong>:
@@ -57,21 +73,20 @@
                 </li>
             </ul>
         {% endif %}
+
+        {% if setupNeeded %}
+            <p>{{ 'Run setup before using the module.'|trans }}</p>
+            <a class="pure-button pure-button-warning" href="?runSetup=1">{{ 'Run Setup'|trans }}</a>
+        {% else %}
+            <p>
+                {{ 'Everything seems good to go.'|trans }}
+                <br>
+                <br>
+                {{ ' Profile page URL is'|trans }}: <a href="{{ profilePageUri }}">{{ profilePageUri }}</a>
+            </p>
+        {% endif %}
     {% else %}
-        <p>{{ 'Could not initialize module configuration.'|trans }}</p>
+        <p>{{ 'Could not initialize module configuration. Check your settings and try again.'|trans }}</p>
     {% endif %}
 
-    <br>
-
-    {% if setupNeeded %}
-        <p>{{ 'Run setup before using the module.'|trans }}</p>
-        <a class="pure-button pure-button-warning" href="?runSetup=1">{{ 'Run Setup'|trans }}</a>
-    {% else %}
-        <p>
-            {{ 'Everything seems good to go.'|trans }}
-            <br>
-            <br>
-            {{ ' Profile page URL is'|trans }}: <a href="{{ profilePageUri }}">{{ profilePageUri }}</a>
-        </p>
-    {% endif %}
 {% endblock %}

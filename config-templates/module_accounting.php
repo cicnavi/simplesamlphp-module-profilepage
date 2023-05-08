@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use SimpleSAML\Module\accounting\Data\Providers;
+use SimpleSAML\Module\accounting\Data\Stores;
+use SimpleSAML\Module\accounting\Data\Trackers;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Providers;
-use SimpleSAML\Module\accounting\Stores;
-use SimpleSAML\Module\accounting\Trackers;
 
 $config = [
     /**
@@ -56,28 +56,53 @@ $config = [
         //Stores\Jobs\PhpRedis\RedisStore::class,
 
     /**
-     * Default data tracker and provider to be used for accounting and as a source for data display in SSP UI.
-     * This class must implement Trackers\Interfaces\AuthenticationDataTrackerInterface and
-     * Providers\Interfaces\AuthenticationDataProviderInterface
+     * Providers
+     *
+     * VersionedDataProvider classes are used to fetch data about users in order to show it in users profile page UI.
+     * Each provider can also include tracking capability, which will be triggered / used automatically.
+     *
+     * Connected services provider is a class which will be used to provide summary data about services that user
+     * has authenticated at, including authentication count for particular service, and the first and last
+     * authentication time. For OIDC services (Relying Parties, RPs), user can also revoke active tokens.
+     *
+     * Given class must implement interface Providers\Interfaces\ConnectedServicesInterface.
+     *
+     * This option can be set to null, meaning no connected services tracking will take place.
      */
-    ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER =>
+    ModuleConfiguration::OPTION_PROVIDER_FOR_CONNECTED_SERVICES =>
         /**
-         * Track each authentication event for idp / sp / user combination, and any change in idp / sp metadata or
-         * released user attributes. Each authentication event record will have data used and released at the
-         * time of the authentication event (versioned idp / sp / user data). This tracker can also be
-         * used as an authentication data provider. It expects Doctrine DBAL compatible connection
-         * to be set below. Internally it uses store class
-         * Stores\Data\DoctrineDbal\DoctrineDbal\Versioned\Store::class.
+         * Default connected services provider which expects Doctrine DBAL compatible connection to be set below.
+         * CurrentDataProvider only gathers current (latest information) about the service and user (there is no
+         * versioning, so it's faster). VersionedDataProvider keeps track of any changes in data about the service
+         * and user.
+         *
          */
-        Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class,
+        Providers\ConnectedServices\DoctrineDbal\CurrentDataProvider::class,
+        //Providers\ConnectedServices\DoctrineDbal\VersionedDataProvider::class,
 
     /**
-     * Additional trackers to run besides default data tracker. These trackers will typically only process and
-     * persist authentication data to proper data store, and won't be used to display data in SSP UI.
-     * These tracker classes must implement Trackers\Interfaces\AuthenticationDataTrackerInterface.
+     * Activity provider is a class which will be used to provide list of authentication events which includes info
+     * about the services, user data sent to the service, and the time of authentication.
+     *
+     * Given class must implement interface Providers\Interfaces\ActivityInterfaceData.
+     *
+     * This option can be set to null, meaning no activity tracking will take place.
+     */
+    ModuleConfiguration::OPTION_PROVIDER_FOR_ACTIVITY =>
+        /**
+         * Default activity provider which expects Doctrine DBAL compatible connection to be set below.
+         * Currently only VersionedDataProvider is available, which tracks all changes in services and users.
+         */
+        Providers\Activity\DoctrineDbal\VersionedDataProvider::class,
+
+    /**
+     * Trackers
+     *
+     * List of additional tracker classes to be used for accounting (processing and persisting authentication data).
+     * These classes must implement Trackers\Interfaces\DataTrackerInterface
      */
     ModuleConfiguration::OPTION_ADDITIONAL_TRACKERS => [
-        // tracker-class
+        // some-tracker-class
     ],
 
     /**
@@ -90,14 +115,26 @@ $config = [
      */
     ModuleConfiguration::OPTION_CLASS_TO_CONNECTION_MAP => [
         /**
-         * Connection key to be used by jobs store class.
+         * Jobs store connection keys.
          */
         Stores\Jobs\DoctrineDbal\Store::class => 'doctrine_dbal_pdo_mysql',
         Stores\Jobs\PhpRedis\RedisStore::class => 'phpredis_class_redis',
         /**
-         * Connection key to be used by this data tracker and provider.
+         * Data provider connection keys.
          */
-        Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class => [
+        Providers\ConnectedServices\DoctrineDbal\VersionedDataProvider::class => [
+            ModuleConfiguration\ConnectionType::MASTER => 'doctrine_dbal_pdo_mysql',
+            ModuleConfiguration\ConnectionType::SLAVE => [
+                'doctrine_dbal_pdo_mysql',
+            ],
+        ],
+        Providers\ConnectedServices\DoctrineDbal\CurrentDataProvider::class => [
+            ModuleConfiguration\ConnectionType::MASTER => 'doctrine_dbal_pdo_mysql',
+            ModuleConfiguration\ConnectionType::SLAVE => [
+                'doctrine_dbal_pdo_mysql',
+            ],
+        ],
+        Providers\Activity\DoctrineDbal\VersionedDataProvider::class => [
             ModuleConfiguration\ConnectionType::MASTER => 'doctrine_dbal_pdo_mysql',
             ModuleConfiguration\ConnectionType::SLAVE => [
                 'doctrine_dbal_pdo_mysql',
@@ -177,7 +214,7 @@ $config = [
     ModuleConfiguration::OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED => 10,
 
     /**
-     * Tracker data retention policy.
+     * VersionedDataTracker data retention policy.
      *
      * Determines how long the tracked data will be stored. If null, data will be stored indefinitely. Otherwise, it
      * can be set as a duration for DateInterval, examples being below. For this to work, a cron tag must also
@@ -198,8 +235,9 @@ $config = [
     ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
 
     /**
-     * Tracker data retention policy tag designates the cron tag to use for enforcing data retention policy. Make sure
-     * to add this tag to the cron module configuration if data retention policy is different from null.
+     * VersionedDataTracker data retention policy tag designates the cron tag to use for enforcing data retention
+     * policy. Make sure to add this tag to the cron module configuration if data retention policy is different
+     * from null.
      */
     ModuleConfiguration::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY =>
         'accounting_tracker_data_retention_policy',

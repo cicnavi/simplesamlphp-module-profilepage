@@ -6,17 +6,18 @@ namespace SimpleSAML\Test\Module\accounting\Auth\Process;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Auth\Process\Accounting;
-use PHPUnit\Framework\TestCase;
+use SimpleSAML\Module\accounting\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider;
+use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Module\accounting\Data\Trackers\Activity\DoctrineDbal\VersionedDataTracker;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Stores\Jobs\DoctrineDbal\Store;
-use SimpleSAML\Module\accounting\Trackers\Authentication\DoctrineDbal\Versioned\Tracker;
-use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
+use SimpleSAML\Module\accounting\Services\TrackerResolver;
 use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
@@ -25,14 +26,16 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
  * @uses \SimpleSAML\Module\accounting\Helpers\AuthenticationEventStateResolver
- * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Connection
- * @uses \SimpleSAML\Module\accounting\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Stores\Builders\Bases\AbstractStoreBuilder
- * @uses \SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Builders\Bases\AbstractStoreBuilder
+ * @uses \SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder
  * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
  * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
  * @uses \SimpleSAML\Module\accounting\Helpers\Network
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @uses \SimpleSAML\Module\accounting\Data\Providers\Builders\DataProviderBuilder
+ * @uses \SimpleSAML\Module\accounting\Services\TrackerResolver
  */
 class AccountingTest extends TestCase
 {
@@ -40,11 +43,14 @@ class AccountingTest extends TestCase
     protected MockObject $loggerMock;
     protected array $filterConfig;
     protected MockObject $jobsStoreBuilderMock;
-    protected MockObject $authenticationDataTrackerBuilderMock;
     protected MockObject $jobsStoreMock;
     protected MockObject $trackerMock;
     protected array $sampleState;
     protected HelpersManager $helpersManager;
+    /**
+     * @var MockObject
+     */
+    protected $trackerResolver;
 
     protected function setUp(): void
     {
@@ -53,17 +59,16 @@ class AccountingTest extends TestCase
         $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->jobsStoreBuilderMock = $this->createMock(JobsStoreBuilder::class);
-        $this->authenticationDataTrackerBuilderMock =
-            $this->createMock(AuthenticationDataTrackerBuilder::class);
 
         $this->jobsStoreMock = $this->createMock(Store::class);
-        $this->trackerMock = $this->createMock(Tracker::class);
+        $this->trackerMock = $this->createMock(VersionedDataTracker::class);
 
         $this->sampleState = StateArrays::SAML2_FULL;
 
         $this->filterConfig = [];
 
         $this->helpersManager = new HelpersManager();
+        $this->trackerResolver = $this->createMock(TrackerResolver::class);
     }
 
     public function testCanCreateInstance(): void
@@ -87,7 +92,7 @@ class AccountingTest extends TestCase
                 $this->loggerMock,
                 $this->helpersManager,
                 $this->jobsStoreBuilderMock,
-                $this->authenticationDataTrackerBuilderMock
+                $this->trackerResolver
             )
         );
     }
@@ -108,9 +113,9 @@ class AccountingTest extends TestCase
             ->with($this->equalTo(Store::class))
             ->willReturn($this->jobsStoreMock);
 
-        $this->authenticationDataTrackerBuilderMock
+        $this->trackerResolver
             ->expects($this->never())
-            ->method('build');
+            ->method('fromModuleConfiguration');
 
         (new Accounting(
             $this->filterConfig,
@@ -119,7 +124,7 @@ class AccountingTest extends TestCase
             $this->loggerMock,
             $this->helpersManager,
             $this->jobsStoreBuilderMock,
-            $this->authenticationDataTrackerBuilderMock
+            $this->trackerResolver
         ))->process($this->sampleState);
     }
 
@@ -128,8 +133,8 @@ class AccountingTest extends TestCase
         $this->moduleConfigurationStub->method('getAccountingProcessingType')
             ->willReturn(ModuleConfiguration\AccountingProcessingType::VALUE_SYNCHRONOUS);
 
-        $this->moduleConfigurationStub->method('getDefaultDataTrackerAndProviderClass')
-            ->willReturn(Tracker::class);
+        $this->moduleConfigurationStub->method('getProviderClasses')
+            ->willReturn([VersionedDataProvider::class]);
         $this->moduleConfigurationStub->method('getAdditionalTrackers')->willReturn([]);
 
         $this->jobsStoreBuilderMock->expects($this->never())
@@ -140,11 +145,10 @@ class AccountingTest extends TestCase
             ->method('process')
             ->with($this->isInstanceOf(Event::class));
 
-        $this->authenticationDataTrackerBuilderMock
+        $this->trackerResolver
             ->expects($this->once())
-            ->method('build')
-            ->with($this->equalTo(Tracker::class))
-            ->willReturn($this->trackerMock);
+            ->method('fromModuleConfiguration')
+            ->willReturn([$this->trackerMock]);
 
         (new Accounting(
             $this->filterConfig,
@@ -153,7 +157,7 @@ class AccountingTest extends TestCase
             $this->loggerMock,
             $this->helpersManager,
             $this->jobsStoreBuilderMock,
-            $this->authenticationDataTrackerBuilderMock
+            $this->trackerResolver
         ))->process($this->sampleState);
     }
 
@@ -171,7 +175,7 @@ class AccountingTest extends TestCase
             $this->loggerMock,
             $this->helpersManager,
             $this->jobsStoreBuilderMock,
-            $this->authenticationDataTrackerBuilderMock
+            $this->trackerResolver
         ))->process($this->sampleState);
     }
 }

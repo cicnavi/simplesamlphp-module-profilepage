@@ -15,15 +15,6 @@ accounting-user-activity:
     path: /user/activity
     controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::activity
 
-accounting-user-oidc-tokens:
-    path: /user/oidc-tokens
-    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::oidcTokens
-
-accounting-user-oidc-token-revoke:
-    path: /user/oidc-tokens/revoke
-    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::oidcTokenRevoke
-    methods: POST
-
 accounting-user-oidc-token-revoke-xhr:
     path: /user/oidc-tokens/revoke-xhr
     controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::oidcTokenRevokeXhr

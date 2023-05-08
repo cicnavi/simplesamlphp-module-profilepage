@@ -31,7 +31,7 @@ class Oidc extends AbstractState
             return $oidcState[self::KEY_OPEN_ID_PROVIDER_METADATA];
         }
 
-        throw new UnexpectedValueException('State array does not contain OpenID Provider metadata.');
+        throw new UnexpectedValueException('State array does not contain OpenID VersionedDataProvider metadata.');
     }
 
     protected function resolveIdentityProviderEntityId(): string
@@ -43,7 +43,7 @@ class Oidc extends AbstractState
             return $this->identityProviderMetadata[Identity\Oidc::METADATA_KEY_ENTITY_ID];
         }
 
-        throw new UnexpectedValueException('OpenID Provider metadata array does not contain issuer.');
+        throw new UnexpectedValueException('OpenID VersionedDataProvider metadata array does not contain issuer.');
     }
 
     protected function resolveServiceProviderMetadata(array $state): array

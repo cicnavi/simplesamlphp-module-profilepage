@@ -6,10 +6,13 @@ namespace SimpleSAML\Test\Module\accounting;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Configuration;
+use SimpleSAML\Module\accounting\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider;
+use SimpleSAML\Module\accounting\Data\Stores;
+use SimpleSAML\Module\accounting\Data\Stores\Interfaces\JobsStoreInterface;
+use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Module\accounting\Data\Trackers;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Stores;
-use SimpleSAML\Module\accounting\Trackers;
 use stdClass;
 
 /**
@@ -56,7 +59,7 @@ class ModuleConfigurationTest extends TestCase
     public function testCanGetJobsStoreClass(): void
     {
         $this->assertTrue(
-            is_subclass_of($this->moduleConfiguration->getJobsStoreClass(), Stores\Interfaces\JobsStoreInterface::class)
+            is_subclass_of($this->moduleConfiguration->getJobsStoreClass(), JobsStoreInterface::class)
         );
     }
 
@@ -96,7 +99,9 @@ class ModuleConfigurationTest extends TestCase
     {
         $this->assertSame(
             'doctrine_dbal_pdo_sqlite',
-            $this->moduleConfiguration->getClassConnectionKey(Stores\Jobs\DoctrineDbal\Store::class)
+            $this->moduleConfiguration->getClassConnectionKey(
+                Store::class
+            )
         );
     }
 
@@ -105,7 +110,7 @@ class ModuleConfigurationTest extends TestCase
         $this->assertSame(
             'doctrine_dbal_pdo_sqlite_slave',
             $this->moduleConfiguration->getClassConnectionKey(
-                Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class,
+                VersionedDataProvider::class,
                 ModuleConfiguration\ConnectionType::SLAVE
             )
         );
@@ -152,7 +157,7 @@ class ModuleConfigurationTest extends TestCase
         $this->expectException(InvalidConfigurationException::class);
 
         $this->moduleConfiguration->getClassConnectionKey(
-            Stores\Jobs\DoctrineDbal\Store::class,
+            Store::class,
             'invalid'
         );
     }
@@ -311,14 +316,14 @@ class ModuleConfigurationTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function testThrowsOnInvalidDefaultDataTrackerAndProvider(): void
+    public function testThrowsOnInvalidDataProvider(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
         new ModuleConfiguration(
             null,
             [
-                ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER => 'invalid'
+                ModuleConfiguration::OPTION_PROVIDER_FOR_ACTIVITY => 'invalid'
             ]
         );
     }

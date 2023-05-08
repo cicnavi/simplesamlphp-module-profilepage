@@ -11,23 +11,28 @@ use SimpleSAML\Error\ConfigurationError;
 use SimpleSAML\Error\CriticalConfigurationError;
 use SimpleSAML\HTTP\RunnableResponse;
 use SimpleSAML\Locale\Translate;
+use SimpleSAML\Metadata\MetaDataStorageHandler;
+use SimpleSAML\Module\accounting\Data\Providers\Builders\DataProviderBuilder;
+use SimpleSAML\Module\accounting\Data\Providers\Interfaces\ActivityInterface;
+use SimpleSAML\Module\accounting\Data\Providers\Interfaces\DataProviderInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc;
-use SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider;
+use SimpleSAML\Module\accounting\Entities\ConnectedService;
 use SimpleSAML\Module\accounting\Entities\User;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Helpers\Attributes;
+use SimpleSAML\Module\accounting\Helpers\ProviderResolver;
 use SimpleSAML\Module\accounting\Helpers\Routes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\ModuleConfiguration\ConnectionType;
-use SimpleSAML\Module\accounting\Providers\Builders\AuthenticationDataProviderBuilder;
-use SimpleSAML\Module\accounting\Providers\Interfaces\AuthenticationDataProviderInterface;
 use SimpleSAML\Module\accounting\Services\AlertsBag;
 use SimpleSAML\Module\accounting\Services\CsrfToken;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\MenuManager;
 use SimpleSAML\Module\accounting\Services\SspModuleManager;
+use SimpleSAML\Module\oidc\Services\OidcOpenIdProviderMetadataService;
 use SimpleSAML\Session;
+use SimpleSAML\Utils\Config\Metadata;
 use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,7 +51,7 @@ class Profile
     protected LoggerInterface $logger;
     protected string $defaultAuthenticationSource;
     protected Simple $authSimple;
-    protected AuthenticationDataProviderBuilder $authenticationDataProviderBuilder;
+    protected DataProviderBuilder $dataProviderBuilder;
     protected HelpersManager $helpersManager;
     protected SspModuleManager $sspModuleManager;
     protected User $user;
@@ -60,7 +65,7 @@ class Profile
      * @param Session $session The current user session.
      * @param LoggerInterface $logger
      * @param Simple|null $authSimple
-     * @param AuthenticationDataProviderBuilder|null $authenticationDataProviderBuilder
+     * @param DataProviderBuilder|null $authenticationDataProviderBuilder
      * @param HelpersManager|null $helpersManager
      * @param SspModuleManager|null $sspModuleManager
      * @param CsrfToken|null $csrfToken
@@ -72,7 +77,7 @@ class Profile
         Session $session,
         LoggerInterface $logger,
         Simple $authSimple = null,
-        AuthenticationDataProviderBuilder $authenticationDataProviderBuilder = null,
+        DataProviderBuilder $authenticationDataProviderBuilder = null,
         HelpersManager $helpersManager = null,
         SspModuleManager $sspModuleManager = null,
         CsrfToken $csrfToken = null,
@@ -88,8 +93,8 @@ class Profile
 
         $this->helpersManager = $helpersManager ?? new HelpersManager();
 
-        $this->authenticationDataProviderBuilder = $authenticationDataProviderBuilder ??
-            new AuthenticationDataProviderBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
+        $this->dataProviderBuilder = $authenticationDataProviderBuilder ??
+            new DataProviderBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
 
         $this->sspModuleManager = $sspModuleManager ?? new SspModuleManager($this->logger, $this->helpersManager);
 
@@ -132,13 +137,21 @@ class Profile
      * @throws Exception
      * @throws ConfigurationError
      */
-    public function connectedOrganizations(): Template
+    public function connectedOrganizations(): Response
     {
         $userIdentifier = $this->resolveUserIdentifier();
 
-        $authenticationDataProvider = $this->resolveAuthenticationDataProvider();
+        $connectedServiceProviderClass = $this->moduleConfiguration->getConnectedServicesProviderClass();
 
-        $connectedServiceProviderBag = $authenticationDataProvider->getConnectedServiceProviders($userIdentifier);
+        if (is_null($connectedServiceProviderClass)) {
+            return new RedirectResponse($this->helpersManager->getRoutes()->getUrl(Routes::PATH_USER_PERSONAL_DATA));
+        }
+
+        $connectedServicesDataProvider = $this->dataProviderBuilder->buildConnectedServicesProvider(
+            $connectedServiceProviderClass
+        );
+
+        $connectedServiceProviderBag = $connectedServicesDataProvider->getConnectedServices($userIdentifier);
 
         $oidc = $this->sspModuleManager->getOidc();
         $accessTokensByClient = [];
@@ -149,13 +162,13 @@ class Profile
         if ($oidc->isEnabled()) {
             // Filter out OIDC service providers and get their entity (client) IDs.
             $oidcClientIds = array_map(
-                function (ConnectedServiceProvider $connectedServiceProvider) {
-                    return $connectedServiceProvider->getServiceProvider()->getEntityId();
+                function (ConnectedService $connectedService) {
+                    return $connectedService->getServiceProvider()->getEntityId();
                 },
                 array_filter(
                     $connectedServiceProviderBag->getAll(),
-                    function (ConnectedServiceProvider $connectedServiceProvider) {
-                        return $connectedServiceProvider->getServiceProvider()->getProtocol()->getDesignation() ===
+                    function (ConnectedService $connectedService) {
+                        return $connectedService->getServiceProvider()->getProtocol()->getDesignation() ===
                             Oidc::DESIGNATION;
                     }
                 )
@@ -190,18 +203,24 @@ class Profile
      * @throws Exception
      * @throws ConfigurationError
      */
-    public function activity(Request $request): Template
+    public function activity(Request $request): Response
     {
         $userIdentifier = $this->resolveUserIdentifier();
 
-        $authenticationDataProvider = $this->resolveAuthenticationDataProvider();
+        $activityProviderClass = $this->moduleConfiguration->getActivityProviderClass();
+
+        if (is_null($activityProviderClass)) {
+            return new RedirectResponse($this->helpersManager->getRoutes()->getUrl(Routes::PATH_USER_PERSONAL_DATA));
+        }
+
+        $activityDataProvider = $this->dataProviderBuilder->buildActivityProvider($activityProviderClass);
 
         $page = ($page = (int)$request->query->get('page', 1)) > 0 ? $page : 1;
 
         $maxResults = 10;
         $firstResult = ($page - 1) * $maxResults;
 
-        $activityBag = $authenticationDataProvider->getActivity($userIdentifier, $maxResults, $firstResult);
+        $activityBag = $activityDataProvider->getActivity($userIdentifier, $maxResults, $firstResult);
 
         $template = $this->resolveTemplate('accounting:user/activity.twig');
         $template->data += compact('activityBag', 'page', 'maxResults');
@@ -209,98 +228,8 @@ class Profile
         return $template;
     }
 
-    /**
-     * @throws Exception|ConfigurationError
-     */
-    public function oidcTokens(): Response
-    {
-        $oidc = $this->sspModuleManager->getOidc();
-
-        // If oidc module is not enabled, this route should not be called.
-        if (!$oidc->isEnabled()) {
-            return new RedirectResponse($this->helpersManager->getRoutes()->getUrl(Routes::PATH_USER_PERSONAL_DATA));
-        }
-
-        $userIdentifier = $this->resolveUserIdentifier();
-
-        $accessTokensByClient = $this->helpersManager->getArr()->groupByValue(
-            $oidc->getUsersAccessTokens($userIdentifier),
-            'client_id'
-        );
-
-        $refreshTokensByClient = $this->helpersManager->getArr()->groupByValue(
-            $oidc->getUsersRefreshTokens($userIdentifier),
-            'client_id'
-        );
-
-        $clientIds = array_unique(array_merge(array_keys($accessTokensByClient), array_keys($refreshTokensByClient)));
-        $clients = $this->helpersManager->getArr()->groupByValue(
-            $oidc->getClients($clientIds),
-            'id'
-        );
-
-        //die(var_dump($accessTokensByClient, $refreshTokensByClient, $clientIds, $clients));
-
-        $template = $this->resolveTemplate('accounting:user/oidc-tokens.twig');
-        $template->data += compact('accessTokensByClient', 'refreshTokensByClient', 'clients');
-
-        return $template;
-    }
-
-    public function oidcTokenRevoke(Request $request): Response
-    {
-        $oidc = $this->sspModuleManager->getOidc();
-
-        // If oidc module is not enabled, this route should not be called.
-        if (! $oidc->isEnabled()) {
-            return new RedirectResponse($this->helpersManager->getRoutes()->getUrl(Routes::PATH_USER_PERSONAL_DATA));
-        }
-
-        $redirectTo = (string) $request->query->get(Routes::QUERY_REDIRECT_TO_PATH, Routes::PATH_USER_OIDC_TOKENS);
-
-        $response = new RedirectResponse(
-            $this->helpersManager->getRoutes()->getUrl($redirectTo)
-        );
-
-        if (! $this->csrfToken->validate($request->request->getAlnum('csrf-token'))) {
-            $this->alertsBag->put(
-                new AlertsBag\Alert('Could not verify CSRF token.', 'warning')
-            );
-
-            return $response;
-        }
-
-        $validTokenTypes = ['access', 'refresh'];
-
-        $tokenType = $request->request->getAlnum('token-type');
-
-        if (! in_array($tokenType, $validTokenTypes)) {
-            $this->alertsBag->put(
-                new AlertsBag\Alert('Token type not valid.', 'warning')
-            );
-            return $response;
-        }
-
-        $tokenId = $request->request->getAlnum('token-id');
-
-        $userIdentifier = $this->resolveUserIdentifier();
-
-        if ($tokenType === 'access') {
-            $oidc->revokeUsersAccessToken($userIdentifier, $tokenId);
-        } elseif ($tokenType === 'refresh') {
-            $oidc->revokeUsersRefreshToken($userIdentifier, $tokenId);
-        }
-
-        $this->alertsBag->put(
-            new AlertsBag\Alert('Token revoked successfully.', 'success')
-        );
-
-        return $response;
-    }
-
     public function oidcTokenRevokeXhr(Request $request): Response
     {
-
         $oidc = $this->sspModuleManager->getOidc();
         $response = new JsonResponse();
 
@@ -357,18 +286,6 @@ class Profile
         }
 
         return $userIdentifier;
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function resolveAuthenticationDataProvider(): AuthenticationDataProviderInterface
-    {
-        return $this->authenticationDataProviderBuilder
-            ->build(
-                $this->moduleConfiguration->getDefaultDataTrackerAndProviderClass(),
-                ConnectionType::SLAVE
-            );
     }
 
     public function logout(): Response
@@ -428,25 +345,25 @@ class Profile
                 'personal-data',
                 Translate::noop('Personal Data'),
                 'css/src/icons/prof-page.svg'
-            ),
-            new MenuManager\MenuItem(
-                'connected-organizations',
-                Translate::noop('Connected Organizations'),
-                'css/src/icons/conn-orgs.svg'
-            ),
-            new MenuManager\MenuItem(
-                'activity',
-                Translate::noop('Activity'),
-                'css/src/icons/activity.svg'
             )
         );
 
-        // Depending on other functionalities, add additional menu items.
-        if ($this->sspModuleManager->getOidc()->isEnabled()) {
+        // Depending on enabled functionalities, add additional menu items.
+        if ($this->moduleConfiguration->getConnectedServicesProviderClass() !== null) {
             $menuManager->addItems(
                 new MenuManager\MenuItem(
-                    'oidc-tokens',
-                    Translate::noop('Tokens'),
+                    'connected-organizations',
+                    Translate::noop('Connected Organizations'),
+                    'css/src/icons/conn-orgs.svg'
+                )
+            );
+        }
+
+        if ($this->moduleConfiguration->getActivityProviderClass() !== null) {
+            $menuManager->addItems(
+                new MenuManager\MenuItem(
+                    'activity',
+                    Translate::noop('Activity'),
                     'css/src/icons/activity.svg'
                 )
             );
