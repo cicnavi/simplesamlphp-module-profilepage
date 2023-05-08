@@ -36,7 +36,7 @@ class Oidc extends AbstractProvider implements IdentityProviderInterface
             return $this->metadata[self::METADATA_KEY_ENTITY_ID];
         }
 
-        throw new MetadataException('OpenID Provider metadata does not contain entity ID.');
+        throw new MetadataException('OpenID VersionedDataProvider metadata does not contain entity ID.');
     }
 
     public function getProtocol(): AuthenticationProtocolInterface

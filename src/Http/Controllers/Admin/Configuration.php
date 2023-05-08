@@ -7,11 +7,12 @@ namespace SimpleSAML\Module\accounting\Http\Controllers\Admin;
 use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Configuration as SspConfiguration;
+use SimpleSAML\Module\accounting\Data\Providers\Builders\DataProviderBuilder;
+use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder;
 use SimpleSAML\Module\accounting\Helpers\Routes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
 use SimpleSAML\Session;
 use SimpleSAML\Utils;
 use SimpleSAML\XHTML\Template;
@@ -59,7 +60,7 @@ class Configuration
         $moduleConfiguration = null;
         $configurationValidationErrors = null;
         $jobsStore = null;
-        $defaultDataTrackerAndProvider = null;
+        $providers = [];
         $additionalTrackers = [];
         $setupNeeded = false;
         $runSetup = $request->query->has('runSetup');
@@ -67,16 +68,17 @@ class Configuration
         try {
             $moduleConfiguration = new ModuleConfiguration();
 
-            $defaultDataTrackerAndProvider =
-                (new AuthenticationDataTrackerBuilder($moduleConfiguration, $this->logger, $this->helpersManager))
-                ->build($moduleConfiguration->getDefaultDataTrackerAndProviderClass());
-
-            if ($defaultDataTrackerAndProvider->needsSetup()) {
-                if ($runSetup) {
-                    $defaultDataTrackerAndProvider->runSetup();
-                } else {
-                    $setupNeeded = true;
+            $dataProviderBuilder = new DataProviderBuilder($moduleConfiguration, $this->logger, $this->helpersManager);
+            foreach ($moduleConfiguration->getProviderClasses() as $providerClass) {
+                $providerInstance = $dataProviderBuilder->build($providerClass);
+                if ($providerInstance->needsSetup()) {
+                    if ($runSetup) {
+                        $providerInstance->runSetup();
+                    } else {
+                        $setupNeeded = true;
+                    }
                 }
+                $providers[$providerClass] = $providerInstance;
             }
 
             if (
@@ -94,19 +96,18 @@ class Configuration
                 }
             }
 
+            $dataTrackerBuilder = new DataTrackerBuilder($moduleConfiguration, $this->logger, $this->helpersManager);
             foreach ($moduleConfiguration->getAdditionalTrackers() as $trackerClass) {
-                $additionalTrackerInstance =
-                    (new AuthenticationDataTrackerBuilder($moduleConfiguration, $this->logger, $this->helpersManager))
-                    ->build($trackerClass);
+                $trackerInstance = $dataTrackerBuilder->build($trackerClass);
 
-                if ($additionalTrackerInstance->needsSetup()) {
+                if ($trackerInstance->needsSetup()) {
                     if ($runSetup) {
-                        $additionalTrackerInstance->runSetup();
+                        $trackerInstance->runSetup();
                     } else {
                         $setupNeeded = true;
                     }
                 }
-                $additionalTrackers[$trackerClass] = $additionalTrackerInstance;
+                $additionalTrackers[$trackerClass] = $trackerInstance;
             }
         } catch (Throwable $exception) {
             $configurationValidationErrors = $exception->getMessage();
@@ -116,11 +117,12 @@ class Configuration
             'moduleConfiguration' => $moduleConfiguration,
             'configurationValidationErrors' => $configurationValidationErrors,
             'jobsStore' => $jobsStore,
-            'defaultDataTrackerAndProvider' => $defaultDataTrackerAndProvider,
+            'providers' => $providers,
             'additionalTrackers' => $additionalTrackers,
             'setupNeeded' => $setupNeeded,
             'profilePageUri' => $this->helpersManager->getRoutes()
                 ->getUrl(Routes::PATH_USER_PERSONAL_DATA),
+            'runSetup' => $runSetup,
         ];
 
         $template = new Template($this->sspConfiguration, 'accounting:admin/configuration/status.twig');

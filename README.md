@@ -1,14 +1,10 @@
 [![Test](https://github.com/cicnavi/simplesamlphp-module-accounting/actions/workflows/test.yml/badge.svg)](https://github.com/cicnavi/simplesamlphp-module-accounting/actions/workflows/test.yml)
 
 
-* TODO 
-* Consider config to enable / disable storing attribute values
-* IG Binary - consider using for data serialization
-
 
 # simplesamlphp-module-accounting
-SimpleSAMLphp module providing user accounting functionality using SimpleSAMLphp authentication processing 
-filters feature.
+SimpleSAMLphp module providing user "Profile Page" and accounting functionality using SimpleSAMLphp authentication
+processing filters feature.
 
 ## Features
 - Enables tracking of authentication events, synchronously (during authentication event) or
@@ -21,10 +17,9 @@ backend storages can be added by following proper interfaces.
 - Comes with setup procedure which sets up backend storage. In case of Doctrine DBAL this means running SQL migrations
 which create proper tables in configured database.
 - Each backend storage connection can have master and slave configuration (master for writing, slave for reading)
-- Has "trackers" which persist authentication data to backend storage. Currently, there is one default Doctrine DBAL
-compatible tracker which stores authentication events, versioned Idp and SP metadata, and versioned user attributes.
-Other trackers can be added by following proper interfaces.
-- Trackers can run in two ways:
+- Has tracking functionality available which persist authentication data to backend storage. Currently, module can
+track connected services and authentication events. Other trackers can be added by following proper interfaces.
+- Tracking can run in two ways:
   - synchronously - authentication data persisted during authentication event typically with multiple
   queries / inserts / updates to backend storage.
   - asynchronously - only authentication event job is persisted during authentication event
@@ -62,23 +57,32 @@ to the SimpleSAMLphp config directory:
 cp modules/accounting/config-templates/module_accounting.php config/
 ```
 
-Next step is configuring available options in file config/module_accounting.php. Each option has an explanation,
+Next step is to configure available options in file config/module_accounting.php. Each option has an explanation,
 however, the description of the overall concept follows.
 
-For accounting processing, the default data tracker and data provider class must be set. This tracker will be used
-to persist tracking data and also to show data in the SimpleSAMLphp user interface. Here is an example excerpt
-of setting the Doctrine DBAL compatible tracker class which will store authentication events, versioned Idp
-and SP metadata, and versioned user attributes in a relational database:
+Module can be configured to only show current user data, with no accounting taking place. However, module can be
+configured to track the following data:
+* Connected organizations - by setting the class ModuleConfiguration::OPTION_PROVIDER_FOR_CONNECTED_SERVICES option. 
+* Activity - by setting the class for ModuleConfiguration::OPTION_PROVIDER_FOR_ACTIVITY option.
+
+Module comes with some Doctrine DBAL capable classes which can be used for those purposes. Here is an example config
+excerpt which will enable storing current (latest) data for connected services and versioned data 
+for authentication events, including versioned Idp and SP metadata, and versioned user attributes:
 
 ```php
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Trackers;
+use SimpleSAML\Module\accounting\Data\Trackers;
+use SimpleSAML\Module\accounting\Data\Providers;
 
 // ...
-ModuleConfiguration::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER =>
-    Trackers\Authentication\DoctrineDbal\Versioned\Tracker::class,
+ModuleConfiguration::OPTION_PROVIDER_FOR_CONNECTED_SERVICES =>
+    Providers\ConnectedServices\DoctrineDbal\CurrentDataProvider::class,
+ModuleConfiguration::OPTION_PROVIDER_FOR_ACTIVITY =>
+        Providers\Activity\DoctrineDbal\VersionedDataProvider::class,
 // ...
 ```
+
+### Processing type
 
 The deployer can choose if the accounting processing will be performed during authentication event (synchronously),
 or in a separate process (asynchronously), for example:
@@ -145,8 +149,14 @@ Only one job runner instance can run at given point in time. By maintaining inte
 if there is another job runner active. If yes, the latter will simply exit and let the active job runner do its work.
 This way one is free to invoke the cron tag at any time, since only one job runner will ever be active.
 
-## TODO
-- [ ] Translation
+## OpendID Connect integration
+This module can also be used as an authentication processing filter for OIDC module 
+https://github.com/simplesamlphp/simplesamlphp-module-oidc, meaning it can also track OIDC authentication events, 
+Also, if connected services option is enabled, a user will be able to revoke any active access / refresh tokens 
+for particular service in the user interface.
+
+Accounting authentication processing filter can be added in the OIDC module configuration, as per OIDC module
+documentation.
 
 ## Tests
 To run phpcs, psalm and phpunit:

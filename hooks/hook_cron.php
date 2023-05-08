@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Configuration;
+use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\JobRunner;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
-use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
+use SimpleSAML\Module\accounting\Services\TrackerResolver;
 
 /**
  * @param array $cronInfo
@@ -51,7 +51,7 @@ function accounting_hook_cron(array &$cronInfo): void
     }
 
     /**
-     * Tracker data retention policy handling.
+     * VersionedDataTracker data retention policy handling.
      */
     $cronTagForTrackerDataRetentionPolicy = $moduleConfiguration->getCronTagForTrackerDataRetentionPolicy();
     try {
@@ -82,16 +82,11 @@ function handleDataRetentionPolicy(
     HelpersManager $helpersManager,
     DateInterval $retentionPolicy
 ): void {
-    // Handle default data tracker and provider
-    (new AuthenticationDataTrackerBuilder($moduleConfiguration, $logger, $helpersManager))
-        ->build($moduleConfiguration->getDefaultDataTrackerAndProviderClass())
-        ->enforceDataRetentionPolicy($retentionPolicy);
 
-    $additionalTrackers = $moduleConfiguration->getAdditionalTrackers();
+    $trackers = (new TrackerResolver($moduleConfiguration, $logger, $helpersManager))->fromModuleConfiguration();
 
-    foreach ($additionalTrackers as $tracker) {
-        (new AuthenticationDataTrackerBuilder($moduleConfiguration, $logger, $helpersManager))
-            ->build($tracker)
-            ->enforceDataRetentionPolicy($retentionPolicy);
+    foreach ($trackers as $trackerClass => $tracker) {
+        $logger->info('Applying data retention policy for class ' . $trackerClass);
+        $tracker->enforceDataRetentionPolicy($retentionPolicy);
     }
 }

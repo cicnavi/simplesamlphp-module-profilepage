@@ -11,6 +11,8 @@ use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use SimpleSAML\Configuration as SspConfiguration;
+use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event\Job;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
@@ -18,9 +20,6 @@ use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter;
 use SimpleSAML\Module\accounting\Services\JobRunner\State;
-use SimpleSAML\Module\accounting\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Trackers\Builders\AuthenticationDataTrackerBuilder;
-use SimpleSAML\Module\accounting\Trackers\Interfaces\AuthenticationDataTrackerInterface;
 use Throwable;
 
 class JobRunner
@@ -28,7 +27,6 @@ class JobRunner
     protected ModuleConfiguration $moduleConfiguration;
     protected SspConfiguration $sspConfiguration;
     protected LoggerInterface $logger;
-    protected AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder;
     protected JobsStoreBuilder $jobsStoreBuilder;
     protected CacheInterface $cache;
     protected State $state;
@@ -49,6 +47,7 @@ class JobRunner
     protected DateInterval $stateStaleThresholdInterval;
     protected RateLimiter $rateLimiter;
     protected HelpersManager $helpersManager;
+    protected TrackerResolver $trackerResolver;
     protected ?DateInterval $maximumExecutionTime;
     protected ?int $shouldPauseAfterNumberOfJobsProcessed;
 
@@ -61,7 +60,7 @@ class JobRunner
         SspConfiguration $sspConfiguration,
         LoggerInterface $logger = null,
         HelpersManager $helpersManager = null,
-        AuthenticationDataTrackerBuilder $authenticationDataTrackerBuilder = null,
+        TrackerResolver $trackerResolver = null,
         JobsStoreBuilder $jobsStoreBuilder = null,
         CacheInterface $cache = null,
         State $state = null,
@@ -72,8 +71,8 @@ class JobRunner
         $this->logger = $logger ?? new Logger();
         $this->helpersManager = $helpersManager ?? new HelpersManager();
 
-        $this->authenticationDataTrackerBuilder = $authenticationDataTrackerBuilder ??
-            new AuthenticationDataTrackerBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
+        $this->trackerResolver = $trackerResolver ??
+            new TrackerResolver($this->moduleConfiguration, $this->logger, $this->helpersManager);
         $this->jobsStoreBuilder = $jobsStoreBuilder ??
             new JobsStoreBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
 
@@ -83,7 +82,7 @@ class JobRunner
 
         $this->state = $state ?? new State($this->jobRunnerId);
 
-        $this->trackers = $this->resolveTrackers();
+        $this->trackers = $this->trackerResolver->fromModuleConfiguration();
         $this->stateStaleThresholdInterval = new DateInterval(self::STATE_STALE_THRESHOLD_INTERVAL);
         $this->rateLimiter = $rateLimiter ?? new RateLimiter();
 
@@ -161,7 +160,7 @@ class JobRunner
                     $this->rateLimiter->resetBackoffPause();
                 }
 
-                /** @var AuthenticationDataTrackerInterface $tracker */
+                /** @var DataTrackerInterface $tracker */
                 foreach ($this->trackers as $tracker) {
                     /** @var Job $job */
                     $tracker->process($job->getPayload());
@@ -313,7 +312,7 @@ class JobRunner
             }
 
             if ($cachedState->getJobRunnerId() !== $this->jobRunnerId) {
-                $message = 'Current job runner ID differs from the ID in the cached state.';
+                $message = 'CurrentDataProvider job runner ID differs from the ID in the cached state.';
                 throw new Exception($message);
             }
 
@@ -487,25 +486,6 @@ class JobRunner
             $this->logger->debug($message);
             throw new Exception($message);
         }
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function resolveTrackers(): array
-    {
-        $trackers = [];
-
-        $configuredTrackerClasses = array_merge(
-            [$this->moduleConfiguration->getDefaultDataTrackerAndProviderClass()],
-            $this->moduleConfiguration->getAdditionalTrackers()
-        );
-
-        foreach ($configuredTrackerClasses as $trackerClass) {
-            $trackers[$trackerClass] = $this->authenticationDataTrackerBuilder->build($trackerClass);
-        }
-
-        return $trackers;
     }
 
     protected function isCli(): bool

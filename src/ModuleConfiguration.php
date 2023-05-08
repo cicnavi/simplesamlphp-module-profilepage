@@ -7,12 +7,12 @@ namespace SimpleSAML\Module\accounting;
 use DateInterval;
 use Exception;
 use SimpleSAML\Configuration;
+use SimpleSAML\Module\accounting\Data\Providers\Interfaces\DataProviderInterface;
+use SimpleSAML\Module\accounting\Data\Stores\Interfaces\JobsStoreInterface;
+use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration\AccountingProcessingType;
 use SimpleSAML\Module\accounting\ModuleConfiguration\ConnectionType;
-use SimpleSAML\Module\accounting\Providers\Interfaces\AuthenticationDataProviderInterface;
-use SimpleSAML\Module\accounting\Stores\Interfaces\JobsStoreInterface;
-use SimpleSAML\Module\accounting\Trackers\Interfaces\AuthenticationDataTrackerInterface;
 use Throwable;
 
 class ModuleConfiguration
@@ -20,7 +20,7 @@ class ModuleConfiguration
     public const MODULE_NAME = 'accounting';
 
     /**
-     * Default file name for module configuration. Can be overridden, for example, for testing purposes.
+     * Default file name for module configuration. Can be overridden in constructor, for example, for testing purposes.
      */
     public const FILE_NAME = 'module_accounting.php';
 
@@ -28,7 +28,6 @@ class ModuleConfiguration
     public const OPTION_DEFAULT_AUTHENTICATION_SOURCE = 'default_authentication_source';
     public const OPTION_ACCOUNTING_PROCESSING_TYPE = 'accounting_processing_type';
     public const OPTION_JOBS_STORE = 'jobs_store';
-    public const OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER = 'default_data_tracker_and_provider';
     public const OPTION_ADDITIONAL_TRACKERS = 'additional_trackers';
     public const OPTION_CONNECTIONS_AND_PARAMETERS = 'connections_and_parameters';
     public const OPTION_CLASS_TO_CONNECTION_MAP = 'class_to_connection_map';
@@ -38,6 +37,8 @@ class ModuleConfiguration
         'job_runner_should_pause_after_number_of_jobs_processed';
     public const OPTION_TRACKER_DATA_RETENTION_POLICY = 'tracker_data_retention_policy';
     public const OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY = 'cron_tag_for_tracker_data_retention_policy';
+    public const OPTION_PROVIDER_FOR_CONNECTED_SERVICES = 'provider_for_connected_services';
+    public const OPTION_PROVIDER_FOR_ACTIVITY = 'provider_for_activity';
 
     /**
      * Contains configuration from module configuration file.
@@ -132,9 +133,25 @@ class ModuleConfiguration
         return $value;
     }
 
-    public function getDefaultDataTrackerAndProviderClass(): string
+    public function getConnectedServicesProviderClass(): ?string
     {
-        return $this->getConfiguration()->getString(self::OPTION_DEFAULT_DATA_TRACKER_AND_PROVIDER);
+        return $this->getConfiguration()->getOptionalString(self::OPTION_PROVIDER_FOR_CONNECTED_SERVICES, null);
+    }
+
+    public function getActivityProviderClass(): ?string
+    {
+        return $this->getConfiguration()->getOptionalString(self::OPTION_PROVIDER_FOR_ACTIVITY, null);
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getProviderClasses(): array
+    {
+        return array_filter([
+            $this->getConnectedServicesProviderClass(),
+            $this->getActivityProviderClass(),
+        ]);
     }
 
     public function getConnectionsAndParameters(): array
@@ -280,7 +297,7 @@ class ModuleConfiguration
         }
 
         try {
-            $this->validateDefaultDataTrackerAndProvider();
+            $this->validateDataProviders();
         } catch (Throwable $exception) {
             $errors[] = $exception->getMessage();
         }
@@ -313,27 +330,18 @@ class ModuleConfiguration
     /**
      * @throws InvalidConfigurationException
      */
-    protected function validateDefaultDataTrackerAndProvider(): void
+    protected function validateDataProviders(): void
     {
         $errors = [];
 
-        // Default data tracker and provider must implement proper interfaces.
-        $defaultDataTrackerAndProviderClass = $this->getDefaultDataTrackerAndProviderClass();
-
-        if (!is_subclass_of($defaultDataTrackerAndProviderClass, AuthenticationDataTrackerInterface::class)) {
-            $errors[] = sprintf(
-                'Default authentication data tracker and provider class \'%s\' does not implement interface \'%s\'.',
-                $defaultDataTrackerAndProviderClass,
-                AuthenticationDataTrackerInterface::class
-            );
-        }
-
-        if (!is_subclass_of($defaultDataTrackerAndProviderClass, AuthenticationDataProviderInterface::class)) {
-            $errors[] = sprintf(
-                'Default authentication data tracker and provider class \'%s\' does not implement interface \'%s\'.',
-                $defaultDataTrackerAndProviderClass,
-                AuthenticationDataProviderInterface::class
-            );
+        foreach ($this->getProviderClasses() as $providerClass) {
+            if (!is_subclass_of($providerClass, DataProviderInterface::class)) {
+                $errors[] = sprintf(
+                    'VersionedDataProvider class \'%s\' does not implement interface \'%s\'.',
+                    $providerClass,
+                    DataProviderInterface::class
+                );
+            }
         }
 
         if (!empty($errors)) {
@@ -353,11 +361,11 @@ class ModuleConfiguration
             /** @psalm-suppress DocblockTypeContradiction */
             if (!is_string($trackerClass)) {
                 $errors[] = 'Additional trackers array must contain class strings only.';
-            } elseif (!is_subclass_of($trackerClass, AuthenticationDataTrackerInterface::class)) {
+            } elseif (!is_subclass_of($trackerClass, DataTrackerInterface::class)) {
                 $errors[] = sprintf(
-                    'Tracker class \'%s\' does not implement interface \'%s\'.',
+                    'VersionedDataTracker class \'%s\' does not implement interface \'%s\'.',
                     $trackerClass,
-                    AuthenticationDataTrackerInterface::class
+                    DataTrackerInterface::class
                 );
             }
         }

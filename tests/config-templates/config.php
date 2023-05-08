@@ -906,7 +906,7 @@ $config = [
      *************************************/
 
     /*
-     * Tracker processing filters that will be executed for all IdPs
+     * VersionedDataTracker processing filters that will be executed for all IdPs
      */
     'authproc.idp' => [
         /* Enable the authproc filter below to add URN prefixes to all attributes
@@ -961,7 +961,7 @@ $config = [
     ],
 
     /*
-     * Tracker processing filters that will be executed for all SPs
+     * VersionedDataTracker processing filters that will be executed for all SPs
      */
     'authproc.sp' => [
         /*
