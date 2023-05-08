@@ -15,7 +15,7 @@ stages:
 # PHP v7.4
 test-74:
   tags:
-    - niif-hu-shell
+    - niif-hu-docker
   stage: test
   image: cicnavi/dap:74
   script:
@@ -25,7 +25,7 @@ test-74:
 # PHP v8.1
 test-81:
   tags:
-    - niif-hu-shell
+    - niif-hu-docker
   stage: test
   image: cicnavi/dap:81
   script:
