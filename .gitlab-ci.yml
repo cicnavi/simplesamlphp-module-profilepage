@@ -11,6 +11,7 @@ cache:
 # List of stages for jobs, and their order of execution
 stages:
   - test
+  - deploy
 
 # PHP v7.4
 test-74:
@@ -31,3 +32,16 @@ test-81:
   script:
     - composer install --prefer-dist --no-progress --no-suggest
     - composer run-script pre-commit
+
+# TODO mivanci remove when GEANT project finishes
+# Do some updates on the test deployment...
+niif-update:
+  tags:
+    - niif-hu-shell
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  #      when: manual
+  script:
+    - cd /var/www/simplesamlphp
+    - composer update -n cicnavi/simplesamlphp-module-accounting
