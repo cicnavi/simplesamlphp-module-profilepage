@@ -16,6 +16,7 @@ class Routes
     public const PATH_USER_PERSONAL_DATA = 'user/personal-data';
     public const PATH_USER_OIDC_TOKENS = 'user/oidc-tokens';
     public const QUERY_REDIRECT_TO_PATH = 'redirectTo';
+    public const PATH_LOGGED_OUT = 'logged-out';
 
     protected HTTP $sspHttpUtils;
     protected Arr $arr;
