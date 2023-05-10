@@ -22,7 +22,11 @@ accounting-user-oidc-token-revoke-xhr:
 
 accounting-user-logout:
     path: /user/logout
-    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::logout
+    controller: SimpleSAML\Module\accounting\Http\Controllers\Logout::logout
     methods:
         - GET
         - POST
+
+accounting-logout:
+    path: /logged-out
+    controller: SimpleSAML\Module\accounting\Http\Controllers\Logout::loggedOut

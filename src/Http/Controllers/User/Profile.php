@@ -288,21 +288,6 @@ class Profile
         return $userIdentifier;
     }
 
-    public function logout(): Response
-    {
-        return new RunnableResponse([$this->authSimple, 'logout'], [$this->getLogoutUrl()]);
-    }
-
-    protected function getLogoutUrl(): string
-    {
-        try {
-            return $this->sspConfiguration->getBasePath() . 'logout.php';
-        } catch (CriticalConfigurationError $exception) {
-            $message = \sprintf('Could not resolve SimpleSAMLphp base path. Error was: %s', $exception->getMessage());
-            throw new InvalidConfigurationException($message, $exception->getCode(), $exception);
-        }
-    }
-
     /**
      * Load all attribute map files which translate attribute names to user-friendly name format.
      */
