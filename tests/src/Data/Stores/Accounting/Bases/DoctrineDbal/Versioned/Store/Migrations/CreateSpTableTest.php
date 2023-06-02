@@ -53,6 +53,8 @@ class CreateSpTableTest extends TestCase
         $migration = new CreateSpTable($this->connection);
         $migration->run();
         $this->assertTrue($this->schemaManager->tablesExist($this->tableName));
+        $migration->run();
+        $this->assertTrue($this->schemaManager->tablesExist($this->tableName));
         $migration->revert();
         $this->assertFalse($this->schemaManager->tablesExist($this->tableName));
     }

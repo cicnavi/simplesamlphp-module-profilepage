@@ -6,10 +6,12 @@ namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal
 
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\TableConstants as BaseTableConstantsAlias;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use Throwable;
+
+use function sprintf;
 
 class CreateIdpVersionTable extends AbstractMigration
 {
@@ -43,7 +45,7 @@ class CreateIdpVersionTable extends AbstractMigration
             $table->addColumn('metadata', Types::TEXT);
 
             $table->addColumn('metadata_hash_sha256', Types::STRING)
-                ->setLength(TableConstants::COLUMN_HASH_SHA265_HEXITS_LENGTH)
+                ->setLength(BaseTableConstantsAlias::COLUMN_HASH_SHA265_HEXITS_LENGTH)
                 ->setFixed(true);
 
             $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
@@ -57,7 +59,7 @@ class CreateIdpVersionTable extends AbstractMigration
             $this->schemaManager->createTable($table);
         } catch (Throwable $exception) {
             throw $this->prepareGenericMigrationException(
-                \sprintf('Error creating table \'%s.', $tableName),
+                sprintf('Error creating table \'%s.', $tableName),
                 $exception
             );
         }
@@ -74,7 +76,7 @@ class CreateIdpVersionTable extends AbstractMigration
         try {
             $this->schemaManager->dropTable($tableName);
         } catch (Throwable $exception) {
-            throw $this->prepareGenericMigrationException(\sprintf('Could not drop table %s.', $tableName), $exception);
+            throw $this->prepareGenericMigrationException(sprintf('Could not drop table %s.', $tableName), $exception);
         }
     }
 }

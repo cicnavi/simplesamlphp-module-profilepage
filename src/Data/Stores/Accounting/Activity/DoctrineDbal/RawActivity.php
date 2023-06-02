@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store;
+namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -22,25 +22,25 @@ class RawActivity extends AbstractRawEntity
         parent::__construct($rawRow, $abstractPlatform);
 
         $this->serviceProviderMetadata = $this->resolveServiceProviderMetadata(
-            (string)$rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA]
+            (string)$rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA]
         );
 
         $this->userAttributes = $this->resolveUserAttributes(
-            (string)$rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES]
+            (string)$rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES]
         );
 
         $this->happenedAt = $this->resolveDateTimeImmutable(
-            $rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT]
+            $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT]
         );
 
-        $this->clientIpAddress = empty($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]) ?
+        $this->clientIpAddress = empty($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]) ?
             null :
-            (string)$rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS];
+            (string)$rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS];
 
         $this->authenticationProtocolDesignation =
-            empty($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION]) ?
+            empty($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION]) ?
             null :
-            (string)$rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION];
+            (string)$rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION];
     }
 
     /**
@@ -89,9 +89,9 @@ class RawActivity extends AbstractRawEntity
     protected function validate(array $rawRow): void
     {
         $columnsToCheck = [
-            TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA,
-            TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES,
-            TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT,
+            EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA,
+            EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES,
+            EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT,
         ];
 
         foreach ($columnsToCheck as $column) {
@@ -101,26 +101,26 @@ class RawActivity extends AbstractRawEntity
         }
 
         /** @noinspection DuplicatedCode */
-        if (! is_string($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA])) {
+        if (! is_string($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA])) {
             $message = sprintf(
                 'Column %s must be string.',
-                TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA
+                EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA
             );
             throw new UnexpectedValueException($message);
         }
 
-        if (! is_string($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES])) {
+        if (! is_string($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES])) {
             $message = sprintf(
                 'Column %s must be string.',
-                TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES
+                EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES
             );
             throw new UnexpectedValueException($message);
         }
 
-        if (! is_string($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT])) {
+        if (! is_string($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT])) {
             $message = sprintf(
                 'Column %s must be string.',
-                TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT
+                EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT
             );
             throw new UnexpectedValueException($message);
         }

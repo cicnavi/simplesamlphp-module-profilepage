@@ -31,22 +31,4 @@ class TableConstants extends BaseTableConstants
     public const TABLE_SP_COLUMN_NAME_METADATA_HASH_SHA256 = 'metadata_hash_sha256';
     public const TABLE_SP_COLUMN_NAME_CREATED_AT = 'created_at';
     public const TABLE_SP_COLUMN_NAME_UPDATED_AT = 'updated_at';
-
-    // Table 'user'
-    public const TABLE_NAME_USER = 'user';
-    public const TABLE_ALIAS_USER = self::TABLE_PREFIX . 'u';
-    public const TABLE_USER_COLUMN_NAME_ID = 'id'; // int
-    public const TABLE_USER_COLUMN_NAME_IDENTIFIER = 'identifier'; // text, varies... (can be ePTID, which is long XML).
-    public const TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256 = 'identifier_hash_sha256';
-    public const TABLE_USER_COLUMN_NAME_CREATED_AT = 'created_at';
-
-    // Table 'user_version' (versioned attributes)
-    public const TABLE_NAME_USER_VERSION = 'user_version';
-    public const TABLE_ALIAS_USER_VERSION = self::TABLE_PREFIX . 'uv';
-    public const TABLE_ALIAS_USER_VERSION_2 = self::TABLE_ALIAS_USER_VERSION . '_2';
-    public const TABLE_USER_VERSION_COLUMN_NAME_ID = 'id'; // int ID
-    public const TABLE_USER_VERSION_COLUMN_NAME_USER_ID = 'user_id'; // FK
-    public const TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES = 'attributes'; // Serialized attributes version
-    public const TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256 = 'attributes_hash_sha256';
-    public const TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT = 'created_at';
 }

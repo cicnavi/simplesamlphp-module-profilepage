@@ -391,4 +391,98 @@ class RepositoryTest extends TestCase
 
         $repository->getUserVersion(1, $this->userIdentifierHash);
     }
+
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function testCanInsertAndGetIdpSpUserVersion(): void
+    {
+        $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);
+        $idpResult = $this->repository->getIdp($this->idpEntityIdHash)->fetchAssociative();
+        $idpId = (int)$idpResult[BaseTableConstants::TABLE_IDP_COLUMN_NAME_ID];
+        $this->repository->insertIdpVersion($idpId, $this->idpMetadata, $this->idpMetadataHash, $this->createdAt);
+        $idpVersionResult = $this->repository->getIdpVersion($idpId, $this->idpMetadataHash)->fetchAssociative();
+
+        $this->repository->insertSp($this->spEntityId, $this->spEntityIdHash, $this->createdAt);
+        $spResult = $this->repository->getSp($this->spEntityIdHash)->fetchAssociative();
+        $spId = (int)$spResult[BaseTableConstants::TABLE_SP_COLUMN_NAME_ID];
+        $this->repository->insertSpVersion($spId, $this->spMetadata, $this->spMetadataHash, $this->createdAt);
+        $spVersionResult = $this->repository->getSpVersion($spId, $this->spMetadataHash)->fetchAssociative();
+
+        $this->repository->insertUser($this->userIdentifier, $this->userIdentifierHash, $this->createdAt);
+        $userResult = $this->repository->getUser($this->userIdentifierHash)->fetchAssociative();
+        $userId = (int)$userResult[BaseTableConstants::TABLE_USER_COLUMN_NAME_ID];
+        $this->repository
+            ->insertUserVersion($userId, $this->userAttributes, $this->userAttributesHash, $this->createdAt);
+        $userVersionResult = $this->repository->getUserVersion($userId, $this->userAttributesHash)->fetchAssociative();
+
+        $idpVersionId = (int)$idpVersionResult[BaseTableConstants::TABLE_IDP_VERSION_COLUMN_NAME_ID];
+        $spVersionId = (int)$spVersionResult[BaseTableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID];
+        $userVersionId = (int)$userVersionResult[BaseTableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId, $this->createdAt);
+        $idpSpUserVersionResult = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId)
+            ->fetchAssociative();
+
+        $this->assertSame(
+            $idpVersionId,
+            (int)$idpSpUserVersionResult[BaseTableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_IDP_VERSION_ID]
+        );
+        $this->assertSame(
+            $spVersionId,
+            (int)$idpSpUserVersionResult[BaseTableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_SP_VERSION_ID]
+        );
+        $this->assertSame(
+            $userVersionId,
+            (int)$idpSpUserVersionResult[BaseTableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_USER_VERSION_ID]
+        );
+
+        // Simulate another SP
+        $spEntityIdNew = $this->spEntityId . '-new';
+        $spEntityIdHashNew = $this->spEntityIdHash . '-new';
+        $spMetadataNew = $this->spMetadata . '-new';
+        $spMetadataHashNew = $this->spMetadataHash . '-new';
+        $this->repository->insertSp($spEntityIdNew, $spEntityIdHashNew, $this->createdAt);
+        $spResult = $this->repository->getSp($spEntityIdHashNew)->fetchAssociative();
+        $spId = (int)$spResult[BaseTableConstants::TABLE_SP_COLUMN_NAME_ID];
+        $this->repository->insertSpVersion($spId, $spMetadataNew, $spMetadataHashNew, $this->createdAt);
+        $spVersionResult = $this->repository->getSpVersion($spId, $spMetadataHashNew)->fetchAssociative();
+        $spVersionId = (int)$spVersionResult[BaseTableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId, $this->createdAt);
+        $idpSpUserVersionResult = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId)
+            ->fetchAssociative();
+
+        $this->assertSame(
+            $idpVersionId,
+            (int)$idpSpUserVersionResult[BaseTableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_IDP_VERSION_ID]
+        );
+        $this->assertSame(
+            $spVersionId,
+            (int)$idpSpUserVersionResult[BaseTableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_SP_VERSION_ID]
+        );
+        $this->assertSame(
+            $userVersionId,
+            (int)$idpSpUserVersionResult[BaseTableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_USER_VERSION_ID]
+        );
+    }
+
+    public function testGetIdpSpUserVersionThrowsOnInvalidDbal(): void
+    {
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
+        $repository = new Repository($this->connectionStub, $this->loggerStub);
+        $this->expectException(StoreException::class);
+
+        $repository->getIdpSpUserVersion(1, 1, 1);
+    }
+
+    public function testInsertIdpSpUserVersionThrowsOnInvalidDbal(): void
+    {
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
+        $repository = new Repository($this->connectionStub, $this->loggerStub);
+        $this->expectException(StoreException::class);
+
+        $repository->insertIdpSpUserVersion(1, 1, 1);
+    }
 }

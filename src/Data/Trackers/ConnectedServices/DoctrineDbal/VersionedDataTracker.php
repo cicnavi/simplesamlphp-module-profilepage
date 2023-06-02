@@ -6,6 +6,7 @@ namespace SimpleSAML\Module\accounting\Data\Trackers\ConnectedServices\DoctrineD
 
 use DateInterval;
 use DateTimeImmutable;
+use Doctrine\DBAL\Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Data\Providers\ConnectedServices\DoctrineDbal\VersionedDataProvider;
 use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
@@ -26,6 +27,10 @@ class VersionedDataTracker extends VersionedDataProvider implements DataTrackerI
         return new self($moduleConfiguration, $logger, $connectionType);
     }
 
+    /**
+     * @throws StoreException
+     * @throws Exception
+     */
     public function process(Event $authenticationEvent): void
     {
         $this->store->persist($authenticationEvent);

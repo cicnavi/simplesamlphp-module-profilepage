@@ -6,7 +6,7 @@ namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineD
 
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\TableConstants as BaseTableConstantsAlias;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use Throwable;
@@ -41,11 +41,11 @@ class Version20220801000700CreateAuthenticationEventTable extends AbstractMigrat
             $table->addColumn('happened_at', Types::DATETIMETZ_IMMUTABLE);
 
             $table->addColumn('client_ip_address', Types::STRING)
-                ->setLength(TableConstants::COLUMN_IP_ADDRESS_LENGTH)
+                ->setLength(BaseTableConstantsAlias::COLUMN_IP_ADDRESS_LENGTH)
                 ->setNotnull(false);
 
             $table->addColumn('authentication_protocol_designation', Types::STRING)
-                ->setLength(TableConstants::COLUMN_AUTHENTICATION_PROTOCOL_DESIGNATION_LENGTH)
+                ->setLength(BaseTableConstantsAlias::COLUMN_AUTHENTICATION_PROTOCOL_DESIGNATION_LENGTH)
                 ->setNotnull(false);
 
             $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);

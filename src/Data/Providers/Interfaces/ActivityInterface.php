@@ -6,8 +6,6 @@ namespace SimpleSAML\Module\accounting\Data\Providers\Interfaces;
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Entities\Activity;
-use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
-use SimpleSAML\Module\accounting\Interfaces\SetupableInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 interface ActivityInterface extends DataProviderInterface

@@ -20,11 +20,15 @@ use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 use SimpleSAML\Test\Module\accounting\Constants\RawRowResult;
 use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+// phpcs:ignore
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants as BaseTableConstants;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\EntityTableConstants;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store
@@ -161,6 +165,115 @@ class StoreTest extends TestCase
         );
     }
 
+
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     * @throws MigrationException
+     */
+    public function testCanPersistAuthenticationEvent(): void
+    {
+        $store = new Store(
+            $this->moduleConfigurationStub,
+            $this->loggerMock,
+            null,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->factoryStub
+        );
+        $store->runSetup();
+
+        $idpCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $idpVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $spCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $spVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $userCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $userVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $idpSpUserVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $connectedServiceCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+
+        $idpCountQueryBuilder->select('COUNT(id) as idpCount')->from(
+        //'vds_idp'
+            $this->connection->preparePrefixedTableName(
+                BaseTableConstants::TABLE_PREFIX . BaseTableConstants::TABLE_NAME_IDP
+            )
+        );
+        $idpVersionCountQueryBuilder->select('COUNT(id) as idpVersionCount')->from(
+        //'vds_idp_version'
+            $this->connection->preparePrefixedTableName(
+                BaseTableConstants::TABLE_PREFIX . BaseTableConstants::TABLE_NAME_IDP_VERSION
+            )
+        );
+        $spCountQueryBuilder->select('COUNT(id) as spCount')->from(
+        //'vds_sp'
+            $this->connection->preparePrefixedTableName(
+                BaseTableConstants::TABLE_PREFIX . BaseTableConstants::TABLE_NAME_SP
+            )
+        );
+        $spVersionCountQueryBuilder->select('COUNT(id) as spVersionCount')->from(
+        //'vds_sp_version'
+            $this->connection->preparePrefixedTableName(
+                BaseTableConstants::TABLE_PREFIX . BaseTableConstants::TABLE_NAME_SP_VERSION
+            )
+        );
+        $userCountQueryBuilder->select('COUNT(id) as userCount')->from(
+        //'vds_user'
+            $this->connection->preparePrefixedTableName(
+                BaseTableConstants::TABLE_PREFIX . BaseTableConstants::TABLE_NAME_USER
+            )
+        );
+        $userVersionCountQueryBuilder->select('COUNT(id) as userVersionCount')->from(
+        //'vds_user_version'
+            $this->connection->preparePrefixedTableName(
+                BaseTableConstants::TABLE_PREFIX . BaseTableConstants::TABLE_NAME_USER_VERSION
+            )
+        );
+        $idpSpUserVersionCountQueryBuilder->select('COUNT(id) as idpSpUserVersionCount')
+            ->from(
+            //'vds_idp_sp_user_version'
+                $this->connection->preparePrefixedTableName(
+                    BaseTableConstants::TABLE_PREFIX . BaseTableConstants::TABLE_NAME_IDP_SP_USER_VERSION
+                )
+            );
+        $connectedServiceCountQueryBuilder->select('COUNT(id) as connectedServiceCount')
+            ->from(
+            //'vds_connected_service'
+                $this->connection->preparePrefixedTableName(
+                    BaseTableConstants::TABLE_PREFIX . TableConstants::TABLE_NAME_CONNECTED_SERVICE
+                )
+            );
+
+        $this->assertSame(0, (int)$idpCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$idpVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$spCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$spVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$userCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$userVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$idpSpUserVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$connectedServiceCountQueryBuilder->executeQuery()->fetchOne());
+
+        $store->persist($this->authenticationEvent);
+
+        $this->assertSame(1, (int)$idpCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$idpVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$spCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$spVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$userCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$userVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$idpSpUserVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$connectedServiceCountQueryBuilder->executeQuery()->fetchOne());
+
+        $store->persist($this->authenticationEvent);
+
+        $this->assertSame(1, (int)$idpCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$idpVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$spCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$spVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$userCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$userVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$idpSpUserVersionCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$connectedServiceCountQueryBuilder->executeQuery()->fetchOne());
+    }
+
     /**
      * @throws StoreException
      */
@@ -212,7 +325,7 @@ class StoreTest extends TestCase
     public function testGetConnectedOrganizationsThrowsForInvalidResult(): void
     {
         $rawResult = RawRowResult::CONNECTED_SERVICE;
-        unset($rawResult[TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]);
+        unset($rawResult[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]);
 
         $this->repositoryMock->method('getConnectedServices')
             ->willReturn([$rawResult]);

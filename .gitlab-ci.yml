@@ -2,11 +2,11 @@
 # Composer stores all downloaded packages in the vendor/ directory.
 # Do not use the following if the vendor/ directory is committed to
 # your git repository.
-cache:
-  # We key the cache using the commit unique identifier.
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - vendor/
+#cache:
+#  # We key the cache using the commit unique identifier.
+#  key: ${CI_COMMIT_REF_SLUG}
+#  paths:
+#    - vendor/
 
 # List of stages for jobs, and their order of execution
 stages:
@@ -21,6 +21,7 @@ test-74:
   image: cicnavi/dap:74
   script:
     - composer install --prefer-dist --no-progress --no-suggest
+    - vendor/bin/psalm --clear-cache
     - composer run-script pre-commit
 
 # PHP v8.1
@@ -31,6 +32,7 @@ test-81:
   image: cicnavi/dap:81
   script:
     - composer install --prefer-dist --no-progress --no-suggest
+    - vendor/bin/psalm --clear-cache
     - composer run-script pre-commit
 
 # TODO mivanci remove when GEANT project finishes

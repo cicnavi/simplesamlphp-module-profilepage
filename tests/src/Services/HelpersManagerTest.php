@@ -16,6 +16,7 @@ use SimpleSAML\Module\accounting\Helpers\Routes;
 use SimpleSAML\Module\accounting\Helpers\Network;
 use SimpleSAML\Module\accounting\Helpers\ProviderResolver;
 use SimpleSAML\Module\accounting\Helpers\Random;
+use SimpleSAML\Module\accounting\Helpers\SspModule;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use PHPUnit\Framework\TestCase;
 
@@ -48,5 +49,6 @@ class HelpersManagerTest extends TestCase
             $helpersManager->getAuthenticationEventStateResolver()
         );
         $this->assertInstanceOf(ProviderResolver::class, $helpersManager->getProviderResolver());
+        $this->assertInstanceOf(SspModule::class, $helpersManager->getSspModule());
     }
 }

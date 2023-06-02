@@ -61,14 +61,17 @@ class Version20240505400CreateConnectedServiceTable extends AbstractMigration
                 ['id']
             );
 
+            // We are using versioned data for user management.
+            $versionedDataStoreTablePrefix = 'vds_';
+
             $table->addForeignKeyConstraint(
-                $this->preparePrefixedTableName('user'),
+                $this->preparePrefixedTableName('user', $versionedDataStoreTablePrefix),
                 ['user_id'],
                 ['id']
             );
 
             $table->addForeignKeyConstraint(
-                $this->preparePrefixedTableName('user_version'),
+                $this->preparePrefixedTableName('user_version', $versionedDataStoreTablePrefix),
                 ['user_version_id'],
                 ['id']
             );

@@ -16,4 +16,11 @@ class RandomTest extends TestCase
     {
         $this->assertIsInt((new Random())->getInt());
     }
+
+    public function testCanGetRandomString(): void
+    {
+        $this->assertIsString((new Random())->getString());
+
+        $this->assertSame(5, mb_strlen((new Random())->getString(5)));
+    }
 }

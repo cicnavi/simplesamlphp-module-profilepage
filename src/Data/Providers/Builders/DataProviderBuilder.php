@@ -64,6 +64,9 @@ class DataProviderBuilder
         return $provider;
     }
 
+    /**
+     * @throws Exception
+     */
     public function buildActivityProvider(
         string $class,
         string $connectionType = ModuleConfiguration\ConnectionType::SLAVE

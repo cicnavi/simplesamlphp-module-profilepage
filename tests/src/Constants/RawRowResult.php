@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Constants;
 
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store\TableConstants as ActivityTableConstants;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\TableConstants as ConnectedServicesTableConstants;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\EntityTableConstants as ActivityTableConstants;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\EntityTableConstants as ConnectedServicesTableConstants;
 
 class RawRowResult
 {

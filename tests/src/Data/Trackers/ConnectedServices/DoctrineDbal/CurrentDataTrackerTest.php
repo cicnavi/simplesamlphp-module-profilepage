@@ -1,42 +1,35 @@
 <?php
 
-declare(strict_types=1);
-
-namespace SimpleSAML\Test\Module\accounting\Data\Trackers\Activity\DoctrineDbal\Versioned;
+namespace SimpleSAML\Test\Module\accounting\Data\Trackers\ConnectedServices\DoctrineDbal;
 
 use DateInterval;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store;
-use SimpleSAML\Module\accounting\Data\Trackers\Activity\DoctrineDbal\VersionedDataTracker;
-use SimpleSAML\Module\accounting\Entities\Activity;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current\Store;
+use SimpleSAML\Module\accounting\Data\Trackers\ConnectedServices\DoctrineDbal\CurrentDataTracker;
+use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
+use SimpleSAML\Module\accounting\Entities\ConnectedService;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Trackers\Activity\DoctrineDbal\VersionedDataTracker
- * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Builders\Bases\AbstractStoreBuilder
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Builders\DataStoreBuilder
+ * @covers \SimpleSAML\Module\accounting\Data\Trackers\ConnectedServices\DoctrineDbal\CurrentDataTracker
+ * @uses \SimpleSAML\Module\accounting\Data\Providers\ConnectedServices\DoctrineDbal\CurrentDataProvider
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Repository
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current\Store
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current\Store\Repository
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractStore
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store\Repository
- * @uses \SimpleSAML\Module\accounting\Helpers\Hash
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Repository
  */
-class DataTrackerTest extends TestCase
+class CurrentDataTrackerTest extends TestCase
 {
     /**
      * @var Stub
@@ -57,7 +50,9 @@ class DataTrackerTest extends TestCase
         $this->moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->store = $this->createMock(Store::class);
+        $this->store = $this->createMock(
+            Store::class
+        );
     }
 
     /**
@@ -66,8 +61,8 @@ class DataTrackerTest extends TestCase
     public function testCanCreateInstance(): void
     {
         $this->assertInstanceOf(
-            VersionedDataTracker::class,
-            new VersionedDataTracker(
+            CurrentDataTracker::class,
+            new CurrentDataTracker(
                 $this->moduleConfigurationStub,
                 $this->loggerMock,
                 ModuleConfiguration\ConnectionType::MASTER,
@@ -76,13 +71,13 @@ class DataTrackerTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            VersionedDataTracker::class,
-            new VersionedDataTracker($this->moduleConfigurationStub, $this->loggerMock)
+            CurrentDataTracker::class,
+            new CurrentDataTracker($this->moduleConfigurationStub, $this->loggerMock)
         );
 
         $this->assertInstanceOf(
-            VersionedDataTracker::class,
-            VersionedDataTracker::build($this->moduleConfigurationStub, $this->loggerMock)
+            CurrentDataTracker::class,
+            CurrentDataTracker::build($this->moduleConfigurationStub, $this->loggerMock)
         );
     }
 
@@ -97,7 +92,7 @@ class DataTrackerTest extends TestCase
             ->method('persist')
             ->with($authenticationEventStub);
 
-        $tracker = new VersionedDataTracker(
+        $tracker = new CurrentDataTracker(
             $this->moduleConfigurationStub,
             $this->loggerMock,
             ModuleConfiguration\ConnectionType::MASTER,
@@ -119,7 +114,7 @@ class DataTrackerTest extends TestCase
         $this->store->expects($this->once())
             ->method('runSetup');
 
-        $tracker = new VersionedDataTracker(
+        $tracker = new CurrentDataTracker(
             $this->moduleConfigurationStub,
             $this->loggerMock,
             ModuleConfiguration\ConnectionType::MASTER,
@@ -142,7 +137,7 @@ class DataTrackerTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('warning');
 
-        $tracker = new VersionedDataTracker(
+        $tracker = new CurrentDataTracker(
             $this->moduleConfigurationStub,
             $this->loggerMock,
             ModuleConfiguration\ConnectionType::MASTER,
@@ -155,14 +150,14 @@ class DataTrackerTest extends TestCase
     /**
      * @throws StoreException
      */
-    public function testGetActivity(): void
+    public function testGetConnectedServices(): void
     {
-        $activityBag = $this->createStub(Activity\Bag::class);
+        $connectedOrganizationsBagStub = $this->createStub(ConnectedService\Bag::class);
         $this->store->expects($this->once())
-            ->method('getActivity')
-            ->willReturn($activityBag);
+            ->method('getConnectedServices')
+            ->willReturn($connectedOrganizationsBagStub);
 
-        $tracker = new VersionedDataTracker(
+        $tracker = new CurrentDataTracker(
             $this->moduleConfigurationStub,
             $this->loggerMock,
             ModuleConfiguration\ConnectionType::MASTER,
@@ -170,8 +165,8 @@ class DataTrackerTest extends TestCase
         );
 
         $this->assertInstanceOf(
-            Activity\Bag::class,
-            $tracker->getActivity('test', 10, 0)
+            ConnectedService\Bag::class,
+            $tracker->getConnectedServices('test')
         );
     }
 
@@ -185,7 +180,7 @@ class DataTrackerTest extends TestCase
         $this->store->expects($this->once())
             ->method('deleteDataOlderThan');
 
-        $tracker = new VersionedDataTracker(
+        $tracker = new CurrentDataTracker(
             $this->moduleConfigurationStub,
             $this->loggerMock,
             ModuleConfiguration\ConnectionType::MASTER,

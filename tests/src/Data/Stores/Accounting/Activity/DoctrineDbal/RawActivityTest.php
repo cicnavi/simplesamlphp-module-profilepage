@@ -2,20 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store;
+namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store\RawActivity;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\RawActivity;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store\TableConstants;
 use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Test\Module\accounting\Constants\DateTime;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\EntityTableConstants;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store\RawActivity
+ * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\RawActivity
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity
  */
 class RawActivityTest extends TestCase
@@ -47,15 +48,16 @@ class RawActivityTest extends TestCase
         $this->authenticationProtocolDesignation = Saml2::DESIGNATION;
 
         $this->rawRow = [
-            TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA => serialize($this->serviceProviderMetadata),
-            TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES => serialize($this->userAttributes),
-            TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT => $this->happenedAt,
-            TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS => $this->clientIpAddress,
-            TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =>
+            EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA => serialize($this->serviceProviderMetadata),
+            EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES => serialize($this->userAttributes),
+            EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT => $this->happenedAt,
+            EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS => $this->clientIpAddress,
+            EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =>
                 $this->authenticationProtocolDesignation,
         ];
         $this->abstractPlatformStub = $this->createStub(AbstractPlatform::class);
-        $this->abstractPlatformStub->method('getDateTimeFormatString')->willReturn(DateTime::DEFAULT_FORMAT);
+        $this->abstractPlatformStub->method('getDateTimeFormatString')
+            ->willReturn(DateTime::DEFAULT_FORMAT);
     }
 
     public function testCanCreateInstance(): void
@@ -85,7 +87,7 @@ class RawActivityTest extends TestCase
     public function testIpAddressCanBeNull(): void
     {
         $rawRow = $this->rawRow;
-        unset($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]);
+        unset($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]);
 
         $rawActivity = new RawActivity($rawRow, $this->abstractPlatformStub);
         $this->assertNull($rawActivity->getClientIpAddress());
@@ -94,7 +96,7 @@ class RawActivityTest extends TestCase
     public function testAuthenticationProtocolDesignationCanBeNull(): void
     {
         $rawRow = $this->rawRow;
-        unset($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION]);
+        unset($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION]);
 
         $rawActivity = new RawActivity($rawRow, $this->abstractPlatformStub);
         $this->assertNull($rawActivity->getAuthenticationProtocolDesignation());
@@ -103,7 +105,7 @@ class RawActivityTest extends TestCase
     public function testThrowsIfColumnNotPresent(): void
     {
         $rawRow = $this->rawRow;
-        unset($rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT]);
+        unset($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT]);
 
         $this->expectException(UnexpectedValueException::class);
 
@@ -113,7 +115,7 @@ class RawActivityTest extends TestCase
     public function testThrowsForNonStringServiceProviderMetadata(): void
     {
         $rawRow = $this->rawRow;
-        $rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA] = 1;
+        $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA] = 1;
 
         $this->expectException(UnexpectedValueException::class);
 
@@ -123,7 +125,7 @@ class RawActivityTest extends TestCase
     public function testThrowsForNonStringUserAttributes(): void
     {
         $rawRow = $this->rawRow;
-        $rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES] = 1;
+        $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES] = 1;
 
         $this->expectException(UnexpectedValueException::class);
 
@@ -133,7 +135,7 @@ class RawActivityTest extends TestCase
     public function testThrowsForNonStringHappenedAt(): void
     {
         $rawRow = $this->rawRow;
-        $rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT] = 1;
+        $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT] = 1;
 
         $this->expectException(UnexpectedValueException::class);
 
@@ -143,7 +145,7 @@ class RawActivityTest extends TestCase
     public function testThrowsForInvalidServiceProviderMetadata(): void
     {
         $rawRow = $this->rawRow;
-        $rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA] = serialize(1);
+        $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA] = serialize(1);
 
         $this->expectException(UnexpectedValueException::class);
 
@@ -153,7 +155,7 @@ class RawActivityTest extends TestCase
     public function testThrowsForInvalidUserAttributes(): void
     {
         $rawRow = $this->rawRow;
-        $rawRow[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES] = serialize(1);
+        $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES] = serialize(1);
 
         $this->expectException(UnexpectedValueException::class);
 

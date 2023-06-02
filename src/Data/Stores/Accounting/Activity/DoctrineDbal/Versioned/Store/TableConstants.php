@@ -19,12 +19,4 @@ class TableConstants
     public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =
         'authentication_protocol_designation';
     public const TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT = 'created_at';
-
-    // Entity 'Activity' related.
-    public const ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA = 'sp_metadata';
-    public const ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES = 'user_attributes';
-    public const ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT = 'happened_at';
-    public const ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS = 'client_ip_address';
-    public const ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =
-        'authentication_protocol_designation';
 }

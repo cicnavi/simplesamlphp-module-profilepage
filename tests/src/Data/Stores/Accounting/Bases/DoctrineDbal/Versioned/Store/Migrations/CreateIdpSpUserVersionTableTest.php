@@ -53,6 +53,8 @@ class CreateIdpSpUserVersionTableTest extends TestCase
         $migration = new Migrations\CreateIdpSpUserVersionTable($this->connection);
         $migration->run();
         $this->assertTrue($this->schemaManager->tablesExist($this->tableName));
+        $migration->run();
+        $this->assertTrue($this->schemaManager->tablesExist($this->tableName));
         $migration->revert();
         $this->assertFalse($this->schemaManager->tablesExist($this->tableName));
     }

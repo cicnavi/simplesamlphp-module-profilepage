@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned;
 
 use Doctrine\DBAL\Result;
-use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Repository;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\HashDecoratedState;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
@@ -18,6 +18,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
+use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
@@ -113,9 +114,7 @@ class StoreTest extends TestCase
         $this->authenticationEvent = new Event($this->state);
 
         $this->hashDecoratedState = new HashDecoratedState($this->state);
-        $this->repositoryMock = $this->createMock(
-            \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Repository::class
-        );
+        $this->repositoryMock = $this->createMock(Repository::class);
 
         $this->resultStub = $this->createStub(Result::class);
         $this->helpersManagerMock = $this->createMock(HelpersManager::class);
@@ -170,6 +169,7 @@ class StoreTest extends TestCase
         $spCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
         $spVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
         $userCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
+        $idpSpUserVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
         $userVersionCountQueryBuilder = $this->connection->dbal()->createQueryBuilder();
 
         $idpCountQueryBuilder->select('COUNT(id) as idpCount')->from(
@@ -208,40 +208,52 @@ class StoreTest extends TestCase
                 TableConstants::TABLE_PREFIX . TableConstants::TABLE_NAME_USER_VERSION
             )
         );
+        $idpSpUserVersionCountQueryBuilder->select('COUNT(id) as idpSpUserVersionCount')
+            ->from(
+            //'vds_idp_sp_user_version'
+                $this->connection->preparePrefixedTableName(
+                    TableConstants::TABLE_PREFIX . TableConstants::TABLE_NAME_IDP_SP_USER_VERSION
+                )
+            );
 
         $this->assertSame(0, (int)$idpCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(0, (int)$idpVersionCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(0, (int)$spCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(0, (int)$spVersionCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(0, (int)$userCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(0, (int)$idpSpUserVersionCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(0, (int)$userVersionCountQueryBuilder->executeQuery()->fetchOne());
 
         $idpId = $store->resolveIdpId($this->hashDecoratedState);
-        $store->resolveIdpVersionId($idpId, $this->hashDecoratedState);
+        $idpVersionId = $store->resolveIdpVersionId($idpId, $this->hashDecoratedState);
         $spId = $store->resolveSpId($this->hashDecoratedState);
-        $store->resolveSpVersionId($spId, $this->hashDecoratedState);
+        $spVersionId = $store->resolveSpVersionId($spId, $this->hashDecoratedState);
         $userId = $store->resolveUserId($this->hashDecoratedState);
-        $store->resolveUserVersionId($userId, $this->hashDecoratedState);
+        $userVersionId = $store->resolveUserVersionId($userId, $this->hashDecoratedState);
+        $store->resolveIdpSpUserVersionId($idpVersionId, $spVersionId, $userVersionId);
 
         $this->assertSame(1, (int)$idpCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(1, (int)$idpVersionCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(1, (int)$spCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(1, (int)$spVersionCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(1, (int)$userCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$idpSpUserVersionCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(1, (int)$userVersionCountQueryBuilder->executeQuery()->fetchOne());
 
         $idpId = $store->resolveIdpId($this->hashDecoratedState);
-        $store->resolveIdpVersionId($idpId, $this->hashDecoratedState);
+        $idpVersionId = $store->resolveIdpVersionId($idpId, $this->hashDecoratedState);
         $spId = $store->resolveSpId($this->hashDecoratedState);
-        $store->resolveSpVersionId($spId, $this->hashDecoratedState);
+        $spVersionId = $store->resolveSpVersionId($spId, $this->hashDecoratedState);
         $userId = $store->resolveUserId($this->hashDecoratedState);
-        $store->resolveUserVersionId($userId, $this->hashDecoratedState);
+        $userVersionId = $store->resolveUserVersionId($userId, $this->hashDecoratedState);
+        $store->resolveIdpSpUserVersionId($idpVersionId, $spVersionId, $userVersionId);
 
         $this->assertSame(1, (int)$idpCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(1, (int)$idpVersionCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(1, (int)$spCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(1, (int)$spVersionCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(1, (int)$userCountQueryBuilder->executeQuery()->fetchOne());
+        $this->assertSame(1, (int)$idpSpUserVersionCountQueryBuilder->executeQuery()->fetchOne());
         $this->assertSame(1, (int)$userVersionCountQueryBuilder->executeQuery()->fetchOne());
     }
 
@@ -548,5 +560,52 @@ class StoreTest extends TestCase
 
         $userId = $store->resolveUserId($this->hashDecoratedState);
         $store->resolveUserVersionId($userId, $this->hashDecoratedState);
+    }
+
+    /**
+     * @throws StoreException
+     */
+    public function testResolveIdpSpUserVersionThrowsOnGet(): void
+    {
+        $this->repositoryMock->method('getIdpSpUserVersion')->willThrowException(new Exception('test'));
+        $store = new Store(
+            $this->moduleConfigurationStub,
+            $this->loggerMock,
+            null,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->factoryStub,
+            $this->helpersManagerMock,
+            $this->repositoryMock
+        );
+
+        $this->expectException(StoreException::class);
+
+        $store->resolveIdpSpUserVersionId(1, 1, 1);
+    }
+
+
+
+    /**
+     * @throws StoreException
+     */
+    public function testResolveIdpSpUserVersionLogsWarningAndThrowsOnFailure(): void
+    {
+        $this->resultStub->method('fetchOne')->willReturn(false);
+        $this->repositoryMock->method('getIdpSpUserVersion')->willReturn($this->resultStub);
+        $this->repositoryMock->method('insertIdpSpUserVersion')
+            ->willThrowException(new Exception('test'));
+        $store = new Store(
+            $this->moduleConfigurationStub,
+            $this->loggerMock,
+            null,
+            ModuleConfiguration\ConnectionType::MASTER,
+            $this->factoryStub,
+            $this->helpersManagerMock,
+            $this->repositoryMock
+        );
+
+        $this->expectException(StoreException::class);
+        $this->loggerMock->expects($this->once())->method('warning');
+        $store->resolveIdpSpUserVersionId(1, 1, 1);
     }
 }

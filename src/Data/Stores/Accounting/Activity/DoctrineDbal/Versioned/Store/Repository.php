@@ -7,15 +7,20 @@ namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineD
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
+// phpcs:ignore
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Traits\Repository\DeletableAuthenticationEventsTrait;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Repository as BaseRepository;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants
     as BaseTableConstants;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use Throwable;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\EntityTableConstants;
 
 class Repository extends BaseRepository
 {
+    use DeletableAuthenticationEventsTrait;
+
     protected string $tableNameAuthenticationEvent;
 
     public function __construct(Connection $connection, LoggerInterface $logger)
@@ -114,11 +119,11 @@ class Repository extends BaseRepository
                 //'vsv.metadata AS sp_metadata',
                 BaseTableConstants::TABLE_ALIAS_SP_VERSION . '.' .
                 BaseTableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA .
-                ' AS ' . TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA,
+                ' AS ' . EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA,
                 //'vuv.attributes AS user_attributes'
                 BaseTableConstants::TABLE_ALIAS_USER_VERSION . '.' .
                 BaseTableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES . ' AS ' .
-                TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES
+                EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES
             )->from(
                 //'vds_authentication_event', 'vae'
                 $this->tableNameAuthenticationEvent,
@@ -212,31 +217,6 @@ class Repository extends BaseRepository
                 $exception->getMessage()
             );
             $this->logger->error($message, compact('userIdentifierHashSha256'));
-            throw new StoreException($message, (int)$exception->getCode(), $exception);
-        }
-    }
-
-    /**
-     * @throws StoreException
-     */
-    public function deleteAuthenticationEventsOlderThan(DateTimeImmutable $dateTime): void
-    {
-        try {
-            $queryBuilder = $this->connection->dbal()->createQueryBuilder();
-
-            $queryBuilder->delete($this->tableNameAuthenticationEvent)
-                ->where(
-                    $queryBuilder->expr()->lt(
-                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
-                        $queryBuilder->createNamedParameter($dateTime, Types::DATETIME_IMMUTABLE)
-                    )
-                )->executeStatement();
-        } catch (Throwable $exception) {
-            $message = sprintf(
-                'Error executing query to delete old authentication events. Error was: %s.',
-                $exception->getMessage()
-            );
-            $this->logger->error($message);
             throw new StoreException($message, (int)$exception->getCode(), $exception);
         }
     }
