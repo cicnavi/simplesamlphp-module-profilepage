@@ -48,11 +48,14 @@ abstract class AbstractMigration implements MigrationInterface
      * Prepare prefixed table name which will include table prefix from connection, local table prefix, and table name.
      *
      * @param string $tableName
+     * @param string|null $tablePrefixOverride
      * @return string
      */
-    protected function preparePrefixedTableName(string $tableName): string
+    protected function preparePrefixedTableName(string $tableName, string $tablePrefixOverride = null): string
     {
-        return $this->connection->preparePrefixedTableName($this->getLocalTablePrefix() . $tableName);
+        $tablePrefix = $tablePrefixOverride ?? $this->getLocalTablePrefix();
+
+        return $this->connection->preparePrefixedTableName($tablePrefix . $tableName);
     }
 
     /**

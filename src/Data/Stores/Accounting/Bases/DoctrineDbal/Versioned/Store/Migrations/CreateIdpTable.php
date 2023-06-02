@@ -6,7 +6,7 @@ namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal
 
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\TableConstants as BaseTableConstantsAlias;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use Throwable;
@@ -41,10 +41,10 @@ class CreateIdpTable extends AbstractMigration
                 ->setAutoincrement(true);
 
             $table->addColumn('entity_id', Types::STRING)
-                ->setLength(TableConstants::COLUMN_ENTITY_ID_LENGTH);
+                ->setLength(BaseTableConstantsAlias::COLUMN_ENTITY_ID_LENGTH);
 
             $table->addColumn('entity_id_hash_sha256', Types::STRING)
-                ->setLength(TableConstants::COLUMN_HASH_SHA265_HEXITS_LENGTH)
+                ->setLength(BaseTableConstantsAlias::COLUMN_HASH_SHA265_HEXITS_LENGTH)
                 ->setFixed(true);
 
             $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);

@@ -10,20 +10,20 @@ use Exception;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants
-    as BaseTableConstants;
+// phpcs:ignore
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants as BaseTableConstants;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\Repository;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\TableConstants;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator;
-use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 use SimpleSAML\Test\Module\accounting\Constants\DateTime;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\EntityTableConstants;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\Repository
@@ -78,8 +78,6 @@ class RepositoryTest extends TestCase
     protected $connectionStub;
     protected string $spEntityIdHash;
     protected string $spMetadata;
-    protected string $clientIpAddress;
-    protected string $authenticationProtocolDesignation;
 
     /**
      * @throws StoreException
@@ -133,8 +131,6 @@ class RepositoryTest extends TestCase
         $this->userAttributesHash = 'user-attributes-hash';
 
         $this->createdAt = new DateTimeImmutable();
-        $this->clientIpAddress = '123.123.123.123';
-        $this->authenticationProtocolDesignation = Saml2::DESIGNATION;
     }
 
     public function testCanCreateInstance(): void
@@ -194,17 +190,17 @@ class RepositoryTest extends TestCase
         $this->assertEquals(
             '1',
             $resultArray[$this->spEntityId]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
         );
         $this->assertSame(
             $this->spMetadata,
             $resultArray[$this->spEntityId]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
         );
         $this->assertSame(
             $this->userAttributes,
             $resultArray[$this->spEntityId]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
         );
 
         $connectedServiceId = (int)$this->repository->getConnectedService($idpSpUserVersionId)->fetchOne();
@@ -219,17 +215,17 @@ class RepositoryTest extends TestCase
         $this->assertEquals(
             '2',
             $resultArray[$this->spEntityId]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
         );
         $this->assertSame(
             $this->spMetadata,
             $resultArray[$this->spEntityId]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
         );
         $this->assertSame(
             $this->userAttributes,
             $resultArray[$this->spEntityId]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
         );
 
         // Simulate another SP
@@ -258,17 +254,17 @@ class RepositoryTest extends TestCase
         $this->assertEquals(
             '1',
             $resultArray[$spEntityIdNew]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
         );
         $this->assertSame(
             $spMetadataNew,
             $resultArray[$spEntityIdNew]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
         );
         $this->assertSame(
             $this->userAttributes,
             $resultArray[$this->spEntityId]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
         );
 
         // Simulate change in user attributes
@@ -291,35 +287,62 @@ class RepositoryTest extends TestCase
         $this->assertEquals(
             '2',
             $resultArray[$spEntityIdNew]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS]
         );
         $this->assertSame(
             $spMetadataNew,
             $resultArray[$spEntityIdNew]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
         );
         // New SP with new user attributes version..
         $this->assertSame(
             $userAttributesNew,
             $resultArray[$spEntityIdNew]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
         );
 
         // First SP still has old user attributes version...
         $this->assertSame(
             $this->userAttributes,
             $resultArray[$this->spEntityId]
-            [TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
+            [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
         );
     }
 
-    public function testGetConnectedServiceProvidersThrowsOnInvalidDbal(): void
+    public function testGetConnectedServicesThrowsOnInvalidDbal(): void
     {
         $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
         $repository = new Repository($this->connectionStub, $this->loggerStub);
         $this->expectException(StoreException::class);
 
         $repository->getConnectedServices($this->userIdentifierHash);
+    }
+
+    public function testGetConnectedServiceThrowsOnInvalidDbal(): void
+    {
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
+        $repository = new Repository($this->connectionStub, $this->loggerStub);
+        $this->expectException(StoreException::class);
+
+        $repository->getConnectedService(1);
+    }
+
+    public function testInsertConnectedServiceThrowsOnInvalidDbal(): void
+    {
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
+        $repository = new Repository($this->connectionStub, $this->loggerStub);
+        $this->expectException(StoreException::class);
+
+        $repository->insertConnectedService(1);
+    }
+
+    public function testUpdatetConnectedServiceCountThrowsOnInvalidDbal(): void
+    {
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
+        $repository = new Repository($this->connectionStub, $this->loggerStub);
+        $this->expectException(StoreException::class);
+
+        $repository->updateConnectedServiceVersionCount(1, new DateTimeImmutable());
     }
 
     /**
@@ -379,5 +402,73 @@ class RepositoryTest extends TestCase
         $this->expectException(StoreException::class);
 
         $repository->deleteConnectedServicesOlderThan(new DateTimeImmutable());
+    }
+
+    public function testCanTouchConnectedServiceVersionsTimestamp(): void
+    {
+        $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);
+        $idpResult = $this->repository->getIdp($this->idpEntityIdHash)->fetchAssociative();
+        $idpId = (int)$idpResult[BaseTableConstants::TABLE_IDP_COLUMN_NAME_ID];
+        $this->repository->insertIdpVersion($idpId, $this->idpMetadata, $this->idpMetadataHash, $this->createdAt);
+
+        $this->repository->insertSp($this->spEntityId, $this->spEntityIdHash, $this->createdAt);
+        $spResult = $this->repository->getSp($this->spEntityIdHash)->fetchAssociative();
+        $spId = (int)$spResult[BaseTableConstants::TABLE_SP_COLUMN_NAME_ID];
+        $this->repository->insertSpVersion($spId, $this->spMetadata, $this->spMetadataHash, $this->createdAt);
+
+        $this->repository->insertUser($this->userIdentifier, $this->userIdentifierHash, $this->createdAt);
+        $userResult = $this->repository->getUser($this->userIdentifierHash)->fetchAssociative();
+        $userId = (int)$userResult[BaseTableConstants::TABLE_USER_COLUMN_NAME_ID];
+        $this->repository
+            ->insertUserVersion($userId, $this->userAttributes, $this->userAttributesHash, $this->createdAt);
+
+        $idpVersionResult = $this->repository->getIdpVersion($idpId, $this->idpMetadataHash)->fetchAssociative();
+        $spVersionResult = $this->repository->getSpVersion($spId, $this->spMetadataHash)->fetchAssociative();
+        $userVersionResult = $this->repository->getUserVersion($userId, $this->userAttributesHash)->fetchAssociative();
+
+        $idpVersionId = (int)$idpVersionResult[BaseTableConstants::TABLE_IDP_VERSION_COLUMN_NAME_ID];
+        $spVersionId = (int)$spVersionResult[BaseTableConstants::TABLE_SP_VERSION_COLUMN_NAME_ID];
+        $userVersionId = (int)$userVersionResult[BaseTableConstants::TABLE_USER_VERSION_COLUMN_NAME_ID];
+
+        $this->repository->insertIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId, $this->createdAt);
+        $idpSpUserVersionResult = $this->repository->getIdpSpUserVersion($idpVersionId, $spVersionId, $userVersionId)
+            ->fetchAssociative();
+
+        $idpSpUserVersionId =
+            (int)$idpSpUserVersionResult[BaseTableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_ID];
+
+        $authenticationAt = new DateTimeImmutable();
+
+        $this->repository->insertConnectedService($idpSpUserVersionId, $authenticationAt, $authenticationAt);
+
+        $resultArray = $this->repository->getConnectedService($idpSpUserVersionId)->fetchAssociative();
+        $this->assertSame(
+            $authenticationAt->format(DateTime::DEFAULT_FORMAT),
+            $resultArray[TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT]
+        );
+
+        $newAuthenticationAt = $authenticationAt->add(new DateInterval('P1D'));
+
+        $this->repository->touchConnectedServiceVersionsTimestamp($userId, $spId, $newAuthenticationAt);
+
+        $resultArray = $this->repository->getConnectedService($idpSpUserVersionId)->fetchAssociative();
+
+        $this->assertNotSame(
+            $authenticationAt->format(DateTime::DEFAULT_FORMAT),
+            $resultArray[TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT]
+        );
+        $this->assertSame(
+            $newAuthenticationAt->format(DateTime::DEFAULT_FORMAT),
+            $resultArray[TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT]
+        );
+    }
+
+    public function testTouchConnectedServiceVersionsTimestampThrowsOnInvalidDbalForSelect(): void
+    {
+        $this->connectionStub->method('dbal')->willThrowException(new Exception('test'));
+        $repository = new Repository($this->connectionStub, $this->loggerStub);
+        $this->expectException(StoreException::class);
+
+        $repository->touchConnectedServiceVersionsTimestamp(1, 1);
     }
 }

@@ -72,10 +72,9 @@ $config = [
     ModuleConfiguration::OPTION_PROVIDER_FOR_CONNECTED_SERVICES =>
         /**
          * Default connected services provider which expects Doctrine DBAL compatible connection to be set below.
-         * CurrentDataProvider only gathers current (latest information) about the service and user (there is no
-         * versioning, so it's faster). VersionedDataProvider keeps track of any changes in data about the service
-         * and user.
-         *
+         * CurrentDataProvider only gathers current (latest information) about the service (there is no
+         * versioning, so it's faster). VersionedDataProvider keeps track of any changes in data about
+         * the service.
          */
         Providers\ConnectedServices\DoctrineDbal\CurrentDataProvider::class,
         //Providers\ConnectedServices\DoctrineDbal\VersionedDataProvider::class,
@@ -91,9 +90,12 @@ $config = [
     ModuleConfiguration::OPTION_PROVIDER_FOR_ACTIVITY =>
         /**
          * Default activity provider which expects Doctrine DBAL compatible connection to be set below.
-         * Currently only VersionedDataProvider is available, which tracks all changes in services and users.
+         * CurrentDataProvider only gathers current (latest information) about the service (there is no
+         * versioning, so it's faster). VersionedDataProvider keeps track of any changes in data about
+         * the service.
          */
-        Providers\Activity\DoctrineDbal\VersionedDataProvider::class,
+        Providers\Activity\DoctrineDbal\CurrentDataProvider::class,
+        //Providers\Activity\DoctrineDbal\VersionedDataProvider::class,
 
     /**
      * Trackers
@@ -129,6 +131,12 @@ $config = [
             ],
         ],
         Providers\ConnectedServices\DoctrineDbal\CurrentDataProvider::class => [
+            ModuleConfiguration\ConnectionType::MASTER => 'doctrine_dbal_pdo_mysql',
+            ModuleConfiguration\ConnectionType::SLAVE => [
+                'doctrine_dbal_pdo_mysql',
+            ],
+        ],
+        Providers\Activity\DoctrineDbal\CurrentDataProvider::class => [
             ModuleConfiguration\ConnectionType::MASTER => 'doctrine_dbal_pdo_mysql',
             ModuleConfiguration\ConnectionType::SLAVE => [
                 'doctrine_dbal_pdo_mysql',

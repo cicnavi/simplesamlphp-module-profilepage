@@ -14,6 +14,7 @@ use SimpleSAML\Utils\HTTP;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Helpers\Routes
+ * @uses \SimpleSAML\Module\accounting\Helpers\Arr
  */
 class RoutesTest extends TestCase
 {
@@ -52,5 +53,23 @@ class RoutesTest extends TestCase
         $moduleRoutesHelper = new Routes($this->sspHttpUtilsStub);
 
         $this->assertSame($fullUrl, $moduleRoutesHelper->getUrl($path, $params));
+    }
+
+    public function testCanAppendFragmentParameters(): void
+    {
+        $associativeFragments = ['a' => 'b'];
+        $indexedFragments = ['a', 'b'];
+
+        $expectedUrlAssociative = self::BASE_URL . 'module.php/' . ModuleConfiguration::MODULE_NAME . '/path#a=b';
+        $expectedUrlIndexed = self::BASE_URL . 'module.php/' . ModuleConfiguration::MODULE_NAME . '/path#a&b';
+
+        $this->assertSame(
+            $expectedUrlAssociative,
+            (new Routes($this->sspHttpUtilsStub))->getUrl('path', [], $associativeFragments)
+        );
+        $this->assertSame(
+            $expectedUrlIndexed,
+            (new Routes($this->sspHttpUtilsStub))->getUrl('path', [], $indexedFragments)
+        );
     }
 }

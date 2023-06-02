@@ -6,7 +6,6 @@ namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\TableConstants;
 use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 
@@ -23,23 +22,23 @@ class RawConnectedService extends AbstractRawEntity
         parent::__construct($rawRow, $abstractPlatform);
 
         $this->numberOfAuthentications = (int)$rawRow[
-            TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS
+        EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS
         ];
 
         $this->lastAuthenticationAt = $this->resolveDateTimeImmutable(
-            $rawRow[TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT]
+            $rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT]
         );
 
         $this->firstAuthenticationAt = $this->resolveDateTimeImmutable(
-            $rawRow[TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT]
+            $rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT]
         );
 
         $this->serviceProviderMetadata = $this->resolveServiceProviderMetadata(
-            (string)$rawRow[TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
+            (string)$rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
         );
 
         $this->userAttributes = $this->resolveUserAttributes(
-            (string)$rawRow[TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
+            (string)$rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
         );
     }
 
@@ -89,11 +88,11 @@ class RawConnectedService extends AbstractRawEntity
     protected function validate(array $rawRow): void
     {
         $columnsToCheck = [
-            TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS,
-            TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT,
-            TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT,
-            TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA,
-            TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES,
+            EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS,
+            EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT,
+            EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT,
+            EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA,
+            EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES,
         ];
 
         foreach ($columnsToCheck as $column) {
@@ -103,44 +102,44 @@ class RawConnectedService extends AbstractRawEntity
         }
 
         if (
-            ! is_numeric($rawRow[TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS])
+            ! is_numeric($rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS])
         ) {
             $message = sprintf(
                 'Column %s must be numeric.',
-                TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS
+                EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS
             );
             throw new UnexpectedValueException($message);
         }
 
         /** @noinspection DuplicatedCode */
-        if (! is_string($rawRow[TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT])) {
+        if (! is_string($rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT])) {
             $message = sprintf(
                 'Column %s must be string.',
-                TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT
+                EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT
             );
             throw new UnexpectedValueException($message);
         }
 
-        if (! is_string($rawRow[TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT])) {
+        if (! is_string($rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT])) {
             $message = sprintf(
                 'Column %s must be string.',
-                TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT
+                EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT
             );
             throw new UnexpectedValueException($message);
         }
 
-        if (! is_string($rawRow[TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA])) {
+        if (! is_string($rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA])) {
             $message = sprintf(
                 'Column %s must be string.',
-                TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA
+                EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA
             );
             throw new UnexpectedValueException($message);
         }
 
-        if (! is_string($rawRow[TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES])) {
+        if (! is_string($rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES])) {
             $message = sprintf(
                 'Column %s must be string.',
-                TableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES
+                EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES
             );
             throw new UnexpectedValueException($message);
         }

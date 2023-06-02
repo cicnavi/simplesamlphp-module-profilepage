@@ -26,4 +26,14 @@ class DateTimeTest extends TestCase
 
         $this->assertSame(1, (new DateTime())->convertDateIntervalToSeconds($interval));
     }
+
+    public function testToFormattedString(): void
+    {
+        $dateTime = new \DateTimeImmutable();
+
+        $this->assertSame(
+            $dateTime->format(DateTime::FORMAT_MYSQL),
+            (new DateTime())->toFormattedString($dateTime)
+        );
+    }
 }

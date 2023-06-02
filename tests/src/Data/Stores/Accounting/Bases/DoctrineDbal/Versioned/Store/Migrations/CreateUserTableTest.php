@@ -15,8 +15,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\Migrations\Version20220801000400CreateUserTable
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Migrations\CreateUserTable
+ * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Migrations\CreateUserTable
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
  */
@@ -52,6 +51,8 @@ class CreateUserTableTest extends TestCase
     {
         $this->assertFalse($this->schemaManager->tablesExist($this->tableName));
         $migration = new CreateUserTable($this->connection);
+        $migration->run();
+        $this->assertTrue($this->schemaManager->tablesExist($this->tableName));
         $migration->run();
         $this->assertTrue($this->schemaManager->tablesExist($this->tableName));
         $migration->revert();

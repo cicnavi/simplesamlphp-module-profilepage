@@ -21,7 +21,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  */
-class AuthenticationDataTrackerBuilderTest extends TestCase
+class DataTrackerBuilderTest extends TestCase
 {
     /**
      * @var MockObject

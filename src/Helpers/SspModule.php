@@ -15,6 +15,7 @@ class SspModule
     {
         try {
             return Module::isModuleEnabled($moduleName);
+            // @codeCoverageIgnoreStart
         } catch (\Throwable $exception) {
             $message = sprintf('Could not check if module %s is enabled', $moduleName);
             throw new Module\accounting\Exceptions\InvalidConfigurationException(
@@ -23,5 +24,6 @@ class SspModule
                 $exception
             );
         }
+        // @codeCoverageIgnoreEnd
     }
 }

@@ -26,11 +26,17 @@ class VersionedDataTracker extends VersionedDataProvider implements DataTrackerI
         return new self($moduleConfiguration, $logger, $connectionType);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function process(Event $authenticationEvent): void
     {
         $this->store->persist($authenticationEvent);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function enforceDataRetentionPolicy(DateInterval $retentionPolicy): void
     {
         $dateTime = (new DateTimeImmutable())->sub($retentionPolicy);

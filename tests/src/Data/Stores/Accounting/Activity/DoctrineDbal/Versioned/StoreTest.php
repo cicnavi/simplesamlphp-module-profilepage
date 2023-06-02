@@ -13,8 +13,8 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store\TableConstants;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants
-    as BaseTableConstants;
+// phpcs:ignore
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants as BaseTableConstants;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\HashDecoratedState;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory;
@@ -28,6 +28,7 @@ use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 use SimpleSAML\Test\Module\accounting\Constants\RawRowResult;
 use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\EntityTableConstants;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store
@@ -71,7 +72,7 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity
  * @uses \SimpleSAML\Module\accounting\Entities\Activity\Bag
  * @uses \SimpleSAML\Module\accounting\Entities\Activity
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Versioned\Store\RawActivity
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\RawActivity
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
  * @uses \SimpleSAML\Module\accounting\Entities\Providers\Service\Saml2
@@ -371,7 +372,7 @@ class StoreTest extends TestCase
     public function testGetActivityThrowsForInvalidResult(): void
     {
         $rawResult = RawRowResult::ACTIVITY;
-        unset($rawResult[TableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT]);
+        unset($rawResult[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT]);
 
         $this->repositoryMock->method('getActivity')
             ->willReturn([$rawResult]);

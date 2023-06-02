@@ -46,4 +46,12 @@ class Saml2Test extends TestCase
 
         new Saml2($metadata);
     }
+
+    public function testCanGetProtocol(): void
+    {
+        $this->assertInstanceOf(
+            \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2::class,
+            (new Saml2($this->metadata))->getProtocol()
+        );
+    }
 }

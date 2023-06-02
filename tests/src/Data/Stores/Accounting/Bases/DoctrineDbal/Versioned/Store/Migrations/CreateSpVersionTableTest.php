@@ -53,6 +53,8 @@ class CreateSpVersionTableTest extends TestCase
         $migration = new Migrations\CreateSpVersionTable($this->connection);
         $migration->run();
         $this->assertTrue($this->schemaManager->tablesExist($this->tableName));
+        $migration->run();
+        $this->assertTrue($this->schemaManager->tablesExist($this->tableName));
         $migration->revert();
         $this->assertFalse($this->schemaManager->tablesExist($this->tableName));
     }

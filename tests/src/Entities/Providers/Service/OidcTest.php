@@ -46,4 +46,12 @@ class OidcTest extends TestCase
 
         new Oidc($metadata);
     }
+
+    public function testCanGetProtocol(): void
+    {
+        $this->assertInstanceOf(
+            \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc::class,
+            (new Oidc($this->metadata))->getProtocol()
+        );
+    }
 }

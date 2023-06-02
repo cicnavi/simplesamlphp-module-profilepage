@@ -5,23 +5,24 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store as BaseStore;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\HashDecoratedState;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\RawConnectedService;
+// phpcs:ignore
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Traits\Store\GettableConnectedServicesTrait;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\Repository;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Data\Stores\Interfaces\ConnectedServicesInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\ConnectedService;
-use SimpleSAML\Module\accounting\Entities\User;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
-use Throwable;
 
 class Store extends BaseStore implements ConnectedServicesInterface
 {
+    use GettableConnectedServicesTrait;
+
     protected Repository $repository;
 
     /**
@@ -67,7 +68,7 @@ class Store extends BaseStore implements ConnectedServicesInterface
     }
 
     /**
-     * @throws StoreException
+     * @throws StoreException|Exception
      */
     public function persist(Event $authenticationEvent): void
     {
@@ -94,54 +95,6 @@ class Store extends BaseStore implements ConnectedServicesInterface
         }
 
         $this->repository->touchConnectedServiceVersionsTimestamp($userId, $spId);
-    }
-
-    /**
-     * @throws StoreException
-     */
-    public function getConnectedServices(string $userIdentifier): ConnectedService\Bag
-    {
-        $connectedServiceProviderBag = new ConnectedService\Bag();
-
-        $userIdentifierHashSha256 = $this->helpersManager->getHash()->getSha256($userIdentifier);
-
-        $results = $this->repository->getConnectedServices($userIdentifierHashSha256);
-
-        if (empty($results)) {
-            return $connectedServiceProviderBag;
-        }
-
-        try {
-            $databasePlatform = $this->connection->dbal()->getDatabasePlatform();
-
-            /** @var array $result */
-            foreach ($results as $result) {
-                $rawConnectedServiceProvider = new RawConnectedService($result, $databasePlatform);
-
-                $serviceProvider = $this->helpersManager
-                    ->getProviderResolver()
-                    ->forServiceFromMetadataArray($rawConnectedServiceProvider->getServiceProviderMetadata());
-                $user = new User($rawConnectedServiceProvider->getUserAttributes());
-
-                $connectedServiceProviderBag->addOrReplace(
-                    new ConnectedService(
-                        $serviceProvider,
-                        $rawConnectedServiceProvider->getNumberOfAuthentications(),
-                        $rawConnectedServiceProvider->getLastAuthenticationAt(),
-                        $rawConnectedServiceProvider->getFirstAuthenticationAt(),
-                        $user
-                    )
-                );
-            }
-        } catch (Throwable $exception) {
-            $message = sprintf(
-                'Error populating connected service provider bag. Error was: %s',
-                $exception->getMessage()
-            );
-            throw new StoreException($message, (int)$exception->getCode(), $exception);
-        }
-
-        return $connectedServiceProviderBag;
     }
 
     /**
