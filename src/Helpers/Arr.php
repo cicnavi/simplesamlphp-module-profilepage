@@ -37,4 +37,33 @@ class Arr
         $keys = array_keys($array);
         return $keys !== array_keys($keys);
     }
+
+    /**
+     * @param array $array
+     * @param  string|int  ...$keys
+     * @return array|null
+     */
+    public function getNestedElementByKey(array $array, ...$keys): ?array
+    {
+        $element = $array;
+
+        foreach ($keys as $key) {
+            if (!is_array($element)) {
+                return null;
+            }
+
+            if (!isset($element[$key])) {
+                return null;
+            }
+
+            /** @var mixed $element */
+            $element = $element[$key];
+        }
+
+        if (is_array($element)) {
+            return $element;
+        }
+
+        return [$element];
+    }
 }

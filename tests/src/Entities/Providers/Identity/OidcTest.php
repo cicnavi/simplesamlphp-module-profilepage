@@ -11,6 +11,8 @@ use SimpleSAML\Module\accounting\Exceptions\MetadataException;
 /**
  * @covers \SimpleSAML\Module\accounting\Entities\Providers\Identity\Oidc
  * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
+ * @uses \SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractOidcProvider
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc
  */
 class OidcTest extends TestCase
 {

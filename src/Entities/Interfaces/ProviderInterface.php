@@ -9,9 +9,12 @@ use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 
 interface ProviderInterface
 {
+    public const DEFAULT_LOCALE = 'en';
+
     public function getMetadata(): array;
-    public function getName(string $locale = 'en'): ?string;
+    public function getName(string $locale = self::DEFAULT_LOCALE): ?string;
     public function getEntityId(): string;
-    public function getDescription(string $locale = 'en'): ?string;
+    public function getDescription(string $locale = self::DEFAULT_LOCALE): ?string;
+    public function getLogoUrl(): ?string;
     public function getProtocol(): AuthenticationProtocolInterface;
 }
