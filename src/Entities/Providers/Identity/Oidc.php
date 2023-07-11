@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Entities\Providers\Identity;
 
-use SimpleSAML\Module\accounting\Entities\Authentication;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
-use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
 use SimpleSAML\Module\accounting\Entities\Interfaces\IdentityProviderInterface;
+use SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractOidcProvider;
 use SimpleSAML\Module\accounting\Exceptions\MetadataException;
 
-class Oidc extends AbstractProvider implements IdentityProviderInterface
+class Oidc extends AbstractOidcProvider implements IdentityProviderInterface
 {
     public const METADATA_KEY_ENTITY_ID = 'issuer';
 
@@ -36,11 +34,11 @@ class Oidc extends AbstractProvider implements IdentityProviderInterface
             return $this->metadata[self::METADATA_KEY_ENTITY_ID];
         }
 
-        throw new MetadataException('OpenID VersionedDataProvider metadata does not contain entity ID.');
+        throw new MetadataException($this->getProviderDescription() . ' metadata does not contain entity ID.');
     }
 
-    public function getProtocol(): AuthenticationProtocolInterface
+    protected function getProviderDescription(): string
     {
-        return new Authentication\Protocol\Oidc();
+        return $this->getProtocol()->getDesignation() . ' OpenID Provider';
     }
 }

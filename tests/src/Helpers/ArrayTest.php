@@ -70,4 +70,37 @@ class ArrayTest extends TestCase
         $this->assertTrue((new Arr())->isAssociative($associative));
         $this->assertTrue((new Arr())->isAssociative($mixed));
     }
+
+    public function testGetNestedElementByKey(): void
+    {
+        $simpleIndexed = [1, 2, 3];
+        $nestedIndexed = [[1, [2, [4, [5]]]], [3, 4]];
+        $nestedAssociative = ['a' => ['b' => 'c'], 'd' => 'e'];
+
+        $arrHelper = new Arr();
+
+        $this->assertSame($arrHelper->getNestedElementByKey($simpleIndexed, 0), [1]);
+        $this->assertNull($arrHelper->getNestedElementByKey($simpleIndexed, 3));
+        $this->assertNull($arrHelper->getNestedElementByKey($simpleIndexed, 'a'));
+        $this->assertNull($arrHelper->getNestedElementByKey($simpleIndexed, 0, 'a'));
+
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedIndexed, 0), [1, [2, [4, [5]]]]);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedIndexed, 0), [1, [2, [4, [5]]]]);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedIndexed, 0, 0), [1]);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedIndexed, 0, 1), [2, [4, [5]]]);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedIndexed, 0, 1, 0), [2]);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedIndexed, 0, 1, 1), [4, [5]]);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedIndexed, 0, 1, 1, 0), [4]);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedIndexed, 0, 1, 1, 1), [5]);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedIndexed, 1), [3, 4]);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedIndexed, 1, 0), [3]);
+        $this->assertNull($arrHelper->getNestedElementByKey($nestedIndexed, 3));
+        $this->assertNull($arrHelper->getNestedElementByKey($nestedIndexed, 'a'));
+
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedAssociative, 'a'), ['b' => 'c']);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedAssociative, 'a', 'b'), ['c']);
+        $this->assertSame($arrHelper->getNestedElementByKey($nestedAssociative, 'd'), ['e']);
+        $this->assertNull($arrHelper->getNestedElementByKey($nestedAssociative, 3));
+        $this->assertNull($arrHelper->getNestedElementByKey($nestedAssociative, 'f'));
+    }
 }

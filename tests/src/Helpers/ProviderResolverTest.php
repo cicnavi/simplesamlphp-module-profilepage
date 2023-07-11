@@ -21,6 +21,10 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Entities\Providers\Identity\Oidc
  * @uses \SimpleSAML\Module\accounting\Entities\Providers\Service\Saml2
  * @uses \SimpleSAML\Module\accounting\Entities\Providers\Service\Oidc
+ * @uses \SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractSaml2Provider
+ * @uses \SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractOidcProvider
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc
  */
 class ProviderResolverTest extends TestCase
 {

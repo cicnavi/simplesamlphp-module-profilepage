@@ -112,6 +112,16 @@ class AbstractProviderTest extends TestCase
                     }
                 };
             }
+
+            protected function getProviderDescription(): string
+            {
+                return 'provider description';
+            }
+
+            public function getLogoUrl(): ?string
+            {
+                return 'https://example.org/logo';
+            }
         };
     }
 }
