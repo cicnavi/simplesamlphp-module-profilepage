@@ -12,6 +12,8 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 /**
  * @covers \SimpleSAML\Module\accounting\Entities\Providers\Identity\Saml2
  * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
+ * @uses \SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractSaml2Provider
+ * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2
  */
 class Saml2Test extends TestCase
 {

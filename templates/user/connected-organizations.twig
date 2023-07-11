@@ -20,7 +20,14 @@
 
         {% for connectedServiceProvider in connectedServiceProviderBag.getAll %}
             <tr id="connected-service-provider-{{ loop.index }}">
-                <td>{{ connectedServiceProvider.getServiceProvider.getName|e }}</td>
+                <td>
+                    <img src="{{ connectedServiceProvider.serviceProvider.logoUrl ?? asset('css/src/icons/no-image.svg', 'accounting') }}"
+                         width="30"
+                         height="30"
+                         loading="lazy"
+                         alt="Service Logo"/>
+                    {{ connectedServiceProvider.getServiceProvider.getName|e }}
+                </td>
                 <td>{{ connectedServiceProvider.getNumberOfAuthentications|e }}</td>
                 <td>{{ connectedServiceProvider.getLastAuthenticationAt|date() }}</td>
             </tr>

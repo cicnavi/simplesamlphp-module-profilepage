@@ -44,7 +44,22 @@ final class StateArrays
             'metadata-index' => 'https://pc-example.org.hr:9074/simplesamlphp/simplesamlphp-2-beta-git/module.php/saml/sp/metadata.php/default-sp',
             'metadata-set' => 'saml20-sp-remote',
             'name' => 'Test service',
-            'description' => 'Test service description'
+            'description' => 'Test service description',
+            'UIInfo' => [
+                'DisplayName' => [
+                    'en' => 'Test service UiInfo',
+                ],
+                'Description' => [
+                    'en' => 'Test service description UiInfo',
+                ],
+                'Logo' => [
+                    [
+                        'url' => 'https://placehold.co/100x80/orange/white?text=test',
+                        'height' => 80,
+                        'width' => 100,
+                    ],
+                ],
+            ],
         ],
         'saml:RelayState' => 'https://localhost.someone.from.hr:9074/simplesamlphp/simplesamlphp-2-beta-git/module.php/admin/test/default-sp',
         'saml:RequestId' => null,
@@ -117,6 +132,21 @@ final class StateArrays
             'entityid' => 'https://pc-example.org.hr:9074/simplesamlphp/simplesamlphp-2-beta-git/module.php/saml/sp/metadata.php/default-sp',
             'metadata-index' => 'https://pc-example.org.hr:9074/simplesamlphp/simplesamlphp-2-beta-git/module.php/saml/sp/metadata.php/default-sp',
             'metadata-set' => 'saml20-sp-remote',
+            'UIInfo' => [
+                'DisplayName' => [
+                    'en' => 'Test service UiInfo',
+                ],
+                'Description' => [
+                    'en' => 'Test service description UiInfo',
+                ],
+                'Logo' => [
+                    [
+                        'url' => 'https://placehold.co/100x80/orange/white?text=test',
+                        'height' => 80,
+                        'width' => 100,
+                    ],
+                ],
+            ],
         ],
         'Source' => [
             'host' => 'localhost.someone.from.hr',
@@ -219,6 +249,7 @@ final class StateArrays
                 'owner' => null,
                 'post_logout_redirect_uri' => [],
                 'backchannel_logout_uri' => 'http://sp.host.internal:8074/logout.php',
+                'logo_uri' => 'http://sp.host.internal:8074/logo.svg',
             ],
             'AuthorizationRequestParameters' => [
                 'response_type' => 'code',
