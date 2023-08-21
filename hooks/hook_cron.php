@@ -60,7 +60,7 @@ function accounting_hook_cron(array &$cronInfo): void
             ($retentionPolicy = $moduleConfiguration->getTrackerDataRetentionPolicy()) !== null
         ) {
             $helpersManager = new HelpersManager();
-            $message = sprintf('Handling data retention policy.');
+            $message = 'Handling data retention policy.';
             $logger->info($message);
             /** @psalm-suppress MixedArrayAssignment */
             $cronInfo['summary'][] = $message;

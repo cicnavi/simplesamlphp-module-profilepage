@@ -93,8 +93,7 @@ class ModuleConfiguration
         }
 
         if (! is_string($value)) {
-            $message = sprintf('Job runner maximum activity must be defined either as null, or DateInterval' .
-                               'duration (string).');
+            $message = 'Job runner maximum activity must be defined either as null, or DateInterval duration (string).';
             throw new InvalidConfigurationException($message);
         }
 

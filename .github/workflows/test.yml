@@ -8,10 +8,10 @@ on:
 
 
 jobs:
-  test-74:
+  test-80:
     runs-on: ubuntu-latest
     container:
-      image: cicnavi/dap:74
+      image: cicnavi/dap:80
     steps:
       - uses: actions/checkout@v3
       - name: Validate composer.json and composer.lock
@@ -32,7 +32,7 @@ jobs:
       - name: Show PHP version
         run: php -v
 
-  test-latest:
+  test-81:
     runs-on: ubuntu-latest
     container:
       image: cicnavi/dap:81

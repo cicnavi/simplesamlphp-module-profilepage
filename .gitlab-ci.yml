@@ -13,18 +13,16 @@ stages:
   - test
   - deploy
 
-# PHP v7.4
-test-74:
+test-80:
   tags:
     - niif-hu-docker
   stage: test
-  image: cicnavi/dap:74
+  image: cicnavi/dap:80
   script:
     - composer install --prefer-dist --no-progress --no-suggest
     - vendor/bin/psalm --clear-cache
     - composer run-script pre-commit
 
-# PHP v8.1
 test-81:
   tags:
     - niif-hu-docker
