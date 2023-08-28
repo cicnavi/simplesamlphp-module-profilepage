@@ -39,6 +39,7 @@ class ModuleConfiguration
     public const OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY = 'cron_tag_for_tracker_data_retention_policy';
     public const OPTION_PROVIDER_FOR_CONNECTED_SERVICES = 'provider_for_connected_services';
     public const OPTION_PROVIDER_FOR_ACTIVITY = 'provider_for_activity';
+    public const OPTION_ACTION_BUTTONS_ENABLED = 'action_buttons_enabled';
 
     /**
      * Contains configuration from module configuration file.
@@ -482,5 +483,10 @@ class ModuleConfiguration
     public function getCronTagForTrackerDataRetentionPolicy(): string
     {
         return $this->getConfiguration()->getString(self::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY);
+    }
+
+    public function getActionButtonsEnabled(): bool
+    {
+        return $this->getConfiguration()->getBoolean(self::OPTION_ACTION_BUTTONS_ENABLED);
     }
 }

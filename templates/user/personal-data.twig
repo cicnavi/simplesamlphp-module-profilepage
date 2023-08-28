@@ -14,6 +14,9 @@
 {% endblock %}
 
 {% block content %}
+    {% if actionButtonsEnabled %}
+        {% include "@accounting/user/includes/_action-buttons.twig" %}
+    {% endif %}
     <table>
         <!-- fixed table header -->
         <tr>

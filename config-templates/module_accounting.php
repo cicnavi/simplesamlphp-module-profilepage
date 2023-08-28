@@ -249,4 +249,17 @@ $config = [
      */
     ModuleConfiguration::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY =>
         'accounting_tracker_data_retention_policy',
+
+    /**
+     * Enable or disable 'action buttons'. Action buttons are displayed on 'Personal data' page, and can be used to
+     * provide links to relevant endpoints, for example to change a password, send email to support, etc.
+     *
+     * Note that you can easily override the action buttons Twig template using standard SimpleSAMLphp
+     * custom theming features: https://simplesamlphp.org/docs/stable/simplesamlphp-theming
+     *
+     * The path to the action buttons template file is:
+     * modules/accounting/templates/user/includes/_action-buttons.twig, so when creating a custom theme file,
+     * place it in: modules/mymodule/themes/fancytheme/accounting/user/includes/_action-buttons.twig
+     */
+    ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => true,
 ];
