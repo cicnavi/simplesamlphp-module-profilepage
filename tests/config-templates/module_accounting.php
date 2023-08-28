@@ -67,4 +67,6 @@ $config = [
         'accounting_tracker_data_retention_policy',
 
     ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
+
+    ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => true,
 ];

@@ -403,4 +403,18 @@ class ModuleConfigurationTest extends TestCase
             ]
         );
     }
+
+    public function testCanGetActionButtonsEnabled(): void
+    {
+        $moduleConfiguration = new ModuleConfiguration();
+
+        $this->assertTrue($moduleConfiguration->getActionButtonsEnabled());
+
+        $moduleConfiguration = new ModuleConfiguration(
+            null,
+            [ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => false]
+        );
+
+        $this->assertFalse($moduleConfiguration->getActionButtonsEnabled());
+    }
 }
