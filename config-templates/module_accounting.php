@@ -252,14 +252,16 @@ $config = [
 
     /**
      * Enable or disable 'action buttons'. Action buttons are displayed on 'Personal data' page, and can be used to
-     * provide links to relevant endpoints, for example to change a password, send email to support, etc.
+     * provide, for example, links to relevant endpoint like to change a password, send email to support, etc.
      *
-     * Note that you can easily override the action buttons Twig template using standard SimpleSAMLphp
-     * custom theming features: https://simplesamlphp.org/docs/stable/simplesamlphp-theming
+     * Note that you should override the action buttons Twig template using standard SimpleSAMLphp custom theming
+     * features: https://simplesamlphp.org/docs/stable/simplesamlphp-theming
      *
-     * The path to the action buttons template file is:
-     * modules/accounting/templates/user/includes/_action-buttons.twig, so when creating a custom theme file,
-     * place it in: modules/mymodule/themes/fancytheme/accounting/user/includes/_action-buttons.twig
+     * The path to the action buttons template file is: modules/accounting/templates/user/includes/_action-buttons.twig.
+     * You can check the source of that file to see a sample dropdown, and a comment about the available variables.
+     *
+     * So, when creating a custom theme action buttons file, place it in:
+     * modules/{mymodule}/themes/{fancytheme}/accounting/user/includes/_action-buttons.twig
      */
-    ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => true,
+    ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => false,
 ];
