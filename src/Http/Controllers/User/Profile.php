@@ -127,8 +127,10 @@ class Profile
             $normalizedAttributes[$name] = implode('; ', $value);
         }
 
+        $actionButtonsEnabled = $this->moduleConfiguration->getActionButtonsEnabled();
+
         $template = $this->resolveTemplate('accounting:user/personal-data.twig');
-        $template->data += compact('normalizedAttributes');
+        $template->data += compact('normalizedAttributes', 'actionButtonsEnabled');
 
         return $template;
     }
