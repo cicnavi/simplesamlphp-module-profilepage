@@ -9,6 +9,7 @@ use SimpleSAML\Module\accounting\Entities\Interfaces\ServiceProviderInterface;
 use SimpleSAML\Module\accounting\Exceptions\MetadataException;
 use SimpleSAML\Module\accounting\Entities\Providers\Service;
 use SimpleSAML\Module\accounting\Entities\Providers\Identity;
+use Throwable;
 
 class ProviderResolver
 {
@@ -19,13 +20,13 @@ class ProviderResolver
     {
         try {
             return new Identity\Saml2($metadata);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable) {
             // This is not SAML2...
         }
 
         try {
             return new Identity\Oidc($metadata);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable) {
             // This is not OIDC...
         }
 
@@ -39,13 +40,13 @@ class ProviderResolver
     {
         try {
             return new Service\Saml2($metadata);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable) {
             // This is not SAML2...
         }
 
         try {
             return new Service\Oidc($metadata);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable) {
             // This is not OIDC...
         }
 

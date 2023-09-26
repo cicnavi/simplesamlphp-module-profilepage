@@ -294,7 +294,7 @@ class RepositoryTest extends TestCase
             $resultArray[$spEntityIdNew]
             [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
         );
-        // New SP with new user attributes version..
+        // New SP with new user attributes version...
         $this->assertSame(
             $userAttributesNew,
             $resultArray[$spEntityIdNew]
@@ -404,6 +404,10 @@ class RepositoryTest extends TestCase
         $repository->deleteConnectedServicesOlderThan(new DateTimeImmutable());
     }
 
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function testCanTouchConnectedServiceVersionsTimestamp(): void
     {
         $this->repository->insertIdp($this->idpEntityId, $this->idpEntityIdHash, $this->createdAt);

@@ -120,7 +120,6 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
     }
 
     /**
-     * @inheritDoc
      * @throws StoreException
      */
     public function markFailedJob(JobInterface $job): void

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Services\MenuManager;
 
 use SimpleSAML\Module\accounting\Services\MenuManager\MenuItem;

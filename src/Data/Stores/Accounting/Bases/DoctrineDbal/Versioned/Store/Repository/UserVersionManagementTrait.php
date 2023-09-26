@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Repository;
 
 use DateTimeImmutable;
@@ -55,7 +57,7 @@ trait UserVersionManagementTrait
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new DateTimeImmutable();
+        $createdAt ??= new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameUser)
             ->values(
@@ -144,7 +146,7 @@ trait UserVersionManagementTrait
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new DateTimeImmutable();
+        $createdAt ??= new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameUserVersion)
             ->values(

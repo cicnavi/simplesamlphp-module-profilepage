@@ -16,26 +16,20 @@ use Throwable;
 
 class Repository
 {
-    protected Connection $connection;
-
     protected array $validJobsTableNames = [];
 
     protected string $tableName;
-    protected LoggerInterface $logger;
 
     /**
      * @throws StoreException
      */
-    public function __construct(Connection $connection, string $tableName, LoggerInterface $logger)
+    public function __construct(protected Connection $connection, string $tableName, protected LoggerInterface $logger)
     {
-        $this->connection = $connection;
-
         $this->prepareValidJobsTableNames();
 
         $this->validateTableName($tableName);
 
         $this->tableName = $tableName;
-        $this->logger = $logger;
     }
 
     protected function prepareValidJobsTableNames(): void

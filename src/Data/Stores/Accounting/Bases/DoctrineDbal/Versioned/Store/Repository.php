@@ -91,7 +91,7 @@ class Repository
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new DateTimeImmutable();
+        $createdAt ??= new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameIdp)
             ->values(
@@ -180,7 +180,7 @@ class Repository
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new DateTimeImmutable();
+        $createdAt ??= new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameIdpVersion)
             ->values(
@@ -262,7 +262,7 @@ class Repository
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new DateTimeImmutable();
+        $createdAt ??= new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameSp)
             ->values(
@@ -351,7 +351,7 @@ class Repository
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new DateTimeImmutable();
+        $createdAt ??= new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameSpVersion)
             ->values(
@@ -451,7 +451,7 @@ class Repository
         try {
             $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-            $createdAt = $createdAt ?? new DateTimeImmutable();
+            $createdAt ??= new DateTimeImmutable();
 
             $queryBuilder->insert($this->tableNameIdpSpUserVersion)
                 ->values(

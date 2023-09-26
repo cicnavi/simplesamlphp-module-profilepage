@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Data\Providers\Activity\DoctrineDbal;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -59,6 +61,9 @@ class CurrentDataProviderTest extends TestCase
         $this->activityBagMock = $this->createMock(Bag::class);
     }
 
+    /**
+     * @throws StoreException
+     */
     protected function prepareMockedInstance(): CurrentDataProvider
     {
         return new CurrentDataProvider(
@@ -69,6 +74,9 @@ class CurrentDataProviderTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanCreateInstance(): void
     {
         $this->assertInstanceOf(CurrentDataProvider::class, $this->prepareMockedInstance());

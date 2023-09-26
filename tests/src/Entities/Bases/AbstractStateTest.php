@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Entities\Bases;
 
+use DateTimeImmutable;
+use PHPUnit\Framework\MockObject\Stub;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractState;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
@@ -19,11 +21,11 @@ class AbstractStateTest extends TestCase
 {
     protected const IP_ADDRESS = '123.123.123.123';
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub
+     * @var Stub
      */
     protected $networkHelperStub;
     /**
-     * @var \PHPUnit\Framework\MockObject\Stub
+     * @var Stub
      */
     protected $helpersManagerStub;
 
@@ -118,7 +120,7 @@ class AbstractStateTest extends TestCase
     public function testCanGetAuthenticationInstant(): void
     {
         $this->assertInstanceOf(
-            \DateTimeImmutable::class,
+            DateTimeImmutable::class,
             $this->getSampleInstance(StateArrays::SAML2_FULL, null, $this->helpersManagerStub)
                 ->getAuthenticationInstant()
         );
@@ -149,14 +151,14 @@ class AbstractStateTest extends TestCase
         $instance = $this->getSampleInstance(StateArrays::SAML2_FULL, null, $this->helpersManagerStub);
         $this->assertIsString($instance->getIdentityProviderEntityId());
         $this->assertIsString($instance->getServiceProviderEntityId());
-        $this->assertInstanceOf(\DateTimeImmutable::class, $instance->getCreatedAt());
+        $this->assertInstanceOf(DateTimeImmutable::class, $instance->getCreatedAt());
         $this->assertIsArray($instance->getIdentityProviderMetadata());
         $this->assertIsArray($instance->getServiceProviderMetadata());
     }
 
     protected function getSampleInstance(
         array $state,
-        \DateTimeImmutable $createdAt = null,
+        DateTimeImmutable $createdAt = null,
         HelpersManager $helpersManager = null
     ): AbstractState {
         return new class ($state, $createdAt, $helpersManager) extends AbstractState {

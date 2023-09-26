@@ -10,13 +10,11 @@ use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 abstract class AbstractProvider implements ProviderInterface
 {
-    protected array $metadata;
     protected HelpersManager $helpersManager;
     protected string $entityId;
 
-    public function __construct(array $metadata, HelpersManager $helpersManager = null)
+    public function __construct(protected array $metadata, HelpersManager $helpersManager = null)
     {
-        $this->metadata = $metadata;
         $this->helpersManager = $helpersManager ?? new HelpersManager();
         $this->entityId = $this->resolveEntityId();
     }

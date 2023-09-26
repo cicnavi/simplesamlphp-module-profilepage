@@ -27,21 +27,18 @@ class Migrator extends AbstractMigrator
     public const COLUMN_NAME_VERSION = 'version';
     public const COLUMN_NAME_CREATED_AT = 'created_at';
 
-    protected Connection $connection;
-    protected LoggerInterface $logger;
-
     protected AbstractSchemaManager $schemaManager;
     protected string $prefixedTableName;
 
     /**
      * @throws StoreException
      */
-    public function __construct(Connection $connection, LoggerInterface $logger, HelpersManager $helpersManager = null)
-    {
+    public function __construct(
+        protected Connection $connection,
+        protected LoggerInterface $logger,
+        HelpersManager $helpersManager = null
+    ) {
         parent::__construct($helpersManager);
-
-        $this->connection = $connection;
-        $this->logger = $logger;
 
         try {
             $this->schemaManager = ($this->connection->dbal())->createSchemaManager();

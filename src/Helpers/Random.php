@@ -4,21 +4,28 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Helpers;
 
+use Exception;
 use Throwable;
 
 class Random
 {
+    /**
+     * @throws Exception
+     */
     public function getInt(int $minimum = PHP_INT_MIN, int $maximum = PHP_INT_MAX): int
     {
         try {
             return random_int($minimum, $maximum);
             // @codeCoverageIgnoreStart
-        } catch (Throwable $exception) {
-            return mt_rand($minimum, $maximum);
+        } catch (Throwable) {
+            return random_int($minimum, $maximum);
             // @codeCoverageIgnoreEnd
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function getString(int $length = 16): string
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

@@ -20,19 +20,19 @@ use SimpleSAML\Module\accounting\Helpers\SspModule;
 
 class HelpersManager
 {
-    protected static ?DateTime $dateTime;
-    protected static ?Environment $environment;
-    protected static ?Random $random;
-    protected static ?Routes $routes;
-    protected static ?Arr $arr;
-    protected static ?Hash $hash;
-    protected static ?Attributes $attributes;
-    protected static ?Filesystem $filesystem;
-    protected static ?InstanceBuilderUsingModuleConfiguration $instanceBuilder;
-    protected static ?Network $network;
-    protected static ?AuthenticationEventStateResolver $authenticationEventStateResolver;
-    protected static ?ProviderResolver $providerResolver;
-    protected static ?SspModule $sspModule;
+    protected static ?DateTime $dateTime = null;
+    protected static ?Environment $environment = null;
+    protected static ?Random $random = null;
+    protected static ?Routes $routes = null;
+    protected static ?Arr $arr = null;
+    protected static ?Hash $hash = null;
+    protected static ?Attributes $attributes = null;
+    protected static ?Filesystem $filesystem = null;
+    protected static ?InstanceBuilderUsingModuleConfiguration $instanceBuilder = null;
+    protected static ?Network $network = null;
+    protected static ?AuthenticationEventStateResolver $authenticationEventStateResolver = null;
+    protected static ?ProviderResolver $providerResolver = null;
+    protected static ?SspModule $sspModule = null;
 
 
     public function getDateTime(): DateTime

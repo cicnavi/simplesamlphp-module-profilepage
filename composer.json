@@ -42,7 +42,8 @@
         "simplesamlphp/simplesamlphp": "2.0.*",
         "simplesamlphp/simplesamlphp-test-framework": "^1",
         "simplesamlphp/simplesamlphp-module-oidc": "^4",
-        "fakerphp/faker": "^1.22"
+        "fakerphp/faker": "^1.22",
+        "rector/rector": "^0.18.4"
     },
     "suggest": {
         "ext-pcntl": "Enables job runner to gracefully respond to SIGTERM signal.",

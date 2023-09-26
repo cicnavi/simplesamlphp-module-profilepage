@@ -15,7 +15,7 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
  */
 class AbstractStoreTest extends TestCase
 {
-    protected \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore $abstractStore;
+    protected AbstractStore $abstractStore;
     /**
      * @var Stub
      */
@@ -33,12 +33,12 @@ class AbstractStoreTest extends TestCase
         $this->abstractStore = new class (
             $this->moduleConfigurationStub,
             $this->loggerStub
-        ) extends \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore {
+        ) extends AbstractStore {
             public static function build(
                 ModuleConfiguration $moduleConfiguration,
                 LoggerInterface $logger,
                 string $connectionKey = null
-            ): \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore {
+            ): AbstractStore {
                 return new self($moduleConfiguration, $logger, $connectionKey);
             }
             public function needsSetup(): bool
@@ -55,7 +55,7 @@ class AbstractStoreTest extends TestCase
     {
         $this->assertInstanceOf(AbstractStore::class, $this->abstractStore);
         $this->assertInstanceOf(
-            \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore::class,
+            AbstractStore::class,
             $this->abstractStore::build($this->moduleConfigurationStub, $this->loggerStub)
         );
     }

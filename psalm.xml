@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <psalm
     errorLevel="1"
-    resolveFromConfigFile="true"
     findUnusedBaselineEntry="true"
     findUnusedCode="true"
     cacheDirectory="./build/psalm/cache"

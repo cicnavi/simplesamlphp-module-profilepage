@@ -61,6 +61,9 @@ class VersionedDataProviderTest extends TestCase
         $this->activityBagMock = $this->createMock(Bag::class);
     }
 
+    /**
+     * @throws StoreException
+     */
     protected function prepareMockedInstance(): VersionedDataProvider
     {
         return new VersionedDataProvider(
@@ -71,6 +74,9 @@ class VersionedDataProviderTest extends TestCase
         );
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanCreateInstance(): void
     {
         $this->assertInstanceOf(VersionedDataProvider::class, $this->prepareMockedInstance());

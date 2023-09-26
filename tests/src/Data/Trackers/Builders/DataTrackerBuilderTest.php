@@ -9,6 +9,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder;
 use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
@@ -74,8 +75,8 @@ class DataTrackerBuilderTest extends TestCase
     public function testCanCreateInstance(): void
     {
         $this->assertInstanceOf(
-            \SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder::class,
-            new \SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder(
+            DataTrackerBuilder::class,
+            new DataTrackerBuilder(
                 $this->moduleConfigurationStub,
                 $this->loggerMock,
                 $this->helpersManager
@@ -88,20 +89,20 @@ class DataTrackerBuilderTest extends TestCase
      */
     public function testCanBuildAuthenticationDataTracker(): void
     {
-        $authenticationDataTrackerBuilder = new \SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder(
+        $authenticationDataTrackerBuilder = new DataTrackerBuilder(
             $this->moduleConfigurationStub,
             $this->loggerMock,
             $this->helpersManager
         );
 
-        $trackerClass = get_class($this->trackerStub);
+        $trackerClass = $this->trackerStub::class;
 
         $this->assertInstanceOf($trackerClass, $authenticationDataTrackerBuilder->build($trackerClass));
     }
 
     public function testBuildThrowsForInvalidTrackerClass(): void
     {
-        $authenticationDataTrackerBuilder = new \SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder(
+        $authenticationDataTrackerBuilder = new DataTrackerBuilder(
             $this->moduleConfigurationStub,
             $this->loggerMock,
             $this->helpersManager

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Services;
 
 use Psr\Log\LoggerInterface;
@@ -11,22 +13,16 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 class TrackerResolver
 {
-    protected ModuleConfiguration $moduleConfiguration;
-    protected LoggerInterface $logger;
-    protected HelpersManager $helpersManager;
     protected DataProviderBuilder $dataProviderBuilder;
     protected DataTrackerBuilder $dataTrackerBuilder;
 
     public function __construct(
-        ModuleConfiguration $moduleConfiguration,
-        LoggerInterface $logger,
-        HelpersManager $helpersManager,
+        protected ModuleConfiguration $moduleConfiguration,
+        protected LoggerInterface $logger,
+        protected HelpersManager $helpersManager,
         DataProviderBuilder $dataProviderBuilder = null,
         DataTrackerBuilder $dataTrackerBuilder = null
     ) {
-        $this->moduleConfiguration = $moduleConfiguration;
-        $this->logger = $logger;
-        $this->helpersManager = $helpersManager;
         $this->dataProviderBuilder = $dataProviderBuilder ?? new DataProviderBuilder(
             $this->moduleConfiguration,
             $this->logger,
@@ -52,7 +48,7 @@ class TrackerResolver
                 ($provider = $this->dataProviderBuilder->build($providerClass)) &&
                 ($providersTracker = $provider->getTracker()) !== null
             ) {
-                $trackers[get_class($providersTracker)] = $providersTracker;
+                $trackers[$providersTracker::class] = $providersTracker;
             }
         }
 

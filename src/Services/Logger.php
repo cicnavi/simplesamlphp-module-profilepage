@@ -10,7 +10,7 @@ use SimpleSAML\Logger as SspLogger;
 
 class Logger extends AbstractLogger
 {
-    public function log($level, $message, array $context = [], string $prefix = '(accounting) ')
+    public function log($level, $message, array $context = [], string $prefix = '(accounting) '): void
     {
         $message = $prefix . $message;
 

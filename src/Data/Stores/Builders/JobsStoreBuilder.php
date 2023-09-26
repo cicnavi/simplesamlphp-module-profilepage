@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Data\Stores\Builders;
 
+use SimpleSAML\Module\accounting\Data\Stores\Builders\Bases\AbstractStoreBuilder;
 use SimpleSAML\Module\accounting\Data\Stores\Interfaces\JobsStoreInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration\ConnectionType;
 
 use function sprintf;
 
-class JobsStoreBuilder extends \SimpleSAML\Module\accounting\Data\Stores\Builders\Bases\AbstractStoreBuilder
+class JobsStoreBuilder extends AbstractStoreBuilder
 {
     /**
      * @throws StoreException
@@ -26,7 +27,7 @@ class JobsStoreBuilder extends \SimpleSAML\Module\accounting\Data\Stores\Builder
             );
         }
 
-        $connectionKey = $connectionKey ?? $this->moduleConfiguration->getClassConnectionKey($class);
+        $connectionKey ??= $this->moduleConfiguration->getClassConnectionKey($class);
 
         /** @var JobsStoreInterface $store */
         $store = $this->buildGeneric($class, [$connectionKey, $connectionType]);

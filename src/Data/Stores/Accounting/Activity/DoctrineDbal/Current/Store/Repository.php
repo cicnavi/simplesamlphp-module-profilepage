@@ -49,7 +49,7 @@ class Repository extends BaseRepository
         try {
             $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-            $createdAt = $createdAt ?? new DateTimeImmutable();
+            $createdAt ??= new DateTimeImmutable();
 
             $queryBuilder->insert($this->tableNameAuthenticationEvent)
                 ->values(

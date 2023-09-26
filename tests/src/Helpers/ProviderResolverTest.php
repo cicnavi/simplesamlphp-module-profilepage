@@ -28,6 +28,9 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  */
 class ProviderResolverTest extends TestCase
 {
+    /**
+     * @throws MetadataException
+     */
     public function testCanResolveIdentityProvider(): void
     {
         $samlIdp = (new ProviderResolver())
@@ -52,6 +55,9 @@ class ProviderResolverTest extends TestCase
         (new ProviderResolver())->forIdentityFromMetadataArray(['invalid' => 'metadata']);
     }
 
+    /**
+     * @throws MetadataException
+     */
     public function testCanResolveServiceProvider(): void
     {
         $samlSp = (new ProviderResolver())

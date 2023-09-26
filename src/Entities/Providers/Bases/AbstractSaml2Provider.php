@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Entities\Providers\Bases;
 
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;

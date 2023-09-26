@@ -16,22 +16,17 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 class VersionedDataProvider implements ActivityInterface
 {
-    protected ModuleConfiguration $moduleConfiguration;
-    protected LoggerInterface $logger;
     protected Store $store;
 
     /**
      * @throws StoreException
      */
     public function __construct(
-        ModuleConfiguration $moduleConfiguration,
-        LoggerInterface $logger,
+        protected ModuleConfiguration $moduleConfiguration,
+        protected LoggerInterface $logger,
         string $connectionType = ModuleConfiguration\ConnectionType::SLAVE,
         Store $store = null
     ) {
-        $this->moduleConfiguration = $moduleConfiguration;
-        $this->logger = $logger;
-
         $this->store = $store ?? new Store(
             $this->moduleConfiguration,
             $this->logger,

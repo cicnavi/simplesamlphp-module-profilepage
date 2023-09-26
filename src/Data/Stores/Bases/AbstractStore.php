@@ -12,21 +12,16 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 abstract class AbstractStore implements BuildableUsingModuleConfigurationInterface, SetupableInterface
 {
-    protected ModuleConfiguration $moduleConfiguration;
-    protected LoggerInterface $logger;
     protected string $connectionKey;
 
     /**
      */
     public function __construct(
-        ModuleConfiguration $moduleConfiguration,
-        LoggerInterface $logger,
+        protected ModuleConfiguration $moduleConfiguration,
+        protected LoggerInterface $logger,
         string $connectionKey = null,
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER
     ) {
-        $this->moduleConfiguration = $moduleConfiguration;
-        $this->logger = $logger;
-
         $this->connectionKey = $connectionKey ??
             $moduleConfiguration->getClassConnectionKey($this->getSelfClass(), $connectionType);
     }

@@ -9,7 +9,6 @@ use SimpleSAML\Module\accounting\Services\HelpersManager;
 
 class HashDecoratedState
 {
-    protected StateInterface $state;
     protected HelpersManager $helpersManager;
 
     protected string $identityProviderEntityIdHashSha256;
@@ -18,9 +17,8 @@ class HashDecoratedState
     protected string $serviceProviderMetadataArrayHashSha256;
     protected string $attributesArrayHashSha256;
 
-    public function __construct(StateInterface $state, HelpersManager $helpersManager = null)
+    public function __construct(protected StateInterface $state, HelpersManager $helpersManager = null)
     {
-        $this->state = $state;
         $this->helpersManager = $helpersManager ?? new HelpersManager();
 
         $this->identityProviderEntityIdHashSha256 = $this->helpersManager->getHash()

@@ -16,18 +16,11 @@ use function sprintf;
 
 abstract class AbstractStoreBuilder
 {
-    protected ModuleConfiguration $moduleConfiguration;
-    protected LoggerInterface $logger;
-    protected HelpersManager $helpersManager;
-
     public function __construct(
-        ModuleConfiguration $moduleConfiguration,
-        LoggerInterface $logger,
-        HelpersManager $helpersManager
+        protected ModuleConfiguration $moduleConfiguration,
+        protected LoggerInterface $logger,
+        protected HelpersManager $helpersManager
     ) {
-        $this->moduleConfiguration = $moduleConfiguration;
-        $this->logger = $logger;
-        $this->helpersManager = $helpersManager;
     }
 
     abstract public function build(
@@ -38,6 +31,9 @@ abstract class AbstractStoreBuilder
 
     /**
      * @throws StoreException
+     * TODO mivanci Utilize generics
+     * TODO mivanci Utilize first class callables:
+     * https://www.php.net/manual/en/functions.first_class_callable_syntax.php
      */
     protected function buildGeneric(string $class, array $additionalArguments = []): StoreInterface
     {
@@ -48,7 +44,7 @@ abstract class AbstractStoreBuilder
             }
 
             // Build store...
-            /** @var \SimpleSAML\Module\accounting\Data\Stores\Interfaces\StoreInterface $store */
+            /** @var StoreInterface $store */
             $store = $this->helpersManager->getInstanceBuilderUsingModuleConfiguration()->build(
                 $class,
                 $this->moduleConfiguration,

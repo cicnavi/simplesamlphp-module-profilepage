@@ -52,6 +52,6 @@ class ConnectionTest extends TestCase
         $parameters['table_prefix'] = new class () {
         };
 
-        (new \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection($parameters));
+        (new Connection($parameters));
     }
 }

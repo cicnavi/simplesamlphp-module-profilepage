@@ -18,8 +18,6 @@ interface JobsStoreInterface extends StoreInterface
 
     /**
      * Add job to queue
-     * @param JobInterface $job
-     * @return void
      */
     public function enqueue(JobInterface $job): void;
 
@@ -30,9 +28,5 @@ interface JobsStoreInterface extends StoreInterface
      */
     public function dequeue(string $type): ?JobInterface;
 
-    /**
-     * @param JobInterface $job
-     * @return void
-     */
     public function markFailedJob(JobInterface $job): void;
 }

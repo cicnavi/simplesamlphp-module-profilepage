@@ -9,24 +9,13 @@ use SimpleSAML\Module\accounting\Entities\Interfaces\ServiceProviderInterface;
 
 class Activity
 {
-    protected ServiceProviderInterface $serviceProvider;
-    protected User $user;
-    protected DateTimeImmutable $happenedAt;
-    protected ?string $clientIpAddress;
-    protected ?string $authenticationProtocolDesignation;
-
     public function __construct(
-        ServiceProviderInterface $serviceProvider,
-        User $user,
-        DateTimeImmutable $happenedAt,
-        ?string $clientIpAddress,
-        ?string $authenticationProtocolDesignation
+        protected ServiceProviderInterface $serviceProvider,
+        protected User $user,
+        protected DateTimeImmutable $happenedAt,
+        protected ?string $clientIpAddress,
+        protected ?string $authenticationProtocolDesignation
     ) {
-        $this->serviceProvider = $serviceProvider;
-        $this->user = $user;
-        $this->happenedAt = $happenedAt;
-        $this->clientIpAddress = $clientIpAddress;
-        $this->authenticationProtocolDesignation = $authenticationProtocolDesignation;
     }
 
     /**

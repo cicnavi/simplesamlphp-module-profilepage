@@ -10,13 +10,10 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 class Factory
 {
-    protected ModuleConfiguration $moduleConfiguration;
-    protected LoggerInterface $loggerService;
-
-    public function __construct(ModuleConfiguration $moduleConfiguration, LoggerInterface $loggerService)
-    {
-        $this->moduleConfiguration = $moduleConfiguration;
-        $this->loggerService = $loggerService;
+    public function __construct(
+        protected ModuleConfiguration $moduleConfiguration,
+        protected LoggerInterface $loggerService
+    ) {
     }
 
     public function buildConnection(string $connectionKey): Connection

@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\Module\accounting\Entities\Bases;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
-use SimpleSAML\Module\accounting\Entities\Providers\Identity\Saml2;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider

@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Result;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
@@ -149,7 +152,7 @@ class StoreTest extends TestCase
     }
     /**
      * @throws StoreException
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      * @throws MigrationException
      */
     public function testCanPersistAuthenticationEvent(): void

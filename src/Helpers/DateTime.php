@@ -6,6 +6,7 @@ namespace SimpleSAML\Module\accounting\Helpers;
 
 use DateInterval;
 use DateTimeImmutable;
+use DateTimeInterface;
 
 class DateTime
 {
@@ -30,10 +31,10 @@ class DateTime
     }
 
     public function toFormattedString(
-        \DateTimeInterface $dateTime = null,
+        DateTimeInterface $dateTime = null,
         string $format = self::FORMAT_MYSQL
     ): string {
-        $dateTime = $dateTime ?? new DateTimeImmutable();
+        $dateTime ??= new DateTimeImmutable();
 
         return $dateTime->format($format);
     }

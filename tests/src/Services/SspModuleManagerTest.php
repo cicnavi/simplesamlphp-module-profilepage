@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Services;
 
+use Exception;
 use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\SspModuleManager;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\SspModule\Oidc;
+use Throwable;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Services\SspModuleManager
@@ -25,12 +27,15 @@ class SspModuleManagerTest extends TestCase
         $this->helpersMangerStub = $this->createStub(HelpersManager::class);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGet(): void
     {
         $sspModuleManager = new SspModuleManager($this->loggerStub, $this->helpersMangerStub);
 
         // By default, OIDC module will try to connect to the database, which we will not mock in module manager.
-        $this->expectException(\Throwable::class);
+        $this->expectException(Throwable::class);
         $sspModuleManager->getOidc();
     }
 }

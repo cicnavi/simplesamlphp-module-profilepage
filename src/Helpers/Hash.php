@@ -6,11 +6,8 @@ namespace SimpleSAML\Module\accounting\Helpers;
 
 class Hash
 {
-    protected Arr $arrayHelper;
-
-    public function __construct(Arr $arrayHelper)
+    public function __construct(protected Arr $arrayHelper)
     {
-        $this->arrayHelper = $arrayHelper;
     }
 
     public function getSha256(string $data): string

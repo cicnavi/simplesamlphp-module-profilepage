@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Services;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,6 +30,9 @@ class AlertsBagTest extends TestCase
         $this->assertInstanceOf(AlertsBag::class, new AlertsBag($this->sessionMock));
     }
 
+    /**
+     * @throws Exception
+     */
     public function testIsEmpty(): void
     {
         $this->sessionMock->method('getData')->willReturn([]);
@@ -36,6 +41,9 @@ class AlertsBagTest extends TestCase
         $this->assertFalse((new AlertsBag($this->sessionMock))->isNotEmpty());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testIsNotEmpty(): void
     {
         $this->sessionMock->method('getData')->willReturn([$this->alertStub]);
@@ -65,6 +73,9 @@ class AlertsBagTest extends TestCase
         (new AlertsBag($this->sessionMock))->getAll();
     }
 
+    /**
+     * @throws Exception
+     */
     public function testPutCallsSetDataOnSession(): void
     {
         $this->sessionMock->expects($this->once())->method('setData');

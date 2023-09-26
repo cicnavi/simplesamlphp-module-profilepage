@@ -37,7 +37,7 @@ class AbstractJobTest extends TestCase
 
         $this->assertSame($id, $job->getId());
         $this->assertSame($createdAt, $job->getCreatedAt());
-        $this->assertSame(get_class($job), $job->getType());
+        $this->assertSame($job::class, $job->getType());
         $this->assertInstanceOf(AbstractPayload::class, $job->getPayload());
     }
 }

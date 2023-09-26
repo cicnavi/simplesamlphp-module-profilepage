@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Entities\Authentication\Protocol;
 
 use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
 
 class Bag
 {

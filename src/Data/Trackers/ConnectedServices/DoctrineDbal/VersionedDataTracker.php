@@ -36,6 +36,9 @@ class VersionedDataTracker extends VersionedDataProvider implements DataTrackerI
         $this->store->persist($authenticationEvent);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function enforceDataRetentionPolicy(DateInterval $retentionPolicy): void
     {
         $dateTime = (new DateTimeImmutable())->sub($retentionPolicy);

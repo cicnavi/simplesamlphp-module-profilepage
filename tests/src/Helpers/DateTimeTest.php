@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\Module\accounting\Helpers;
 
 use DateInterval;
+use DateTimeImmutable;
 use SimpleSAML\Module\accounting\Helpers\DateTime;
 use PHPUnit\Framework\TestCase;
 
@@ -29,7 +30,7 @@ class DateTimeTest extends TestCase
 
     public function testToFormattedString(): void
     {
-        $dateTime = new \DateTimeImmutable();
+        $dateTime = new DateTimeImmutable();
 
         $this->assertSame(
             $dateTime->format(DateTime::FORMAT_MYSQL),

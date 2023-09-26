@@ -13,8 +13,6 @@ class MenuManager
 
     /**
      * Add MenuItems to the end of the list.
-     * @param MenuItem ...$menuItems
-     * @return void
      */
     public function addItems(MenuItem ...$menuItems): void
     {
@@ -23,13 +21,10 @@ class MenuManager
 
     /**
      * Add MenuItem to specific offset (position). If offset not set, MenuItem will be appended to the end.
-     * @param MenuItem $menuItem
-     * @param int|null $offset
-     * @return void
      */
     public function addItem(MenuItem $menuItem, int $offset = null): void
     {
-        $offset = $offset ?? count($this->items);
+        $offset ??= count($this->items);
 
         array_splice($this->items, $offset, 0, [$menuItem]);
     }

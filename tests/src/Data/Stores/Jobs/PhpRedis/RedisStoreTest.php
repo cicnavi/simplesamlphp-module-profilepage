@@ -61,7 +61,7 @@ class RedisStoreTest extends TestCase
 
         $this->assertInstanceOf(
             RedisStore::class,
-            new \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore(
+            new RedisStore(
                 $this->moduleConfigurationStub,
                 $this->loggerMock,
                 null,
@@ -80,7 +80,7 @@ class RedisStoreTest extends TestCase
 
         $this->assertInstanceOf(
             RedisStore::class,
-            new \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore(
+            new RedisStore(
                 $this->moduleConfigurationStub,
                 $this->loggerMock,
                 null,
@@ -104,8 +104,8 @@ class RedisStoreTest extends TestCase
         $this->redisMock->method('connect')->willThrowException(new RedisException('test'));
 
         $this->assertInstanceOf(
-            \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore::class,
-            new \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore(
+            RedisStore::class,
+            new RedisStore(
                 $this->moduleConfigurationStub,
                 $this->loggerMock,
                 null,
@@ -129,8 +129,8 @@ class RedisStoreTest extends TestCase
         $this->redisMock->method('auth')->willThrowException(new RedisException('test'));
 
         $this->assertInstanceOf(
-            \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore::class,
-            new \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore(
+            RedisStore::class,
+            new RedisStore(
                 $this->moduleConfigurationStub,
                 $this->loggerMock,
                 null,
@@ -154,7 +154,7 @@ class RedisStoreTest extends TestCase
 
         $this->assertInstanceOf(
             RedisStore::class,
-            new \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore(
+            new RedisStore(
                 $this->moduleConfigurationStub,
                 $this->loggerMock,
                 null,
@@ -199,7 +199,7 @@ class RedisStoreTest extends TestCase
 
         $this->redisMock->method('rPush')->willThrowException(new RedisException('test'));
 
-        $redisStore = new \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore(
+        $redisStore = new RedisStore(
             $this->moduleConfigurationStub,
             $this->loggerMock,
             null,
@@ -245,7 +245,7 @@ class RedisStoreTest extends TestCase
             ->method('error')
             ->with($this->stringContains('Could not pop job from Redis list.'));
 
-        $redisStore = new \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore(
+        $redisStore = new RedisStore(
             $this->moduleConfigurationStub,
             $this->loggerMock,
             null,

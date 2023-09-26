@@ -8,11 +8,10 @@ class Network
 {
     public function resolveClientIpAddress(string $clientIpAddress = null): ?string
     {
-        $clientIpAddress = $clientIpAddress ??
-            $_SERVER['HTTP_CLIENT_IP'] ??
-            $_SERVER['HTTP_X_FORWARDED_FOR'] ??
-            $_SERVER['REMOTE_ADDR'] ??
-            null;
+        $clientIpAddress ??= $_SERVER['HTTP_CLIENT_IP'] ??
+        $_SERVER['HTTP_X_FORWARDED_FOR'] ??
+        $_SERVER['REMOTE_ADDR'] ??
+        null;
 
         if (!is_string($clientIpAddress)) {
             return null;

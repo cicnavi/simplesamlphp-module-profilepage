@@ -140,7 +140,7 @@ class MigratorTest extends TestCase
 
         $this->expectException(InvalidValueException::class);
 
-        $migrator->runMigrationClasses([get_class($migration)]);
+        $migrator->runMigrationClasses([$migration::class]);
     }
 
     /**

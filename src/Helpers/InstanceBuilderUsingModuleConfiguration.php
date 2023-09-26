@@ -20,11 +20,6 @@ class InstanceBuilderUsingModuleConfiguration
 
     /**
      * @param class-string $class
-     * @param ModuleConfiguration $moduleConfiguration
-     * @param LoggerInterface $logger
-     * @param array $additionalArguments
-     * @param string $method
-     * @return BuildableUsingModuleConfigurationInterface
      * @throws Exception
      */
     public function build(

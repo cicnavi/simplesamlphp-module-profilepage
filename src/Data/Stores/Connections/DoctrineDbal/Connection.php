@@ -21,7 +21,7 @@ class Connection implements ConnectionInterface
         try {
             /** @psalm-suppress MixedArgumentTypeCoercion */
             $this->dbal = DriverManager::getConnection($parameters);
-        } catch (Exception $e) {
+        } catch (Exception) {
             throw new InvalidConfigurationException(
                 'Could not initiate Doctrine DBAL connection with given parameters.'
             );

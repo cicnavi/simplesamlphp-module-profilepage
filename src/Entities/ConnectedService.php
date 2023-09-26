@@ -12,31 +12,13 @@ use SimpleSAML\Module\accounting\Entities\Interfaces\ServiceProviderInterface;
  */
 class ConnectedService
 {
-    protected ServiceProviderInterface $serviceProvider;
-    protected int $numberOfAuthentications;
-    protected DateTimeImmutable $lastAuthenticationAt;
-    protected DateTimeImmutable $firstAuthenticationAt;
-    protected User $user;
-
-    /**
-     * @param ServiceProviderInterface $serviceProvider
-     * @param int $numberOfAuthentications
-     * @param DateTimeImmutable $lastAuthenticationAt
-     * @param DateTimeImmutable $firstAuthenticationAt
-     * @param User $user
-     */
     public function __construct(
-        ServiceProviderInterface $serviceProvider,
-        int $numberOfAuthentications,
-        DateTimeImmutable $lastAuthenticationAt,
-        DateTimeImmutable $firstAuthenticationAt,
-        User $user
+        protected ServiceProviderInterface $serviceProvider,
+        protected int $numberOfAuthentications,
+        protected DateTimeImmutable $lastAuthenticationAt,
+        protected DateTimeImmutable $firstAuthenticationAt,
+        protected User $user
     ) {
-        $this->serviceProvider = $serviceProvider;
-        $this->numberOfAuthentications = $numberOfAuthentications;
-        $this->lastAuthenticationAt = $lastAuthenticationAt;
-        $this->firstAuthenticationAt = $firstAuthenticationAt;
-        $this->user = $user;
     }
 
     /**
