@@ -19,7 +19,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 /**
  * @covers \SimpleSAML\Module\accounting\Data\Stores\Builders\Bases\AbstractStoreBuilder
  * @covers \SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder
- * @uses   \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
@@ -88,7 +88,7 @@ class JobsStoreBuilderTest extends TestCase
 
         $this->expectException(StoreException::class);
 
-        $storeBuilder->build(get_class($invalidStore));
+        $storeBuilder->build($invalidStore::class);
     }
 
     public function testThrowsForInvalidJobsStoreClass(): void
@@ -127,11 +127,11 @@ class JobsStoreBuilderTest extends TestCase
         $moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
-        $moduleConfigurationStub->method('getJobsStoreClass')->willReturn(get_class($sampleStore));
+        $moduleConfigurationStub->method('getJobsStoreClass')->willReturn($sampleStore::class);
 
         $this->expectException(StoreException::class);
 
         (new JobsStoreBuilder($moduleConfigurationStub, $this->loggerStub, $this->helpersManager))
-            ->build(get_class($sampleStore));
+            ->build($sampleStore::class);
     }
 }

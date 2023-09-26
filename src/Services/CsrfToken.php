@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Services;
 
+use Exception;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Session;
 
@@ -14,6 +15,9 @@ class CsrfToken
     public const KEY = 'ssp-' . ModuleConfiguration::MODULE_NAME . '-csrf-token';
     protected HelpersManager $helpersManager;
 
+    /**
+     * @throws Exception
+     */
     public function __construct(
         Session $session = null,
         HelpersManager $helpersManager = null
@@ -26,6 +30,9 @@ class CsrfToken
         }
     }
 
+    /**
+     * @throws Exception
+     */
     protected function set(?string $token = null): void
     {
         $this->session->setData(
@@ -46,6 +53,9 @@ class CsrfToken
         return null;
     }
 
+    /**
+     * @throws Exception
+     */
     public function validate(string $token): bool
     {
         $isValid = $token === $this->get();

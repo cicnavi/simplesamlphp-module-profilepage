@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Configuration;
 use SimpleSAML\Module\accounting\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider;
@@ -64,7 +65,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsForInvalidConfig(): void
     {
@@ -79,7 +80,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsForInvalidJobsStore(): void
     {
@@ -117,7 +118,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsForNonStringAndNonArrayConnectionKey(): void
     {
@@ -134,7 +135,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsForNonMasterInArrayConnection(): void
     {
@@ -218,7 +219,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsForNonStringJobRunnerMaximumExecutionTime(): void
     {
@@ -233,7 +234,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsForInvalidStringJobRunnerMaximumExecutionTime(): void
     {
@@ -254,7 +255,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testCanGetNullForJobRunnerShouldPauseAfterNumberOfJobsProcessed(): void
     {
@@ -267,7 +268,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsForNonIntegerJobRunnerShouldPauseAfterNumberOfJobsProcessed(): void
     {
@@ -282,7 +283,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsForNegativeIntegerJobRunnerShouldPauseAfterNumberOfJobsProcessed(): void
     {
@@ -297,7 +298,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsOnInvalidCronTag(): void
     {
@@ -314,7 +315,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsOnInvalidDataProvider(): void
     {
@@ -329,7 +330,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsOnInvalidAdditionalTrackers(): void
     {
@@ -344,7 +345,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsOnNonStringAdditionalTracker(): void
     {
@@ -359,7 +360,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsWhenClassHasNoConnectionParametersSet(): void
     {
@@ -374,7 +375,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsForInvalidTrackerDataRetentionPolicy(): void
     {
@@ -389,7 +390,7 @@ class ModuleConfigurationTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThrowsForInvalidCronTagForTrackerDataRetentionPolicy(): void
     {
@@ -404,6 +405,9 @@ class ModuleConfigurationTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCanGetActionButtonsEnabled(): void
     {
         $moduleConfiguration = new ModuleConfiguration();

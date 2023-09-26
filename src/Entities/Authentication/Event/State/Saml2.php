@@ -7,11 +7,8 @@ namespace SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 use SimpleSAML\Module\accounting\Entities\Authentication\Protocol;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractState;
 use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
-use SimpleSAML\Module\accounting\Entities\Providers\Identity;
-use SimpleSAML\Module\accounting\Entities\Providers\Service;
+use SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractSaml2Provider;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-
-use function sprintf;
 
 class Saml2 extends AbstractState
 {
@@ -51,10 +48,10 @@ class Saml2 extends AbstractState
     protected function resolveIdentityProviderEntityId(): string
     {
         if (
-            !empty($this->identityProviderMetadata[Identity\Saml2::METADATA_KEY_ENTITY_ID]) &&
-            is_string($this->identityProviderMetadata[Identity\Saml2::METADATA_KEY_ENTITY_ID])
+            !empty($this->identityProviderMetadata[AbstractSaml2Provider::METADATA_KEY_ENTITY_ID]) &&
+            is_string($this->identityProviderMetadata[AbstractSaml2Provider::METADATA_KEY_ENTITY_ID])
         ) {
-            return $this->identityProviderMetadata[Identity\Saml2::METADATA_KEY_ENTITY_ID];
+            return $this->identityProviderMetadata[AbstractSaml2Provider::METADATA_KEY_ENTITY_ID];
         }
 
         throw new UnexpectedValueException('IdP metadata array does not contain entity ID.');
@@ -63,10 +60,10 @@ class Saml2 extends AbstractState
     protected function resolveServiceProviderEntityId(): string
     {
         if (
-            !empty($this->serviceProviderMetadata[Service\Saml2::METADATA_KEY_ENTITY_ID]) &&
-            is_string($this->serviceProviderMetadata[Service\Saml2::METADATA_KEY_ENTITY_ID])
+            !empty($this->serviceProviderMetadata[AbstractSaml2Provider::METADATA_KEY_ENTITY_ID]) &&
+            is_string($this->serviceProviderMetadata[AbstractSaml2Provider::METADATA_KEY_ENTITY_ID])
         ) {
-            return $this->serviceProviderMetadata[Service\Saml2::METADATA_KEY_ENTITY_ID];
+            return $this->serviceProviderMetadata[AbstractSaml2Provider::METADATA_KEY_ENTITY_ID];
         }
 
         throw new UnexpectedValueException('Service provider metadata array does not contain entity ID.');

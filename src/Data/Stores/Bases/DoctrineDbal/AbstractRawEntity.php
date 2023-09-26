@@ -16,14 +16,8 @@ use Throwable;
  */
 abstract class AbstractRawEntity
 {
-    protected array $rawRow;
-    protected AbstractPlatform $abstractPlatform;
-
-    public function __construct(array $rawRow, AbstractPlatform $abstractPlatform)
+    public function __construct(protected array $rawRow, protected AbstractPlatform $abstractPlatform)
     {
-        $this->rawRow = $rawRow;
-        $this->abstractPlatform = $abstractPlatform;
-
         $this->validate($rawRow);
     }
 
@@ -32,11 +26,7 @@ abstract class AbstractRawEntity
      */
     abstract protected function validate(array $rawRow): void;
 
-    /**
-     * @param mixed $value
-     * @return DateTimeImmutable
-     */
-    protected function resolveDateTimeImmutable($value): DateTimeImmutable
+    protected function resolveDateTimeImmutable(mixed $value): DateTimeImmutable
     {
         try {
             /** @var DateTimeImmutable $dateTimeImmutable */

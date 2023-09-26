@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Data\Providers\ConnectedServices\DoctrineDbal;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider;
 use SimpleSAML\Module\accounting\Data\Providers\ConnectedServices\DoctrineDbal\CurrentDataProvider;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current\Store;
@@ -29,19 +31,19 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 class CurrentDataProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $moduleConfigurationMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $loggerMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $connectedServicesBagMock;
 
@@ -141,6 +143,9 @@ class CurrentDataProviderTest extends TestCase
         $this->prepareMockedInstance()->getConnectedServices('userId');
     }
 
+    /**
+     * @throws StoreException
+     */
     public function testCanGetTracker(): void
     {
         $this->assertInstanceOf(

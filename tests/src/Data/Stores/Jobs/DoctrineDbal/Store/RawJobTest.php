@@ -42,7 +42,7 @@ class RawJobTest extends TestCase
         $this->validRawRow = [
             TableConstants::COLUMN_NAME_ID => 1,
             TableConstants::COLUMN_NAME_PAYLOAD => serialize($this->authenticationEvent),
-            TableConstants::COLUMN_NAME_TYPE => get_class($this->authenticationEvent),
+            TableConstants::COLUMN_NAME_TYPE => $this->authenticationEvent::class,
             TableConstants::COLUMN_NAME_CREATED_AT => '2022-08-17 13:26:12',
         ];
     }

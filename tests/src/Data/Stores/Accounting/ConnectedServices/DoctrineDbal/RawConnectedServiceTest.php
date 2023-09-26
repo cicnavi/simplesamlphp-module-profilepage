@@ -9,7 +9,6 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\RawConnectedService;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\TableConstants;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\EntityTableConstants;

@@ -16,18 +16,11 @@ use Throwable;
 
 class DataProviderBuilder
 {
-    protected ModuleConfiguration $moduleConfiguration;
-    protected LoggerInterface $logger;
-    protected HelpersManager $helpersManager;
-
     public function __construct(
-        ModuleConfiguration $moduleConfiguration,
-        LoggerInterface $logger,
-        HelpersManager $helpersManager
+        protected ModuleConfiguration $moduleConfiguration,
+        protected LoggerInterface $logger,
+        protected HelpersManager $helpersManager
     ) {
-        $this->moduleConfiguration = $moduleConfiguration;
-        $this->logger = $logger;
-        $this->helpersManager = $helpersManager;
     }
 
     /**

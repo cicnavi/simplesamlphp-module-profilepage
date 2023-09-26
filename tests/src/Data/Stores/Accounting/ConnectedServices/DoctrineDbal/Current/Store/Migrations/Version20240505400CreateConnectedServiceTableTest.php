@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // phpcs:ignore
 namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current\Store\Migrations;
 

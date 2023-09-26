@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store;
 
 use DateTimeImmutable;
@@ -190,6 +192,7 @@ class RepositoryTest extends TestCase
 
     /**
      * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function testCanUpdateIdp(): void
     {
@@ -205,7 +208,7 @@ class RepositoryTest extends TestCase
         $this->assertSame($this->idpMetadata, $result[TableConstants::TABLE_IDP_COLUMN_NAME_METADATA]);
 
         $this->repository->updateIdp(
-            $result[TableConstants::TABLE_IDP_COLUMN_NAME_ID],
+            (int)$result[TableConstants::TABLE_IDP_COLUMN_NAME_ID],
             'new-idp-metadata',
             'new-idp-metadata-hash'
         );
@@ -300,6 +303,10 @@ class RepositoryTest extends TestCase
         $repository->getSp($this->spEntityIdHash);
     }
 
+    /**
+     * @throws StoreException
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function testCanUpdateSp(): void
     {
         $this->repository->insertSp(
@@ -314,7 +321,7 @@ class RepositoryTest extends TestCase
         $this->assertSame($this->spMetadata, $result[TableConstants::TABLE_SP_COLUMN_NAME_METADATA]);
 
         $this->repository->updateSp(
-            $result[TableConstants::TABLE_SP_COLUMN_NAME_ID],
+            (int)$result[TableConstants::TABLE_SP_COLUMN_NAME_ID],
             'new-sp-metadata',
             'new-sp-metadata-hash'
         );

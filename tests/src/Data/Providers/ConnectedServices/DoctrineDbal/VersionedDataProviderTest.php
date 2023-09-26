@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Data\Providers\ConnectedServices\DoctrineDbal;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Data\Providers\ConnectedServices\DoctrineDbal\VersionedDataProvider;
 use PHPUnit\Framework\TestCase;
@@ -30,19 +31,19 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 class VersionedDataProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $moduleConfigurationMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $loggerMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeMock;
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $connectedServicesBagMock;
     protected function setUp(): void

@@ -22,6 +22,9 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  */
 class AuthenticationEventStateResolverTest extends TestCase
 {
+    /**
+     * @throws StateException
+     */
     public function testCanResolveState(): void
     {
         $resolver = new AuthenticationEventStateResolver();

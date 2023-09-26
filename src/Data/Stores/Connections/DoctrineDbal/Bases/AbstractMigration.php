@@ -13,15 +13,13 @@ use Throwable;
 
 abstract class AbstractMigration implements MigrationInterface
 {
-    protected Connection $connection;
     protected AbstractSchemaManager $schemaManager;
 
     /**
      * @throws StoreException
      */
-    public function __construct(Connection $connection)
+    public function __construct(protected Connection $connection)
     {
-        $this->connection = $connection;
         try {
             $this->schemaManager = $this->connection->dbal()->createSchemaManager();
         } catch (Throwable $exception) {
@@ -41,15 +39,12 @@ abstract class AbstractMigration implements MigrationInterface
             $throwable->getMessage()
         );
 
-        return new MigrationException($message, (int) $throwable->getCode(), $throwable);
+        /** @noinspection PhpCastIsUnnecessaryInspection */
+        return new MigrationException($message, (int)$throwable->getCode(), $throwable);
     }
 
     /**
      * Prepare prefixed table name which will include table prefix from connection, local table prefix, and table name.
-     *
-     * @param string $tableName
-     * @param string|null $tablePrefixOverride
-     * @return string
      */
     protected function preparePrefixedTableName(string $tableName, string $tablePrefixOverride = null): string
     {

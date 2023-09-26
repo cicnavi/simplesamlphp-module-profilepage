@@ -34,7 +34,7 @@ class InstanceBuilderUsingModuleConfigurationTest extends TestCase
             }
         };
 
-        $this->stubClass = get_class($this->stub);
+        $this->stubClass = $this->stub::class;
 
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $this->loggerStub = $this->createStub(LoggerInterface::class);

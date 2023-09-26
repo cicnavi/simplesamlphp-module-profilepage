@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Current\Store;
 
 use DateInterval;

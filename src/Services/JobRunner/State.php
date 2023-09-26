@@ -11,9 +11,6 @@ class State
 {
     public const MAX_NUMBER_OF_MESSAGES_TO_KEEP = 100;
     public const DEFAULT_NUMBER_OF_MESSAGES_TO_KEEP = 10;
-
-    protected int $jobRunnerId;
-    protected ?DateTimeImmutable $startedAt;
     protected DateTimeImmutable $updatedAt;
     protected ?DateTimeImmutable $endedAt = null;
     protected int $successfulJobsProcessed = 0;
@@ -26,13 +23,11 @@ class State
     protected bool $isGracefulInterruptInitiated = false;
 
     public function __construct(
-        int $jobRunnerId,
-        DateTimeImmutable $startedAt = null,
+        protected int $jobRunnerId,
+        protected ?DateTimeImmutable $startedAt = null,
         DateTimeImmutable $updatedAt = null,
         int $numberOfStatusMessagesToKeep = self::DEFAULT_NUMBER_OF_MESSAGES_TO_KEEP
     ) {
-        $this->jobRunnerId = $jobRunnerId;
-        $this->startedAt = $startedAt;
         $this->updatedAt = $updatedAt ?? new DateTimeImmutable();
 
         $this->numberOfStatusMessagesToKeep =
@@ -59,7 +54,6 @@ class State
 
     /**
      * Set startedAt if not already set.
-     * @param DateTimeImmutable $startedAt
      * @return bool True if set, false otherwise.
      */
     public function setStartedAt(DateTimeImmutable $startedAt): bool
@@ -80,9 +74,6 @@ class State
         return $this->updatedAt;
     }
 
-    /**
-     * @param DateTimeImmutable $updatedAt
-     */
     public function setUpdatedAt(DateTimeImmutable $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
@@ -90,7 +81,6 @@ class State
 
     /**
      * Set endedAt if not already set.
-     * @param DateTimeImmutable $endedAt
      * @return bool True if set, false otherwise.
      */
     public function setEndedAt(DateTimeImmutable $endedAt): bool
@@ -195,9 +185,6 @@ class State
         return $this->isGracefulInterruptInitiated;
     }
 
-    /**
-     * @param bool $isGracefulInterruptInitiated
-     */
     public function setIsGracefulInterruptInitiated(bool $isGracefulInterruptInitiated): void
     {
         $this->isGracefulInterruptInitiated = $isGracefulInterruptInitiated;

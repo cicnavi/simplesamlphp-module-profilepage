@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\Module\accounting\Data\Trackers\ConnectedServices\DoctrineDbal;
 
 use DateInterval;
+use Doctrine\DBAL\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -90,6 +91,7 @@ class VersionedDataTrackerTest extends TestCase
 
     /**
      * @throws StoreException
+     * @throws Exception
      */
     public function testProcessCallsPersistOnDataStore(): void
     {

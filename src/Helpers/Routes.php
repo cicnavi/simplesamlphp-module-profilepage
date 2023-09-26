@@ -9,6 +9,8 @@ use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Utils\HTTP;
 
+use function sprintf;
+
 class Routes
 {
     public const PATH_ADMIN_CONFIGURATION_STATUS = 'admin/configuration/status';
@@ -34,7 +36,7 @@ class Routes
             // @codeCoverageIgnoreStart
             // SSP dumps some exception context data when simulating exception, so will ignore coverage for this...
         } catch (CriticalConfigurationError $exception) {
-            $message = \sprintf('Could not load SimpleSAMLphp base URL. Error was: %s', $exception->getMessage());
+            $message = sprintf('Could not load SimpleSAMLphp base URL. Error was: %s', $exception->getMessage());
             throw new InvalidConfigurationException($message, $exception->getCode(), $exception);
             // @codeCoverageIgnoreEnd
         }
@@ -52,9 +54,11 @@ class Routes
                 (
                     ! $this->arr->isAssociative($fragmentParameters) ?
                     $fragmentParameters :
-                    array_map(function ($key, string $value): string {
-                        return $key . '=' . $value;
-                    }, array_keys($fragmentParameters), $fragmentParameters)
+                    array_map(
+                        fn($key, string $value): string => $key . '=' . $value,
+                        array_keys($fragmentParameters),
+                        $fragmentParameters
+                    )
                 )
             );
         }

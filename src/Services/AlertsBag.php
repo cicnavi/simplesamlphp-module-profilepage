@@ -11,15 +11,15 @@ use SimpleSAML\Session;
 
 class AlertsBag
 {
-    protected Session $sspSession;
-
     public const SESSION_KEY = 'alerts';
 
-    public function __construct(Session $session)
+    public function __construct(protected Session $sspSession)
     {
-        $this->sspSession = $session;
     }
 
+    /**
+     * @throws Exception
+     */
     public function isNotEmpty(): bool
     {
         return ! empty($this->getAll(false));
@@ -27,6 +27,7 @@ class AlertsBag
 
     /**
      * @throws Exception
+     * @throws \Exception
      */
     public function getAll(bool $reinitialize = true): array
     {
@@ -43,6 +44,10 @@ class AlertsBag
         return $alerts;
     }
 
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
     public function put(Alert $alert): void
     {
         $this->sspSession->setData(

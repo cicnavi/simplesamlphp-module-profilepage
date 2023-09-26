@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current\Store;
 
 use DateInterval;
@@ -264,7 +266,7 @@ class RepositoryTest extends TestCase
             $resultArray[1]
             [EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
         );
-        // New SP with new user attributes version..
+        // New SP with new user attributes version...
         $this->assertSame(
             $userAttributesNew,
             $resultArray[1]

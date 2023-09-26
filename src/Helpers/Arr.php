@@ -18,12 +18,7 @@ class Arr
         ksort($array);
     }
 
-    /**
-     * @param array $array
-     * @param int|string $key
-     * @return array
-     */
-    public function groupByValue(array $array, $key): array
+    public function groupByValue(array $array, int|string $key): array
     {
         return array_reduce($array, function (array $carry, array $item) use ($key) {
             /** @psalm-suppress MixedArrayOffset, MixedArrayAssignment */
@@ -38,12 +33,7 @@ class Arr
         return $keys !== array_keys($keys);
     }
 
-    /**
-     * @param array $array
-     * @param  string|int  ...$keys
-     * @return array|null
-     */
-    public function getNestedElementByKey(array $array, ...$keys): ?array
+    public function getNestedElementByKey(array $array, string|int ...$keys): ?array
     {
         $element = $array;
 

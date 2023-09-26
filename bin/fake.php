@@ -1,15 +1,19 @@
 #!/usr/bin/env php
 <?php
-// TODO mivanci remove this file before release
+
 declare(strict_types=1);
+
+exit(1); // This script was used to generate fake data...
 
 use SimpleSAML\Module\accounting\Data\Trackers\Activity\DoctrineDbal\CurrentDataTracker as ActivityTracker;
 use SimpleSAML\Module\accounting\Data\Trackers\ConnectedServices\DoctrineDbal\CurrentDataTracker as ConnectedServicesTracker;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2;
+use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\Logger;
+
 
 require 'vendor/autoload.php';
 
@@ -19,12 +23,14 @@ $configDir = __DIR__ . '/config';
 putenv("SIMPLESAMLPHP_CONFIG_DIR=$configDir");
 $moduleConfiguration = new ModuleConfiguration();
 $sampleUsers = include 'sampleUsers.php';
+/** @noinspection PhpUnhandledExceptionInspection */
 $activityTracker = new ActivityTracker($moduleConfiguration, $logger);
+/** @noinspection PhpUnhandledExceptionInspection */
 $connectedServicesTracker = new ConnectedServicesTracker($moduleConfiguration, $logger);
 $start = new DateTime();
 $newLine = "\n";
 
-echo "Start: " . $start->format(DateTime::ATOM);
+echo "Start: " . $start->format(DateTimeInterface::ATOM);
 echo $newLine;
 
 $options = getopt('c:o:a::');
@@ -33,27 +39,34 @@ $spMetadata = [];
 
 if (isset($options['c'])) {
     $numberOfItems = max((int) $options['c'], 100);
+    /** @noinspection PhpUnhandledExceptionInspection */
     doSampleUsers($numberOfItems, $spMetadata, $sampleUsers, $activityTracker, $connectedServicesTracker);
 }
 
 if (isset($options['o'])) {
     $numberOfUsers = max((int) $options['o'], 100);
     $numberOfAuthentications = (int) ($options['a'] ?? 1000);
+    /** @noinspection PhpUnhandledExceptionInspection */
     doRandomUsers($numberOfUsers, $numberOfAuthentications, $spMetadata, $activityTracker, $connectedServicesTracker);
 }
 
 
 echo $newLine;
-echo 'End: ' . (new DateTime())->format(DateTime::ATOM);
+echo 'End: ' . (new DateTime())->format(DateTimeInterface::ATOM);
 echo $newLine;
 
+/**
+ * @throws StoreException
+ * @throws \Doctrine\DBAL\Exception
+ */
 function doSampleUsers(
         int $numberOfAuthentications,
         array &$spMetadata,
         $sampleUsers,
         ActivityTracker $activityTracker,
         ConnectedServicesTracker $connectedServicesTracker
-) {
+): void
+{
     echo "Doing $numberOfAuthentications authentications for sample users. \n";
 
     if (count($spMetadata) < 100) {
@@ -87,13 +100,18 @@ function doSampleUsers(
 }
 
 
+/**
+ * @throws StoreException
+ * @throws \Doctrine\DBAL\Exception
+ */
 function doRandomUsers(
     int $numberOfUsers,
     int $numberOfAuthentications,
     array $spMetadata,
     ActivityTracker $activityTracker,
     ConnectedServicesTracker $connectedServicesTracker
-) {
+): void
+{
     echo "Doing $numberOfUsers random users with $numberOfAuthentications authentications.\n";
 
     while (count($spMetadata) < 100) {

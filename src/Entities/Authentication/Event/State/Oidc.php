@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 
-use DateTimeImmutable;
 use SimpleSAML\Module\accounting\Entities\Providers\Identity;
 use SimpleSAML\Module\accounting\Entities\Providers\Service;
 use SimpleSAML\Module\accounting\Entities\Authentication\Protocol;

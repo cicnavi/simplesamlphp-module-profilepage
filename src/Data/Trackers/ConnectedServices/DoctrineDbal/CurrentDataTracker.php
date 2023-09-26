@@ -36,6 +36,9 @@ class CurrentDataTracker extends CurrentDataProvider implements DataTrackerInter
         $this->store->persist($authenticationEvent);
     }
 
+    /**
+     * @throws StoreException
+     */
     public function enforceDataRetentionPolicy(DateInterval $retentionPolicy): void
     {
         $dateTime = (new DateTimeImmutable())->sub($retentionPolicy);

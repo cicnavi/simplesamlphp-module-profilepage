@@ -86,10 +86,10 @@ class Repository extends BaseRepository
         try {
             $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-            $firstAuthenticationAt = $firstAuthenticationAt ?? new DateTimeImmutable();
-            $lastAuthenticationAt = $lastAuthenticationAt ?? $firstAuthenticationAt;
+            $firstAuthenticationAt ??= new DateTimeImmutable();
+            $lastAuthenticationAt ??= $firstAuthenticationAt;
             $count = max($count, 1);
-            $createdUpdatedAt = $createdUpdatedAt ?? new DateTimeImmutable();
+            $createdUpdatedAt ??= new DateTimeImmutable();
 
             $queryBuilder->insert($this->tableNameConnectedService)
                 ->values(
@@ -205,7 +205,7 @@ class Repository extends BaseRepository
         DateTimeImmutable $happenedAt = null
     ): void {
         try {
-            $happenedAt = $happenedAt ?? new DateTimeImmutable();
+            $happenedAt ??= new DateTimeImmutable();
 
             $selectConnectedServiceVersionsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
 

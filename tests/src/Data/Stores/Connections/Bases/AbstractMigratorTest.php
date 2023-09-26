@@ -136,7 +136,7 @@ class AbstractMigratorTest extends TestCase
 
         $this->expectException(MigrationException::class);
 
-        $migrator->runMigrationClasses([get_class($migration)]);
+        $migrator->runMigrationClasses([$migration::class]);
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store;
 
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\HashDecoratedState;

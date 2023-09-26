@@ -73,7 +73,7 @@ final class StateArrays
         'saml:NameIDFormat' => null,
         'saml:AllowCreate' => true,
         'saml:Extensions' => null,
-        'saml:AuthnRequestReceivedAt' => 1660912195.505402,
+        'saml:AuthnRequestReceivedAt' => 1_660_912_195.505402,
         'saml:RequestedAuthnContext' => null,
         'core:IdP' => 'saml2:https://localhost.someone.from.hr:9074/simplesamlphp/simplesamlphp-2-beta-git/saml2/idp/metadata.php',
         'core:SP' => 'https://pc-example.org.hr:9074/simplesamlphp/simplesamlphp-2-beta-git/module.php/saml/sp/metadata.php/default-sp',
@@ -100,8 +100,8 @@ final class StateArrays
             'updatedAt' => [0 => '123456789',],
         ],
         'Authority' => 'example-userpass',
-        'AuthnInstant' => 1660911943,
-        'Expire' => 1660940743,
+        'AuthnInstant' => 1_660_911_943,
+        'Expire' => 1_660_940_743,
         'ReturnCall' => [0 => '\\SimpleSAML\\IdP', 1 => 'postAuthProc',],
         'Destination' => [
             'SingleLogoutService' => [
@@ -174,8 +174,8 @@ final class StateArrays
             'displayName' => ['testname123'],
         ],
         'Authority' => 'example-userpass',
-        'AuthnInstant' => 1677066265,
-        'Expire' => 1677095065,
+        'AuthnInstant' => 1_677_066_265,
+        'Expire' => 1_677_095_065,
         'LogoutHandlers' => [
             [
                 'SimpleSAML\Module\oidc\Controller\LogoutController',

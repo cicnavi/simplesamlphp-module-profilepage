@@ -10,10 +10,6 @@ use SimpleSAML\Module\accounting\Services\JobRunner;
 use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Module\accounting\Services\TrackerResolver;
 
-/**
- * @param array $cronInfo
- * @return void
- */
 function accounting_hook_cron(array &$cronInfo): void
 {
     $moduleConfiguration = new ModuleConfiguration();

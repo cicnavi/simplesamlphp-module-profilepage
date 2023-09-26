@@ -105,6 +105,9 @@ class DataProviderBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testBuildActivityProviderThrowsForInvalidClass(): void
     {
         $this->expectException(UnexpectedValueException::class);
@@ -112,6 +115,9 @@ class DataProviderBuilderTest extends TestCase
         $this->prepareMockedInstance()->buildActivityProvider(ConnectedServicesVersionedDataProviderAlias::class);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCanBuildConnectedServicesProvider(): void
     {
         $this->assertInstanceOf(
@@ -122,6 +128,9 @@ class DataProviderBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testBuildConnectedServicesProviderThrowsForInvalidClass(): void
     {
         $this->expectException(UnexpectedValueException::class);

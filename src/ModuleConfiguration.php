@@ -51,7 +51,7 @@ class ModuleConfiguration
      */
     public function __construct(string $fileName = null, array $overrides = [])
     {
-        $fileName = $fileName ?? self::FILE_NAME;
+        $fileName ??= self::FILE_NAME;
 
         $fullConfigArray = array_merge(Configuration::getConfig($fileName)->toArray(), $overrides);
 
@@ -100,7 +100,7 @@ class ModuleConfiguration
 
         try {
             return new DateInterval($value);
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             $message = sprintf('Can not create DateInterval instance using value %s as parameter.', $value);
             throw new InvalidConfigurationException($message);
         }
@@ -175,11 +175,8 @@ class ModuleConfiguration
 
     /**
      * Get configuration option from module configuration file.
-     *
-     * @param string $option
-     * @return mixed
      */
-    public function get(string $option)
+    public function get(string $option): mixed
     {
         if (!$this->configuration->hasValue($option)) {
             throw new InvalidConfigurationException(
@@ -474,7 +471,7 @@ class ModuleConfiguration
 
         try {
             return new DateInterval($value);
-        } catch (Throwable $exception) {
+        } catch (Throwable) {
             $message = sprintf('Can not create DateInterval instance using value %s as parameter.', $value);
             throw new InvalidConfigurationException($message);
         }

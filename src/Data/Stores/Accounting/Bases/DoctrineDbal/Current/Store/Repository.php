@@ -102,7 +102,7 @@ class Repository
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new DateTimeImmutable();
+        $createdAt ??= new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameIdp)
             ->values(
@@ -189,7 +189,7 @@ class Repository
      * @throws StoreException
      */
     public function updateIdp(
-        string $idpId,
+        int $idpId,
         string $metadata,
         string $metadataHashSha256,
         DateTimeImmutable $updatedAt = null
@@ -197,7 +197,7 @@ class Repository
         try {
             $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-            $updatedAt = $updatedAt ?? new DateTimeImmutable();
+            $updatedAt ??= new DateTimeImmutable();
 
             $queryBuilder->update($this->tableNameIdp)
                 ->set(
@@ -256,7 +256,7 @@ class Repository
     ): void {
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-        $createdAt = $createdAt ?? new DateTimeImmutable();
+        $createdAt ??= new DateTimeImmutable();
 
         $queryBuilder->insert($this->tableNameSp)
             ->values(
@@ -315,7 +315,7 @@ class Repository
         try {
             $queryBuilder = $this->connection->dbal()->createQueryBuilder();
 
-            $updatedAt = $updatedAt ?? new DateTimeImmutable();
+            $updatedAt ??= new DateTimeImmutable();
 
             $queryBuilder->update($this->tableNameSp)
                 ->set(

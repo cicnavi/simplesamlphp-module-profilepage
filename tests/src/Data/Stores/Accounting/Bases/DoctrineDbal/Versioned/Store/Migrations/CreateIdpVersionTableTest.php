@@ -17,7 +17,7 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 /**
  * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Migrations\CreateIdpVersionTable
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection *
+ * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
  */
 class CreateIdpVersionTableTest extends TestCase
 {

@@ -22,8 +22,6 @@ abstract class AbstractMigrator
     }
 
     /**
-     * @param string $directory
-     * @param string $namespace
      * @return class-string[]
      */
     public function gatherMigrationClassesFromDirectory(string $directory, string $namespace): array
@@ -46,7 +44,7 @@ abstract class AbstractMigrator
             try {
                 $this->validateMigrationClass($file);
                 return true;
-            } catch (InvalidValueException $exception) {
+            } catch (InvalidValueException) {
                 return false;
             }
         });
@@ -93,11 +91,6 @@ abstract class AbstractMigrator
         );
     }
 
-    /**
-     * @param string $directory
-     * @param string $namespace
-     * @return bool
-     */
     public function hasNonImplementedMigrationClasses(string $directory, string $namespace): bool
     {
         return ! empty($this->getNonImplementedMigrationClasses($directory, $namespace));

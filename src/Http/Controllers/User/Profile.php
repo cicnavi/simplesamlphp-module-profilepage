@@ -8,31 +8,21 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Auth\Simple;
 use SimpleSAML\Configuration as SspConfiguration;
 use SimpleSAML\Error\ConfigurationError;
-use SimpleSAML\Error\CriticalConfigurationError;
-use SimpleSAML\HTTP\RunnableResponse;
 use SimpleSAML\Locale\Translate;
-use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\accounting\Data\Providers\Builders\DataProviderBuilder;
-use SimpleSAML\Module\accounting\Data\Providers\Interfaces\ActivityInterface;
-use SimpleSAML\Module\accounting\Data\Providers\Interfaces\DataProviderInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc;
 use SimpleSAML\Module\accounting\Entities\ConnectedService;
 use SimpleSAML\Module\accounting\Entities\User;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Helpers\Attributes;
-use SimpleSAML\Module\accounting\Helpers\ProviderResolver;
 use SimpleSAML\Module\accounting\Helpers\Routes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\ModuleConfiguration\ConnectionType;
 use SimpleSAML\Module\accounting\Services\AlertsBag;
 use SimpleSAML\Module\accounting\Services\CsrfToken;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\MenuManager;
 use SimpleSAML\Module\accounting\Services\SspModuleManager;
-use SimpleSAML\Module\oidc\Services\OidcOpenIdProviderMetadataService;
 use SimpleSAML\Session;
-use SimpleSAML\Utils\Config\Metadata;
 use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,10 +35,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Profile
 {
-    protected ModuleConfiguration $moduleConfiguration;
-    protected SspConfiguration $sspConfiguration;
-    protected Session $session;
-    protected LoggerInterface $logger;
     protected string $defaultAuthenticationSource;
     protected Simple $authSimple;
     protected DataProviderBuilder $dataProviderBuilder;
@@ -60,22 +46,22 @@ class Profile
     protected AlertsBag $alertsBag;
 
     /**
-     * @param ModuleConfiguration $moduleConfiguration
-     * @param SspConfiguration $sspConfiguration
      * @param Session $session The current user session.
-     * @param LoggerInterface $logger
      * @param Simple|null $authSimple
      * @param DataProviderBuilder|null $authenticationDataProviderBuilder
      * @param HelpersManager|null $helpersManager
      * @param SspModuleManager|null $sspModuleManager
      * @param CsrfToken|null $csrfToken
      * @param AlertsBag|null $alertsBag
+     * @throws \Exception
+     * @throws \Exception
+     * @throws \Exception
      */
     public function __construct(
-        ModuleConfiguration $moduleConfiguration,
-        SspConfiguration $sspConfiguration,
-        Session $session,
-        LoggerInterface $logger,
+        protected ModuleConfiguration $moduleConfiguration,
+        protected SspConfiguration $sspConfiguration,
+        protected Session $session,
+        protected LoggerInterface $logger,
         Simple $authSimple = null,
         DataProviderBuilder $authenticationDataProviderBuilder = null,
         HelpersManager $helpersManager = null,
@@ -83,11 +69,6 @@ class Profile
         CsrfToken $csrfToken = null,
         AlertsBag $alertsBag = null
     ) {
-        $this->moduleConfiguration = $moduleConfiguration;
-        $this->sspConfiguration = $sspConfiguration;
-        $this->session = $session;
-        $this->logger = $logger;
-
         $this->defaultAuthenticationSource = $moduleConfiguration->getDefaultAuthenticationSource();
         $this->authSimple = $authSimple ?? new Simple($this->defaultAuthenticationSource, $sspConfiguration, $session);
 
@@ -138,6 +119,7 @@ class Profile
     /**
      * @throws Exception
      * @throws ConfigurationError
+     * @throws \Exception
      */
     public function connectedOrganizations(): Response
     {
@@ -164,15 +146,11 @@ class Profile
         if ($oidc->isEnabled()) {
             // Filter out OIDC service providers and get their entity (client) IDs.
             $oidcClientIds = array_map(
-                function (ConnectedService $connectedService) {
-                    return $connectedService->getServiceProvider()->getEntityId();
-                },
+                fn(ConnectedService $connectedService) => $connectedService->getServiceProvider()->getEntityId(),
                 array_filter(
                     $connectedServiceProviderBag->getAll(),
-                    function (ConnectedService $connectedService) {
-                        return $connectedService->getServiceProvider()->getProtocol()->getDesignation() ===
-                            Oidc::DESIGNATION;
-                    }
+                    fn(ConnectedService $connectedService) =>
+                        $connectedService->getServiceProvider()->getProtocol()->getDesignation() === Oidc::DESIGNATION
                 )
             );
 
@@ -230,6 +208,11 @@ class Profile
         return $template;
     }
 
+    /**
+     * @throws Exception
+     * @throws \Exception
+     * @throws \Exception
+     */
     public function oidcTokenRevokeXhr(Request $request): Response
     {
         $oidc = $this->sspModuleManager->getOidc();

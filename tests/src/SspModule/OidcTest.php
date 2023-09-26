@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\SspModule;
 
+use Exception;
+use PDOStatement;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Database;
@@ -34,9 +38,12 @@ class OidcTest extends TestCase
 
         $this->sspModuleMock = $this->createMock(SspModule::class);
         $this->dateTimeMock = $this->createMock(DateTime::class);
-        $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
+        $this->pdoStatementMock = $this->createMock(PDOStatement::class);
     }
 
+    /**
+     * @throws Exception
+     */
     protected function prepareMockedInstance(): Oidc
     {
         $this->helpersManagerMock->method('getSspModule')->willReturn($this->sspModuleMock);
@@ -50,6 +57,9 @@ class OidcTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCanCreateInstance(): void
     {
         $this->assertInstanceOf(
@@ -58,18 +68,27 @@ class OidcTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testIsEnabled(): void
     {
         $this->sspModuleMock->method('isEnabled')->willReturn(true);
         $this->assertTrue($this->prepareMockedInstance()->isEnabled());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testIsNotEnabled(): void
     {
         $this->sspModuleMock->method('isEnabled')->willReturn(false);
         $this->assertFalse($this->prepareMockedInstance()->isEnabled());
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCanGetContainer(): void
     {
         $this->assertInstanceOf(
@@ -78,6 +97,9 @@ class OidcTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetUsersAccessTokens(): void
     {
         $this->pdoStatementMock->method('fetchAll')->willReturn(['sample']);
@@ -88,6 +110,9 @@ class OidcTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetUsersAccessTokensEmpty(): void
     {
         $this->databaseMock->expects($this->once())->method('read');
@@ -96,12 +121,19 @@ class OidcTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testRevokeUsersAccessToken(): void
     {
+        $this->databaseMock->method('write')->willReturn(1);
         $this->databaseMock->expects($this->once())->method('write');
         $this->prepareMockedInstance()->revokeUsersAccessToken('userId', 'accessTokenId');
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetUsersRefreshTokens(): void
     {
         $this->pdoStatementMock->method('fetchAll')->willReturn(['sample']);
@@ -112,6 +144,9 @@ class OidcTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetUsersRefreshTokensEmpty(): void
     {
         $this->databaseMock->expects($this->once())->method('read');
@@ -120,12 +155,19 @@ class OidcTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testRevokeUsersRefreshToken(): void
     {
+        $this->databaseMock->method('write')->willReturn(1);
         $this->databaseMock->expects($this->once())->method('write');
         $this->prepareMockedInstance()->revokeUsersRefreshToken('userId', 'refreshTokenId');
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetClients(): void
     {
         $this->pdoStatementMock->method('fetchAll')->willReturn(['sample']);
@@ -136,6 +178,9 @@ class OidcTest extends TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetClientsEmpty(): void
     {
         $this->databaseMock->expects($this->once())->method('read');

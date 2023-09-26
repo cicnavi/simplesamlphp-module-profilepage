@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\SspModule;
 
+use Exception;
+use PDO;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Database;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
@@ -24,6 +26,9 @@ class Oidc
     protected Container $container;
     protected Database $database;
 
+    /**
+     * @throws Exception
+     */
     public function __construct(
         LoggerInterface $logger = null,
         HelpersManager $helpersManager = null,
@@ -95,7 +100,7 @@ class Oidc
 
         $statement = $this->database->read($sql, $params);
 
-        if (!$data = $statement->fetchAll(\PDO::FETCH_ASSOC)) {
+        if (!$data = $statement->fetchAll(PDO::FETCH_ASSOC)) {
             $this->logger->debug('No OIDC access tokens available for user ID ' . $userId);
             return [];
         }
@@ -103,12 +108,7 @@ class Oidc
         return $data;
     }
 
-    /**
-     * @param string $userId
-     * @param string $accessTokenId
-     * @return false|int
-     */
-    public function revokeUsersAccessToken(string $userId, string $accessTokenId)
+    public function revokeUsersAccessToken(string $userId, string $accessTokenId): false|int
     {
         $sql = sprintf(
             <<<EOF
@@ -167,7 +167,7 @@ class Oidc
 
         $statement = $this->database->read($sql, $params);
 
-        if (!$data = $statement->fetchAll(\PDO::FETCH_ASSOC)) {
+        if (!$data = $statement->fetchAll(PDO::FETCH_ASSOC)) {
             $this->logger->debug('No OIDC refresh tokens available for user ID ' . $userId);
             return [];
         }
@@ -176,11 +176,9 @@ class Oidc
     }
 
     /**
-     * @param string $userId
-     * @param string $refreshTokenId
      * @return false|int
      */
-    public function revokeUsersRefreshToken(string $userId, string $refreshTokenId)
+    public function revokeUsersRefreshToken(string $userId, string $refreshTokenId): bool|int
     {
         $sql = sprintf(
             <<<EOF
@@ -226,7 +224,7 @@ class Oidc
 
         $statement = $this->database->read($sql, $params);
 
-        if (!$data = $statement->fetchAll(\PDO::FETCH_ASSOC)) {
+        if (!$data = $statement->fetchAll(PDO::FETCH_ASSOC)) {
             $this->logger->debug('No OIDC clients available for ' . var_export($clientIds, true));
             return [];
         }

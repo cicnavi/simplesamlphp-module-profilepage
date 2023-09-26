@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Migrations;
 
 use Doctrine\DBAL\Exception;
@@ -26,6 +28,9 @@ class CreateIdpTableTest extends TestCase
     protected Stub $dbalStub;
     protected Stub $schemaManagerStub;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
 

@@ -1,18 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Services\AlertsBag;
 
 class Alert
 {
-    protected string $message;
-    protected string $level;
-
-    public function __construct(
-        string $message,
-        string $level
-    ) {
-        $this->message = $message;
-        $this->level = $level;
+    public function __construct(protected string $message, protected string $level)
+    {
     }
 
     public function getMessage(): string

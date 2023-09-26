@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 //phpcs:ignore
 namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\Migrations;
 
@@ -15,7 +17,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
- * @covers SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\Migrations\Version20220801000700CreateConnectedServiceTable
+ * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\Migrations\Version20220801000700CreateConnectedServiceTable
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
  */

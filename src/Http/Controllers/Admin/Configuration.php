@@ -24,34 +24,24 @@ use Throwable;
  */
 class Configuration
 {
-    protected SspConfiguration $sspConfiguration;
-    protected Session $session;
-    protected LoggerInterface $logger;
     protected Utils\Auth $sspAuthUtils;
-    protected HelpersManager $helpersManager;
 
     /**
      * @throws \SimpleSAML\Error\Exception
      */
     public function __construct(
-        SspConfiguration $sspConfiguration,
-        Session $session,
-        LoggerInterface $logger,
-        HelpersManager $helpersManager,
+        protected SspConfiguration $sspConfiguration,
+        protected Session $session,
+        protected LoggerInterface $logger,
+        protected HelpersManager $helpersManager,
         Utils\Auth $sspAuthUtils = null
     ) {
-        $this->sspConfiguration = $sspConfiguration;
-        $this->session = $session;
-        $this->logger = $logger;
-        $this->helpersManager = $helpersManager;
         $this->sspAuthUtils = $sspAuthUtils ?? new Utils\Auth();
 
         $this->sspAuthUtils->requireAdmin();
     }
 
     /**
-     * @param Request $request
-     * @return Template
      * @throws Exception
      */
     public function status(Request $request): Template
