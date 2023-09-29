@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use Redis;
 use SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore;
 use SimpleSAML\Module\accounting\Data\Stores\Interfaces\JobsStoreInterface;
+use SimpleSAML\Module\accounting\Entities\Authentication\Event\Job;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
@@ -79,7 +80,7 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
     {
         try {
             $listKey = $this->resolveListKeyForType(self::LIST_KEY_JOB, $job->getType());
-            $this->redis->rPush($listKey, serialize($job));
+            $this->redis->rPush($listKey, serialize($job->getRawState()));
         } catch (Throwable $exception) {
             $message = sprintf('Could not add job to Redis list. Error was: %s', $exception->getMessage());
             $this->logger->error($message);
@@ -95,7 +96,7 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
     {
         try {
             $listKey = $this->resolveListKeyForType(self::LIST_KEY_JOB, $type);
-            if (!is_string($serializedJob = $this->redis->lPop($listKey))) {
+            if (!is_string($payload = $this->redis->lPop($listKey))) {
                 return null;
             }
         } catch (Throwable $exception) {
@@ -104,16 +105,16 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
             throw new StoreException($message);
         }
 
-        /** @var JobInterface|false $job */
-        $job = unserialize($serializedJob);
+        /** @var array|false $rawState */
+        $rawState = unserialize($payload);
 
-        if ($job instanceof JobInterface) {
-            return $job;
+        if (is_array($rawState)) {
+            return new Job($rawState);
         }
 
         $message = sprintf(
             'Could not deserialize job entry which was available in Redis. Entry was %s.',
-            $serializedJob
+            $payload
         );
         $this->logger->error($message);
         throw new StoreException($message);
