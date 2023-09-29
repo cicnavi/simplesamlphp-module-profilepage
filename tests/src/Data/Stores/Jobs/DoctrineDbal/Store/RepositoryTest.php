@@ -15,9 +15,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
 use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Repository;
 use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\TableConstants;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
@@ -57,7 +55,7 @@ class RepositoryTest extends TestCase
     protected Stub $loggerServiceStub;
     protected Migrator $migrator;
     protected Stub $factoryStub;
-    protected Stub $payloadStub;
+    protected array $payload = StateArrays::SAML2_FULL;
     protected Stub $jobStub;
     protected Store $jobsStore;
     protected string $jobsTableName;
@@ -79,9 +77,8 @@ class RepositoryTest extends TestCase
         $this->factoryStub->method('buildConnection')->willReturn($this->connection);
         $this->factoryStub->method('buildMigrator')->willReturn($this->migrator);
 
-        $this->payloadStub = $this->createStub(AbstractPayload::class);
         $this->jobStub = $this->createStub(GenericJob::class);
-        $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
+        $this->jobStub->method('getRawState')->willReturn($this->payload);
         $this->jobStub->method('getType')->willReturn(GenericJob::class);
         $this->jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
 
@@ -143,7 +140,7 @@ class RepositoryTest extends TestCase
 
         $invalidType = str_pad('abc', TableConstants::COLUMN_TYPE_LENGTH + 1);
         $jobStub = $this->createStub(GenericJob::class);
-        $jobStub->method('getPayload')->willReturn($this->payloadStub);
+        $jobStub->method('getRawState')->willReturn($this->payload);
         $jobStub->method('getType')->willReturn($invalidType);
         $jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
 
@@ -174,9 +171,8 @@ class RepositoryTest extends TestCase
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
 
-        $payloadStub = $this->createStub(AbstractPayload::class);
         $jobStub = $this->createStub(AbstractJob::class); // Abstract classes can't be initialized...
-        $jobStub->method('getPayload')->willReturn($payloadStub);
+        $jobStub->method('getRawState')->willReturn(StateArrays::SAML2_FULL);
         $jobStub->method('getType')->willReturn(AbstractJob::class);
         $jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
 
@@ -240,8 +236,7 @@ class RepositoryTest extends TestCase
 
         $repository->insert($this->jobStub);
 
-        $authenticationEvent = new Event(new State\Saml2(StateArrays::SAML2_FULL));
-        $authenticationEventJob = new Event\Job($authenticationEvent);
+        $authenticationEventJob = new Event\Job($this->payload);
 
         $repository->insert($authenticationEventJob);
 

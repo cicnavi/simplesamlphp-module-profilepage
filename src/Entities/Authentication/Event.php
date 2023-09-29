@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\accounting\Entities\Authentication;
 
 use DateTimeImmutable;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\Interfaces\StateInterface;
 
-class Event extends AbstractPayload
+class Event
 {
     protected DateTimeImmutable $happenedAt;
 

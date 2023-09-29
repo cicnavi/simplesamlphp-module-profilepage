@@ -163,7 +163,7 @@ class JobRunner
                 /** @var DataTrackerInterface $tracker */
                 foreach ($this->trackers as $tracker) {
                     /** @var Job $job */
-                    $tracker->process($job->getPayload());
+                    $tracker->process($job->getAuthenticationEvent());
                 }
 
                 $this->state->incrementSuccessfulJobsProcessed();

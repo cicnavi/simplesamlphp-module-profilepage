@@ -26,6 +26,7 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use SimpleSAML\Module\accounting\Services\JobRunner;
 use SimpleSAML\Module\accounting\Services\TrackerResolver;
+use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Services\JobRunner
@@ -92,10 +93,9 @@ class JobRunnerTest extends TestCase
      * @var Stub
      */
     protected $jobStub;
-    /**
-     * @var Stub
-     */
-    protected $payloadStub;
+    protected array $payload = StateArrays::SAML2_FULL;
+
+    protected Stub $authenticationEventStub;
 
     protected function setUp(): void
     {
@@ -114,7 +114,7 @@ class JobRunnerTest extends TestCase
         $this->helpersManagerStub = $this->createStub(HelpersManager::class);
         $this->jobsStoreMock = $this->createMock(JobsStoreInterface::class);
         $this->jobStub = $this->createStub(JobInterface::class);
-        $this->payloadStub = $this->createStub(Event::class);
+        $this->authenticationEventStub = $this->createStub(Event::class);
     }
 
     /**
@@ -891,7 +891,8 @@ class JobRunnerTest extends TestCase
         $this->dataTrackerMock->expects($this->once())->method('process');
         $this->trackerResolverMock->method('fromModuleConfiguration')->willReturn([$this->dataTrackerMock]);
 
-        $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
+        $this->jobStub->method('getRawState')->willReturn($this->payload);
+        $this->jobStub->method('getAuthenticationEvent')->willReturn($this->authenticationEventStub);
         $this->jobsStoreMock->method('dequeue')->willReturn($this->jobStub);
         $this->jobsStoreBuilderStub->method('build')->willReturn($this->jobsStoreMock);
 
@@ -953,7 +954,8 @@ class JobRunnerTest extends TestCase
 
         $this->stateStub->method('hasRunStarted')->willReturn(true);
 
-        $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
+        $this->jobStub->method('getRawState')->willReturn($this->payload);
+        $this->jobStub->method('getAuthenticationEvent')->willReturn($this->authenticationEventStub);
         $this->jobsStoreMock->method('dequeue')->willReturn($this->jobStub);
         $this->jobsStoreBuilderStub->method('build')->willReturn($this->jobsStoreMock);
 
@@ -1023,7 +1025,8 @@ class JobRunnerTest extends TestCase
             ->method('process');
         $this->trackerResolverMock->method('fromModuleConfiguration')->willReturn([$this->dataTrackerMock]);
 
-        $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
+        $this->jobStub->method('getRawState')->willReturn($this->payload);
+        $this->jobStub->method('getAuthenticationEvent')->willReturn($this->authenticationEventStub);
         $this->jobsStoreMock->method('dequeue')->willReturn($this->jobStub);
         $this->jobsStoreBuilderStub->method('build')->willReturn($this->jobsStoreMock);
 
@@ -1092,7 +1095,8 @@ class JobRunnerTest extends TestCase
             ->willThrowException(new Exception('test'));
         $this->trackerResolverMock->method('fromModuleConfiguration')->willReturn([$this->dataTrackerMock]);
 
-        $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
+        $this->jobStub->method('getRawState')->willReturn($this->payload);
+        $this->jobStub->method('getAuthenticationEvent')->willReturn($this->authenticationEventStub);
         $this->jobsStoreMock->method('dequeue')->willReturn($this->jobStub);
         $this->jobsStoreMock->expects($this->once())->method('markFailedJob')->with($this->jobStub);
         $this->jobsStoreBuilderStub->method('build')->willReturn($this->jobsStoreMock);

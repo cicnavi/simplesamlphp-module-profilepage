@@ -64,18 +64,18 @@ class Accounting extends ProcessingFilter
         $this->logger->debug('Accounting started.', $state);
 
         try {
-            $authenticationEvent = new Event(
-                $this->helpersManager->getAuthenticationEventStateResolver()->fromStateArray($state)
-            );
-
             if ($this->isAccountingProcessingTypeAsynchronous()) {
                 // Only create authentication event job for later processing...
                 $this->logger->debug('Accounting type is asynchronous, creating job for later processing.');
-                $this->createAuthenticationEventJob($authenticationEvent);
+                $this->createAuthenticationEventJob($state);
                 return;
             }
 
             $this->logger->debug('Accounting type is synchronous, processing now.');
+
+            $authenticationEvent = new Event(
+                $this->helpersManager->getAuthenticationEventStateResolver()->fromStateArray($state)
+            );
 
             foreach ($this->trackerResolver->fromModuleConfiguration() as $trackerClass => $tracker) {
                     $this->logger->debug(sprintf('Processing tracker for class %s.', $trackerClass));
@@ -98,9 +98,9 @@ class Accounting extends ProcessingFilter
     /**
      * @throws StoreException
      */
-    protected function createAuthenticationEventJob(Event $authenticationEvent): void
+    protected function createAuthenticationEventJob(array $state): void
     {
         ($this->jobsStoreBuilder->build($this->moduleConfiguration->getJobsStoreClass()))
-            ->enqueue(new Event\Job($authenticationEvent));
+            ->enqueue(new Event\Job($state));
     }
 }

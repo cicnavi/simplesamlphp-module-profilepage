@@ -59,7 +59,7 @@ class Repository
             )
             ->setParameters(
                 [
-                    Store\TableConstants::COLUMN_NAME_PAYLOAD => serialize($job->getPayload()),
+                    Store\TableConstants::COLUMN_NAME_PAYLOAD => serialize($job->getRawState()),
                     Store\TableConstants::COLUMN_NAME_TYPE => $job->getType(),
                     Store\TableConstants::COLUMN_NAME_CREATED_AT => $job->getCreatedAt(),
                 ],

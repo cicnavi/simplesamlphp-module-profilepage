@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\Module\accounting\Entities\Bases;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
@@ -16,19 +15,14 @@ use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
  */
 class AbstractJobTest extends TestCase
 {
-    protected AbstractPayload $payload;
+    protected array $rawState = [];
 
-    protected function setUp(): void
-    {
-        $this->payload = new class extends AbstractPayload {
-        };
-    }
 
     public function testCanInitializeProperties(): void
     {
         $id = 1;
         $createdAt = new DateTimeImmutable();
-        $job = new class ($this->payload, $id, $createdAt) extends AbstractJob  {
+        $job = new class ($this->rawState, $id, $createdAt) extends AbstractJob  {
             public function getType(): string
             {
                 return self::class;
@@ -38,6 +32,5 @@ class AbstractJobTest extends TestCase
         $this->assertSame($id, $job->getId());
         $this->assertSame($createdAt, $job->getCreatedAt());
         $this->assertSame($job::class, $job->getType());
-        $this->assertInstanceOf(AbstractPayload::class, $job->getPayload());
     }
 }

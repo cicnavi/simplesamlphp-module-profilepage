@@ -15,7 +15,7 @@ use function sprintf;
 class RawJob extends AbstractRawEntity
 {
     protected int $id;
-    protected AbstractPayload $payload;
+    protected array $payload;
     protected string $type;
     protected DateTimeImmutable $createdAt;
 
@@ -69,16 +69,16 @@ class RawJob extends AbstractRawEntity
         }
     }
 
-    protected function resolvePayload(string $rawPayload): AbstractPayload
+    protected function resolvePayload(string $rawPayload): array
     {
         /** @psalm-suppress MixedAssignment - we check the type manually */
         $payload = unserialize($rawPayload);
 
-        if ($payload instanceof AbstractPayload) {
+        if (is_array($payload)) {
             return $payload;
         }
 
-        throw new UnexpectedValueException('Job payload is not instance of AbstractPayload.');
+        throw new UnexpectedValueException('Job payload is not in expected array format.');
     }
 
     /**
@@ -90,9 +90,9 @@ class RawJob extends AbstractRawEntity
     }
 
     /**
-     * @return AbstractPayload
+     * @return array
      */
-    public function getPayload(): AbstractPayload
+    public function getPayload(): array
     {
         return $this->payload;
     }
