@@ -33,7 +33,8 @@ abstract class AbstractCreateJobsTable extends AbstractMigration
                 ->setLength(TableConstants::COLUMN_TYPE_LENGTH);
 
             $table->addColumn('payload', Types::TEXT);
-            $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn('created_at', Types::BIGINT)
+                ->setUnsigned(true);
 
             $table->setPrimaryKey(['id']);
 

@@ -18,10 +18,12 @@ use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
+ * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
  */
 class RedisStoreTest extends TestCase
 {
@@ -219,7 +221,7 @@ class RedisStoreTest extends TestCase
             ->willReturn(['host' => 'sample']);
 
         $this->redisMock->method('lPop')
-            ->willReturn(serialize($this->jobStub));
+            ->willReturn(serialize(StateArrays::SAML2_FULL));
 
         $redisStore = new RedisStore(
             $this->moduleConfigurationStub,

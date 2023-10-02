@@ -47,7 +47,8 @@ class CreateIdpSpUserVersionTable extends AbstractMigration
             $table->addColumn('user_version_id', Types::BIGINT)
                 ->setUnsigned(true);
 
-            $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn('created_at', Types::BIGINT)
+                ->setUnsigned(true);
 
             $table->setPrimaryKey(['id']);
 

@@ -21,18 +21,15 @@ class Repository
     // We user versioned user data, so let's reuse versioned user tables.
     use VersionedRepository\UserVersionManagementTrait;
 
-    protected Connection $connection;
-    protected LoggerInterface $logger;
     protected string $tableNameIdp;
     protected string $tableNameSp;
     protected string $tableNameUser;
     protected string $tableNameUserVersion;
 
-    public function __construct(Connection $connection, LoggerInterface $logger)
-    {
-        $this->connection = $connection;
-        $this->logger = $logger;
-
+    public function __construct(
+        protected Connection $connection,
+        protected LoggerInterface $logger
+    ) {
         $this->tableNameIdp = $this->preparePrefixedTableName(TableConstants::TABLE_NAME_IDP);
         $this->tableNameSp = $this->preparePrefixedTableName(TableConstants::TABLE_NAME_SP);
 
@@ -127,16 +124,16 @@ class Repository
                     TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => $entityIdHashSha256,
                     TableConstants::TABLE_IDP_COLUMN_NAME_METADATA => $metadata,
                     TableConstants::TABLE_IDP_COLUMN_NAME_METADATA_HASH_SHA256 => $metadataHashSha256,
-                    TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT => $createdAt,
-                    TableConstants::TABLE_IDP_COLUMN_NAME_UPDATED_AT => $createdAt,
+                    TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT => $createdAt->getTimestamp(),
+                    TableConstants::TABLE_IDP_COLUMN_NAME_UPDATED_AT => $createdAt->getTimestamp(),
                 ],
                 [
                     TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID => Types::STRING,
                     TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => Types::STRING,
                     TableConstants::TABLE_IDP_COLUMN_NAME_METADATA => Types::STRING,
                     TableConstants::TABLE_IDP_COLUMN_NAME_METADATA_HASH_SHA256 => Types::STRING,
-                    TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
-                    TableConstants::TABLE_IDP_COLUMN_NAME_UPDATED_AT => Types::DATETIMETZ_IMMUTABLE,
+                    TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT => Types::BIGINT,
+                    TableConstants::TABLE_IDP_COLUMN_NAME_UPDATED_AT => Types::BIGINT,
                 ]
             );
 
@@ -224,8 +221,8 @@ class Repository
                 )
                 ->setParameter(
                     TableConstants::TABLE_IDP_COLUMN_NAME_UPDATED_AT,
-                    $updatedAt,
-                    Types::DATETIMETZ_IMMUTABLE
+                    $updatedAt->getTimestamp(),
+                    Types::BIGINT
                 )
                 ->where(
                     $queryBuilder->expr()->and(
@@ -281,16 +278,16 @@ class Repository
                     TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => $entityIdHashSha256,
                     TableConstants::TABLE_SP_COLUMN_NAME_METADATA => $metadata,
                     TableConstants::TABLE_SP_COLUMN_NAME_METADATA_HASH_SHA256 => $metadataHashSha256,
-                    TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT => $createdAt,
-                    TableConstants::TABLE_SP_COLUMN_NAME_UPDATED_AT => $createdAt,
+                    TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT => $createdAt->getTimestamp(),
+                    TableConstants::TABLE_SP_COLUMN_NAME_UPDATED_AT => $createdAt->getTimestamp(),
                 ],
                 [
                     TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID => Types::STRING,
                     TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => Types::STRING,
                     TableConstants::TABLE_SP_COLUMN_NAME_METADATA => Types::STRING,
                     TableConstants::TABLE_SP_COLUMN_NAME_METADATA_HASH_SHA256 => Types::STRING,
-                    TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
-                    TableConstants::TABLE_SP_COLUMN_NAME_UPDATED_AT => Types::DATETIMETZ_IMMUTABLE,
+                    TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT => Types::BIGINT,
+                    TableConstants::TABLE_SP_COLUMN_NAME_UPDATED_AT => Types::BIGINT,
                 ]
             );
 
@@ -342,8 +339,8 @@ class Repository
                 )
                 ->setParameter(
                     TableConstants::TABLE_SP_COLUMN_NAME_UPDATED_AT,
-                    $updatedAt,
-                    Types::DATETIMETZ_IMMUTABLE
+                    $updatedAt->getTimestamp(),
+                    Types::BIGINT
                 )
                 ->where(
                     $queryBuilder->expr()->and(

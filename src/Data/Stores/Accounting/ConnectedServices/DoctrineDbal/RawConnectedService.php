@@ -26,11 +26,11 @@ class RawConnectedService extends AbstractRawEntity
         ];
 
         $this->lastAuthenticationAt = $this->resolveDateTimeImmutable(
-            $rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT]
+            (int)$rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT]
         );
 
         $this->firstAuthenticationAt = $this->resolveDateTimeImmutable(
-            $rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT]
+            (int)$rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT]
         );
 
         $this->serviceProviderMetadata = $this->resolveServiceProviderMetadata(
@@ -112,17 +112,17 @@ class RawConnectedService extends AbstractRawEntity
         }
 
         /** @noinspection DuplicatedCode */
-        if (! is_string($rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT])) {
+        if (! is_numeric($rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT])) {
             $message = sprintf(
-                'Column %s must be string.',
+                'Column %s must be numeric.',
                 EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT
             );
             throw new UnexpectedValueException($message);
         }
 
-        if (! is_string($rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT])) {
+        if (! is_numeric($rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT])) {
             $message = sprintf(
-                'Column %s must be string.',
+                'Column %s must be numeric.',
                 EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT
             );
             throw new UnexpectedValueException($message);

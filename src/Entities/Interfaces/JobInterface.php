@@ -13,8 +13,6 @@ interface JobInterface
 
     public function getRawState(): array;
 
-    public function setRawState(array $rawState): void;
-
     public function getType(): string;
 
     public function getCreatedAt(): DateTimeImmutable;

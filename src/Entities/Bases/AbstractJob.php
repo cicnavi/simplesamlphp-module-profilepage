@@ -37,11 +37,6 @@ abstract class AbstractJob implements JobInterface
         return $this->rawState;
     }
 
-    public function setRawState(array $rawState): void
-    {
-        $this->rawState = $rawState;
-    }
-
     /**
      * @throws StateException
      */

@@ -7,6 +7,7 @@ namespace SimpleSAML\Module\accounting\Helpers;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 
 class DateTime
 {

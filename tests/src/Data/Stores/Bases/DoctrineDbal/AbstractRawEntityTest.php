@@ -50,23 +50,10 @@ class AbstractRawEntityTest extends TestCase
             protected function validate(
                 array $rawRow
             ): void {
-                $this->resolveDateTimeImmutable('2022-09-21 14:49:20');
+                $this->resolveDateTimeImmutable(1696014686);
             }
         };
 
         $this->assertInstanceOf(AbstractRawEntity::class, $rawEntityInstance);
-    }
-
-    public function testThrowsForInvalidDateTime(): void
-    {
-        $this->expectException(UnexpectedValueException::class);
-
-        new class ($this->rawRow, $this->abstractPlatformStub) extends AbstractRawEntity {
-            protected function validate(
-                array $rawRow
-            ): void {
-                $this->resolveDateTimeImmutable('invalid');
-            }
-        };
     }
 }

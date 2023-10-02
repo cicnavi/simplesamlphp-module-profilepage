@@ -30,7 +30,7 @@ class RawActivity extends AbstractRawEntity
         );
 
         $this->happenedAt = $this->resolveDateTimeImmutable(
-            $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT]
+            (int)$rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT]
         );
 
         $this->clientIpAddress = empty($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]) ?
@@ -117,9 +117,9 @@ class RawActivity extends AbstractRawEntity
             throw new UnexpectedValueException($message);
         }
 
-        if (! is_string($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT])) {
+        if (! is_numeric($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT])) {
             $message = sprintf(
-                'Column %s must be string.',
+                'Column %s must be numeric.',
                 EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT
             );
             throw new UnexpectedValueException($message);

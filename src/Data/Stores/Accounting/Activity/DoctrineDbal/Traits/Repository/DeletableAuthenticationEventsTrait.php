@@ -24,7 +24,7 @@ trait DeletableAuthenticationEventsTrait
                 ->where(
                     $queryBuilder->expr()->lt(
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
-                        $queryBuilder->createNamedParameter($dateTime, Types::DATETIME_IMMUTABLE)
+                        $queryBuilder->createNamedParameter($dateTime->getTimestamp(), Types::BIGINT)
                     )
                 )->executeStatement();
         } catch (Throwable $exception) {

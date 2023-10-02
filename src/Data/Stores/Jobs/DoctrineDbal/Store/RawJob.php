@@ -26,7 +26,7 @@ class RawJob extends AbstractRawEntity
         $this->id = (int)$rawRow[TableConstants::COLUMN_NAME_ID];
         $this->payload = $this->resolvePayload((string)$rawRow[TableConstants::COLUMN_NAME_PAYLOAD]);
         $this->type = (string)$rawRow[TableConstants::COLUMN_NAME_TYPE];
-        $this->createdAt = $this->resolveDateTimeImmutable($rawRow[TableConstants::COLUMN_NAME_CREATED_AT]);
+        $this->createdAt = $this->resolveDateTimeImmutable((int)$rawRow[TableConstants::COLUMN_NAME_CREATED_AT]);
     }
 
     protected function validate(array $rawRow): void
@@ -62,9 +62,9 @@ class RawJob extends AbstractRawEntity
             );
         }
 
-        if (! is_string($rawRow[TableConstants::COLUMN_NAME_CREATED_AT])) {
+        if (! is_numeric($rawRow[TableConstants::COLUMN_NAME_CREATED_AT])) {
             throw new UnexpectedValueException(
-                sprintf('Column %s must be string.', TableConstants::COLUMN_NAME_CREATED_AT)
+                sprintf('Column %s must be numeric.', TableConstants::COLUMN_NAME_CREATED_AT)
             );
         }
     }

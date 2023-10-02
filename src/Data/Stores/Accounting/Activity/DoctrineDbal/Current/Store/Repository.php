@@ -75,23 +75,21 @@ class Repository extends BaseRepository
                             $spId,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_USER_VERSION_ID =>
                             $userVersionId,
-                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT => $happenedAt,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT =>
+                            $happenedAt->getTimestamp(),
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS => $clientIpAddress,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =>
                             $authenticationProtocolDesignation,
-                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT => $createdAt,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT => $createdAt->getTimestamp(),
                     ],
                     [
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_SP_ID => Types::BIGINT,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_USER_VERSION_ID => Types::BIGINT,
-                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT =>
-                            Types::DATETIMETZ_IMMUTABLE,
-                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS =>
-                            Types::STRING,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT => Types::BIGINT,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CLIENT_IP_ADDRESS => Types::STRING,
                         TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION =>
                             Types::STRING,
-                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT =>
-                            Types::DATETIMETZ_IMMUTABLE,
+                        TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_CREATED_AT => Types::BIGINT,
                     ]
                 );
 
@@ -185,7 +183,7 @@ class Repository extends BaseRepository
                 ->orderBy(
                     //'cae.id',
                     TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
-                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_ID,
+                    TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
                     'DESC'
                 )
             ->setMaxResults($maxResults)

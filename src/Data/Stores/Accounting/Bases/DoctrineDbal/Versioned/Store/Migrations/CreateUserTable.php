@@ -46,7 +46,8 @@ class CreateUserTable extends AbstractMigration
                 ->setLength(BaseTableConstantsAlias::COLUMN_HASH_SHA265_HEXITS_LENGTH)
                 ->setFixed(true);
 
-            $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn('created_at', Types::BIGINT)
+                ->setUnsigned(true);
 
             $table->setPrimaryKey(['id']);
 

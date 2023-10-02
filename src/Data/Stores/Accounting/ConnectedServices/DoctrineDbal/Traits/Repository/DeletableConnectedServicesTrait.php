@@ -24,7 +24,7 @@ trait DeletableConnectedServicesTrait
                 ->where(
                     $queryBuilder->expr()->lt(
                         TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT,
-                        $queryBuilder->createNamedParameter($dateTime, Types::DATETIME_IMMUTABLE)
+                        $queryBuilder->createNamedParameter($dateTime->getTimestamp(), Types::BIGINT)
                     )
                 )->executeStatement();
         } catch (Throwable $exception) {

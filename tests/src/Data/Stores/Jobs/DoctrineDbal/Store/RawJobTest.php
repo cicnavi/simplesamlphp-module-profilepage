@@ -43,7 +43,7 @@ class RawJobTest extends TestCase
             TableConstants::COLUMN_NAME_ID => 1,
             TableConstants::COLUMN_NAME_PAYLOAD => serialize(StateArrays::SAML2_FULL),
             TableConstants::COLUMN_NAME_TYPE => $this->authenticationEvent::class,
-            TableConstants::COLUMN_NAME_CREATED_AT => '2022-08-17 13:26:12',
+            TableConstants::COLUMN_NAME_CREATED_AT => 1645564942,
         ];
     }
 
@@ -107,20 +107,10 @@ class RawJobTest extends TestCase
         new RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 
-    public function testThrowsOnNonStringCreatedAt(): void
+    public function testThrowsOnNonNumericCreatedAt(): void
     {
         $invalidRawRow = $this->validRawRow;
-        $invalidRawRow[TableConstants::COLUMN_NAME_CREATED_AT] = 123;
-
-        $this->expectException(UnexpectedValueException::class);
-
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
-    }
-
-    public function testThrowsOnNonValidCreatedAt(): void
-    {
-        $invalidRawRow = $this->validRawRow;
-        $invalidRawRow[TableConstants::COLUMN_NAME_CREATED_AT] = '123';
+        $invalidRawRow[TableConstants::COLUMN_NAME_CREATED_AT] = 'abc';
 
         $this->expectException(UnexpectedValueException::class);
 
