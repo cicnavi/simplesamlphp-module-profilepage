@@ -154,7 +154,7 @@ class RepositoryTest extends TestCase
         $this->assertSame($this->idpMetadataHash, $result[TableConstants::TABLE_IDP_COLUMN_NAME_METADATA_HASH_SHA256]);
         $this->assertSame(
             $this->createdAt->getTimestamp(),
-            $result[TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT]
+            (int)$result[TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT]
         );
 
         return $result;
@@ -268,7 +268,7 @@ class RepositoryTest extends TestCase
         $this->assertSame($this->spMetadataHash, $result[TableConstants::TABLE_SP_COLUMN_NAME_METADATA_HASH_SHA256]);
         $this->assertSame(
             $this->createdAt->getTimestamp(),
-            $result[TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT]
+            (int)$result[TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT]
         );
 
         return $result;
@@ -373,7 +373,7 @@ class RepositoryTest extends TestCase
         );
         $this->assertSame(
             $this->createdAt->getTimestamp(),
-            $result[VersionedTableConstants::TABLE_USER_COLUMN_NAME_CREATED_AT]
+            (int)$result[VersionedTableConstants::TABLE_USER_COLUMN_NAME_CREATED_AT]
         );
 
         return $result;
