@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Current\Store;
 
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\TableConstants
-    as BaseTableConstants;
+// phpcs:ignore
+use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\TableConstants as BaseTableConstants;
 
 class TableConstants
 {

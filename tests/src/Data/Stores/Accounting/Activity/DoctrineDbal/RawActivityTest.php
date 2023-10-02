@@ -28,7 +28,7 @@ class RawActivityTest extends TestCase
      * @var string[]
      */
     protected array $userAttributes;
-    protected string $happenedAt;
+    protected int $happenedAt;
     protected string $clientIpAddress;
 
     protected array $rawRow;
@@ -42,7 +42,7 @@ class RawActivityTest extends TestCase
     {
         $this->serviceProviderMetadata = ['sp' => 'metadata'];
         $this->userAttributes = ['user' => 'attribute'];
-        $this->happenedAt = '2022-02-22 22:22:22';
+        $this->happenedAt = 1645564942;
         $this->clientIpAddress = '123.123.123.123';
         $this->authenticationProtocolDesignation = Saml2::DESIGNATION;
 
@@ -131,10 +131,10 @@ class RawActivityTest extends TestCase
         new RawActivity($rawRow, $this->abstractPlatformStub);
     }
 
-    public function testThrowsForNonStringHappenedAt(): void
+    public function testThrowsForNonNumericHappenedAt(): void
     {
         $rawRow = $this->rawRow;
-        $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT] = 1;
+        $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_HAPPENED_AT] = 'abc';
 
         $this->expectException(UnexpectedValueException::class);
 

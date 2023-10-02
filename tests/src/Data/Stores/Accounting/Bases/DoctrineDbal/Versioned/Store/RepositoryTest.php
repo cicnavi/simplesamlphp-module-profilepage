@@ -151,8 +151,8 @@ class RepositoryTest extends TestCase
             $result[BaseTableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256]
         );
         $this->assertSame(
-            $this->createdAt->format($this->dateTimeFormat),
-            $result[BaseTableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT]
+            $this->createdAt->getTimestamp(),
+            (int)$result[BaseTableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT]
         );
 
         return $result;
@@ -196,8 +196,8 @@ class RepositoryTest extends TestCase
             $result[BaseTableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256]
         );
         $this->assertSame(
-            $this->createdAt->format($this->dateTimeFormat),
-            $result[BaseTableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT]
+            $this->createdAt->getTimestamp(),
+            (int)$result[BaseTableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT]
         );
 
         return $result;
@@ -236,8 +236,8 @@ class RepositoryTest extends TestCase
             $result[BaseTableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256]
         );
         $this->assertSame(
-            $this->createdAt->format($this->dateTimeFormat),
-            $result[BaseTableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT]
+            $this->createdAt->getTimestamp(),
+            (int)$result[BaseTableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT]
         );
 
         return $result;
@@ -280,8 +280,8 @@ class RepositoryTest extends TestCase
             $result[BaseTableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256]
         );
         $this->assertSame(
-            $this->createdAt->format($this->dateTimeFormat),
-            $result[BaseTableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT]
+            $this->createdAt->getTimestamp(),
+            (int)$result[BaseTableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT]
         );
 
         return $result;
@@ -320,8 +320,8 @@ class RepositoryTest extends TestCase
             $result[BaseTableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256]
         );
         $this->assertSame(
-            $this->createdAt->format($this->dateTimeFormat),
-            $result[BaseTableConstants::TABLE_USER_COLUMN_NAME_CREATED_AT]
+            $this->createdAt->getTimestamp(),
+            (int)$result[BaseTableConstants::TABLE_USER_COLUMN_NAME_CREATED_AT]
         );
 
         return $result;
@@ -367,8 +367,8 @@ class RepositoryTest extends TestCase
             $result[BaseTableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256]
         );
         $this->assertSame(
-            $this->createdAt->format($this->dateTimeFormat),
-            $result[BaseTableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT]
+            $this->createdAt->getTimestamp(),
+            (int)$result[BaseTableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT]
         );
 
         return $result;

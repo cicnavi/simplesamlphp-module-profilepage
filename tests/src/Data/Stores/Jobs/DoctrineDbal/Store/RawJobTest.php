@@ -41,9 +41,9 @@ class RawJobTest extends TestCase
         $this->authenticationEvent = new Event(new State\Saml2(StateArrays::SAML2_FULL));
         $this->validRawRow = [
             TableConstants::COLUMN_NAME_ID => 1,
-            TableConstants::COLUMN_NAME_PAYLOAD => serialize($this->authenticationEvent),
+            TableConstants::COLUMN_NAME_PAYLOAD => serialize(StateArrays::SAML2_FULL),
             TableConstants::COLUMN_NAME_TYPE => $this->authenticationEvent::class,
-            TableConstants::COLUMN_NAME_CREATED_AT => '2022-08-17 13:26:12',
+            TableConstants::COLUMN_NAME_CREATED_AT => 1645564942,
         ];
     }
 
@@ -52,7 +52,7 @@ class RawJobTest extends TestCase
         $abstractPlatform = new SqlitePlatform();
         $rawJob = new RawJob($this->validRawRow, $abstractPlatform);
         $this->assertSame($rawJob->getId(), $this->validRawRow[TableConstants::COLUMN_NAME_ID]);
-        $this->assertEquals($rawJob->getPayload(), $this->authenticationEvent);
+        $this->assertEquals(StateArrays::SAML2_FULL, $rawJob->getPayload());
         $this->assertSame($rawJob->getType(), $this->validRawRow[TableConstants::COLUMN_NAME_TYPE]);
         $this->assertInstanceOf(DateTimeImmutable::class, $rawJob->getCreatedAt());
     }
@@ -107,20 +107,10 @@ class RawJobTest extends TestCase
         new RawJob($invalidRawRow, $this->abstractPlatformStub);
     }
 
-    public function testThrowsOnNonStringCreatedAt(): void
+    public function testThrowsOnNonNumericCreatedAt(): void
     {
         $invalidRawRow = $this->validRawRow;
-        $invalidRawRow[TableConstants::COLUMN_NAME_CREATED_AT] = 123;
-
-        $this->expectException(UnexpectedValueException::class);
-
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
-    }
-
-    public function testThrowsOnNonValidCreatedAt(): void
-    {
-        $invalidRawRow = $this->validRawRow;
-        $invalidRawRow[TableConstants::COLUMN_NAME_CREATED_AT] = '123';
+        $invalidRawRow[TableConstants::COLUMN_NAME_CREATED_AT] = 'abc';
 
         $this->expectException(UnexpectedValueException::class);
 

@@ -26,21 +26,8 @@ abstract class AbstractRawEntity
      */
     abstract protected function validate(array $rawRow): void;
 
-    protected function resolveDateTimeImmutable(mixed $value): DateTimeImmutable
+    protected function resolveDateTimeImmutable(int $timestamp): DateTimeImmutable
     {
-        try {
-            /** @var DateTimeImmutable $dateTimeImmutable */
-            $dateTimeImmutable = (Type::getType(Types::DATETIME_IMMUTABLE))
-                ->convertToPHPValue($value, $this->abstractPlatform);
-        } catch (Throwable $exception) {
-            $message = sprintf(
-                'Could not create DateTimeImmutable using value %s. Error was: %s.',
-                var_export($value, true),
-                $exception->getMessage()
-            );
-            throw new UnexpectedValueException($message, (int)$exception->getCode(), $exception);
-        }
-
-        return $dateTimeImmutable;
+        return (new DateTimeImmutable())->setTimestamp($timestamp);
     }
 }

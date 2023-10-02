@@ -91,7 +91,7 @@ class Migrator extends AbstractMigrator
                 ->setAutoincrement(true)
                 ->setUnsigned(true);
             $table->addColumn(self::COLUMN_NAME_VERSION, Types::STRING);
-            $table->addColumn(self::COLUMN_NAME_CREATED_AT, Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn(self::COLUMN_NAME_CREATED_AT, Types::BIGINT);
 
             $table->setPrimaryKey(['id']);
             $table->addUniqueIndex([self::COLUMN_NAME_VERSION]);
@@ -141,11 +141,11 @@ class Migrator extends AbstractMigrator
                 ->setParameters(
                     [
                         self::COLUMN_NAME_VERSION => $migrationClass,
-                        self::COLUMN_NAME_CREATED_AT => new DateTimeImmutable(),
+                        self::COLUMN_NAME_CREATED_AT => (new DateTimeImmutable())->getTimestamp(),
                     ],
                     [
                         self::COLUMN_NAME_VERSION => Types::STRING,
-                        self::COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
+                        self::COLUMN_NAME_CREATED_AT => Types::BIGINT
                     ]
                 );
 

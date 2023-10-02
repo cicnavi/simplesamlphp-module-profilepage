@@ -15,9 +15,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
 use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Repository;
 use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\TableConstants;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
@@ -58,7 +56,7 @@ class StoreTest extends TestCase
     protected Connection $connection;
     protected Stub $loggerStub;
     protected Migrator $migrator;
-    protected Stub $payloadStub;
+    protected array $payload = StateArrays::SAML2_FULL;
     protected Stub $jobStub;
 
     /**
@@ -78,9 +76,8 @@ class StoreTest extends TestCase
         $this->factoryStub->method('buildConnection')->willReturn($this->connection);
         $this->factoryStub->method('buildMigrator')->willReturn($this->migrator);
 
-        $this->payloadStub = $this->createStub(AbstractPayload::class);
         $this->jobStub = $this->createStub(GenericJob::class);
-        $this->jobStub->method('getPayload')->willReturn($this->payloadStub);
+        $this->jobStub->method('getRawState')->willReturn($this->payload);
         $this->jobStub->method('getType')->willReturn(GenericJob::class);
         $this->jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
         $this->jobStub->method('getId')->willReturn(1);
@@ -213,9 +210,8 @@ class StoreTest extends TestCase
         // Don't run setup, so we get exception
         //$jobsStore->runSetup();
 
-        $payloadStub = $this->createStub(AbstractPayload::class);
         $jobStub = $this->createStub(AbstractJob::class);
-        $jobStub->method('getPayload')->willReturn($payloadStub);
+        $jobStub->method('getRawState')->willReturn(StateArrays::SAML2_FULL);
 
         $this->expectException(StoreException::class);
 
@@ -269,8 +265,7 @@ class StoreTest extends TestCase
         );
         $jobsStore->runSetup();
 
-        $authenticationEvent = new Event(new State\Saml2(StateArrays::SAML2_FULL));
-        $authenticationEventJob = new Event\Job($authenticationEvent);
+        $authenticationEventJob = new Event\Job(StateArrays::SAML2_FULL);
 
         $queryBuilder = $this->connection->dbal()->createQueryBuilder();
         $queryBuilder->select('COUNT(id) as jobsCount')->from($jobsStore->getPrefixedTableNameJobs())->fetchOne();
@@ -306,9 +301,8 @@ class StoreTest extends TestCase
         );
 //        $jobsStore->runSetup();
 
-        $payloadStub = $this->createStub(AbstractPayload::class);
         $jobStub = $this->createStub(AbstractJob::class);
-        $jobStub->method('getPayload')->willReturn($payloadStub);
+        $jobStub->method('getRawState')->willReturn(StateArrays::SAML2_FULL);
 
         $this->expectException(StoreException::class);
 
@@ -324,7 +318,7 @@ class StoreTest extends TestCase
     {
         $repositoryStub = $this->createStub(Repository::class);
         $jobStub = $this->createStub(GenericJob::class);
-        $jobStub->method('getPayload')->willReturn($this->payloadStub);
+        $jobStub->method('getRawState')->willReturn($this->payload);
         $jobStub->method('getCreatedAt')->willReturn(new DateTimeImmutable());
         $jobStub->method('getType')->willReturn(GenericJob::class);
         $jobStub->method('getId')->willReturn(null); // Invalid ID value...

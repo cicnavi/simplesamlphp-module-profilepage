@@ -41,7 +41,8 @@ class Version20220801000700CreateAuthenticationEventTable extends AbstractMigrat
             $table->addColumn('user_version_id', Types::BIGINT)
                 ->setUnsigned(true);
 
-            $table->addColumn('happened_at', Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn('happened_at', Types::BIGINT)
+                ->setUnsigned(true);
 
             $table->addColumn('client_ip_address', Types::STRING)
                 ->setLength(BaseTableConstantsAlias::COLUMN_IP_ADDRESS_LENGTH)
@@ -51,7 +52,8 @@ class Version20220801000700CreateAuthenticationEventTable extends AbstractMigrat
                 ->setLength(BaseTableConstantsAlias::COLUMN_AUTHENTICATION_PROTOCOL_DESIGNATION_LENGTH)
                 ->setNotnull(false);
 
-            $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn('created_at', Types::BIGINT)
+                ->setUnsigned(true);
 
             $table->setPrimaryKey(['id']);
 

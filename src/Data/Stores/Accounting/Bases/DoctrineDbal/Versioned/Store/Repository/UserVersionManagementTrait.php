@@ -74,12 +74,12 @@ trait UserVersionManagementTrait
                 [
                     TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER => $identifier,
                     TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256 => $identifierHashSha256,
-                    TableConstants::TABLE_USER_COLUMN_NAME_CREATED_AT => $createdAt,
+                    TableConstants::TABLE_USER_COLUMN_NAME_CREATED_AT => $createdAt->getTimestamp(),
                 ],
                 [
                     TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER => Types::TEXT,
                     TableConstants::TABLE_USER_COLUMN_NAME_IDENTIFIER_HASH_SHA256 => Types::STRING,
-                    TableConstants::TABLE_USER_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
+                    TableConstants::TABLE_USER_COLUMN_NAME_CREATED_AT => Types::BIGINT
                 ]
             );
 
@@ -137,6 +137,7 @@ trait UserVersionManagementTrait
 
     /**
      * @throws StoreException
+     * @throws \Exception
      */
     public function insertUserVersion(
         int $userId,
@@ -166,13 +167,13 @@ trait UserVersionManagementTrait
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_USER_ID => $userId,
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES => $attributes,
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256 => $attributesHashSha256,
-                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT => $createdAt,
+                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT => $createdAt->getTimestamp(),
                 ],
                 [
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_USER_ID => Types::BIGINT,
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES => Types::TEXT,
                     TableConstants::TABLE_USER_VERSION_COLUMN_NAME_ATTRIBUTES_HASH_SHA256 => Types::STRING,
-                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
+                    TableConstants::TABLE_USER_VERSION_COLUMN_NAME_CREATED_AT => Types::BIGINT,
                 ]
             );
 

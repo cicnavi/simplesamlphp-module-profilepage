@@ -113,22 +113,22 @@ class Repository extends BaseRepository
                         TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_IDP_SP_USER_VERSION_ID =>
                             $idpSpUserVersionId,
                         TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT =>
-                            $firstAuthenticationAt,
+                            $firstAuthenticationAt->getTimestamp(),
                         TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT =>
-                            $lastAuthenticationAt,
+                            $lastAuthenticationAt->getTimestamp(),
                         TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_COUNT => $count,
-                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_CREATED_AT => $createdUpdatedAt,
-                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT => $createdUpdatedAt,
+                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_CREATED_AT =>
+                            $createdUpdatedAt->getTimestamp(),
+                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT =>
+                            $createdUpdatedAt->getTimestamp(),
                     ],
                     [
                         TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_IDP_SP_USER_VERSION_ID => Types::BIGINT,
-                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT =>
-                            Types::DATETIMETZ_IMMUTABLE,
-                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT =>
-                            Types::DATETIMETZ_IMMUTABLE,
+                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT => Types::BIGINT,
+                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT => Types::BIGINT,
                         TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_COUNT => Types::BIGINT,
-                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
-                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT => Types::DATETIMETZ_IMMUTABLE,
+                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_CREATED_AT => Types::BIGINT,
+                        TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT => Types::BIGINT,
                     ]
                 );
 
@@ -170,8 +170,8 @@ class Repository extends BaseRepository
                 )
                 ->setParameter(
                     TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT,
-                    $happenedAt,
-                    Types::DATETIMETZ_IMMUTABLE
+                    $happenedAt->getTimestamp(),
+                    Types::BIGINT
                 )
                 ->where(
                     $updateCountQueryBuilder->expr()->and(
@@ -313,8 +313,8 @@ class Repository extends BaseRepository
             )
             ->setParameter(
                 TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT,
-                $happenedAt,
-                Types::DATETIMETZ_IMMUTABLE
+                $happenedAt->getTimestamp(),
+                Types::BIGINT
             )
             ->where(
                 $updateLastAuthenticationAtQueryBuilder->expr()->in(

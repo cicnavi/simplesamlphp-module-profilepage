@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\Module\accounting\Entities;
 
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Entities\GenericJob
@@ -16,7 +16,7 @@ class GenericJobTest extends TestCase
 {
     public function testCanGetProperType(): void
     {
-        $job = new GenericJob($this->createStub(AbstractPayload::class));
+        $job = new GenericJob(StateArrays::SAML2_FULL);
 
         $this->assertSame(GenericJob::class, $job->getType());
     }

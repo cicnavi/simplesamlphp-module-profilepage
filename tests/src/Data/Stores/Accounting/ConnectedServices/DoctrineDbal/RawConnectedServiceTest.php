@@ -20,8 +20,8 @@ use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\Doctri
 class RawConnectedServiceTest extends TestCase
 {
     protected int $numberOfAuthentications;
-    protected string $lastAuthenticationAt;
-    protected string $firstAuthenticationAt;
+    protected int $lastAuthenticationAt;
+    protected int $firstAuthenticationAt;
     /**
      * @var string[]
      */
@@ -40,8 +40,8 @@ class RawConnectedServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->numberOfAuthentications = 2;
-        $this->lastAuthenticationAt = '2022-02-22 22:22:22';
-        $this->firstAuthenticationAt = '2022-02-02 22:22:22';
+        $this->lastAuthenticationAt = 1645564942;
+        $this->firstAuthenticationAt = 1645564942;
         $this->serviceProviderMetadata = ['sp' => 'metadata'];
         $this->userAttributes = ['user' => 'attribute'];
         $this->rawRow = [
@@ -81,12 +81,12 @@ class RawConnectedServiceTest extends TestCase
         $this->assertInstanceOf(DateTimeImmutable::class, $rawConnectedServiceProvider->getLastAuthenticationAt());
         $this->assertSame(
             $this->lastAuthenticationAt,
-            $rawConnectedServiceProvider->getLastAuthenticationAt()->format($this->dateTimeFormat)
+            $rawConnectedServiceProvider->getLastAuthenticationAt()->getTimestamp()
         );
         $this->assertInstanceOf(DateTimeImmutable::class, $rawConnectedServiceProvider->getFirstAuthenticationAt());
         $this->assertSame(
             $this->firstAuthenticationAt,
-            $rawConnectedServiceProvider->getFirstAuthenticationAt()->format($this->dateTimeFormat)
+            $rawConnectedServiceProvider->getFirstAuthenticationAt()->getTimestamp()
         );
         $this->assertSame($this->serviceProviderMetadata, $rawConnectedServiceProvider->getServiceProviderMetadata());
         $this->assertSame($this->userAttributes, $rawConnectedServiceProvider->getUserAttributes());
@@ -112,20 +112,20 @@ class RawConnectedServiceTest extends TestCase
         new RawConnectedService($rawRow, $this->abstractPlatformStub);
     }
 
-    public function testThrowsIfLastAuthenticationAtNotString(): void
+    public function testThrowsIfLastAuthenticationAtNotNumeric(): void
     {
         $rawRow = $this->rawRow;
-        $rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT] = 1;
+        $rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_LAST_AUTHENTICATION_AT] = 'abc';
 
         $this->expectException(UnexpectedValueException::class);
 
         new RawConnectedService($rawRow, $this->abstractPlatformStub);
     }
 
-    public function testThrowsIfFirstAuthenticationAtNotString(): void
+    public function testThrowsIfFirstAuthenticationAtNotNumeric(): void
     {
         $rawRow = $this->rawRow;
-        $rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT] = 1;
+        $rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_FIRST_AUTHENTICATION_AT] = 'abc';
 
         $this->expectException(UnexpectedValueException::class);
 

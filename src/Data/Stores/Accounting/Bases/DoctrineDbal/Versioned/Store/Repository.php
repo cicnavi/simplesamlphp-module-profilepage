@@ -11,14 +11,13 @@ use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Services\HelpersManager;
 use Throwable;
 
 class Repository
 {
     use Repository\UserVersionManagementTrait;
 
-    protected Connection $connection;
-    protected LoggerInterface $logger;
     protected string $tableNameIdp;
     protected string $tableNameIdpVersion;
     protected string $tableNameSp;
@@ -27,11 +26,10 @@ class Repository
     protected string $tableNameUserVersion;
     protected string $tableNameIdpSpUserVersion;
 
-    public function __construct(Connection $connection, LoggerInterface $logger)
-    {
-        $this->connection = $connection;
-        $this->logger = $logger;
-
+    public function __construct(
+        protected Connection $connection,
+        protected LoggerInterface $logger
+    ) {
         $this->tableNameIdp = $this->preparePrefixedTableName(TableConstants::TABLE_NAME_IDP);
         $this->tableNameIdpVersion = $this->preparePrefixedTableName(TableConstants::TABLE_NAME_IDP_VERSION);
         $this->tableNameSp = $this->preparePrefixedTableName(TableConstants::TABLE_NAME_SP);
@@ -108,12 +106,12 @@ class Repository
                 [
                     TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID => $entityId,
                     TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => $entityIdHashSha256,
-                    TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT => $createdAt,
+                    TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT => $createdAt->getTimestamp(),
                 ],
                 [
                     TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID => Types::STRING,
                     TableConstants::TABLE_IDP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => Types::STRING,
-                    TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
+                    TableConstants::TABLE_IDP_COLUMN_NAME_CREATED_AT => Types::BIGINT
                 ]
             );
 
@@ -200,13 +198,13 @@ class Repository
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID => $idpId,
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA => $metadata,
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 => $metadataHashSha256,
-                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT => $createdAt,
+                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT => $createdAt->getTimestamp(),
                 ],
                 [
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_IDP_ID => Types::BIGINT,
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA => Types::TEXT,
                     TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 => Types::STRING,
-                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
+                    TableConstants::TABLE_IDP_VERSION_COLUMN_NAME_CREATED_AT => Types::BIGINT,
                 ]
             );
 
@@ -279,12 +277,12 @@ class Repository
                 [
                     TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID => $entityId,
                     TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => $entityIdHashSha256,
-                    TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT => $createdAt,
+                    TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT => $createdAt->getTimestamp(),
                 ],
                 [
                     TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID => Types::STRING,
                     TableConstants::TABLE_SP_COLUMN_NAME_ENTITY_ID_HASH_SHA256 => Types::STRING,
-                    TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
+                    TableConstants::TABLE_SP_COLUMN_NAME_CREATED_AT => Types::BIGINT
                 ]
             );
 
@@ -371,13 +369,13 @@ class Repository
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_SP_ID => $spId,
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA => $metadata,
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 => $metadataHashSha256,
-                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT => $createdAt,
+                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT => $createdAt->getTimestamp(),
                 ],
                 [
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_SP_ID => Types::BIGINT,
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA => Types::TEXT,
                     TableConstants::TABLE_SP_VERSION_COLUMN_NAME_METADATA_HASH_SHA256 => Types::STRING,
-                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE,
+                    TableConstants::TABLE_SP_VERSION_COLUMN_NAME_CREATED_AT => Types::BIGINT,
                 ]
             );
 
@@ -471,13 +469,13 @@ class Repository
                         TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_IDP_VERSION_ID => $idpVersionId,
                         TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_SP_VERSION_ID => $spVersionId,
                         TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_USER_VERSION_ID => $userVersionId,
-                        TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_CREATED_AT => $createdAt,
+                        TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_CREATED_AT => $createdAt->getTimestamp(),
                     ],
                     [
                         TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_IDP_VERSION_ID => Types::BIGINT,
                         TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_SP_VERSION_ID => Types::BIGINT,
                         TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_USER_VERSION_ID => Types::BIGINT,
-                        TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_CREATED_AT => Types::DATETIMETZ_IMMUTABLE
+                        TableConstants::TABLE_IDP_SP_USER_VERSION_COLUMN_NAME_CREATED_AT => Types::BIGINT
                     ]
                 );
 

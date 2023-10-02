@@ -15,7 +15,7 @@ use function sprintf;
 class RawJob extends AbstractRawEntity
 {
     protected int $id;
-    protected AbstractPayload $payload;
+    protected array $payload;
     protected string $type;
     protected DateTimeImmutable $createdAt;
 
@@ -26,7 +26,7 @@ class RawJob extends AbstractRawEntity
         $this->id = (int)$rawRow[TableConstants::COLUMN_NAME_ID];
         $this->payload = $this->resolvePayload((string)$rawRow[TableConstants::COLUMN_NAME_PAYLOAD]);
         $this->type = (string)$rawRow[TableConstants::COLUMN_NAME_TYPE];
-        $this->createdAt = $this->resolveDateTimeImmutable($rawRow[TableConstants::COLUMN_NAME_CREATED_AT]);
+        $this->createdAt = $this->resolveDateTimeImmutable((int)$rawRow[TableConstants::COLUMN_NAME_CREATED_AT]);
     }
 
     protected function validate(array $rawRow): void
@@ -62,23 +62,23 @@ class RawJob extends AbstractRawEntity
             );
         }
 
-        if (! is_string($rawRow[TableConstants::COLUMN_NAME_CREATED_AT])) {
+        if (! is_numeric($rawRow[TableConstants::COLUMN_NAME_CREATED_AT])) {
             throw new UnexpectedValueException(
-                sprintf('Column %s must be string.', TableConstants::COLUMN_NAME_CREATED_AT)
+                sprintf('Column %s must be numeric.', TableConstants::COLUMN_NAME_CREATED_AT)
             );
         }
     }
 
-    protected function resolvePayload(string $rawPayload): AbstractPayload
+    protected function resolvePayload(string $rawPayload): array
     {
         /** @psalm-suppress MixedAssignment - we check the type manually */
         $payload = unserialize($rawPayload);
 
-        if ($payload instanceof AbstractPayload) {
+        if (is_array($payload)) {
             return $payload;
         }
 
-        throw new UnexpectedValueException('Job payload is not instance of AbstractPayload.');
+        throw new UnexpectedValueException('Job payload is not in expected array format.');
     }
 
     /**
@@ -90,9 +90,9 @@ class RawJob extends AbstractRawEntity
     }
 
     /**
-     * @return AbstractPayload
+     * @return array
      */
-    public function getPayload(): AbstractPayload
+    public function getPayload(): array
     {
         return $this->payload;
     }

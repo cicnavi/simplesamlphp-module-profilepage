@@ -447,8 +447,8 @@ class RepositoryTest extends TestCase
 
         $resultArray = $this->repository->getConnectedService($idpSpUserVersionId)->fetchAssociative();
         $this->assertSame(
-            $authenticationAt->format(DateTime::DEFAULT_FORMAT),
-            $resultArray[TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT]
+            $authenticationAt->getTimestamp(),
+            (int)$resultArray[TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT]
         );
 
         $newAuthenticationAt = $authenticationAt->add(new DateInterval('P1D'));
@@ -458,12 +458,12 @@ class RepositoryTest extends TestCase
         $resultArray = $this->repository->getConnectedService($idpSpUserVersionId)->fetchAssociative();
 
         $this->assertNotSame(
-            $authenticationAt->format(DateTime::DEFAULT_FORMAT),
+            $authenticationAt->getTimestamp(),
             $resultArray[TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT]
         );
         $this->assertSame(
-            $newAuthenticationAt->format(DateTime::DEFAULT_FORMAT),
-            $resultArray[TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT]
+            $newAuthenticationAt->getTimestamp(),
+            (int)$resultArray[TableConstants::TABLE_CONNECTED_SERVICE_COLUMN_NAME_UPDATED_AT]
         );
     }
 

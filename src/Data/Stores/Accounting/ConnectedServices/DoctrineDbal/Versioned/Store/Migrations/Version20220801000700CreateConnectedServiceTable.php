@@ -37,15 +37,19 @@ class Version20220801000700CreateConnectedServiceTable extends AbstractMigration
             $table->addColumn('idp_sp_user_version_id', Types::BIGINT)
                 ->setUnsigned(true);
 
-            $table->addColumn('first_authentication_at', Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn('first_authentication_at', Types::BIGINT)
+                ->setUnsigned(true);
 
-            $table->addColumn('last_authentication_at', Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn('last_authentication_at', Types::BIGINT)
+                ->setUnsigned(true);
 
             $table->addColumn('count', Types::BIGINT)->setUnsigned(true);
 
-            $table->addColumn('created_at', Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn('created_at', Types::BIGINT)
+                ->setUnsigned(true);
 
-            $table->addColumn('updated_at', Types::DATETIMETZ_IMMUTABLE);
+            $table->addColumn('updated_at', Types::BIGINT)
+                ->setUnsigned(true);
 
             $table->setPrimaryKey(['id']);
 
