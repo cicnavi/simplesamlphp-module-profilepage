@@ -90,7 +90,7 @@ class Profile
     /**
      * @throws ConfigurationError
      */
-    public function personalData(): Response
+    public function personalData(Request $request): Response
     {
         $normalizedAttributes = [];
 
@@ -108,10 +108,17 @@ class Profile
             $normalizedAttributes[$name] = implode('; ', $value);
         }
 
-        $actionButtonsEnabled = $this->moduleConfiguration->getActionButtonsEnabled();
+        if ($request->query->has('csv')) {
+            $csvData = [
+                ['Attribute', 'Values'],
+                ...(array_map(null, array_keys($normalizedAttributes), $normalizedAttributes))
+            ];
+
+            return $this->csvResponseFor($csvData, 'attributes.csv');
+        }
 
         $template = $this->resolveTemplate('accounting:user/personal-data.twig');
-        $template->data += compact('normalizedAttributes', 'actionButtonsEnabled');
+        $template->data += compact('normalizedAttributes');
 
         return $template;
     }
@@ -298,6 +305,7 @@ class Profile
             'menuManager' => $this->menuManager,
             'csrfToken' => $this->csrfToken,
             'alertsBag' => $this->alertsBag,
+            'actionButtonsEnabled' => $this->moduleConfiguration->getActionButtonsEnabled()
         ];
 
         // Make CSRF token also available as a cookie, so it can be used for XHR POST requests validation.
@@ -353,5 +361,23 @@ class Profile
     protected function appendCsrfCookie(Response $response): void
     {
         $response->headers->setCookie(new Cookie(CsrfToken::KEY, $this->csrfToken->get()));
+    }
+
+    protected function csvResponseFor(array $data, string $filename = 'data.csv'): Response
+    {
+        $fp = fopen('php://output', 'w');
+
+        foreach ($data as $row) {
+            fputcsv($fp, $row);
+        }
+
+        rewind($fp);
+        $response = new Response(stream_get_contents($fp));
+        fclose($fp);
+
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', "attachment; filename=\"$filename\"");
+
+        return $response;
     }
 }

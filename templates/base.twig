@@ -8,12 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/src/default.css', 'accounting') }}">
     <link rel="icon" href="{{ asset("icons/favicon.ico") }}">
     <meta name="robots" content="noindex, nofollow">
-    <script>
-        function doPopup(popupId) {
-        var popup = document.getElementById(popupId);
-        popup.classList.toggle("show");
-        }
-    </script>
+
 </head>
 <body id="{{ templateId }}">
 
@@ -41,7 +36,6 @@
 <script>
     const accounting = {
         alert: function (message) {
-            // TODO implement nice alerts.
             alert(message);
         },
         removeElement: function (element, speed = 500) {
@@ -51,7 +45,11 @@
             setTimeout(function() {
                 element.parentNode.removeChild(element);
             }, speed);
-        }
+        },
+        doPopup: function (popupId) {
+            const popup = document.getElementById(popupId);
+            popup.classList.toggle("show");
+        },
     };
 </script>
 
