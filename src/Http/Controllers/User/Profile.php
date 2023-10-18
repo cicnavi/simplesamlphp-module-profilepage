@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Http\Controllers\User;
 
+use DateTimeInterface;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Auth\Simple;
 use SimpleSAML\Configuration as SspConfiguration;
@@ -15,6 +16,7 @@ use SimpleSAML\Module\accounting\Entities\ConnectedService;
 use SimpleSAML\Module\accounting\Entities\User;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Helpers\Attributes;
+use SimpleSAML\Module\accounting\Helpers\DateTime;
 use SimpleSAML\Module\accounting\Helpers\Routes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\AlertsBag;
@@ -35,6 +37,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Profile
 {
+    protected const KEY_CSV = 'csv';
     protected string $defaultAuthenticationSource;
     protected Simple $authSimple;
     protected DataProviderBuilder $dataProviderBuilder;
@@ -108,17 +111,20 @@ class Profile
             $normalizedAttributes[$name] = implode('; ', $value);
         }
 
-        if ($request->query->has('csv')) {
+        $attributeColumnName = Translate::noop('Attribute');
+        $valuesColumnName = Translate::noop('Values');
+
+        if ($request->query->has(self::KEY_CSV)) {
             $csvData = [
-                ['Attribute', 'Values'],
+                [$attributeColumnName, $valuesColumnName],
                 ...(array_map(null, array_keys($normalizedAttributes), $normalizedAttributes))
             ];
 
-            return $this->csvResponseFor($csvData, 'attributes.csv');
+            return $this->csvResponseFor($csvData, __FUNCTION__ . '.csv');
         }
 
         $template = $this->resolveTemplate('accounting:user/personal-data.twig');
-        $template->data += compact('normalizedAttributes');
+        $template->data += compact('normalizedAttributes', 'attributeColumnName', 'valuesColumnName');
 
         return $template;
     }
@@ -128,7 +134,7 @@ class Profile
      * @throws ConfigurationError
      * @throws \Exception
      */
-    public function connectedOrganizations(): Response
+    public function connectedOrganizations(Request $request): Response
     {
         $userIdentifier = $this->resolveUserIdentifier();
 
@@ -143,6 +149,41 @@ class Profile
         );
 
         $connectedServiceProviderBag = $connectedServicesDataProvider->getConnectedServices($userIdentifier);
+        $columnNames = [
+            'name' => Translate::noop('Name'),
+            'number-of-access' => Translate::noop('Number of access'),
+            'last-access' => Translate::noop('Last access'),
+            'entity-id' => Translate::noop('Entity ID'),
+            'service-details' => Translate::noop('Service details'),
+            'description' => Translate::noop('Description'),
+            'login-details' => Translate::noop('Login details'),
+            'first-access' => Translate::noop('First access'),
+        ];
+
+        if ($request->query->has(self::KEY_CSV)) {
+            $csvData = [
+                [
+                    $columnNames['name'],
+                    $columnNames['entity-id'],
+                    $columnNames['number-of-access'],
+                    $columnNames['first-access'],
+                    $columnNames['last-access'],
+                ],
+                ...(array_map(
+                    fn(ConnectedService $connectedService): array => [
+                        $connectedService->getServiceProvider()->getName(),
+                        $connectedService->getServiceProvider()->getEntityId(),
+                        $connectedService->getNumberOfAuthentications(),
+                        $connectedService->getFirstAuthenticationAt()->format(DateTimeInterface::RFC3339),
+                        $connectedService->getLastAuthenticationAt()->format(DateTimeInterface::RFC3339),
+                    ],
+                    $connectedServiceProviderBag->getAll()
+                )
+                )
+            ];
+
+            return $this->csvResponseFor($csvData, __FUNCTION__ . '.csv');
+        }
 
         $oidc = $this->sspModuleManager->getOidc();
         $accessTokensByClient = [];
@@ -172,7 +213,6 @@ class Profile
                     'client_id'
                 );
             }
-            //die(var_dump($oidcClientIds, $accessTokensByClient, $refreshTokensByClient));
         }
 
         $template = $this->resolveTemplate('accounting:user/connected-organizations.twig');
@@ -180,7 +220,8 @@ class Profile
             'connectedServiceProviderBag',
             'accessTokensByClient',
             'refreshTokensByClient',
-            'oidcProtocolDesignation'
+            'oidcProtocolDesignation',
+            'columnNames',
         );
 
         return $template;
