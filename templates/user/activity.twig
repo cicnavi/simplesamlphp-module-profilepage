@@ -8,6 +8,9 @@
 {% set pageMenuItem = 'activity' %}
 
 {% block content %}
+    {% if actionButtonsEnabled %}
+        {% include "@accounting/user/includes/_action-buttons.twig" %}
+    {% endif %}
     <table>
         <tr>
             <th><strong>{{ 'Time'|trans }}</strong></th>
