@@ -2,6 +2,6 @@
 <div class="dropdown">
     <button class="dropbtn">{% trans %}Actions{% endtrans %} ▾</button>
     <div class="dropdown-content">
-        <a href="?csv">{% trans %}Export to CSV{% endtrans %}</a>
+        <a href="{{ csvUrl|default('?csv')  }}">{% trans %}Export to CSV{% endtrans %}</a>
     </div>
 </div>

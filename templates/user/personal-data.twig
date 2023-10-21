@@ -20,8 +20,8 @@
     <table>
         <!-- fixed table header -->
         <tr>
-            <th>{{ attributeColumnName|trans }}</th>
-            <th>{{ valuesColumnName|trans }}</th>
+            <th>{{ columnNames.attribute|trans }}</th>
+            <th>{{ columnNames.values|trans }}</th>
         </tr>
 
         {% for name, value in normalizedAttributes %}

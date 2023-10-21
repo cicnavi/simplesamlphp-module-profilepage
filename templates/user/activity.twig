@@ -13,9 +13,9 @@
     {% endif %}
     <table>
         <tr>
-            <th><strong>{{ 'Time'|trans }}</strong></th>
-            <th><strong>{{ 'Access'|trans }}</strong></th>
-            <th><strong>{{ 'Sent data'|trans }}</strong></th>
+            <th><strong>{{ columnNames.time|trans }}</strong></th>
+            <th><strong>{{ columnNames.serviceName|trans }}</strong></th>
+            <th><strong>{{ columnNames.sentData|trans }}</strong></th>
         </tr>
 
         {% for activity in activityBag.getAll %}
@@ -35,16 +35,16 @@
                         <img src="{{ asset('css/src/icons/dropdown.svg', 'accounting') }}" alt="Dropdown icon">
                     </label>
                     <div class="dropdown-box">
-                        <strong>{{ 'Information transfered to service'|trans }}</strong>:
+                        <strong>{{ columnNames.informationTransferred|trans }}</strong>:
                         {% for name, value in activity.getUser.getAttributes %}
                             <span class="label">
                                 {{ name|trans }}: {{ value|join(', ') }}
                             </span>
                         {% endfor %}
                         <br><br>
-                        <strong>{{ 'IP address'|trans }}</strong>: {{ activity.getClientIpAddress|default(' / ') }}
+                        <strong>{{ columnNames.ipAddress|trans }}</strong>: {{ activity.getClientIpAddress|default(' / ') }}
                         <br>
-                        <strong>{{ 'Authentication protocol'|trans }}</strong>:
+                        <strong>{{ columnNames.authenticationProtocol|trans }}</strong>:
                             {{ activity.getAuthenticationProtocolDesignation|default(' / ') }}
                         <br>
                     </div>

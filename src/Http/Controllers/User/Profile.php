@@ -17,7 +17,6 @@ use SimpleSAML\Module\accounting\Entities\ConnectedService;
 use SimpleSAML\Module\accounting\Entities\User;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Helpers\Attributes;
-use SimpleSAML\Module\accounting\Helpers\DateTime;
 use SimpleSAML\Module\accounting\Helpers\Routes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\AlertsBag;
@@ -39,7 +38,27 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Profile
 {
-    protected const KEY_CSV = 'csv';
+    protected const KEY_ATTRIBUTE = 'attribute';
+    protected const KEY_VALUES = 'values';
+    protected const KEY_NAME = 'name';
+    protected const KEY_NUMBER_OF_ACCESS = 'numberOfAccess';
+    protected const KEY_LAST_ACCESS = 'lastAccess';
+    protected const KEY_ENTITY_ID = 'entityId';
+    protected const KEY_SERVICE_DETAILS = 'serviceDetails';
+    protected const KEY_DESCRIPTION = 'description';
+    protected const KEY_LOGIN_DETAILS = 'loginDetails';
+    protected const KEY_FIRST_ACCESS = 'firstAccess';
+    protected const KEY_ACCESS_TOKENS = 'accessTokens';
+    protected const KEY_EXPIRES_AT = 'expiresAt';
+    protected const KEY_REFRESH_TOKENS = 'refreshTokens';
+    protected const KEY_TIME = 'time';
+    protected const KEY_SERVICE_NAME = 'serviceName';
+    protected const KEY_SERVICE_ENTITY_ID = 'serviceEntityId';
+    protected const KEY_SENT_DATA = 'sentData';
+    protected const KEY_IP_ADDRESS = 'ipAddress';
+    protected const KEY_AUTHENTICATION_PROTOCOL = 'authenticationProtocol';
+    protected const KEY_INFORMATION_TRANSFERRED = 'informationTransferred';
+
     protected string $defaultAuthenticationSource;
     protected Simple $authSimple;
     protected DataProviderBuilder $dataProviderBuilder;
@@ -95,7 +114,36 @@ class Profile
     /**
      * @throws ConfigurationError
      */
-    public function personalData(Request $request): Response
+    public function personalData(): Response
+    {
+        $normalizedAttributes = $this->normalizeUserAttributes($this->user->getAttributes());
+
+        $columnNames = $this->getPersonalDataColumnNames();
+        $csvUrl = 'personal-data/csv';
+
+        $template = $this->resolveTemplate('accounting:user/personal-data.twig');
+        $template->data += compact('normalizedAttributes', 'columnNames', 'csvUrl');
+
+        return $template;
+    }
+
+    public function personalDataCsv(): Response
+    {
+        $normalizedAttributes = $this->normalizeUserAttributes($this->user->getAttributes());
+
+        $columnNames = $this->getPersonalDataColumnNames();
+
+        /** @psalm-suppress DuplicateArrayKey No string keys are being used here. */
+        $csvData = [
+            [$columnNames[self::KEY_ATTRIBUTE], $columnNames[self::KEY_VALUES]],
+            ...(array_map(null, array_keys($normalizedAttributes), $normalizedAttributes))
+        ];
+
+        /** @var array<array<string>> $csvData */
+        return $this->csvResponseFor($csvData, __FUNCTION__ . '.csv');
+    }
+
+    protected function normalizeUserAttributes(array $attributes): array
     {
         $normalizedAttributes = [];
 
@@ -105,7 +153,7 @@ class Profile
          * @var string $name
          * @var string[] $value
          */
-        foreach ($this->user->getAttributes() as $name => $value) {
+        foreach ($attributes as $name => $value) {
             // Convert attribute names to user-friendly names.
             if (array_key_exists($name, $toNameAttributeMap)) {
                 $name = (string)$toNameAttributeMap[$name];
@@ -113,24 +161,18 @@ class Profile
             $normalizedAttributes[$name] = implode('; ', $value);
         }
 
-        $attributeColumnName = Translate::noop('Attribute');
-        $valuesColumnName = Translate::noop('Values');
+        return $normalizedAttributes;
+    }
 
-        if ($request->query->has(self::KEY_CSV)) {
-            /** @psalm-suppress DuplicateArrayKey No string keys are being used here. */
-            $csvData = [
-                [$attributeColumnName, $valuesColumnName],
-                ...(array_map(null, array_keys($normalizedAttributes), $normalizedAttributes))
-            ];
-
-            /** @var array<array<string>> $csvData */
-            return $this->csvResponseFor($csvData, __FUNCTION__ . '.csv');
-        }
-
-        $template = $this->resolveTemplate('accounting:user/personal-data.twig');
-        $template->data += compact('normalizedAttributes', 'attributeColumnName', 'valuesColumnName');
-
-        return $template;
+    /**
+     * @return array<string,string>
+     */
+    protected function getPersonalDataColumnNames(): array
+    {
+        return [
+            self::KEY_ATTRIBUTE => Translate::noop('Attribute'),
+            self::KEY_VALUES => Translate::noop('Values'),
+        ];
     }
 
     /**
@@ -138,7 +180,7 @@ class Profile
      * @throws ConfigurationError
      * @throws \Exception
      */
-    public function connectedOrganizations(Request $request): Response
+    public function connectedOrganizations(): Response
     {
         $userIdentifier = $this->resolveUserIdentifier();
 
@@ -154,46 +196,8 @@ class Profile
 
         $connectedServiceProviderBag = $connectedServicesDataProvider->getConnectedServices($userIdentifier);
 
-        $columnNames = [
-            'name' => Translate::noop('Name'),
-            'numberOfAccess' => Translate::noop('Number of access'),
-            'lastAccess' => Translate::noop('Last access'),
-            'entityId' => Translate::noop('Entity ID'),
-            'serviceDetails' => Translate::noop('Service details'),
-            'description' => Translate::noop('Description'),
-            'loginDetails' => Translate::noop('Login details'),
-            'firstAccess' => Translate::noop('First access'),
-            'accessTokens' => Translate::noop('Access Tokens'),
-            'expiresAt' => Translate::noop('Expires at'),
-            'refreshTokens' => Translate::noop('Refresh Tokens'),
-        ];
-
-        if ($request->query->has(self::KEY_CSV)) {
-            /** @psalm-suppress DuplicateArrayKey No string keys are being used here. */
-            $csvData = [
-                [
-                    $columnNames['name'],
-                    $columnNames['entityId'],
-                    $columnNames['numberOfAccess'],
-                    $columnNames['firstAccess'],
-                    $columnNames['lastAccess'],
-                ],
-                ...(array_map(
-                    fn(ConnectedService $connectedService): array => [
-                        $connectedService->getServiceProvider()->getName() ?? '',
-                        $connectedService->getServiceProvider()->getEntityId(),
-                        $connectedService->getNumberOfAuthentications(),
-                        $connectedService->getFirstAuthenticationAt()->format(DateTimeInterface::RFC3339),
-                        $connectedService->getLastAuthenticationAt()->format(DateTimeInterface::RFC3339),
-                    ],
-                    $connectedServiceProviderBag->getAll()
-                )
-                )
-            ];
-
-            /** @var array<array<string>> $csvData */
-            return $this->csvResponseFor($csvData, __FUNCTION__ . '.csv');
-        }
+        $columnNames = $this->getConnectedOrganizationColumnNames();
+        $csvUrl = 'connected-organizations/csv';
 
         $oidc = $this->sspModuleManager->getOidc();
         $accessTokensByClient = [];
@@ -232,9 +236,79 @@ class Profile
             'refreshTokensByClient',
             'oidcProtocolDesignation',
             'columnNames',
+            'csvUrl'
         );
 
         return $template;
+    }
+
+    /**
+     * @throws Exception
+     * @throws ConfigurationError
+     * @throws \Exception
+     */
+    public function connectedOrganizationsCsv(): Response
+    {
+        $userIdentifier = $this->resolveUserIdentifier();
+
+        $connectedServiceProviderClass = $this->moduleConfiguration->getConnectedServicesProviderClass();
+
+        if (is_null($connectedServiceProviderClass)) {
+            return new RedirectResponse($this->helpersManager->getRoutes()->getUrl(Routes::PATH_USER_PERSONAL_DATA));
+        }
+
+        $connectedServicesDataProvider = $this->dataProviderBuilder->buildConnectedServicesProvider(
+            $connectedServiceProviderClass
+        );
+
+        $connectedServiceProviderBag = $connectedServicesDataProvider->getConnectedServices($userIdentifier);
+
+        $columnNames = $this->getConnectedOrganizationColumnNames();
+
+        /** @psalm-suppress DuplicateArrayKey No string keys are being used here. */
+        $csvData = [
+            [
+                $columnNames['name'],
+                $columnNames['entityId'],
+                $columnNames['numberOfAccess'],
+                $columnNames['firstAccess'],
+                $columnNames['lastAccess'],
+            ],
+            ...(array_map(
+                fn(ConnectedService $connectedService): array => [
+                    $connectedService->getServiceProvider()->getName() ?? '',
+                    $connectedService->getServiceProvider()->getEntityId(),
+                    $connectedService->getNumberOfAuthentications(),
+                    $connectedService->getFirstAuthenticationAt()->format(DateTimeInterface::RFC3339),
+                    $connectedService->getLastAuthenticationAt()->format(DateTimeInterface::RFC3339),
+                ],
+                $connectedServiceProviderBag->getAll()
+            )
+            )
+        ];
+
+        /** @var array<array<string>> $csvData */
+        return $this->csvResponseFor($csvData, __FUNCTION__ . '.csv');
+    }
+
+    /**
+     * @return array<string,string>
+     */
+    protected function getConnectedOrganizationColumnNames(): array
+    {
+        return [
+            self::KEY_NAME => Translate::noop('Name'),
+            self::KEY_NUMBER_OF_ACCESS => Translate::noop('Number of access'),
+            self::KEY_LAST_ACCESS => Translate::noop('Last access'),
+            self::KEY_ENTITY_ID => Translate::noop('Entity ID'),
+            self::KEY_SERVICE_DETAILS => Translate::noop('Service details'),
+            self::KEY_DESCRIPTION => Translate::noop('Description'),
+            self::KEY_LOGIN_DETAILS => Translate::noop('Login details'),
+            self::KEY_FIRST_ACCESS => Translate::noop('First access'),
+            self::KEY_ACCESS_TOKENS => Translate::noop('Access Tokens'),
+            self::KEY_EXPIRES_AT => Translate::noop('Expires at'),
+            self::KEY_REFRESH_TOKENS => Translate::noop('Refresh Tokens'),
+        ];
     }
 
     /**
@@ -260,60 +334,85 @@ class Profile
 
         $activityBag = $activityDataProvider->getActivity($userIdentifier, $maxResults, $firstResult);
 
-        $columnNames = [
-            'time' => Translate::noop('Time'),
-            'serviceName' => Translate::noop('Service'),
-            'serviceEntityId' => Translate::noop('Service entity ID'),
-            'sentData' => Translate::noop('Sent data'),
-            'ipAddress' => Translate::noop('IP address'),
-            'authenticationProtocol' => Translate::noop('Authentication protocol'),
-            'informationTransferred' => Translate::noop('Information transfered to service'),
-        ];
-
-        if ($request->query->has(self::KEY_CSV)) {
-            /** @psalm-suppress DuplicateArrayKey No string keys are being used here. */
-            $csvData = [
-                [
-                    $columnNames['time'],
-                    $columnNames['serviceName'],
-                    $columnNames['serviceEntityId'],
-                    $columnNames['informationTransferred'] . ' (data may be truncated)',
-                    $columnNames['ipAddress'],
-                    $columnNames['authenticationProtocol'],
-                ],
-                ...(array_map(
-                    fn(Activity $activity): array => [
-                        $activity->getHappenedAt()->format(DateTimeInterface::RFC3339),
-                        $activity->getServiceProvider()->getName() ?? '',
-                        $activity->getServiceProvider()->getEntityId(),
-                        substr(implode(
-                            '; ',
-                            array_map(
-                                fn($key, array $values): string => sprintf(
-                                    '%s: %s',
-                                    $key,
-                                    implode(', ', array_map(fn($value): string => (string)$value, $values))
-                                ),
-                                array_keys($activity->getUser()->getAttributes()),
-                                $activity->getUser()->getAttributes()
-                            )
-                        ), 0, 100),
-                        $activity->getClientIpAddress() ?? '',
-                        $activity->getAuthenticationProtocolDesignation() ?? '',
-                    ],
-                    $activityBag->getAll()
-                )
-                )
-            ];
-
-            /** @var array<array<string>> $csvData */
-            return $this->csvResponseFor($csvData, __FUNCTION__ . '.csv');
-        }
+        $columnNames = $this->getActivityColumnNames();
+        $csvUrl = 'activity/csv';
 
         $template = $this->resolveTemplate('accounting:user/activity.twig');
-        $template->data += compact('activityBag', 'page', 'maxResults');
+        $template->data += compact('activityBag', 'page', 'maxResults', 'csvUrl', 'columnNames');
 
         return $template;
+    }
+
+    /**
+     * @throws Exception
+     * @throws ConfigurationError
+     */
+    public function activityCsv(): Response
+    {
+        $userIdentifier = $this->resolveUserIdentifier();
+
+        $activityProviderClass = $this->moduleConfiguration->getActivityProviderClass();
+
+        if (is_null($activityProviderClass)) {
+            return new RedirectResponse($this->helpersManager->getRoutes()->getUrl(Routes::PATH_USER_PERSONAL_DATA));
+        }
+
+        $activityDataProvider = $this->dataProviderBuilder->buildActivityProvider($activityProviderClass);
+
+        $activityBag = $activityDataProvider->getActivity($userIdentifier);
+
+        $columnNames = $this->getActivityColumnNames();
+
+        /** @psalm-suppress DuplicateArrayKey No string keys are being used here. */
+        $csvData = [
+            [
+                $columnNames['time'],
+                $columnNames['serviceName'],
+                $columnNames['serviceEntityId'],
+                $columnNames['ipAddress'],
+                $columnNames['authenticationProtocol'],
+                $columnNames['informationTransferred'] . ' (data may be truncated)',
+            ],
+            ...(array_map(
+                fn(Activity $activity): array => [
+                    $activity->getHappenedAt()->format(DateTimeInterface::RFC3339),
+                    $activity->getServiceProvider()->getName() ?? '',
+                    $activity->getServiceProvider()->getEntityId(),
+                    $activity->getClientIpAddress() ?? '',
+                    $activity->getAuthenticationProtocolDesignation() ?? '',
+                    substr(implode(
+                        '; ',
+                        array_map(
+                            fn($key, array $values): string => sprintf(
+                                '%s: %s',
+                                $key,
+                                implode(', ', array_map(fn($value): string => (string)$value, $values))
+                            ),
+                            array_keys($activity->getUser()->getAttributes()),
+                            $activity->getUser()->getAttributes()
+                        )
+                    ), 0, 256),
+                ],
+                $activityBag->getAll()
+            )
+            )
+        ];
+
+        /** @var array<array<string>> $csvData */
+        return $this->csvResponseFor($csvData, __FUNCTION__ . '.csv');
+    }
+
+    protected function getActivityColumnNames(): array
+    {
+        return [
+            self::KEY_TIME => Translate::noop('Time'),
+            self::KEY_SERVICE_NAME => Translate::noop('Service'),
+            self::KEY_SERVICE_ENTITY_ID => Translate::noop('Service entity ID'),
+            self::KEY_SENT_DATA => Translate::noop('Sent data'),
+            self::KEY_IP_ADDRESS => Translate::noop('IP address'),
+            self::KEY_AUTHENTICATION_PROTOCOL => Translate::noop('Authentication protocol'),
+            self::KEY_INFORMATION_TRANSFERRED => Translate::noop('Information transferred to service'),
+        ];
     }
 
     /**
@@ -466,13 +565,18 @@ class Profile
 
     /**
      * @param array<array<array-key, Stringable|null|scalar>> $data
+     * @throws Exception
      */
     protected function csvResponseFor(array $data, string $filename = 'data.csv'): Response
     {
-        $fp = fopen('php://output', 'w');
+        $fp = fopen('php://temp', 'w');
 
         foreach ($data as $row) {
             fputcsv($fp, $row);
+        }
+
+        if (!is_resource($fp)) {
+            throw new Exception('Error creating CSV resource.');
         }
 
         rewind($fp);
@@ -481,6 +585,7 @@ class Profile
 
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Disposition', "attachment; filename=\"$filename\"");
+        $response->headers->set('Content-Encoding', 'UTF-8');
 
         return $response;
     }

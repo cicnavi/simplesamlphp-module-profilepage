@@ -7,13 +7,25 @@ accounting-user-personal-data:
     path: /user/personal-data
     controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::personalData
 
+accounting-user-personal-data-csv:
+    path: /user/personal-data/csv
+    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::personalDataCsv
+
 accounting-user-connected-organizations:
     path: /user/connected-organizations
     controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::connectedOrganizations
 
+accounting-user-connected-organizations-csv:
+    path: /user/connected-organizations/csv
+    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::connectedOrganizationsCsv
+
 accounting-user-activity:
     path: /user/activity
     controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::activity
+
+accounting-user-activity-csv:
+    path: /user/activity/csv
+    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::activityCsv
 
 accounting-user-oidc-token-revoke-xhr:
     path: /user/oidc-tokens/revoke-xhr

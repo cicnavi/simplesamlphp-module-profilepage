@@ -15,7 +15,7 @@ trait GettableActivityTrait
     /**
      * @throws StoreException
      */
-    public function getActivity(string $userIdentifier, int $maxResults, int $firstResult): Activity\Bag
+    public function getActivity(string $userIdentifier, int $maxResults = null, int $firstResult = 0): Activity\Bag
     {
         $userIdentifierHashSha256 = $this->helpersManager->getHash()->getSha256($userIdentifier);
 
