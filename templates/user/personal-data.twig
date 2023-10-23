@@ -20,15 +20,15 @@
     <table>
         <!-- fixed table header -->
         <tr>
-            <th>{{ 'Attribute'|trans }}</th>
-            <th>{{ 'Your value'|trans }}</th>
+            <th>{{ columnNames.attribute|trans }}</th>
+            <th>{{ columnNames.values|trans }}</th>
         </tr>
 
         {% for name, value in normalizedAttributes %}
             <tr>
                 <td>
                     {{ name|trans }}
-                    <div class="popup" onclick="doPopup('popup-{{ name }}')">
+                    <div class="popup" onclick="accounting.doPopup('popup-{{ name }}')">
                         <img src="{{ asset('css/src/icons/i.svg', 'accounting') }}" alt="Info icon"/>
                         {% set helpId = 'help-attribute-' ~ name %}
                         <span class="popuptext" id="popup-{{ name }}">

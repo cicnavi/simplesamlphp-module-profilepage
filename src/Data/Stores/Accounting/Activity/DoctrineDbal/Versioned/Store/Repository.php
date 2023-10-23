@@ -99,7 +99,7 @@ class Repository extends BaseRepository
     /**
      * @throws StoreException
      */
-    public function getActivity(string $userIdentifierHashSha256, int $maxResults, int $firstResult): array
+    public function getActivity(string $userIdentifierHashSha256, int $maxResults = null, int $firstResult = 0): array
     {
         try {
             $authenticationEventsQueryBuilder = $this->connection->dbal()->createQueryBuilder();
@@ -203,9 +203,12 @@ class Repository extends BaseRepository
                     TableConstants::TABLE_ALIAS_AUTHENTICATION_EVENT . '.' .
                     TableConstants::TABLE_AUTHENTICATION_EVENT_COLUMN_NAME_HAPPENED_AT,
                     'DESC'
-                )
-            ->setMaxResults($maxResults)
-            ->setFirstResult($firstResult);
+                );
+
+            if ($maxResults !== null) {
+                $authenticationEventsQueryBuilder->setMaxResults($maxResults)
+                    ->setFirstResult($firstResult);
+            }
 
             return $authenticationEventsQueryBuilder->executeQuery()->fetchAllAssociative();
         } catch (Throwable $exception) {

@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \SimpleSAML\Module\accounting\Services\MenuManager
+ * @uses \SimpleSAML\Module\accounting\Services\MenuManager\MenuItem
  */
 class MenuManagerTest extends TestCase
 {
@@ -30,5 +31,7 @@ class MenuManagerTest extends TestCase
         $this->assertCount(1, $menuManager->getItems());
         $menuManager->addItems($this->menuItemStub, $this->menuItemStub);
         $this->assertCount(3, $menuManager->getItems());
+
+        $this->assertInstanceOf(MenuManager\MenuItem::class, $menuManager->buildItem('test', 'test'));
     }
 }

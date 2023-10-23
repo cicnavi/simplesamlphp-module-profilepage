@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-exit(1); // This script was used to generate fake data...
+//exit(1); // This script was used to generate fake data...
 
 use SimpleSAML\Module\accounting\Data\Trackers\Activity\DoctrineDbal\CurrentDataTracker as ActivityTracker;
 use SimpleSAML\Module\accounting\Data\Trackers\ConnectedServices\DoctrineDbal\CurrentDataTracker as ConnectedServicesTracker;

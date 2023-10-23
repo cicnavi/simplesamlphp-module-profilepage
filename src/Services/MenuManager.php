@@ -33,4 +33,12 @@ class MenuManager
     {
         return $this->items;
     }
+
+    /**
+     * Factory method for MenuItem for easy injection in tests.
+     */
+    public function buildItem(string $hrefPath, string $label, ?string $iconAssetPath = null): MenuItem
+    {
+        return new MenuItem($hrefPath, $label, $iconAssetPath);
+    }
 }

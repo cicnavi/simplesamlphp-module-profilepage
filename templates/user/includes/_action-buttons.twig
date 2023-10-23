@@ -1,15 +1,7 @@
 
-{# @var normalizedAttributes array User attributes #}
-
-{#
-    Example code to dump user attribute array to the screen:
-    {{ normalizedAttributes|json_encode(constant('JSON_PRETTY_PRINT')) }}
-#}
-
 <div class="dropdown">
-    <button class="dropbtn">{% trans %}TODO Actions{% endtrans %} ▾</button>
+    <button class="dropbtn">{% trans %}Actions{% endtrans %} ▾</button>
     <div class="dropdown-content">
-        <a href="#">{% trans %}Custom action{% endtrans %}</a>
+        <a href="{{ csvUrl|default('?csv')  }}">{% trans %}Export to CSV{% endtrans %}</a>
     </div>
 </div>
-

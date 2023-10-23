@@ -2,6 +2,7 @@
 {# @var connectedServiceProvider \SimpleSAML\Module\accounting\Entities\ConnectedService #}
 {# @var accessTokensByClient array #}
 {# @var refreshTokensByClient array #}
+{# @var columnNames array #}
 
 {% extends "@accounting/base.twig" %}
 
@@ -10,12 +11,15 @@
 {% set pageMenuItem = 'connected-organizations' %}
 
 {% block content %}
+    {% if actionButtonsEnabled %}
+        {% include "@accounting/user/includes/_action-buttons.twig" %}
+    {% endif %}
     <table>
         <!-- fixed table header -->
         <tr>
-            <th><strong>{{ 'Name'|trans }}</strong></th>
-            <th><strong>{{ 'All access'|trans }}</strong></th>
-            <th><strong>{{ 'Last access'|trans }}</strong></th>
+            <th><strong>{{ columnNames.name|trans }}</strong></th>
+            <th><strong>{{ columnNames.numberOfAccess|trans }}</strong></th>
+            <th><strong>{{ columnNames.lastAccess|trans }}</strong></th>
         </tr>
 
         {% for connectedServiceProvider in connectedServiceProviderBag.getAll %}
@@ -38,31 +42,31 @@
                         <img src="{{ asset('css/src/icons/dropdown.svg', 'accounting') }}" alt="Dropdown icon">
                     </label>
                     <div class="dropdown-box" >
-                        <strong>{{ 'Service details'|trans }}</strong>
+                        <strong>{{ columnNames.serviceDetails|trans }}</strong>
                         <ul>
-                            <li>{{ 'Entity ID'|trans }}: {{ connectedServiceProvider.getServiceProvider.getEntityId|e }}</li>
-                            <li>{{ 'Description'|trans }}: {{ connectedServiceProvider.getServiceProvider.getDescription|e|default(' / ') }}</li>
+                            <li>{{  columnNames.entityId|trans }}: {{ connectedServiceProvider.getServiceProvider.getEntityId|e }}</li>
+                            <li>{{  columnNames.description|trans }}: {{ connectedServiceProvider.getServiceProvider.getDescription|e|default(' / ') }}</li>
                         </ul>
 
-                        <strong>{{ 'Login details'|trans }}</strong>
+                        <strong>{{  columnNames.loginDetails|trans }}</strong>
                         <ul>
                             <li>
-                                {{ 'First access'|trans }}: {{ connectedServiceProvider.getFirstAuthenticationAt|date() }}
+                                {{ columnNames.firstAccess|trans }}: {{ connectedServiceProvider.getFirstAuthenticationAt|date() }}
                             </li>
                             <li>
-                                {{ 'Last access'|trans }}: {{ connectedServiceProvider.getLastAuthenticationAt|date() }}
+                                {{ columnNames.lastAccess|trans }}: {{ connectedServiceProvider.getLastAuthenticationAt|date() }}
                             </li>
                         </ul>
 
                         {% if connectedServiceProvider.serviceProvider.protocol.designation is same as oidcProtocolDesignation %}
                             {% if accessTokensByClient is not empty and attribute(accessTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
-                                <strong>{{ 'Access Tokens'|trans }}</strong>
+                                <strong>{{ columnNames.accessTokens|trans }}</strong>
                                 <table>
                                     {% for accessToken in attribute(accessTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
                                         <tr>
                                             <td>
                                                 {{ accessToken.id }}<br>
-                                                {{ 'Expires at'|trans }} {{ accessToken.expires_at|date }}
+                                                {{ columnNames.expiresAt|trans }} {{ accessToken.expires_at|date }}
                                             </td>
                                             <td>
                                                 <form class="token-revoke-form" action="oidc-tokens/revoke-xhr">
@@ -77,13 +81,13 @@
                             {% endif %}
 
                             {% if refreshTokensByClient is not empty and attribute(refreshTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
-                                <strong>{{ 'Refresh Tokens'|trans }}</strong>
+                                <strong>{{ columnNames.refreshTokens|trans }}</strong>
                                 <table>
                                     {% for refreshToken in attribute(refreshTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
                                         <tr>
                                             <td>
                                                 {{ refreshToken.id }}<br>
-                                                {{ 'Expires at'|trans }} {{ refreshToken.expires_at|date }}
+                                                {{ columnNames.expiresAt|trans }} {{ refreshToken.expires_at|date }}
                                             </td>
                                             <td>
                                                 <form class="token-revoke-form" action="oidc-tokens/revoke-xhr">

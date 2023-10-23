@@ -8,6 +8,9 @@ use SimpleSAML\Module\accounting\Entities\Activity;
 
 class Bag
 {
+    /**
+     * @var Activity[]
+     */
     protected array $activities = [];
 
     public function add(Activity $activity): void
@@ -15,6 +18,9 @@ class Bag
         $this->activities[] = $activity;
     }
 
+    /**
+     * @return Activity[]
+     */
     public function getAll(): array
     {
         return $this->activities;

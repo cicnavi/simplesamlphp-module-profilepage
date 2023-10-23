@@ -16,5 +16,5 @@ interface ActivityInterface extends DataProviderInterface
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER
     ): self;
 
-    public function getActivity(string $userIdentifier, int $maxResults, int $firstResult): Activity\Bag;
+    public function getActivity(string $userIdentifier, int $maxResults = null, int $firstResult = 0): Activity\Bag;
 }
