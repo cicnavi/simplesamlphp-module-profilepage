@@ -71,7 +71,7 @@ class VersionedDataProvider implements ActivityInterface
     /**
      * @throws StoreException
      */
-    public function getActivity(string $userIdentifier, int $maxResults, int $firstResult): Activity\Bag
+    public function getActivity(string $userIdentifier, int $maxResults = null, int $firstResult = 0): Activity\Bag
     {
         return $this->store->getActivity($userIdentifier, $maxResults, $firstResult);
     }

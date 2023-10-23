@@ -16,6 +16,7 @@ use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc;
 use SimpleSAML\Module\accounting\Entities\ConnectedService;
 use SimpleSAML\Module\accounting\Entities\User;
 use SimpleSAML\Module\accounting\Exceptions\Exception;
+use SimpleSAML\Module\accounting\Factories\FactoryManager;
 use SimpleSAML\Module\accounting\Helpers\Attributes;
 use SimpleSAML\Module\accounting\Helpers\Routes;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
@@ -68,6 +69,7 @@ class Profile
     protected MenuManager $menuManager;
     protected CsrfToken $csrfToken;
     protected AlertsBag $alertsBag;
+    protected FactoryManager $factoryManager;
 
     /**
      * @param Session $session The current user session.
@@ -91,21 +93,26 @@ class Profile
         HelpersManager $helpersManager = null,
         SspModuleManager $sspModuleManager = null,
         CsrfToken $csrfToken = null,
-        AlertsBag $alertsBag = null
+        AlertsBag $alertsBag = null,
+        FactoryManager $factoryManager = null,
     ) {
         $this->defaultAuthenticationSource = $moduleConfiguration->getDefaultAuthenticationSource();
         $this->authSimple = $authSimple ?? new Simple($this->defaultAuthenticationSource, $sspConfiguration, $session);
 
         $this->helpersManager = $helpersManager ?? new HelpersManager();
 
-        $this->dataProviderBuilder = $authenticationDataProviderBuilder ??
-            new DataProviderBuilder($this->moduleConfiguration, $this->logger, $this->helpersManager);
+        $this->dataProviderBuilder = $authenticationDataProviderBuilder ?? new DataProviderBuilder(
+            $this->moduleConfiguration,
+            $this->logger,
+            $this->helpersManager
+        );
 
         $this->sspModuleManager = $sspModuleManager ?? new SspModuleManager($this->logger, $this->helpersManager);
+        $this->factoryManager = $factoryManager ?? new FactoryManager();
 
         // Make sure the end user is authenticated.
         $this->authSimple->requireAuth();
-        $this->user = new User($this->authSimple->getAttributes());
+        $this->user = $this->factoryManager->userFactory()->build($this->authSimple->getAttributes());
         $this->menuManager = $this->prepareMenuManager();
         $this->csrfToken = $csrfToken ?? new CsrfToken($this->session, $this->helpersManager);
         $this->alertsBag = $alertsBag ?? new AlertsBag($this->session);
@@ -402,6 +409,9 @@ class Profile
         return $this->csvResponseFor($csvData, __FUNCTION__ . '.csv');
     }
 
+    /**
+     * @return array<string,string>
+     */
     protected function getActivityColumnNames(): array
     {
         return [
@@ -516,10 +526,10 @@ class Profile
 
     protected function prepareMenuManager(): MenuManager
     {
-        $menuManager = new MenuManager();
+        $menuManager = $this->factoryManager->menuManagerFactory()->build();
 
         $menuManager->addItems(
-            new MenuManager\MenuItem(
+            $menuManager->buildItem(
                 'personal-data',
                 Translate::noop('Personal Data'),
                 'css/src/icons/prof-page.svg'
@@ -529,7 +539,7 @@ class Profile
         // Depending on enabled functionalities, add additional menu items.
         if ($this->moduleConfiguration->getConnectedServicesProviderClass() !== null) {
             $menuManager->addItems(
-                new MenuManager\MenuItem(
+                $menuManager->buildItem(
                     'connected-organizations',
                     Translate::noop('Connected Organizations'),
                     'css/src/icons/conn-orgs.svg'
@@ -539,7 +549,7 @@ class Profile
 
         if ($this->moduleConfiguration->getActivityProviderClass() !== null) {
             $menuManager->addItems(
-                new MenuManager\MenuItem(
+                $menuManager->buildItem(
                     'activity',
                     Translate::noop('Activity'),
                     'css/src/icons/activity.svg'
@@ -548,7 +558,7 @@ class Profile
         }
 
         $menuManager->addItems(
-            new MenuManager\MenuItem(
+            $menuManager->buildItem(
                 'logout',
                 Translate::noop('Log out'),
                 'css/src/icons/logout.svg'
