@@ -13,7 +13,7 @@
     
     --button-bg-c: #4859B2;
     --button-text-c: #ffffff;
-  
+
     --link-c: #4859B2;
   
     --main-font-family: Raleway;
@@ -226,8 +226,8 @@
   #banner div {
     color: var(--link-c);
     background-color: var(--nav-bg-c);
-    margin: 2em;
-    padding: 2.5em 1em 1em;
+    margin: 1em 0 0;
+    padding: 1em;
 
     border-width: 1px;
     border-style: solid;
@@ -243,11 +243,8 @@
     font-size: 80%;
   }
   
-  .label {
-    font-size: 90%;
-    padding-left:1em;
-    padding-right: 1em;
-    background-color: var(--caption-bg-c);
+  .value {
+    font-size: 85%;
   }
   
   button {
@@ -261,22 +258,18 @@
   /* ======================= */
   
   table {
-    padding:1em;
-    margin: 1em auto 1em 1em;
     width: 100%;
   }
   
   th {
-    text-align:left;
-    padding:0.5em;
+    text-align: left;
+    padding: 0.5em;
     word-wrap: break-word;
   }
   
   td {
     text-align:left;
-    padding-left:0.5em;
-    padding-right:0.5em;
-    padding-top:1.25em;
+    padding: 0.5em 0.5em 0 0.5em;
     word-wrap: break-word;
     border-top: solid 1px var(--table-border);
     vertical-align: top;
@@ -324,11 +317,15 @@
   .dropdown-box {
     background-color: var(--caption-bg-c);
     display:none;
-    padding: 1em;
+    padding: 0.5em 0.5em 0.5em 1em;
   }
   
   .dropdown-toggle:checked ~ div.dropdown-box:first-of-type {
     display: block;
+  }
+
+  .dropdown.actions {
+    margin-top: 0.5em;
   }
   
   /* ======================= */
@@ -529,4 +526,27 @@
 
 .dropdown:hover .dropbtn {
   background-color: #4f5c9b;
+}
+
+.center {
+  text-align: center;
+}
+
+.pagination {
+  height: 2em;
+}
+
+.pagination a,.asd {
+  color: var(--link-c);
+  padding: 1em;
+  margin: 0 1em;
+  text-decoration: none;
+  font-size: 120%;
+  font-family: var(--main-font-family);
+}
+
+.pagination .page {
+  color: var(--link-c);
+  font-size: 120%;
+  font-family: var(--main-font-family);
 }
