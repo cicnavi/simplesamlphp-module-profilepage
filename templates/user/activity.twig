@@ -21,11 +21,13 @@
         {% for activity in activityBag.getAll %}
             <tr class="accordion">
                 <td>{{ activity.getHappenedAt|date() }}</td>
-                <td>{{ activity.getServiceProvider.getName }}</td>
+                <td><span class="value">{{ activity.getServiceProvider.getName }}</span></td>
                 <td>
+                    <span class="value">
                     {% for name in activity.getUser.getAttributes|keys %}
                         {{ name|trans }}{% if not loop.last %}, {% endif %}
                     {% endfor %}
+                    </span>
                 </td>
             </tr>
             <tr>
@@ -37,15 +39,18 @@
                     <div class="dropdown-box">
                         <strong>{{ columnNames.informationTransferred|trans }}</strong>:
                         {% for name, value in activity.getUser.getAttributes %}
-                            <span class="label">
+                            <span class="value">
                                 {{ name|trans }}: {{ value|join(', ') }}
                             </span>
                         {% endfor %}
                         <br><br>
-                        <strong>{{ columnNames.ipAddress|trans }}</strong>: {{ activity.getClientIpAddress|default(' / ') }}
+                        <strong>{{ columnNames.ipAddress|trans }}</strong>:
+                            <span class="value">{{ activity.getClientIpAddress|default(' / ') }}</span>
                         <br>
                         <strong>{{ columnNames.authenticationProtocol|trans }}</strong>:
+                            <span class="value">
                             {{ activity.getAuthenticationProtocolDesignation|default(' / ') }}
+                            </span>
                         <br>
                     </div>
                 </td>
@@ -62,7 +67,7 @@
             {% if page > 1 %}
                 <a href="?page={{ page - 1 }}">❮</a>
             {% endif %}
-
+                <span class="page">{{ page }}</span>
             {% if activityBag.getAll|length == maxResults %}
                 <a href="?page={{ page + 1 }}">❯</a>
             {% endif %}

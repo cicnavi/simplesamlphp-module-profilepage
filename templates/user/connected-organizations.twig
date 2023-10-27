@@ -32,8 +32,8 @@
                          alt="Service Logo"/>
                     {{ connectedServiceProvider.getServiceProvider.getName|e }}
                 </td>
-                <td>{{ connectedServiceProvider.getNumberOfAuthentications|e }}</td>
-                <td>{{ connectedServiceProvider.getLastAuthenticationAt|date() }}</td>
+                <td><span class="value">{{ connectedServiceProvider.getNumberOfAuthentications|e }}</span></td>
+                <td><span class="value">{{ connectedServiceProvider.getLastAuthenticationAt|date() }}</span></td>
             </tr>
             <tr>
                 <td class="dropdown-container" colspan="3">
@@ -44,17 +44,25 @@
                     <div class="dropdown-box" >
                         <strong>{{ columnNames.serviceDetails|trans }}</strong>
                         <ul>
-                            <li>{{  columnNames.entityId|trans }}: {{ connectedServiceProvider.getServiceProvider.getEntityId|e }}</li>
-                            <li>{{  columnNames.description|trans }}: {{ connectedServiceProvider.getServiceProvider.getDescription|e|default(' / ') }}</li>
+                            <li>
+                                {{  columnNames.entityId|trans }}:
+                                <span class="value">{{ connectedServiceProvider.getServiceProvider.getEntityId|e }}</span>
+                            </li>
+                            <li>
+                                {{  columnNames.description|trans }}:
+                                <span class="value">{{ connectedServiceProvider.getServiceProvider.getDescription|e|default(' / ') }}</span>
+                            </li>
                         </ul>
 
                         <strong>{{  columnNames.loginDetails|trans }}</strong>
                         <ul>
                             <li>
-                                {{ columnNames.firstAccess|trans }}: {{ connectedServiceProvider.getFirstAuthenticationAt|date() }}
+                                {{ columnNames.firstAccess|trans }}:
+                                <span class="value">{{ connectedServiceProvider.getFirstAuthenticationAt|date() }}</span>
                             </li>
                             <li>
-                                {{ columnNames.lastAccess|trans }}: {{ connectedServiceProvider.getLastAuthenticationAt|date() }}
+                                {{ columnNames.lastAccess|trans }}:
+                                <span class="value">{{ connectedServiceProvider.getLastAuthenticationAt|date() }}</span>
                             </li>
                         </ul>
 
@@ -65,8 +73,9 @@
                                     {% for accessToken in attribute(accessTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
                                         <tr>
                                             <td>
-                                                {{ accessToken.id }}<br>
-                                                {{ columnNames.expiresAt|trans }} {{ accessToken.expires_at|date }}
+                                                <span class="value">{{ accessToken.id }}</span><br>
+                                                {{ columnNames.expiresAt|trans }}:
+                                                <span class="value">{{ accessToken.expires_at|date }}</span>
                                             </td>
                                             <td>
                                                 <form class="token-revoke-form" action="oidc-tokens/revoke-xhr">
@@ -81,13 +90,15 @@
                             {% endif %}
 
                             {% if refreshTokensByClient is not empty and attribute(refreshTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
+                                <br>
                                 <strong>{{ columnNames.refreshTokens|trans }}</strong>
                                 <table>
                                     {% for refreshToken in attribute(refreshTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
                                         <tr>
                                             <td>
-                                                {{ refreshToken.id }}<br>
-                                                {{ columnNames.expiresAt|trans }} {{ refreshToken.expires_at|date }}
+                                                <span class="value">{{ refreshToken.id }}</span><br>
+                                                {{ columnNames.expiresAt|trans }}:
+                                                <span class="value">{{ refreshToken.expires_at|date }}</span>
                                             </td>
                                             <td>
                                                 <form class="token-revoke-form" action="oidc-tokens/revoke-xhr">
