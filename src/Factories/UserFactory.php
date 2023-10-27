@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\accounting\Factories;
 
 use SimpleSAML\Module\accounting\Entities\User;

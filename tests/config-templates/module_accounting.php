@@ -6,6 +6,7 @@ use SimpleSAML\Module\accounting\Data\Providers;
 use SimpleSAML\Module\accounting\Data\Stores;
 use SimpleSAML\Module\accounting\Data\Trackers;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\Serializers;
 
 $config = [
 
@@ -69,4 +70,6 @@ $config = [
     ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
 
     ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => true,
+
+	ModuleConfiguration::OPTION_SERIALIZER => Serializers\PhpSerializer::class,
 ];

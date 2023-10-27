@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 
 class RawConnectedService extends AbstractRawEntity
 {
@@ -17,9 +18,9 @@ class RawConnectedService extends AbstractRawEntity
     protected array $serviceProviderMetadata;
     protected array $userAttributes;
 
-    public function __construct(array $rawRow, AbstractPlatform $abstractPlatform)
+    public function __construct(array $rawRow, AbstractPlatform $abstractPlatform, SerializerInterface $serializer)
     {
-        parent::__construct($rawRow, $abstractPlatform);
+        parent::__construct($rawRow, $abstractPlatform, $serializer);
 
         $this->numberOfAuthentications = (int)$rawRow[
         EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS

@@ -43,10 +43,10 @@ class Store extends AbstractStore implements JobsStoreInterface
             ->preparePrefixedTableName(TableConstants::TABLE_NAME_JOB_FAILED);
 
         $this->jobsRepository = $jobsRepository ??
-            new Repository($this->connection, $this->prefixedTableNameJobs, $this->logger);
+            new Repository($this->connection, $this->prefixedTableNameJobs, $this->logger, $this->serializer);
 
         $this->failedJobsRepository = $failedJobsRepository ??
-            new Repository($this->connection, $this->prefixedTableNameFailedJobs, $this->logger);
+            new Repository($this->connection, $this->prefixedTableNameFailedJobs, $this->logger, $this->serializer);
     }
 
     /**

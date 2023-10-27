@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 
 class RawActivity extends AbstractRawEntity
 {
@@ -17,9 +18,12 @@ class RawActivity extends AbstractRawEntity
     protected ?string $clientIpAddress;
     protected ?string $authenticationProtocolDesignation;
 
-    public function __construct(array $rawRow, AbstractPlatform $abstractPlatform)
-    {
-        parent::__construct($rawRow, $abstractPlatform);
+    public function __construct(
+		array $rawRow,
+		AbstractPlatform $abstractPlatform,
+	    SerializerInterface $serializer
+    ) {
+        parent::__construct($rawRow, $abstractPlatform, $serializer);
 
         $this->serviceProviderMetadata = $this->resolveServiceProviderMetadata(
             (string)$rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA]

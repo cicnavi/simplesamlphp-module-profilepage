@@ -7,9 +7,9 @@ namespace SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractPayload;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use function sprintf;
 
 class RawJob extends AbstractRawEntity
@@ -19,9 +19,9 @@ class RawJob extends AbstractRawEntity
     protected string $type;
     protected DateTimeImmutable $createdAt;
 
-    public function __construct(array $rawRow, AbstractPlatform $abstractPlatform)
+    public function __construct(array $rawRow, AbstractPlatform $abstractPlatform, SerializerInterface $serializer)
     {
-        parent::__construct($rawRow, $abstractPlatform);
+        parent::__construct($rawRow, $abstractPlatform, $serializer);
 
         $this->id = (int)$rawRow[TableConstants::COLUMN_NAME_ID];
         $this->payload = $this->resolvePayload((string)$rawRow[TableConstants::COLUMN_NAME_PAYLOAD]);
@@ -72,7 +72,7 @@ class RawJob extends AbstractRawEntity
     protected function resolvePayload(string $rawPayload): array
     {
         /** @psalm-suppress MixedAssignment - we check the type manually */
-        $payload = unserialize($rawPayload);
+        $payload = $this->serializer->undo($rawPayload);
 
         if (is_array($payload)) {
             return $payload;

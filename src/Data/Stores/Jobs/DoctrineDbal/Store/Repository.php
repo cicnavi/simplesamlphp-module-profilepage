@@ -12,6 +12,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use Throwable;
 
 class Repository
@@ -23,8 +24,12 @@ class Repository
     /**
      * @throws StoreException
      */
-    public function __construct(protected Connection $connection, string $tableName, protected LoggerInterface $logger)
-    {
+    public function __construct(
+		protected Connection $connection,
+		string $tableName,
+		protected LoggerInterface $logger,
+	    protected SerializerInterface $serializer,
+    ) {
         $this->prepareValidJobsTableNames();
 
         $this->validateTableName($tableName);
@@ -59,7 +64,7 @@ class Repository
             )
             ->setParameters(
                 [
-                    Store\TableConstants::COLUMN_NAME_PAYLOAD => serialize($job->getRawState()),
+                    Store\TableConstants::COLUMN_NAME_PAYLOAD => $this->serializer->do($job->getRawState()),
                     Store\TableConstants::COLUMN_NAME_TYPE => $job->getType(),
                     Store\TableConstants::COLUMN_NAME_CREATED_AT => $job->getCreatedAt()->getTimestamp(),
                 ],
@@ -121,7 +126,7 @@ class Repository
         }
 
         try {
-            $rawJob = new RawJob($row, $this->connection->dbal()->getDatabasePlatform());
+            $rawJob = new RawJob($row, $this->connection->dbal()->getDatabasePlatform(), $this->serializer);
             $rawJobType = $rawJob->getType();
 
             // Try to create a specific job type. Otherwise, create a generic one.
