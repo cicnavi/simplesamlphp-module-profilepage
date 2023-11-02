@@ -71,5 +71,5 @@ $config = [
 
     ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => true,
 
-	ModuleConfiguration::OPTION_SERIALIZER => Serializers\PhpSerializer::class,
+    ModuleConfiguration::OPTION_SERIALIZER => Serializers\PhpSerializer::class,
 ];

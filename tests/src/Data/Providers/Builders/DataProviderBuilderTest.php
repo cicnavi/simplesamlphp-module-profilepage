@@ -16,6 +16,7 @@ use SimpleSAML\Module\accounting\Exceptions\Exception;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
@@ -38,6 +39,8 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Data\Providers\ConnectedServices\DoctrineDbal\VersionedDataProvider
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\Repository
+ * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
  */
 class DataProviderBuilderTest extends TestCase
 {
@@ -49,6 +52,7 @@ class DataProviderBuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
+        $this->moduleConfigurationStub->method('getSerializerClass')->willReturn(PhpSerializer::class);
         $connectionParams = ConnectionParameters::DBAL_SQLITE_MEMORY;
         $this->moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn($connectionParams);

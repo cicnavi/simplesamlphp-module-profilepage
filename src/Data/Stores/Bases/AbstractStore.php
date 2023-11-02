@@ -15,21 +15,21 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 abstract class AbstractStore implements BuildableUsingModuleConfigurationInterface, SetupableInterface
 {
     protected string $connectionKey;
-	protected SerializerInterface $serializer;
+    protected SerializerInterface $serializer;
 
-	/**
+    /**
      */
     public function __construct(
         protected ModuleConfiguration $moduleConfiguration,
         protected LoggerInterface $logger,
         string $connectionKey = null,
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
-	    SerializerInterface $serializer = null,
+        SerializerInterface $serializer = null,
     ) {
         $this->connectionKey = $connectionKey ??
             $moduleConfiguration->getClassConnectionKey($this->getSelfClass(), $connectionType);
 
-		$this->serializer = $serializer ?? (new SerializerFactory($this->moduleConfiguration))->build();
+        $this->serializer = $serializer ?? (new SerializerFactory($this->moduleConfiguration))->build();
     }
 
     /**

@@ -13,6 +13,7 @@ use SimpleSAML\Module\accounting\Entities\ConnectedService\Bag;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
@@ -27,6 +28,8 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
  */
 class CurrentDataProviderTest extends TestCase
 {
@@ -50,6 +53,7 @@ class CurrentDataProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->moduleConfigurationMock = $this->createMock(ModuleConfiguration::class);
+        $this->moduleConfigurationMock->method('getSerializerClass')->willReturn(PhpSerializer::class);
         $connectionParams = ConnectionParameters::DBAL_SQLITE_MEMORY;
         $this->moduleConfigurationMock->method('getConnectionParameters')
             ->willReturn($connectionParams);

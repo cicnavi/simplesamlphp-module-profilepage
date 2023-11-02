@@ -19,9 +19,9 @@ class RawActivity extends AbstractRawEntity
     protected ?string $authenticationProtocolDesignation;
 
     public function __construct(
-		array $rawRow,
-		AbstractPlatform $abstractPlatform,
-	    SerializerInterface $serializer
+        array $rawRow,
+        AbstractPlatform $abstractPlatform,
+        SerializerInterface $serializer
     ) {
         parent::__construct($rawRow, $abstractPlatform, $serializer);
 

@@ -31,9 +31,9 @@ trait GettableActivityTrait
             /** @var array $result */
             foreach ($results as $result) {
                 $rawActivity = new RawActivity(
-					$result,
-					$this->connection->dbal()->getDatabasePlatform(),
-					$this->serializer
+                    $result,
+                    $this->connection->dbal()->getDatabasePlatform(),
+                    $this->serializer
                 );
                 $serviceProvider = $this->helpersManager
                     ->getProviderResolver()

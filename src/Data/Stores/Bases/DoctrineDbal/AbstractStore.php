@@ -11,6 +11,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 abstract class AbstractStore extends \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
@@ -27,9 +28,10 @@ abstract class AbstractStore extends \SimpleSAML\Module\accounting\Data\Stores\B
         LoggerInterface $logger,
         string $connectionKey = null,
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
-        Factory $connectionFactory = null
+        Factory $connectionFactory = null,
+        SerializerInterface $serializer = null,
     ) {
-        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType);
+        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType, $serializer);
 
         $this->connectionFactory = $connectionFactory ?? new Factory($this->moduleConfiguration, $this->logger);
 

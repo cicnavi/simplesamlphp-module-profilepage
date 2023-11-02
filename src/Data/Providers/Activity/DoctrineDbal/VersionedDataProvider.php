@@ -12,6 +12,7 @@ use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
 use SimpleSAML\Module\accounting\Entities\Activity;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 class VersionedDataProvider implements ActivityInterface
@@ -25,7 +26,7 @@ class VersionedDataProvider implements ActivityInterface
         protected ModuleConfiguration $moduleConfiguration,
         protected LoggerInterface $logger,
         string $connectionType = ModuleConfiguration\ConnectionType::SLAVE,
-        Store $store = null
+        Store $store = null,
     ) {
         $this->store = $store ?? new Store(
             $this->moduleConfiguration,

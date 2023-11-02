@@ -17,6 +17,7 @@ use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
@@ -43,6 +44,7 @@ class RedisStoreTest extends TestCase
      * @var Stub
      */
     protected $jobStub;
+    private MockObject $serializerMock;
 
     protected function setUp(): void
     {
@@ -51,6 +53,10 @@ class RedisStoreTest extends TestCase
         $this->redisMock = $this->createMock(Redis::class);
         $this->jobStub = $this->createStub(JobInterface::class);
         $this->jobStub->method('getType')->willReturn(GenericJob::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock->method('undo')->willReturnCallback(
+            fn($argument) => unserialize($argument)
+        );
     }
 
     /**
@@ -68,7 +74,8 @@ class RedisStoreTest extends TestCase
                 $this->loggerMock,
                 null,
                 ModuleConfiguration\ConnectionType::MASTER,
-                $this->redisMock
+                $this->redisMock,
+                $this->serializerMock,
             )
         );
     }
@@ -87,7 +94,8 @@ class RedisStoreTest extends TestCase
                 $this->loggerMock,
                 null,
                 ModuleConfiguration\ConnectionType::MASTER,
-                $this->redisMock
+                $this->redisMock,
+                $this->serializerMock,
             )
         );
     }
@@ -112,7 +120,8 @@ class RedisStoreTest extends TestCase
                 $this->loggerMock,
                 null,
                 ModuleConfiguration\ConnectionType::MASTER,
-                $this->redisMock
+                $this->redisMock,
+                $this->serializerMock,
             )
         );
     }
@@ -137,7 +146,8 @@ class RedisStoreTest extends TestCase
                 $this->loggerMock,
                 null,
                 ModuleConfiguration\ConnectionType::MASTER,
-                $this->redisMock
+                $this->redisMock,
+                $this->serializerMock,
             )
         );
     }
@@ -161,7 +171,8 @@ class RedisStoreTest extends TestCase
                 $this->loggerMock,
                 null,
                 ModuleConfiguration\ConnectionType::MASTER,
-                $this->redisMock
+                $this->redisMock,
+                $this->serializerMock,
             )
         );
     }
@@ -184,7 +195,8 @@ class RedisStoreTest extends TestCase
             $this->loggerMock,
             null,
             ModuleConfiguration\ConnectionType::MASTER,
-            $this->redisMock
+            $this->redisMock,
+            $this->serializerMock,
         );
 
         $redisStore->enqueue($this->jobStub);
@@ -206,7 +218,8 @@ class RedisStoreTest extends TestCase
             $this->loggerMock,
             null,
             ModuleConfiguration\ConnectionType::MASTER,
-            $this->redisMock
+            $this->redisMock,
+            $this->serializerMock,
         );
 
         $redisStore->enqueue($this->jobStub);
@@ -228,7 +241,8 @@ class RedisStoreTest extends TestCase
             $this->loggerMock,
             null,
             ModuleConfiguration\ConnectionType::MASTER,
-            $this->redisMock
+            $this->redisMock,
+            $this->serializerMock,
         );
 
         $this->assertInstanceOf(JobInterface::class, $redisStore->dequeue($this->jobStub->getType()));
@@ -252,7 +266,8 @@ class RedisStoreTest extends TestCase
             $this->loggerMock,
             null,
             ModuleConfiguration\ConnectionType::MASTER,
-            $this->redisMock
+            $this->redisMock,
+            $this->serializerMock,
         );
 
         $redisStore->dequeue($this->jobStub->getType());
@@ -276,7 +291,8 @@ class RedisStoreTest extends TestCase
             $this->loggerMock,
             null,
             ModuleConfiguration\ConnectionType::MASTER,
-            $this->redisMock
+            $this->redisMock,
+            $this->serializerMock,
         );
 
         // Suppress notice being raised using @
@@ -300,7 +316,8 @@ class RedisStoreTest extends TestCase
             $this->loggerMock,
             null,
             ModuleConfiguration\ConnectionType::MASTER,
-            $this->redisMock
+            $this->redisMock,
+            $this->serializerMock,
         );
 
         $redisStore->markFailedJob($this->jobStub);
@@ -324,7 +341,8 @@ class RedisStoreTest extends TestCase
             $this->loggerMock,
             null,
             ModuleConfiguration\ConnectionType::MASTER,
-            $this->redisMock
+            $this->redisMock,
+            $this->serializerMock,
         );
 
         $redisStore->markFailedJob($this->jobStub);
@@ -343,7 +361,8 @@ class RedisStoreTest extends TestCase
             $this->loggerMock,
             null,
             ModuleConfiguration\ConnectionType::MASTER,
-            $this->redisMock
+            $this->redisMock,
+            $this->serializerMock,
         );
 
         $this->assertFalse($redisStore->needsSetup());

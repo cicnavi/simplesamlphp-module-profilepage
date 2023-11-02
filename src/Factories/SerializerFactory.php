@@ -10,22 +10,22 @@ use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 class SerializerFactory
 {
-	public function __construct(
-		protected ModuleConfiguration $moduleConfiguration
-	) {
-	}
+    public function __construct(
+        protected ModuleConfiguration $moduleConfiguration
+    ) {
+    }
 
-	/**
-	 * @throws InvalidConfigurationException
-	 */
-	public function build(): SerializerInterface
-	{
-		$class = $this->moduleConfiguration->getSerializerClass();
+    /**
+     * @throws InvalidConfigurationException
+     */
+    public function build(): SerializerInterface
+    {
+        $class = $this->moduleConfiguration->getSerializerClass();
 
-		if (is_a($class, SerializerInterface::class, true)) {
-			return new $class();
-		}
+        if (is_a($class, SerializerInterface::class, true)) {
+            return new $class();
+        }
 
-		throw new InvalidConfigurationException('Invalid serializer class defined: ' . $class);
-	}
+        throw new InvalidConfigurationException('Invalid serializer class defined: ' . $class);
+    }
 }

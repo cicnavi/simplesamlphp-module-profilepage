@@ -12,6 +12,7 @@ use SimpleSAML\Module\accounting\Entities\Authentication\Event\Job;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use Throwable;
 
@@ -30,9 +31,10 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
         LoggerInterface $logger,
         string $connectionKey = null,
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
-        Redis $redis = null
+        Redis $redis = null,
+        SerializerInterface $serializer = null,
     ) {
-        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType);
+        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType, $serializer);
         $this->redis = $redis ?? new Redis();
         $connectionParameters = $this->getConnectionParameters();
 

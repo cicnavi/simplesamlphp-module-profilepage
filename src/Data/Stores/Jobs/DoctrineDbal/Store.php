@@ -14,6 +14,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\TableConsta
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use Throwable;
 
@@ -34,9 +35,17 @@ class Store extends AbstractStore implements JobsStoreInterface
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
         Factory $connectionFactory = null,
         Repository $jobsRepository = null,
-        Repository $failedJobsRepository = null
+        Repository $failedJobsRepository = null,
+        SerializerInterface $serializer = null,
     ) {
-        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType, $connectionFactory);
+        parent::__construct(
+            $moduleConfiguration,
+            $logger,
+            $connectionKey,
+            $connectionType,
+            $connectionFactory,
+            $serializer,
+        );
 
         $this->prefixedTableNameJobs = $this->connection->preparePrefixedTableName(TableConstants::TABLE_NAME_JOB);
         $this->prefixedTableNameFailedJobs = $this->connection

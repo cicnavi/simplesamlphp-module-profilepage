@@ -41,9 +41,9 @@ class ModuleConfiguration
     public const OPTION_PROVIDER_FOR_CONNECTED_SERVICES = 'provider_for_connected_services';
     public const OPTION_PROVIDER_FOR_ACTIVITY = 'provider_for_activity';
     public const OPTION_ACTION_BUTTONS_ENABLED = 'action_buttons_enabled';
-	public const OPTION_SERIALIZER = '';
+    public const OPTION_SERIALIZER = '';
 
-	/**
+    /**
      * Contains configuration from module configuration file.
      */
     protected Configuration $configuration;
@@ -489,8 +489,8 @@ class ModuleConfiguration
         return $this->getConfiguration()->getBoolean(self::OPTION_ACTION_BUTTONS_ENABLED);
     }
 
-	public function getSerializerClass(): string
-	{
-		return $this->getConfiguration()->getOptionalString(self::OPTION_SERIALIZER, PhpSerializer::class);
-	}
+    public function getSerializerClass(): string
+    {
+        return $this->getConfiguration()->getOptionalString(self::OPTION_SERIALIZER, PhpSerializer::class);
+    }
 }

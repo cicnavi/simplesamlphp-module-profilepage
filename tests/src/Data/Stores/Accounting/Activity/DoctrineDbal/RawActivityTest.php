@@ -6,11 +6,13 @@ namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\Activity\Doct
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\RawActivity;
 use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\EntityTableConstants;
 
@@ -37,6 +39,7 @@ class RawActivityTest extends TestCase
      */
     protected $abstractPlatformStub;
     protected string $authenticationProtocolDesignation;
+    protected MockObject $serializerMock;
 
     protected function setUp(): void
     {
@@ -57,11 +60,13 @@ class RawActivityTest extends TestCase
         $this->abstractPlatformStub = $this->createStub(AbstractPlatform::class);
         $this->abstractPlatformStub->method('getDateTimeFormatString')
             ->willReturn(DateTime::DEFAULT_FORMAT);
+
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 
     public function testCanCreateInstance(): void
     {
-        $rawActivity = new RawActivity($this->rawRow, $this->abstractPlatformStub);
+        $rawActivity = new RawActivity($this->rawRow, $this->abstractPlatformStub, $this->serializerMock);
 
         $this->assertInstanceOf(
             RawActivity::class,
@@ -71,7 +76,7 @@ class RawActivityTest extends TestCase
 
     public function testCanGetProperties(): void
     {
-        $rawActivity = new RawActivity($this->rawRow, $this->abstractPlatformStub);
+        $rawActivity = new RawActivity($this->rawRow, $this->abstractPlatformStub, $this->serializerMock);
 
         $this->assertInstanceOf(DateTimeImmutable::class, $rawActivity->getHappenedAt());
         $this->assertSame($this->serviceProviderMetadata, $rawActivity->getServiceProviderMetadata());
@@ -88,7 +93,7 @@ class RawActivityTest extends TestCase
         $rawRow = $this->rawRow;
         unset($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]);
 
-        $rawActivity = new RawActivity($rawRow, $this->abstractPlatformStub);
+        $rawActivity = new RawActivity($rawRow, $this->abstractPlatformStub, $this->serializerMock);
         $this->assertNull($rawActivity->getClientIpAddress());
     }
 
@@ -97,7 +102,7 @@ class RawActivityTest extends TestCase
         $rawRow = $this->rawRow;
         unset($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION]);
 
-        $rawActivity = new RawActivity($rawRow, $this->abstractPlatformStub);
+        $rawActivity = new RawActivity($rawRow, $this->abstractPlatformStub, $this->serializerMock);
         $this->assertNull($rawActivity->getAuthenticationProtocolDesignation());
     }
 
@@ -108,7 +113,7 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawActivity($rawRow, $this->abstractPlatformStub);
+        new RawActivity($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsForNonStringServiceProviderMetadata(): void
@@ -118,7 +123,7 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawActivity($rawRow, $this->abstractPlatformStub);
+        new RawActivity($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsForNonStringUserAttributes(): void
@@ -128,7 +133,7 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawActivity($rawRow, $this->abstractPlatformStub);
+        new RawActivity($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsForNonNumericHappenedAt(): void
@@ -138,7 +143,7 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawActivity($rawRow, $this->abstractPlatformStub);
+        new RawActivity($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsForInvalidServiceProviderMetadata(): void
@@ -148,7 +153,7 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawActivity($rawRow, $this->abstractPlatformStub);
+        new RawActivity($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsForInvalidUserAttributes(): void
@@ -158,6 +163,6 @@ class RawActivityTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawActivity($rawRow, $this->abstractPlatformStub);
+        new RawActivity($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 }

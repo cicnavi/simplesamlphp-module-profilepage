@@ -25,10 +25,10 @@ class Repository
      * @throws StoreException
      */
     public function __construct(
-		protected Connection $connection,
-		string $tableName,
-		protected LoggerInterface $logger,
-	    protected SerializerInterface $serializer,
+        protected Connection $connection,
+        string $tableName,
+        protected LoggerInterface $logger,
+        protected SerializerInterface $serializer,
     ) {
         $this->prepareValidJobsTableNames();
 

@@ -6,7 +6,7 @@ use SimpleSAML\Module\accounting\Data\Providers;
 use SimpleSAML\Module\accounting\Data\Stores;
 use SimpleSAML\Module\accounting\Data\Trackers;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
-use \SimpleSAML\Module\accounting\Services\Serializers;
+use SimpleSAML\Module\accounting\Services\Serializers;
 
 $config = [
     /**
@@ -266,12 +266,12 @@ $config = [
      */
     ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => false,
 
-	/**
-	 * Serializer class which will be used to serialize data to make it storable. For example, this will be
-	 * used for when storing authentication events as jobs.
-	 * Class must implement SimpleSAML\Module\accounting\Interfaces\SerializerInterface
-	 */
-	ModuleConfiguration::OPTION_SERIALIZER =>
-		Serializers\PhpSerializer::class,
-		//Serializers\JsonSerializer::class,
+    /**
+     * Serializer class which will be used to serialize data to make it storable. For example, this will be
+     * used for when storing authentication events as jobs.
+     * Class must implement SimpleSAML\Module\accounting\Interfaces\SerializerInterface
+     */
+    ModuleConfiguration::OPTION_SERIALIZER =>
+        Serializers\PhpSerializer::class,
+        //Serializers\JsonSerializer::class,
 ];

@@ -18,9 +18,9 @@ use Throwable;
 abstract class AbstractRawEntity
 {
     public function __construct(
-		protected array $rawRow,
-		protected AbstractPlatform $abstractPlatform,
-	    protected SerializerInterface $serializer
+        protected array $rawRow,
+        protected AbstractPlatform $abstractPlatform,
+        protected SerializerInterface $serializer
     ) {
         $this->validate($rawRow);
     }

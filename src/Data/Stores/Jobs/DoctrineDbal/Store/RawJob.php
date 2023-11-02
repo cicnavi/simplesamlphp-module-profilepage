@@ -8,8 +8,8 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-
 use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
+
 use function sprintf;
 
 class RawJob extends AbstractRawEntity

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\Module\accounting\Data\Stores\Bases\DoctrineDbal;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 
 /**
@@ -17,13 +18,14 @@ use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 class AbstractRawEntityTest extends TestCase
 {
     /**
-     * @var AbstractPlatform|Stub
+     * @var Stub
      */
     protected $abstractPlatformStub;
     /**
      * @var string[]
      */
     protected array $rawRow;
+    protected MockObject $serializerMock;
 
     protected function setUp(): void
     {
@@ -31,11 +33,16 @@ class AbstractRawEntityTest extends TestCase
         $this->abstractPlatformStub->method('getDateTimeFormatString')
             ->willReturn(DateTime::DEFAULT_FORMAT);
         $this->rawRow = ['sample' => 'test'];
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 
     public function testCanCreateInstance(): void
     {
-        $rawEntityInstance = new class ($this->rawRow, $this->abstractPlatformStub) extends AbstractRawEntity {
+        $rawEntityInstance = new class (
+            $this->rawRow,
+            $this->abstractPlatformStub,
+            $this->serializerMock
+        ) extends AbstractRawEntity {
             protected function validate(
                 array $rawRow
             ): void {
@@ -46,7 +53,11 @@ class AbstractRawEntityTest extends TestCase
 
     public function testCanResolveDateTimeImmutable(): void
     {
-        $rawEntityInstance = new class ($this->rawRow, $this->abstractPlatformStub) extends AbstractRawEntity {
+        $rawEntityInstance = new class (
+            $this->rawRow,
+            $this->abstractPlatformStub,
+            $this->serializerMock
+        ) extends AbstractRawEntity {
             protected function validate(
                 array $rawRow
             ): void {

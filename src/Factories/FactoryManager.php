@@ -6,7 +6,7 @@ namespace SimpleSAML\Module\accounting\Factories;
 
 class FactoryManager
 {
-	protected static ?UserFactory $userFactory = null;
+    protected static ?UserFactory $userFactory = null;
     protected static ?MenuManagerFactory $menuManagerFactory = null;
 
     public function userFactory(): UserFactory
