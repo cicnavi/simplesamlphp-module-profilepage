@@ -133,7 +133,7 @@ class RawActivity extends AbstractRawEntity
     protected function resolveServiceProviderMetadata(string $serializedMetadata): array
     {
         /** @psalm-suppress MixedAssignment - we check the type manually */
-        $metadata = unserialize($serializedMetadata);
+        $metadata = $this->serializer->undo($serializedMetadata);
 
         if (is_array($metadata)) {
             return $metadata;
@@ -146,7 +146,7 @@ class RawActivity extends AbstractRawEntity
     protected function resolveUserAttributes(string $serializedUserAttributes): array
     {
         /** @psalm-suppress MixedAssignment - we check the type manually */
-        $userAttributes = unserialize($serializedUserAttributes);
+        $userAttributes = $this->serializer->undo($serializedUserAttributes);
 
         if (is_array($userAttributes)) {
             return $userAttributes;

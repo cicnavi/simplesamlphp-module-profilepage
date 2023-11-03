@@ -94,7 +94,7 @@ trait UserVersionResolvingTrait
         try {
             $this->repository->insertUserVersion(
                 $userId,
-                serialize($hashDecoratedState->getState()->getAttributes()),
+                $this->serializer->do($hashDecoratedState->getState()->getAttributes()),
                 $attributeArrayHashSha256
             );
         } catch (Throwable $exception) {

@@ -90,7 +90,7 @@ class Store extends AbstractStore implements StoreInterface
                 ) {
                     $this->repository->updateSp(
                         $spId,
-                        serialize($hashDecoratedState->getState()->getServiceProviderMetadata()),
+                        $this->serializer->do($hashDecoratedState->getState()->getServiceProviderMetadata()),
                         $hashDecoratedState->getServiceProviderMetadataArrayHashSha256()
                     );
                 }
@@ -106,7 +106,7 @@ class Store extends AbstractStore implements StoreInterface
             $this->repository->insertSp(
                 $hashDecoratedState->getState()->getServiceProviderEntityId(),
                 $spEntityIdHashSha256,
-                serialize($hashDecoratedState->getState()->getServiceProviderMetadata()),
+                $this->serializer->do($hashDecoratedState->getState()->getServiceProviderMetadata()),
                 $hashDecoratedState->getServiceProviderMetadataArrayHashSha256()
             );
         } catch (Throwable $exception) {

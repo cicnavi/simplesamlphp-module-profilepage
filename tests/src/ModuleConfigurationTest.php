@@ -14,6 +14,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
 use SimpleSAML\Module\accounting\Data\Trackers;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
 use stdClass;
 
 /**
@@ -420,5 +421,15 @@ class ModuleConfigurationTest extends TestCase
         );
 
         $this->assertFalse($moduleConfiguration->getActionButtonsEnabled());
+    }
+
+    public function testCanGetDefaultSerializerClass(): void
+    {
+        $moduleConfiguration = new ModuleConfiguration();
+
+        $this->assertSame(
+            PhpSerializer::class,
+            $moduleConfiguration->getSerializerClass()
+        );
     }
 }

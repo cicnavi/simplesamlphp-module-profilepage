@@ -145,7 +145,7 @@ class Store extends AbstractStore implements StoreInterface
         try {
             $this->repository->insertIdpVersion(
                 $idpId,
-                serialize($hashDecoratedState->getState()->getIdentityProviderMetadata()),
+                $this->serializer->do($hashDecoratedState->getState()->getIdentityProviderMetadata()),
                 $idpMetadataArrayHashSha256
             );
         } catch (Throwable $exception) {
@@ -254,7 +254,7 @@ class Store extends AbstractStore implements StoreInterface
         try {
             $this->repository->insertSpVersion(
                 $spId,
-                serialize($hashDecoratedState->getState()->getServiceProviderMetadata()),
+                $this->serializer->do($hashDecoratedState->getState()->getServiceProviderMetadata()),
                 $spMetadataArrayHashSha256
             );
         } catch (Throwable $exception) {

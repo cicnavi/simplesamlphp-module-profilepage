@@ -65,6 +65,12 @@ class RawConnectedServiceTest extends TestCase
             ->willReturn($this->dateTimeFormat);
 
         $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock->method('do')->willReturnCallback(
+            fn($argument) => serialize($argument)
+        );
+        $this->serializerMock->method('undo')->willReturnCallback(
+            fn($argument) => unserialize($argument)
+        );
     }
 
     public function testCanCreateInstance(): void

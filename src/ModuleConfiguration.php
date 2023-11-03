@@ -489,6 +489,11 @@ class ModuleConfiguration
         return $this->getConfiguration()->getBoolean(self::OPTION_ACTION_BUTTONS_ENABLED);
     }
 
+    /**
+     * Serializer class which will be used to serialize data to make it storable. For example, this will be used when
+     * storing authentication events as jobs.
+     * Class must implement SimpleSAML\Module\accounting\Interfaces\SerializerInterface
+     */
     public function getSerializerClass(): string
     {
         return $this->getConfiguration()->getOptionalString(self::OPTION_SERIALIZER, PhpSerializer::class);
