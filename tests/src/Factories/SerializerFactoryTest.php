@@ -41,5 +41,4 @@ class SerializerFactoryTest extends TestCase
 
         $this->mocked()->build();
     }
-
 }

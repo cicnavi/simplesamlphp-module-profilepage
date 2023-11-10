@@ -475,7 +475,7 @@ class JobRunner
             $this->moduleConfiguration->getAccountingProcessingType() !==
             ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS
         ) {
-            $message = 'Job runner called, however profilepage mode is not ' .
+            $message = 'Job runner called, however accounting mode is not ' .
                 ModuleConfiguration\AccountingProcessingType::VALUE_ASYNCHRONOUS;
             $this->logger->warning($message);
             throw new Exception($message);

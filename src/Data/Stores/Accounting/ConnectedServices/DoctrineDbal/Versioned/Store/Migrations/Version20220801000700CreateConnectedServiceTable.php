@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+//phpcs:ignore
 namespace SimpleSAML\Module\profilepage\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Versioned\Store\Migrations;
 
 use Doctrine\DBAL\Schema\Table;

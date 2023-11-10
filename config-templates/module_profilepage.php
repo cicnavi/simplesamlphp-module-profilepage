@@ -257,7 +257,8 @@ $config = [
      * Note that you should override the action buttons Twig template using standard SimpleSAMLphp custom theming
      * features: https://simplesamlphp.org/docs/stable/simplesamlphp-theming
      *
-     * The path to the action buttons template file is: modules/profilepage/templates/user/includes/_action-buttons.twig.
+     * The path to the action buttons template file is:
+     * modules/profilepage/templates/user/includes/_action-buttons.twig.
      * You can check the source of that file to see a sample dropdown, and a comment about the available variables.
      *
      * So, when creating a custom theme action buttons file, place it in:

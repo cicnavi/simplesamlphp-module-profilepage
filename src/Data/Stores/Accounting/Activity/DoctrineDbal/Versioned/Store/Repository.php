@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
 // phpcs:ignore
 use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Activity\DoctrineDbal\Traits\Repository\DeletableAuthenticationEventsTrait;
+// phpcs:ignore
 use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Repository as BaseRepository;
 use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants
     as BaseTableConstants;
