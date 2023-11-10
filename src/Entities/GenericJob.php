@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities;
+namespace SimpleSAML\Module\profilepage\Entities;
 
 class GenericJob extends Bases\AbstractJob
 {

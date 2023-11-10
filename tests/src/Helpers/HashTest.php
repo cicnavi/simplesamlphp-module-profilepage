@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
-use SimpleSAML\Module\accounting\Helpers\Arr;
-use SimpleSAML\Module\accounting\Helpers\Hash;
+use SimpleSAML\Module\profilepage\Helpers\Arr;
+use SimpleSAML\Module\profilepage\Helpers\Hash;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\Hash
- * @uses \SimpleSAML\Module\accounting\Helpers\Arr
+ * @covers \SimpleSAML\Module\profilepage\Helpers\Hash
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Arr
  */
 class HashTest extends TestCase
 {

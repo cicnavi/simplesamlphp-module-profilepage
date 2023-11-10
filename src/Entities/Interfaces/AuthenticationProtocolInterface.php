@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Interfaces;
+namespace SimpleSAML\Module\profilepage\Entities\Interfaces;
 
 interface AuthenticationProtocolInterface
 {

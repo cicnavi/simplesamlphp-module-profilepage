@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Helpers;
+namespace SimpleSAML\Module\profilepage\Helpers;
 
-use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidValueException;
 
 class Filesystem
 {

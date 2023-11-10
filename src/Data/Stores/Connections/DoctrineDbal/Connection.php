@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal;
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\ConnectionInterface;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\ConnectionInterface;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidConfigurationException;
 
 class Connection implements ConnectionInterface
 {

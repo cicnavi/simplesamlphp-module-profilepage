@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Bases;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Bases;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractState;
-use SimpleSAML\Module\accounting\Exceptions\StateException;
-use SimpleSAML\Module\accounting\Helpers\AuthenticationEventStateResolver;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Entities\Bases\AbstractJob;
+use SimpleSAML\Module\profilepage\Entities\Bases\AbstractState;
+use SimpleSAML\Module\profilepage\Exceptions\StateException;
+use SimpleSAML\Module\profilepage\Helpers\AuthenticationEventStateResolver;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
+ * @covers \SimpleSAML\Module\profilepage\Entities\Bases\AbstractJob
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event\Job
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event
  */
 class AbstractJobTest extends TestCase
 {

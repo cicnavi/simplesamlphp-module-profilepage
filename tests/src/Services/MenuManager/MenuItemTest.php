@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services\MenuManager;
+namespace SimpleSAML\Test\Module\profilepage\Services\MenuManager;
 
-use SimpleSAML\Module\accounting\Services\MenuManager\MenuItem;
+use SimpleSAML\Module\profilepage\Services\MenuManager\MenuItem;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\MenuManager\MenuItem
+ * @covers \SimpleSAML\Module\profilepage\Services\MenuManager\MenuItem
  */
 class MenuItemTest extends TestCase
 {

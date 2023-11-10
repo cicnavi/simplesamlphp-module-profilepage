@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
 
 class TableConstants
 {

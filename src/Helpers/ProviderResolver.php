@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Helpers;
+namespace SimpleSAML\Module\profilepage\Helpers;
 
-use SimpleSAML\Module\accounting\Entities\Interfaces\IdentityProviderInterface;
-use SimpleSAML\Module\accounting\Entities\Interfaces\ServiceProviderInterface;
-use SimpleSAML\Module\accounting\Exceptions\MetadataException;
-use SimpleSAML\Module\accounting\Entities\Providers\Service;
-use SimpleSAML\Module\accounting\Entities\Providers\Identity;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\IdentityProviderInterface;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\ServiceProviderInterface;
+use SimpleSAML\Module\profilepage\Exceptions\MetadataException;
+use SimpleSAML\Module\profilepage\Entities\Providers\Service;
+use SimpleSAML\Module\profilepage\Entities\Providers\Identity;
 use Throwable;
 
 class ProviderResolver

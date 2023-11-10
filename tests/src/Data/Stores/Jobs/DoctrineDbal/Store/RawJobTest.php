@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -10,22 +10,22 @@ use Doctrine\DBAL\Platforms\SqlitePlatform;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\RawJob;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\TableConstants;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\RawJob;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\TableConstants;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event\State;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\RawJob
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity
- * @uses \SimpleSAML\Module\accounting\Helpers\Network
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\RawJob
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractState
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event\State\Saml2
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Network
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
  */
 class RawJobTest extends TestCase
 {

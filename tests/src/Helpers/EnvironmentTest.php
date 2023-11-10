@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
-use SimpleSAML\Module\accounting\Helpers\Environment;
+use SimpleSAML\Module\profilepage\Helpers\Environment;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\Environment
+ * @covers \SimpleSAML\Module\profilepage\Helpers\Environment
  */
 class EnvironmentTest extends TestCase
 {

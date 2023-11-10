@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
@@ -11,12 +11,12 @@ use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionException;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\MigrationInterface;
-use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\Bases\AbstractMigrator;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\MigrationInterface;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidValueException;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 use Throwable;
 
 class Migrator extends AbstractMigrator

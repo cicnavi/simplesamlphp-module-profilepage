@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Services;
+namespace SimpleSAML\Module\profilepage\Services;
 
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
@@ -10,7 +10,7 @@ use SimpleSAML\Logger as SspLogger;
 
 class Logger extends AbstractLogger
 {
-    public function log($level, $message, array $context = [], string $prefix = '(accounting) '): void
+    public function log($level, $message, array $context = [], string $prefix = '(profilepage) '): void
     {
         $message = $prefix . $message;
 

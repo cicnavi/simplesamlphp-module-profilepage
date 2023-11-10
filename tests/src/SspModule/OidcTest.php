@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\SspModule;
+namespace SimpleSAML\Test\Module\profilepage\SspModule;
 
 use Exception;
 use PDOStatement;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Database;
-use SimpleSAML\Module\accounting\Helpers\DateTime;
-use SimpleSAML\Module\accounting\Helpers\SspModule;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\SspModule\Oidc;
+use SimpleSAML\Module\profilepage\Helpers\DateTime;
+use SimpleSAML\Module\profilepage\Helpers\SspModule;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\SspModule\Oidc;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\oidc\Services\Container;
 
 /**
- * @covers \SimpleSAML\Module\accounting\SspModule\Oidc
+ * @covers \SimpleSAML\Module\profilepage\SspModule\Oidc
  */
 class OidcTest extends TestCase
 {

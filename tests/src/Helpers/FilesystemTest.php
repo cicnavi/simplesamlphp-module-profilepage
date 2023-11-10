@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
-use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
-use SimpleSAML\Module\accounting\Helpers\Filesystem;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidValueException;
+use SimpleSAML\Module\profilepage\Helpers\Filesystem;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\Filesystem
+ * @covers \SimpleSAML\Module\profilepage\Helpers\Filesystem
  */
 class FilesystemTest extends TestCase
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
+namespace SimpleSAML\Module\profilepage\Entities\Authentication\Event\State;
 
-use SimpleSAML\Module\accounting\Entities\Authentication\Protocol;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractState;
-use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
-use SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractSaml2Provider;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Protocol;
+use SimpleSAML\Module\profilepage\Entities\Bases\AbstractState;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\AuthenticationProtocolInterface;
+use SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractSaml2Provider;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
 
 class Saml2 extends AbstractState
 {

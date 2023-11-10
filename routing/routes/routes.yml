@@ -1,44 +1,44 @@
 
-accounting-admin-configuration-status:
+profilepage-admin-configuration-status:
     path:       /admin/configuration/status
-    controller: SimpleSAML\Module\accounting\Http\Controllers\Admin\Configuration::status
+    controller: SimpleSAML\Module\profilepage\Http\Controllers\Admin\Configuration::status
 
-accounting-user-personal-data:
+profilepage-user-personal-data:
     path: /user/personal-data
-    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::personalData
+    controller: SimpleSAML\Module\profilepage\Http\Controllers\User\Profile::personalData
 
-accounting-user-personal-data-csv:
+profilepage-user-personal-data-csv:
     path: /user/personal-data/csv
-    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::personalDataCsv
+    controller: SimpleSAML\Module\profilepage\Http\Controllers\User\Profile::personalDataCsv
 
-accounting-user-connected-organizations:
+profilepage-user-connected-organizations:
     path: /user/connected-organizations
-    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::connectedOrganizations
+    controller: SimpleSAML\Module\profilepage\Http\Controllers\User\Profile::connectedOrganizations
 
-accounting-user-connected-organizations-csv:
+profilepage-user-connected-organizations-csv:
     path: /user/connected-organizations/csv
-    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::connectedOrganizationsCsv
+    controller: SimpleSAML\Module\profilepage\Http\Controllers\User\Profile::connectedOrganizationsCsv
 
-accounting-user-activity:
+profilepage-user-activity:
     path: /user/activity
-    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::activity
+    controller: SimpleSAML\Module\profilepage\Http\Controllers\User\Profile::activity
 
-accounting-user-activity-csv:
+profilepage-user-activity-csv:
     path: /user/activity/csv
-    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::activityCsv
+    controller: SimpleSAML\Module\profilepage\Http\Controllers\User\Profile::activityCsv
 
-accounting-user-oidc-token-revoke-xhr:
+profilepage-user-oidc-token-revoke-xhr:
     path: /user/oidc-tokens/revoke-xhr
-    controller: SimpleSAML\Module\accounting\Http\Controllers\User\Profile::oidcTokenRevokeXhr
+    controller: SimpleSAML\Module\profilepage\Http\Controllers\User\Profile::oidcTokenRevokeXhr
     methods: POST
 
-accounting-user-logout:
+profilepage-user-logout:
     path: /user/logout
-    controller: SimpleSAML\Module\accounting\Http\Controllers\Logout::logout
+    controller: SimpleSAML\Module\profilepage\Http\Controllers\Logout::logout
     methods:
         - GET
         - POST
 
-accounting-logout:
+profilepage-logout:
     path: /logged-out
-    controller: SimpleSAML\Module\accounting\Http\Controllers\Logout::loggedOut
+    controller: SimpleSAML\Module\profilepage\Http\Controllers\Logout::loggedOut

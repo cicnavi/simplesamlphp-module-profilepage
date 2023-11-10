@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Traits\Repository;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Traits\Repository;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current\Store\TableConstants;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current\Store\TableConstants;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
 use Throwable;
 
 trait DeletableConnectedServicesTrait

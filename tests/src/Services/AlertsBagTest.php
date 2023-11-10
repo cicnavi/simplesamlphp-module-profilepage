@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services;
+namespace SimpleSAML\Test\Module\profilepage\Services;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\Services\AlertsBag;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\Services\AlertsBag;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Session;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\AlertsBag
+ * @covers \SimpleSAML\Module\profilepage\Services\AlertsBag
  */
 class AlertsBagTest extends TestCase
 {

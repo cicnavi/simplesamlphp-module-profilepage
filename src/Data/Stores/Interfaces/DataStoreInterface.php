@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Interfaces;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Interfaces;
 
 use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 interface DataStoreInterface extends StoreInterface
 {

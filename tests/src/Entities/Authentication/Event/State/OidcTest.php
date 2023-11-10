@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Authentication\Event\State;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Authentication\Event\State;
 
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event\State;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Helpers\Network;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
-use SimpleSAML\Module\accounting\Entities\Providers\Identity;
-use SimpleSAML\Module\accounting\Entities\Providers\Service;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Oidc;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\Helpers\Network;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
+use SimpleSAML\Module\profilepage\Entities\Providers\Identity;
+use SimpleSAML\Module\profilepage\Entities\Providers\Service;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Oidc
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
+ * @covers \SimpleSAML\Module\profilepage\Entities\Authentication\Event\State\Oidc
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractState
  */
 class OidcTest extends TestCase
 {

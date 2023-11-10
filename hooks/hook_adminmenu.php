@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 use SimpleSAML\Locale\Translate;
-use SimpleSAML\Module\accounting\Helpers\Routes;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Helpers\Routes;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 use SimpleSAML\XHTML\Template;
 
 /** @noinspection PhpParameterByRefIsNotUsedAsReferenceInspection Reference is actually used by SimpleSAMLphp */
-function accounting_hook_adminmenu(Template &$template): void
+function profilepage_hook_adminmenu(Template &$template): void
 {
     $menuKey = 'menu';
 

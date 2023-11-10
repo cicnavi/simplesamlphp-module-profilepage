@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Services\AlertsBag;
+namespace SimpleSAML\Module\profilepage\Services\AlertsBag;
 
 class Alert
 {

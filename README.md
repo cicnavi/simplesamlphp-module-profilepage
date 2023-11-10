@@ -1,9 +1,9 @@
-[![Test](https://github.com/cicnavi/simplesamlphp-module-accounting/actions/workflows/test.yml/badge.svg)](https://github.com/cicnavi/simplesamlphp-module-accounting/actions/workflows/test.yml)
+[![Test](https://github.com/cicnavi/simplesamlphp-module-profilepage/actions/workflows/test.yml/badge.svg)](https://github.com/cicnavi/simplesamlphp-module-profilepage/actions/workflows/test.yml)
 
 
 
-# simplesamlphp-module-accounting
-SimpleSAMLphp module providing user "Profile Page" and accounting functionality using SimpleSAMLphp authentication
+# simplesamlphp-module-profilepage
+SimpleSAMLphp module providing user "Profile Page" and profilepage functionality using SimpleSAMLphp authentication
 processing filters feature.
 
 ## Features
@@ -32,15 +32,15 @@ Module requires SimpleSAMLphp version 2 or higher.
 Module is installable using Composer:
 
 ```shell
-composer require cicnavi/simplesamlphp-module-accounting
+composer require cicnavi/simplesamlphp-module-profilepage
 ```
 
-In config.php, search for the "module.enable" key and set 'accounting' to true:
+In config.php, search for the "module.enable" key and set 'profilepage' to true:
 
 ```php
 // ...
 'module.enable' => [
-    'accounting' => true,
+    'profilepage' => true,
     // ...
 ],
 // ...
@@ -54,10 +54,10 @@ As usual with SimpleSAMLphp modules, copy the module template configuration
 to the SimpleSAMLphp config directory:
 
 ```shell
-cp modules/accounting/config-templates/module_accounting.php config/
+cp modules/profilepage/config-templates/module_profilepage.php config/
 ```
 
-Next step is to configure available options in file config/module_accounting.php. Each option has an explanation,
+Next step is to configure available options in file config/module_profilepage.php. Each option has an explanation,
 however, the description of the overall concept follows.
 
 Module can be configured to only show current user data, with no accounting taking place. However, module can be
@@ -70,9 +70,9 @@ excerpt which will enable storing current (latest) data for connected services a
 for authentication events, including versioned Idp and SP metadata, and versioned user attributes:
 
 ```php
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Data\Trackers;
-use SimpleSAML\Module\accounting\Data\Providers;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Trackers;
+use SimpleSAML\Module\profilepage\Data\Providers;
 
 // ...
 ModuleConfiguration::OPTION_PROVIDER_FOR_CONNECTED_SERVICES =>
@@ -88,8 +88,8 @@ The deployer can choose if the accounting processing will be performed during au
 or in a separate process (asynchronously), for example:
 
 ```php
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\ModuleConfiguration\AccountingProcessingType;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\ModuleConfiguration\AccountingProcessingType;
 
 // ...
 ModuleConfiguration::OPTION_ACCOUNTING_PROCESSING_TYPE =>
@@ -110,8 +110,8 @@ Also review / edit all other configuration options, and set appropriate values.
 
 ### Running Setup
 
-After you have configured everything in config/module_accounting.php, go to the SimpleSAMLphp Admin > Configuration
-Page. There you will find a link "Accounting configuration status", which will take you on the 
+After you have configured everything in config/module_profilepage.php, go to the SimpleSAMLphp Admin > Configuration
+Page. There you will find a link "Profile Page configuration status", which will take you on the 
 module configuration overview page.
 
 If the configured trackers / jobs store require any setup, you will see a "Run Setup" button, so go ahead
@@ -123,7 +123,7 @@ users to see their activity.
 
 ### Adding Authentication Processing Filter
 Last step to start tracking user data using the configured tracker classes / jobs store is to add an [authentication
-processing filter](https://simplesamlphp.org/docs/stable/simplesamlphp-authproc.html) from the accounting module
+processing filter](https://simplesamlphp.org/docs/stable/simplesamlphp-authproc.html) from the profilepage module
 to the right place in SimpleSAMLphp configuration. Here is an example of setting it globally for all IdPs 
 in config/config.php:
 
@@ -131,7 +131,7 @@ in config/config.php:
 // ...
 'authproc.idp' => [
         // ... 
-        1000 => 'accounting:Accounting',
+        1000 => 'profilepage:Accounting',
     ],
 // ...
 ```

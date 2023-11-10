@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Helpers;
+namespace SimpleSAML\Module\profilepage\Helpers;
 
 use SimpleSAML\Error\CriticalConfigurationError;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 use SimpleSAML\Utils\HTTP;
 
 use function sprintf;

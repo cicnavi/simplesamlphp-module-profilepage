@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Providers\Identity;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Providers\Identity;
 
-use SimpleSAML\Module\accounting\Entities\Providers\Identity\Oidc;
+use SimpleSAML\Module\profilepage\Entities\Providers\Identity\Oidc;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Exceptions\MetadataException;
+use SimpleSAML\Module\profilepage\Exceptions\MetadataException;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Providers\Identity\Oidc
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
- * @uses \SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractOidcProvider
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc
+ * @covers \SimpleSAML\Module\profilepage\Entities\Providers\Identity\Oidc
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractProvider
+ * @uses \SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractOidcProvider
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Oidc
  */
 class OidcTest extends TestCase
 {
@@ -50,7 +50,7 @@ class OidcTest extends TestCase
     public function testCanGetProtocol(): void
     {
         $this->assertInstanceOf(
-            \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc::class,
+            \SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Oidc::class,
             (new Oidc($this->metadata))->getProtocol()
         );
     }

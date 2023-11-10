@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services\JobRunner;
+namespace SimpleSAML\Test\Module\profilepage\Services\JobRunner;
 
 use DateInterval;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter;
+use SimpleSAML\Module\profilepage\Services\JobRunner\RateLimiter;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter
- * @uses \SimpleSAML\Module\accounting\Helpers\DateTime
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @covers \SimpleSAML\Module\profilepage\Services\JobRunner\RateLimiter
+ * @uses \SimpleSAML\Module\profilepage\Helpers\DateTime
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
  */
 class RateLimiterTest extends TestCase
 {

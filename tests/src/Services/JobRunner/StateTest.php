@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services\JobRunner;
+namespace SimpleSAML\Test\Module\profilepage\Services\JobRunner;
 
 use DateInterval;
 use DateTimeImmutable;
-use SimpleSAML\Module\accounting\Services\JobRunner\State;
+use SimpleSAML\Module\profilepage\Services\JobRunner\State;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\JobRunner\State
+ * @covers \SimpleSAML\Module\profilepage\Services\JobRunner\State
  */
 class StateTest extends TestCase
 {

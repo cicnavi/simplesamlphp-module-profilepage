@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Providers\ConnectedServices\DoctrineDbal;
+namespace SimpleSAML\Module\profilepage\Data\Providers\ConnectedServices\DoctrineDbal;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Providers\Interfaces\ConnectedServicesInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current\Store;
-use SimpleSAML\Module\accounting\Data\Trackers\ConnectedServices\DoctrineDbal\CurrentDataTracker;
-use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
-use SimpleSAML\Module\accounting\Entities\ConnectedService;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Providers\Interfaces\ConnectedServicesInterface;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Current\Store;
+use SimpleSAML\Module\profilepage\Data\Trackers\ConnectedServices\DoctrineDbal\CurrentDataTracker;
+use SimpleSAML\Module\profilepage\Data\Trackers\Interfaces\DataTrackerInterface;
+use SimpleSAML\Module\profilepage\Entities\ConnectedService;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException\MigrationException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 class CurrentDataProvider implements ConnectedServicesInterface
 {

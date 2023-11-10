@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Activity;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Activity;
 
-use SimpleSAML\Module\accounting\Entities\Activity;
-use SimpleSAML\Module\accounting\Entities\Activity\Bag;
+use SimpleSAML\Module\profilepage\Entities\Activity;
+use SimpleSAML\Module\profilepage\Entities\Activity\Bag;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Activity\Bag
+ * @covers \SimpleSAML\Module\profilepage\Entities\Activity\Bag
  */
 class BagTest extends TestCase
 {

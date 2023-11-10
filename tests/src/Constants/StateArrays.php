@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Constants;
+namespace SimpleSAML\Test\Module\profilepage\Constants;
 
 final class StateArrays
 {

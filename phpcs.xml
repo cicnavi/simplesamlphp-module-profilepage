@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="SimpleSAMLphp accounting module ruleset">
+<ruleset name="SimpleSAMLphp profilepage module ruleset">
 
     <file>config-templates</file>
     <file>src</file>

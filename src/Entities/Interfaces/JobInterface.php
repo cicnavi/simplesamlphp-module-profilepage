@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Interfaces;
+namespace SimpleSAML\Module\profilepage\Entities\Interfaces;
 
 use DateTimeImmutable;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
 
 interface JobInterface
 {

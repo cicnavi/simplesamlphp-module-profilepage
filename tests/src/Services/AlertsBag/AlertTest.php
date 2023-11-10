@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services\AlertsBag;
+namespace SimpleSAML\Test\Module\profilepage\Services\AlertsBag;
 
-use SimpleSAML\Module\accounting\Services\AlertsBag\Alert;
+use SimpleSAML\Module\profilepage\Services\AlertsBag\Alert;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\AlertsBag\Alert
+ * @covers \SimpleSAML\Module\profilepage\Services\AlertsBag\Alert
  */
 class AlertTest extends TestCase
 {

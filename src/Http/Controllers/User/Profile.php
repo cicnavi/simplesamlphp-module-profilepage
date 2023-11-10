@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Http\Controllers\User;
+namespace SimpleSAML\Module\profilepage\Http\Controllers\User;
 
 use DateTimeInterface;
 use Psr\Log\LoggerInterface;
@@ -10,21 +10,21 @@ use SimpleSAML\Auth\Simple;
 use SimpleSAML\Configuration as SspConfiguration;
 use SimpleSAML\Error\ConfigurationError;
 use SimpleSAML\Locale\Translate;
-use SimpleSAML\Module\accounting\Data\Providers\Builders\DataProviderBuilder;
-use SimpleSAML\Module\accounting\Entities\Activity;
-use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc;
-use SimpleSAML\Module\accounting\Entities\ConnectedService;
-use SimpleSAML\Module\accounting\Entities\User;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\Factories\FactoryManager;
-use SimpleSAML\Module\accounting\Helpers\Attributes;
-use SimpleSAML\Module\accounting\Helpers\Routes;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\AlertsBag;
-use SimpleSAML\Module\accounting\Services\CsrfToken;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Services\MenuManager;
-use SimpleSAML\Module\accounting\Services\SspModuleManager;
+use SimpleSAML\Module\profilepage\Data\Providers\Builders\DataProviderBuilder;
+use SimpleSAML\Module\profilepage\Entities\Activity;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Oidc;
+use SimpleSAML\Module\profilepage\Entities\ConnectedService;
+use SimpleSAML\Module\profilepage\Entities\User;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\Factories\FactoryManager;
+use SimpleSAML\Module\profilepage\Helpers\Attributes;
+use SimpleSAML\Module\profilepage\Helpers\Routes;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\AlertsBag;
+use SimpleSAML\Module\profilepage\Services\CsrfToken;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\MenuManager;
+use SimpleSAML\Module\profilepage\Services\SspModuleManager;
 use SimpleSAML\Session;
 use SimpleSAML\XHTML\Template;
 use Stringable;
@@ -128,7 +128,7 @@ class Profile
         $columnNames = $this->getPersonalDataColumnNames();
         $csvUrl = 'personal-data/csv';
 
-        $template = $this->resolveTemplate('accounting:user/personal-data.twig');
+        $template = $this->resolveTemplate('profilepage:user/personal-data.twig');
         $template->data += compact('normalizedAttributes', 'columnNames', 'csvUrl');
 
         return $template;
@@ -236,7 +236,7 @@ class Profile
             }
         }
 
-        $template = $this->resolveTemplate('accounting:user/connected-organizations.twig');
+        $template = $this->resolveTemplate('profilepage:user/connected-organizations.twig');
         $template->data += compact(
             'connectedServiceProviderBag',
             'accessTokensByClient',
@@ -344,7 +344,7 @@ class Profile
         $columnNames = $this->getActivityColumnNames();
         $csvUrl = 'activity/csv';
 
-        $template = $this->resolveTemplate('accounting:user/activity.twig');
+        $template = $this->resolveTemplate('profilepage:user/activity.twig');
         $template->data += compact('activityBag', 'page', 'maxResults', 'csvUrl', 'columnNames');
 
         return $template;

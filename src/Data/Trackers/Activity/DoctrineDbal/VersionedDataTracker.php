@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Trackers\Activity\DoctrineDbal;
+namespace SimpleSAML\Module\profilepage\Data\Trackers\Activity\DoctrineDbal;
 
 use DateInterval;
 use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider;
-use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider;
+use SimpleSAML\Module\profilepage\Data\Trackers\Interfaces\DataTrackerInterface;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 class VersionedDataTracker extends VersionedDataProvider implements DataTrackerInterface
 {

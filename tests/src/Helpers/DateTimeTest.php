@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
 use DateInterval;
 use DateTimeImmutable;
-use SimpleSAML\Module\accounting\Helpers\DateTime;
+use SimpleSAML\Module\profilepage\Helpers\DateTime;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\DateTime
+ * @covers \SimpleSAML\Module\profilepage\Helpers\DateTime
  */
 class DateTimeTest extends TestCase
 {

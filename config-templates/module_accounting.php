@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use SimpleSAML\Module\accounting\Data\Providers;
-use SimpleSAML\Module\accounting\Data\Stores;
-use SimpleSAML\Module\accounting\Data\Trackers;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Providers;
+use SimpleSAML\Module\profilepage\Data\Stores;
+use SimpleSAML\Module\profilepage\Data\Trackers;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 $config = [
     /**
@@ -193,7 +193,7 @@ $config = [
             //'retryInterval' => 500, // (int): value in milliseconds (optional, default 0)
             //'readTimeout' => 0, // (float): value in seconds (default is 0 meaning unlimited)
             'auth' => ['phpredis', 'phpredis'], // (mixed): authentication information
-            'keyPrefix' => 'ssp_accounting:'
+            'keyPrefix' => 'ssp_profilepage:'
         ],
     ],
 
@@ -237,10 +237,10 @@ $config = [
     /**
      * Cron tags.
      *
-     * Job runner tag designates the cron tag to use when running accounting jobs. Make sure to add this tag to
+     * Job runner tag designates the cron tag to use when running Profile Page jobs. Make sure to add this tag to
      * the cron module configuration in case of the 'asynchronous' accounting processing type.
      */
-    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
+    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'profilepage_job_runner',
 
     /**
      * VersionedDataTracker data retention policy tag designates the cron tag to use for enforcing data retention
@@ -248,7 +248,7 @@ $config = [
      * from null.
      */
     ModuleConfiguration::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY =>
-        'accounting_tracker_data_retention_policy',
+        'profilepage_tracker_data_retention_policy',
 
     /**
      * Enable or disable 'action buttons'. Action buttons are displayed on 'Personal data' page, and can be used to
@@ -257,11 +257,11 @@ $config = [
      * Note that you should override the action buttons Twig template using standard SimpleSAMLphp custom theming
      * features: https://simplesamlphp.org/docs/stable/simplesamlphp-theming
      *
-     * The path to the action buttons template file is: modules/accounting/templates/user/includes/_action-buttons.twig.
+     * The path to the action buttons template file is: modules/profilepage/templates/user/includes/_action-buttons.twig.
      * You can check the source of that file to see a sample dropdown, and a comment about the available variables.
      *
      * So, when creating a custom theme action buttons file, place it in:
-     * modules/{mymodule}/themes/{fancytheme}/accounting/user/includes/_action-buttons.twig
+     * modules/{mymodule}/themes/{fancytheme}/profilepage/user/includes/_action-buttons.twig
      */
     ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => false,
 ];

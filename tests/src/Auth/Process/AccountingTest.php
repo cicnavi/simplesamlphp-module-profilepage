@@ -2,40 +2,40 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Auth\Process;
+namespace SimpleSAML\Test\Module\profilepage\Auth\Process;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Auth\Process\Accounting;
-use SimpleSAML\Module\accounting\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider;
-use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
-use SimpleSAML\Module\accounting\Data\Trackers\Activity\DoctrineDbal\VersionedDataTracker;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Services\TrackerResolver;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Module\profilepage\Auth\Process\Accounting;
+use SimpleSAML\Module\profilepage\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider;
+use SimpleSAML\Module\profilepage\Data\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Module\profilepage\Data\Trackers\Activity\DoctrineDbal\VersionedDataTracker;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\TrackerResolver;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Auth\Process\Accounting
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
- * @uses \SimpleSAML\Module\accounting\Helpers\AuthenticationEventStateResolver
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Builders\Bases\AbstractStoreBuilder
- * @uses \SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
- * @uses \SimpleSAML\Module\accounting\Helpers\Network
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
- * @uses \SimpleSAML\Module\accounting\Data\Providers\Builders\DataProviderBuilder
- * @uses \SimpleSAML\Module\accounting\Services\TrackerResolver
+ * @covers \SimpleSAML\Module\profilepage\Auth\Process\Accounting
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractState
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event\State\Saml2
+ * @uses \SimpleSAML\Module\profilepage\Helpers\AuthenticationEventStateResolver
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Builders\Bases\AbstractStoreBuilder
+ * @uses \SimpleSAML\Module\profilepage\Data\Trackers\Builders\DataTrackerBuilder
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event\Job
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractJob
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Network
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
+ * @uses \SimpleSAML\Module\profilepage\Data\Providers\Builders\DataProviderBuilder
+ * @uses \SimpleSAML\Module\profilepage\Services\TrackerResolver
  */
 class AccountingTest extends TestCase
 {

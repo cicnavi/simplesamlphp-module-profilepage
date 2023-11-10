@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Providers\Service;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Providers\Service;
 
-use SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractSaml2Provider;
-use SimpleSAML\Module\accounting\Entities\Providers\Service\Saml2;
+use SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractSaml2Provider;
+use SimpleSAML\Module\profilepage\Entities\Providers\Service\Saml2;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Exceptions\MetadataException;
+use SimpleSAML\Module\profilepage\Exceptions\MetadataException;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Providers\Service\Saml2
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
- * @uses \SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractSaml2Provider
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2
+ * @covers \SimpleSAML\Module\profilepage\Entities\Providers\Service\Saml2
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractProvider
+ * @uses \SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractSaml2Provider
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Saml2
  */
 class Saml2Test extends TestCase
 {
@@ -56,7 +56,7 @@ class Saml2Test extends TestCase
     public function testCanGetProtocol(): void
     {
         $this->assertInstanceOf(
-            \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2::class,
+            \SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Saml2::class,
             (new Saml2($this->metadata))->getProtocol()
         );
     }

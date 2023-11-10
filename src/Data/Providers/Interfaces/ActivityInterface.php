@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Providers\Interfaces;
+namespace SimpleSAML\Module\profilepage\Data\Providers\Interfaces;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Entities\Activity;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Entities\Activity;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 interface ActivityInterface extends DataProviderInterface
 {

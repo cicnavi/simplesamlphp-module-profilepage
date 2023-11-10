@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Services;
+namespace SimpleSAML\Module\profilepage\Services;
 
-use SimpleSAML\Module\accounting\Helpers\Arr;
-use SimpleSAML\Module\accounting\Helpers\Attributes;
-use SimpleSAML\Module\accounting\Helpers\AuthenticationEventStateResolver;
-use SimpleSAML\Module\accounting\Helpers\DateTime;
-use SimpleSAML\Module\accounting\Helpers\Environment;
-use SimpleSAML\Module\accounting\Helpers\Filesystem;
-use SimpleSAML\Module\accounting\Helpers\Hash;
-use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration;
-use SimpleSAML\Module\accounting\Helpers\Network;
-use SimpleSAML\Module\accounting\Helpers\ProviderResolver;
-use SimpleSAML\Module\accounting\Helpers\Random;
-use SimpleSAML\Module\accounting\Helpers\Routes;
-use SimpleSAML\Module\accounting\Helpers\SspModule;
+use SimpleSAML\Module\profilepage\Helpers\Arr;
+use SimpleSAML\Module\profilepage\Helpers\Attributes;
+use SimpleSAML\Module\profilepage\Helpers\AuthenticationEventStateResolver;
+use SimpleSAML\Module\profilepage\Helpers\DateTime;
+use SimpleSAML\Module\profilepage\Helpers\Environment;
+use SimpleSAML\Module\profilepage\Helpers\Filesystem;
+use SimpleSAML\Module\profilepage\Helpers\Hash;
+use SimpleSAML\Module\profilepage\Helpers\InstanceBuilderUsingModuleConfiguration;
+use SimpleSAML\Module\profilepage\Helpers\Network;
+use SimpleSAML\Module\profilepage\Helpers\ProviderResolver;
+use SimpleSAML\Module\profilepage\Helpers\Random;
+use SimpleSAML\Module\profilepage\Helpers\Routes;
+use SimpleSAML\Module\profilepage\Helpers\SspModule;
 
 class HelpersManager
 {

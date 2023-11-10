@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Interfaces;
+namespace SimpleSAML\Module\profilepage\Interfaces;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 interface BuildableUsingModuleConfigurationInterface
 {

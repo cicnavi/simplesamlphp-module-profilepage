@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Connections\Bases;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Connections\Bases;
 
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\MigrationInterface;
-use SimpleSAML\Module\accounting\Exceptions\InvalidValueException;
-use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\MigrationInterface;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidValueException;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException\MigrationException;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 use Throwable;
 
 abstract class AbstractMigrator

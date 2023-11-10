@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services;
+namespace SimpleSAML\Test\Module\profilepage\Services;
 
 use DateInterval;
 use DateTimeImmutable;
@@ -12,24 +12,24 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use SimpleSAML\Configuration;
-use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\JobsStoreInterface;
-use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Helpers\DateTime;
-use SimpleSAML\Module\accounting\Helpers\Environment;
-use SimpleSAML\Module\accounting\Helpers\Random;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Services\JobRunner;
-use SimpleSAML\Module\accounting\Services\TrackerResolver;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Module\profilepage\Data\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\JobsStoreInterface;
+use SimpleSAML\Module\profilepage\Data\Trackers\Interfaces\DataTrackerInterface;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\JobInterface;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Helpers\DateTime;
+use SimpleSAML\Module\profilepage\Helpers\Environment;
+use SimpleSAML\Module\profilepage\Helpers\Random;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\JobRunner;
+use SimpleSAML\Module\profilepage\Services\TrackerResolver;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\JobRunner
+ * @covers \SimpleSAML\Module\profilepage\Services\JobRunner
  */
 class JobRunnerTest extends TestCase
 {

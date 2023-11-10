@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Providers\Identity;
+namespace SimpleSAML\Module\profilepage\Entities\Providers\Identity;
 
-use SimpleSAML\Module\accounting\Entities\Interfaces\IdentityProviderInterface;
-use SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractOidcProvider;
-use SimpleSAML\Module\accounting\Exceptions\MetadataException;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\IdentityProviderInterface;
+use SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractOidcProvider;
+use SimpleSAML\Module\profilepage\Exceptions\MetadataException;
 
 class Oidc extends AbstractOidcProvider implements IdentityProviderInterface
 {

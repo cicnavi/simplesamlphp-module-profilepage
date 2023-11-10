@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Connections\DoctrineDbal;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Connections\DoctrineDbal;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidConfigurationException;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection
  */
 class ConnectionTest extends TestCase
 {

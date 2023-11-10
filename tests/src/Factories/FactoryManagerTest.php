@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Factories;
+namespace SimpleSAML\Test\Module\profilepage\Factories;
 
-use SimpleSAML\Module\accounting\Factories\FactoryManager;
+use SimpleSAML\Module\profilepage\Factories\FactoryManager;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Factories\MenuManagerFactory;
-use SimpleSAML\Module\accounting\Factories\UserFactory;
+use SimpleSAML\Module\profilepage\Factories\MenuManagerFactory;
+use SimpleSAML\Module\profilepage\Factories\UserFactory;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Factories\FactoryManager
- * @uses \SimpleSAML\Module\accounting\Factories\UserFactory
- * @uses \SimpleSAML\Module\accounting\Factories\MenuManagerFactory
+ * @covers \SimpleSAML\Module\profilepage\Factories\FactoryManager
+ * @uses \SimpleSAML\Module\profilepage\Factories\UserFactory
+ * @uses \SimpleSAML\Module\profilepage\Factories\MenuManagerFactory
  */
 class FactoryManagerTest extends TestCase
 {

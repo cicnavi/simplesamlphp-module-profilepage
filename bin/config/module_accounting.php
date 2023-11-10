@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use SimpleSAML\Module\accounting\Data\Providers;
-use SimpleSAML\Module\accounting\Data\Stores;
-use SimpleSAML\Module\accounting\Data\Trackers;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Providers;
+use SimpleSAML\Module\profilepage\Data\Stores;
+use SimpleSAML\Module\profilepage\Data\Trackers;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 $config = [
     /**
@@ -238,10 +238,10 @@ $config = [
     /**
      * Cron tags.
      *
-     * Job runner tag designates the cron tag to use when running accounting jobs. Make sure to add this tag to
+     * Job runner tag designates the cron tag to use when running jobs. Make sure to add this tag to
      * the cron module configuration in case of the 'asynchronous' accounting processing type.
      */
-    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
+    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'profilepage_job_runner',
 
     /**
      * VersionedDataTracker data retention policy tag designates the cron tag to use for enforcing data retention
@@ -249,5 +249,5 @@ $config = [
      * from null.
      */
     ModuleConfiguration::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY =>
-        'accounting_tracker_data_retention_policy',
+        'profilepage_tracker_data_retention_policy',
 ];

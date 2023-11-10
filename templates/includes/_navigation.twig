@@ -1,6 +1,6 @@
-{# @var menuManager \SimpleSAML\Module\accounting\Services\MenuManager #}
-{# @var menuItem \SimpleSAML\Module\accounting\Services\MenuManager\MenuItem #}
-{# @var csrfToken \SimpleSAML\Module\accounting\Services\CsrfToken #}
+{# @var menuManager \SimpleSAML\Module\profilepage\Services\MenuManager #}
+{# @var menuItem \SimpleSAML\Module\profilepage\Services\MenuManager\MenuItem #}
+{# @var csrfToken \SimpleSAML\Module\profilepage\Services\CsrfToken #}
 
 <div id="nav">
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
@@ -11,7 +11,7 @@
                     <a href="{{ menuItem.hrefPath }}">
                         {% if menuItem.iconAssetPath %}
                             <span class="navicon">
-                                <img src="{{ asset(menuItem.iconAssetPath, 'accounting') }}"
+                                <img src="{{ asset(menuItem.iconAssetPath, 'profilepage') }}"
                                      alt="{{ menuItem.label|trans }} Icon"/>
                             </span>
                         {% endif %}

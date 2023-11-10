@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Builders\Bases;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Builders\Bases;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\StoreInterface;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\StoreInterface;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 use Throwable;
 
 use function is_subclass_of;

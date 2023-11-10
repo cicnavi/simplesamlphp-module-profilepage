@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
 use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\Helpers\InstanceBuilderUsingModuleConfiguration;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Interfaces\BuildableUsingModuleConfigurationInterface;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
+ * @covers \SimpleSAML\Module\profilepage\Helpers\InstanceBuilderUsingModuleConfiguration
  */
 class InstanceBuilderUsingModuleConfigurationTest extends TestCase
 {

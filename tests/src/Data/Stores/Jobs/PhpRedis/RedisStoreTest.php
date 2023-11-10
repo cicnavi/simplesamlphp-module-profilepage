@@ -4,7 +4,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Jobs\PhpRedis;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Jobs\PhpRedis;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
@@ -12,19 +12,19 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Redis;
 use RedisException;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore;
-use SimpleSAML\Module\accounting\Entities\GenericJob;
-use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\PhpRedis\RedisStore;
+use SimpleSAML\Module\profilepage\Entities\GenericJob;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\JobInterface;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis\RedisStore
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Jobs\PhpRedis\RedisStore
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Bases\AbstractStore
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractJob
  */
 class RedisStoreTest extends TestCase
 {

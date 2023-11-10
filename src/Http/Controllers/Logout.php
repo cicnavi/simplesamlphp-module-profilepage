@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Http\Controllers;
+namespace SimpleSAML\Module\profilepage\Http\Controllers;
 
 use SimpleSAML\Auth\Simple;
 use SimpleSAML\Configuration as SspConfiguration;
 use SimpleSAML\Error\ConfigurationError;
 use SimpleSAML\HTTP\RunnableResponse;
-use SimpleSAML\Module\accounting\Helpers\Routes;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Helpers\Routes;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 use SimpleSAML\Session;
 use SimpleSAML\XHTML\Template;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,7 +51,7 @@ class Logout
      */
     public function loggedOut(): Response
     {
-        return new Template($this->sspConfiguration, 'accounting:logged-out.twig');
+        return new Template($this->sspConfiguration, 'profilepage:logged-out.twig');
     }
 
     protected function getLoggedOutUrl(): string

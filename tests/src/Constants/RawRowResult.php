@@ -3,10 +3,10 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Constants;
+namespace SimpleSAML\Test\Module\profilepage\Constants;
 
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\EntityTableConstants as ActivityTableConstants;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\EntityTableConstants as ConnectedServicesTableConstants;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Activity\DoctrineDbal\EntityTableConstants as ActivityTableConstants;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\EntityTableConstants as ConnectedServicesTableConstants;
 
 class RawRowResult
 {

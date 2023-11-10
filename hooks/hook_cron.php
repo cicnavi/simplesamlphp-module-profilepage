@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Configuration;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Services\JobRunner;
-use SimpleSAML\Module\accounting\Services\Logger;
-use SimpleSAML\Module\accounting\Services\TrackerResolver;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\JobRunner;
+use SimpleSAML\Module\profilepage\Services\Logger;
+use SimpleSAML\Module\profilepage\Services\TrackerResolver;
 
-function accounting_hook_cron(array &$cronInfo): void
+function profilepage_hook_cron(array &$cronInfo): void
 {
     $moduleConfiguration = new ModuleConfiguration();
     $logger = new Logger();
@@ -70,7 +70,7 @@ function accounting_hook_cron(array &$cronInfo): void
 }
 
 /**
- * @throws \SimpleSAML\Module\accounting\Exceptions\Exception
+ * @throws \SimpleSAML\Module\profilepage\Exceptions\Exception
  */
 function handleDataRetentionPolicy(
     ModuleConfiguration $moduleConfiguration,

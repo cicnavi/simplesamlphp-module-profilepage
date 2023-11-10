@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities;
+namespace SimpleSAML\Module\profilepage\Entities;
 
 use DateTimeImmutable;
-use SimpleSAML\Module\accounting\Entities\Interfaces\ServiceProviderInterface;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\ServiceProviderInterface;
 
 /**
  * Represents a Service VersionedDataProvider to which a user has authenticated at least once.

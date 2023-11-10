@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services;
+namespace SimpleSAML\Test\Module\profilepage\Services;
 
-use SimpleSAML\Module\accounting\Services\Logger;
+use SimpleSAML\Module\profilepage\Services\Logger;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\Logger
+ * @covers \SimpleSAML\Module\profilepage\Services\Logger
  */
 class LoggerServiceTest extends TestCase
 {

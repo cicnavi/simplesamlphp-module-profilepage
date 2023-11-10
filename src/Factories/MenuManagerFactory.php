@@ -1,8 +1,8 @@
 <?php
 
-namespace SimpleSAML\Module\accounting\Factories;
+namespace SimpleSAML\Module\profilepage\Factories;
 
-use SimpleSAML\Module\accounting\Services\MenuManager;
+use SimpleSAML\Module\profilepage\Services\MenuManager;
 
 class MenuManagerFactory
 {

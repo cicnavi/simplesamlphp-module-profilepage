@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\Attributes
- * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @covers \SimpleSAML\Module\profilepage\Helpers\Attributes
+ * @uses \SimpleSAML\Module\profilepage\ModuleConfiguration
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
  */
 class AttributesTest extends TestCase
 {

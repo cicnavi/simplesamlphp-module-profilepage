@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Builders;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Builders;
 
-use SimpleSAML\Module\accounting\Data\Stores\Builders\Bases\AbstractStoreBuilder;
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\DataStoreInterface;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\ModuleConfiguration\ConnectionType;
+use SimpleSAML\Module\profilepage\Data\Stores\Builders\Bases\AbstractStoreBuilder;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\DataStoreInterface;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration\ConnectionType;
 
 class DataStoreBuilder extends AbstractStoreBuilder
 {

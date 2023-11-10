@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services;
+namespace SimpleSAML\Test\Module\profilepage\Services;
 
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Services\CsrfToken;
+use SimpleSAML\Module\profilepage\Services\CsrfToken;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 use SimpleSAML\Session;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\CsrfToken
+ * @covers \SimpleSAML\Module\profilepage\Services\CsrfToken
  */
 class CsrfTokenTest extends TestCase
 {

@@ -1,7 +1,7 @@
-{# @var connectedServiceProviderBag \SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider\Bag #}
-{# @var connectedServiceProvider \SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider #}
+{# @var connectedServiceProviderBag \SimpleSAML\Module\profilepage\Entities\ConnectedServiceProvider\Bag #}
+{# @var connectedServiceProvider \SimpleSAML\Module\profilepage\Entities\ConnectedServiceProvider #}
 
-{% extends "@accounting/base.twig" %}
+{% extends "@profilepage/base.twig" %}
 
 {% set pagetitle = 'Connected organizations'|trans %}
 
@@ -66,5 +66,5 @@
 
 {% block postload %}
     {{ parent() }}
-    {% include '@accounting/includes/_js-accordion.twig' %}
+    {% include '@profilepage/includes/_js-accordion.twig' %}
 {% endblock %}

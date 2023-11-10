@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Services\JobRunner;
+namespace SimpleSAML\Module\profilepage\Services\JobRunner;
 
 use DateInterval;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 
 class RateLimiter
 {

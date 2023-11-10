@@ -1,6 +1,6 @@
 {
-    "name": "cicnavi/simplesamlphp-module-accounting",
-    "description": "The SimpleSAMLphp accounting module",
+    "name": "cicnavi/simplesamlphp-module-profilepage",
+    "description": "The SimpleSAMLphp Profile Page module",
     "type": "simplesamlphp-module",
     "license": "LGPL-2.1-or-later",
     "authors": [
@@ -17,12 +17,12 @@
     },
     "autoload": {
         "psr-4": {
-            "SimpleSAML\\Module\\accounting\\": "src/"
+            "SimpleSAML\\Module\\profilepage\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "SimpleSAML\\Test\\Module\\accounting\\": "tests/src/"
+            "SimpleSAML\\Test\\Module\\profilepage\\": "tests/src/"
         }
     },
     "require": {

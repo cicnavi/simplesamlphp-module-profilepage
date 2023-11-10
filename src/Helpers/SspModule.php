@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Helpers;
+namespace SimpleSAML\Module\profilepage\Helpers;
 
 use Exception;
 use SimpleSAML\Module;
@@ -20,7 +20,7 @@ class SspModule
             // @codeCoverageIgnoreStart
         } catch (Throwable $exception) {
             $message = sprintf('Could not check if module %s is enabled', $moduleName);
-            throw new Module\accounting\Exceptions\InvalidConfigurationException(
+            throw new Module\profilepage\Exceptions\InvalidConfigurationException(
                 $message,
                 (int) $exception->getCode(),
                 $exception

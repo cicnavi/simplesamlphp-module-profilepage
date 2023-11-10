@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Interfaces;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Interfaces;
 
-use SimpleSAML\Module\accounting\Entities\ConnectedService;
+use SimpleSAML\Module\profilepage\Entities\ConnectedService;
 
 interface ConnectedServicesInterface extends DataStoreInterface
 {

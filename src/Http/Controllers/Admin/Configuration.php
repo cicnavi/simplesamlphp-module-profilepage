@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Http\Controllers\Admin;
+namespace SimpleSAML\Module\profilepage\Http\Controllers\Admin;
 
 use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Configuration as SspConfiguration;
-use SimpleSAML\Module\accounting\Data\Providers\Builders\DataProviderBuilder;
-use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder;
-use SimpleSAML\Module\accounting\Helpers\Routes;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Data\Providers\Builders\DataProviderBuilder;
+use SimpleSAML\Module\profilepage\Data\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\profilepage\Data\Trackers\Builders\DataTrackerBuilder;
+use SimpleSAML\Module\profilepage\Helpers\Routes;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 use SimpleSAML\Session;
 use SimpleSAML\Utils;
 use SimpleSAML\XHTML\Template;
@@ -115,7 +115,7 @@ class Configuration
             'runSetup' => $runSetup,
         ];
 
-        $template = new Template($this->sspConfiguration, 'accounting:admin/configuration/status.twig');
+        $template = new Template($this->sspConfiguration, 'profilepage:admin/configuration/status.twig');
 
         $template->data = $templateData;
         return $template;

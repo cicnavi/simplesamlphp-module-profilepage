@@ -1,5 +1,5 @@
 
-{% extends "@accounting/base.twig" %}
+{% extends "@profilepage/base.twig" %}
 
 {% set pagetitle = 'Personal Data'|trans %}
 
@@ -15,7 +15,7 @@
 
 {% block content %}
     {% if actionButtonsEnabled %}
-        {% include "@accounting/user/includes/_action-buttons.twig" %}
+        {% include "@profilepage/user/includes/_action-buttons.twig" %}
     {% endif %}
     <table>
         <!-- fixed table header -->
@@ -28,8 +28,8 @@
             <tr>
                 <td>
                     {{ name|trans }}
-                    <div class="popup" onclick="accounting.doPopup('popup-{{ name }}')">
-                        <img src="{{ asset('css/src/icons/i.svg', 'accounting') }}" alt="Info icon"/>
+                    <div class="popup" onclick="profilepage.doPopup('popup-{{ name }}')">
+                        <img src="{{ asset('css/src/icons/i.svg', 'profilepage') }}" alt="Info icon"/>
                         {% set helpId = 'help-attribute-' ~ name %}
                         <span class="popuptext" id="popup-{{ name }}">
                             {{ helpId|trans }}

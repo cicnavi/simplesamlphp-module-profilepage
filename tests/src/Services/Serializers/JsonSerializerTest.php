@@ -1,12 +1,12 @@
 <?php
 
-namespace SimpleSAML\Test\Module\accounting\Services\Serializers;
+namespace SimpleSAML\Test\Module\profilepage\Services\Serializers;
 
-use SimpleSAML\Module\accounting\Services\Serializers\JsonSerializer;
+use SimpleSAML\Module\profilepage\Services\Serializers\JsonSerializer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\Serializers\JsonSerializer
+ * @covers \SimpleSAML\Module\profilepage\Services\Serializers\JsonSerializer
  */
 class JsonSerializerTest extends TestCase
 {

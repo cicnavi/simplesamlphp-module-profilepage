@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\Bases;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Accounting\Bases;
 
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\HashDecoratedState;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\HashDecoratedState;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event\State;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\HashDecoratedState
- * @uses \SimpleSAML\Module\accounting\Helpers\Hash
- * @uses \SimpleSAML\Module\accounting\Helpers\Arr
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\HashDecoratedState
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Hash
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Arr
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
  */
 class HashDecoratedStateTest extends TestCase
 {

@@ -15,7 +15,7 @@ msgstr ""
 "Generated-By: Babel 2.3.4\n"
 
 msgid "help-attribute-hrEduPersonUniqueID"
-msgstr "Primjer prijevoda accounting"
+msgstr "help-attribute-hrEduPersonUniqueID"
 
 msgid "Accounting"
 msgstr "Accounting"
