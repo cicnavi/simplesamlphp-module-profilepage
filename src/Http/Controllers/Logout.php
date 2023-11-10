@@ -43,6 +43,8 @@ class Logout
 
     public function logout(): Response
     {
+        // TODO mivanci move to Response
+        /** @psalm-suppress DeprecatedClass */
         return new RunnableResponse([$this->authSimple, 'logout'], [$this->getLoggedOutUrl()]);
     }
 
