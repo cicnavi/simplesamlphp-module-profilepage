@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Bases;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Bases;
 
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
-use SimpleSAML\Module\accounting\Factories\SerializerFactory;
-use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
-use SimpleSAML\Module\accounting\Interfaces\SetupableInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Factories\SerializerFactory;
+use SimpleSAML\Module\profilepage\Interfaces\BuildableUsingModuleConfigurationInterface;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\Interfaces\SetupableInterface;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 abstract class AbstractStore implements BuildableUsingModuleConfigurationInterface, SetupableInterface
 {

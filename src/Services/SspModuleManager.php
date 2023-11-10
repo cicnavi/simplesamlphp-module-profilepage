@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Services;
+namespace SimpleSAML\Module\profilepage\Services;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\SspModule\Oidc;
+use SimpleSAML\Module\profilepage\SspModule\Oidc;
 
 class SspModuleManager
 {

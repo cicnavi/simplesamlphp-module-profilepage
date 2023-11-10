@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Traits\Store;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\Traits\Store;
 
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\RawConnectedService;
-use SimpleSAML\Module\accounting\Entities\ConnectedService;
-use SimpleSAML\Module\accounting\Entities\User;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\RawConnectedService;
+use SimpleSAML\Module\profilepage\Entities\ConnectedService;
+use SimpleSAML\Module\profilepage\Entities\User;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
 use Throwable;
 
 trait GettableConnectedServicesTrait

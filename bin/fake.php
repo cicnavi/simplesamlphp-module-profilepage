@@ -5,14 +5,14 @@ declare(strict_types=1);
 
 //exit(1); // This script was used to generate fake data...
 
-use SimpleSAML\Module\accounting\Data\Trackers\Activity\DoctrineDbal\CurrentDataTracker as ActivityTracker;
-use SimpleSAML\Module\accounting\Data\Trackers\ConnectedServices\DoctrineDbal\CurrentDataTracker as ConnectedServicesTracker;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Services\Logger;
+use SimpleSAML\Module\profilepage\Data\Trackers\Activity\DoctrineDbal\CurrentDataTracker as ActivityTracker;
+use SimpleSAML\Module\profilepage\Data\Trackers\ConnectedServices\DoctrineDbal\CurrentDataTracker as ConnectedServicesTracker;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Saml2;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\Logger;
 
 
 require 'vendor/autoload.php';
@@ -199,7 +199,7 @@ function prepareEvent(
     $happenedAt = $happenedAt ?? new DateTimeImmutable();
 
     if ($protocol == Saml2::DESIGNATION) {
-        $state = SimpleSAML\Test\Module\accounting\Constants\StateArrays::SAML2_FULL;
+        $state = SimpleSAML\Test\Module\profilepage\Constants\StateArrays::SAML2_FULL;
         if ($userAttributes) {
             $state['Attributes'] = $userAttributes;
         }
@@ -211,7 +211,7 @@ function prepareEvent(
         return new Event(new Event\State\Saml2($state), $happenedAt);
     }
 
-    $state = SimpleSAML\Test\Module\accounting\Constants\StateArrays::OIDC_FULL;
+    $state = SimpleSAML\Test\Module\profilepage\Constants\StateArrays::OIDC_FULL;
     if ($userAttributes) {
         $state['Attributes'] = $userAttributes;
     }
@@ -228,7 +228,7 @@ function prepareSampleSpMetadata(string $protocol = Saml2::DESIGNATION)
     $faker = Faker\Factory::create();
 
     if ($protocol == Saml2::DESIGNATION) {
-        $spMetadata = SimpleSAML\Test\Module\accounting\Constants\StateArrays::SAML2_FULL['SPMetadata'];
+        $spMetadata = SimpleSAML\Test\Module\profilepage\Constants\StateArrays::SAML2_FULL['SPMetadata'];
 
         $spMetadata['entityid'] = $faker->url();
         $spMetadata['name'] = $faker->company();
@@ -236,7 +236,7 @@ function prepareSampleSpMetadata(string $protocol = Saml2::DESIGNATION)
         return $spMetadata;
     }
 
-    $rpMetadata = SimpleSAML\Test\Module\accounting\Constants\StateArrays::OIDC_FULL['Oidc']['RelyingPartyMetadata'];
+    $rpMetadata = SimpleSAML\Test\Module\profilepage\Constants\StateArrays::OIDC_FULL['Oidc']['RelyingPartyMetadata'];
 
     $rpMetadata['id'] = $faker->uuid();
     $rpMetadata['name'] = $faker->company();

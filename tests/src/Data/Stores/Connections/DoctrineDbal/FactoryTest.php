@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Connections\DoctrineDbal;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Connections\DoctrineDbal;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\Logger;
-use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Factory;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Migrator;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\Logger;
+use SimpleSAML\Test\Module\profilepage\Constants\ConnectionParameters;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory
- * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Factory
+ * @uses \SimpleSAML\Module\profilepage\ModuleConfiguration
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\Bases\AbstractMigrator
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
  */
 class FactoryTest extends TestCase
 {
@@ -31,7 +31,7 @@ class FactoryTest extends TestCase
     protected function setUp(): void
     {
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
-        $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
+        $this->moduleConfiguration = new ModuleConfiguration('module_profilepage.php');
         $this->loggerServiceMock = $this->createMock(Logger::class);
     }
 

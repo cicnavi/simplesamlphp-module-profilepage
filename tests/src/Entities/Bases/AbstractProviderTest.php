@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Bases;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Bases;
 
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
+use SimpleSAML\Module\profilepage\Entities\Bases\AbstractProvider;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\AuthenticationProtocolInterface;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
+ * @covers \SimpleSAML\Module\profilepage\Entities\Bases\AbstractProvider
  */
 class AbstractProviderTest extends TestCase
 {

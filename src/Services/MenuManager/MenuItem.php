@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Services\MenuManager;
+namespace SimpleSAML\Module\profilepage\Services\MenuManager;
 
 class MenuItem
 {

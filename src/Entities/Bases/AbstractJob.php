@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Bases;
+namespace SimpleSAML\Module\profilepage\Entities\Bases;
 
 use DateTimeImmutable;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
-use SimpleSAML\Module\accounting\Exceptions\StateException;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\JobInterface;
+use SimpleSAML\Module\profilepage\Exceptions\StateException;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 
 abstract class AbstractJob implements JobInterface
 {

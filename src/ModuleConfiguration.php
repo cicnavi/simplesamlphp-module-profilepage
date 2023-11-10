@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting;
+namespace SimpleSAML\Module\profilepage;
 
 use DateInterval;
 use Exception;
 use SimpleSAML\Configuration;
-use SimpleSAML\Module\accounting\Data\Providers\Interfaces\DataProviderInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\JobsStoreInterface;
-use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\ModuleConfiguration\AccountingProcessingType;
-use SimpleSAML\Module\accounting\ModuleConfiguration\ConnectionType;
-use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
+use SimpleSAML\Module\profilepage\Data\Providers\Interfaces\DataProviderInterface;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\JobsStoreInterface;
+use SimpleSAML\Module\profilepage\Data\Trackers\Interfaces\DataTrackerInterface;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration\AccountingProcessingType;
+use SimpleSAML\Module\profilepage\ModuleConfiguration\ConnectionType;
+use SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer;
 use Throwable;
 
 class ModuleConfiguration
 {
-    public const MODULE_NAME = 'accounting';
+    public const MODULE_NAME = 'profilepage';
 
     /**
      * Default file name for module configuration. Can be overridden in constructor, for example, for testing purposes.
      */
-    public const FILE_NAME = 'module_accounting.php';
+    public const FILE_NAME = 'module_profilepage.php';
 
     public const OPTION_USER_ID_ATTRIBUTE_NAME = 'user_id_attribute_name';
     public const OPTION_DEFAULT_AUTHENTICATION_SOURCE = 'default_authentication_source';
@@ -492,7 +492,7 @@ class ModuleConfiguration
     /**
      * Serializer class which will be used to serialize data to make it storable. For example, this will be used when
      * storing authentication events as jobs.
-     * Class must implement SimpleSAML\Module\accounting\Interfaces\SerializerInterface
+     * Class must implement SimpleSAML\Module\profilepage\Interfaces\SerializerInterface
      */
     public function getSerializerClass(): string
     {

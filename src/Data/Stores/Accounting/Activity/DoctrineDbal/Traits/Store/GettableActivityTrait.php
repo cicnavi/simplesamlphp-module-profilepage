@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Traits\Store;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Accounting\Activity\DoctrineDbal\Traits\Store;
 
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\RawActivity;
-use SimpleSAML\Module\accounting\Entities\Activity;
-use SimpleSAML\Module\accounting\Entities\User;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Activity\DoctrineDbal\RawActivity;
+use SimpleSAML\Module\profilepage\Entities\Activity;
+use SimpleSAML\Module\profilepage\Entities\User;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
 use Throwable;
 
 trait GettableActivityTrait

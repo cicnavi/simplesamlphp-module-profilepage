@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Constants;
+namespace SimpleSAML\Test\Module\profilepage\Constants;
 
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\Job;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event\Job;
 
 class SerializedJob
 {

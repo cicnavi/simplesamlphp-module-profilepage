@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Trackers\Builders;
+namespace SimpleSAML\Module\profilepage\Data\Trackers\Builders;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Data\Trackers\Interfaces\DataTrackerInterface;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 use Throwable;
 
 class DataTrackerBuilder

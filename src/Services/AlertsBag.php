@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Services;
+namespace SimpleSAML\Module\profilepage\Services;
 
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\AlertsBag\Alert;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\AlertsBag\Alert;
 use SimpleSAML\Session;
 
 class AlertsBag

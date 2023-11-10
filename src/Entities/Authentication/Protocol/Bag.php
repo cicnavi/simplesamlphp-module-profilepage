@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Authentication\Protocol;
+namespace SimpleSAML\Module\profilepage\Entities\Authentication\Protocol;
 
-use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\AuthenticationProtocolInterface;
 
 class Bag
 {

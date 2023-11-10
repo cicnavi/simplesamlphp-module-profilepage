@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases;
 
 class TableConstants
 {

@@ -2,36 +2,36 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Builders;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Builders;
 
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Builders\Bases\AbstractStoreBuilder;
-use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\StoreInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
-use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
+use SimpleSAML\Module\profilepage\Data\Stores\Builders\Bases\AbstractStoreBuilder;
+use SimpleSAML\Module\profilepage\Data\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\StoreInterface;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer;
+use SimpleSAML\Test\Module\profilepage\Constants\ConnectionParameters;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Builders\Bases\AbstractStoreBuilder
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Repository
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Helpers\InstanceBuilderUsingModuleConfiguration
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
- * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Builders\Bases\AbstractStoreBuilder
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Builders\JobsStoreBuilder
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Factory
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Repository
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal\AbstractStore
+ * @uses \SimpleSAML\Module\profilepage\Helpers\InstanceBuilderUsingModuleConfiguration
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\Bases\AbstractMigrator
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Bases\AbstractStore
+ * @uses \SimpleSAML\Module\profilepage\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer
  */
 class JobsStoreBuilderTest extends TestCase
 {

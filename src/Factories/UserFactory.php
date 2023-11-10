@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Factories;
+namespace SimpleSAML\Module\profilepage\Factories;
 
-use SimpleSAML\Module\accounting\Entities\User;
+use SimpleSAML\Module\profilepage\Entities\User;
 
 class UserFactory
 {

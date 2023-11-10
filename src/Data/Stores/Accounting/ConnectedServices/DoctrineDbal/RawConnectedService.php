@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Accounting\ConnectedServices\DoctrineDbal;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
 
 class RawConnectedService extends AbstractRawEntity
 {

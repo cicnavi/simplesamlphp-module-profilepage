@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases;
 
-use SimpleSAML\Module\accounting\Entities\Interfaces\StateInterface;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\StateInterface;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 
 class HashDecoratedState
 {

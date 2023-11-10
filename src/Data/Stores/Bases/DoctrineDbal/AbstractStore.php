@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\Bases\AbstractMigrator;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Factory;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Migrator;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException\MigrationException;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
-abstract class AbstractStore extends \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
+abstract class AbstractStore extends \SimpleSAML\Module\profilepage\Data\Stores\Bases\AbstractStore
 {
     protected Connection $connection;
     protected Migrator $migrator;

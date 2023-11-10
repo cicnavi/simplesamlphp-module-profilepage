@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\ConnectedService;
+namespace SimpleSAML\Test\Module\profilepage\Entities\ConnectedService;
 
-use SimpleSAML\Module\accounting\Entities\ConnectedService;
-use SimpleSAML\Module\accounting\Entities\ConnectedService\Bag;
+use SimpleSAML\Module\profilepage\Entities\ConnectedService;
+use SimpleSAML\Module\profilepage\Entities\ConnectedService\Bag;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\ConnectedService\Bag
+ * @covers \SimpleSAML\Module\profilepage\Entities\ConnectedService\Bag
  */
 class BagTest extends TestCase
 {

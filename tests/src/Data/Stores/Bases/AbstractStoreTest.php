@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Bases;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Bases;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
+use SimpleSAML\Module\profilepage\Data\Stores\Bases\AbstractStore;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
- * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Bases\AbstractStore
+ * @uses \SimpleSAML\Module\profilepage\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer
  */
 class AbstractStoreTest extends TestCase
 {

@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Bases;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Bases;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractState;
+use SimpleSAML\Module\profilepage\Entities\Bases\AbstractState;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Helpers\Network;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\AuthenticationProtocolInterface;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\Helpers\Network;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
+ * @covers \SimpleSAML\Module\profilepage\Entities\Bases\AbstractState
  */
 class AbstractStateTest extends TestCase
 {

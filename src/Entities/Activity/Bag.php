@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Activity;
+namespace SimpleSAML\Module\profilepage\Entities\Activity;
 
-use SimpleSAML\Module\accounting\Entities\Activity;
+use SimpleSAML\Module\profilepage\Entities\Activity;
 
 class Bag
 {

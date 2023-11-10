@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal;
 
 use Doctrine\DBAL\Exception;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractStore;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory;
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\JobsStoreInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Repository;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\TableConstants;
-use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal\AbstractStore;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Factory;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\JobsStoreInterface;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Repository;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\TableConstants;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\JobInterface;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 use Throwable;
 
 class Store extends AbstractStore implements JobsStoreInterface

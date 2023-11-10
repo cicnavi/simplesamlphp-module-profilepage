@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use SimpleSAML\Module\accounting\Data\Providers;
-use SimpleSAML\Module\accounting\Data\Stores;
-use SimpleSAML\Module\accounting\Data\Trackers;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Providers;
+use SimpleSAML\Module\profilepage\Data\Stores;
+use SimpleSAML\Module\profilepage\Data\Trackers;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 $config = [
     /**
@@ -18,8 +18,7 @@ $config = [
      * eduPersonPrincipalName
      * eduPersonUniqueID
      */
-//    ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE_NAME => 'urn:oasis:names:tc:SAML:attribute:subject-id',
-    ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE_NAME => 'hrEduPersonPersistentID',
+    ModuleConfiguration::OPTION_USER_ID_ATTRIBUTE_NAME => 'urn:oasis:names:tc:SAML:attribute:subject-id',
 
     /**
      * Default authentication source which will be used when authenticating users in SimpleSAMLphp Profile Page.
@@ -161,16 +160,16 @@ $config = [
          * There are additional parameters for: table prefix.
          */
         'doctrine_dbal_pdo_mysql' => [
-            'driver' => 'pdo_mysql', // (string): The built-in driver implementation to use
-            'user' => 'apps', // (string): Username to use when connecting to the database.
-            'password' => 'apps', // (string): Password to use when connecting to the database.
-            'host' => 'mysql.dap.test', // (string): Hostname of the database to connect to.
+            'driver' => 'pdo_mysql', // (string): The built-in driver implementation to use.
+            'user' => 'user', // (string): Username to use when connecting to the database.
+            'password' => 'password', // (string): Password to use when connecting to the database.
+            'host' => 'host', // (string): Hostname of the database to connect to.
             'port' => 3306, // (integer): Port of the database to connect to.
-            'dbname' => 'accounting', // (string): Name of the database/schema to connect to.
+            'dbname' => 'dbname', // (string): Name of the database/schema to connect to.
             //'unix_socket' => 'unix_socet', // (string): Name of the socket used to connect to the database.
             'charset' => 'utf8', // (string): The charset used when connecting to the database.
             //'url' => 'mysql://user:secret@localhost/mydb?charset=utf8', // ...alternative way of providing parameters.
-            // Additional parameters not originally avaliable in Doctrine DBAL
+            // Additional parameters not originally available in Doctrine DBAL
             'table_prefix' => '', // (string): Prefix for each table.
         ],
         'doctrine_dbal_pdo_sqlite' => [
@@ -194,7 +193,7 @@ $config = [
             //'retryInterval' => 500, // (int): value in milliseconds (optional, default 0)
             //'readTimeout' => 0, // (float): value in seconds (default is 0 meaning unlimited)
             'auth' => ['phpredis', 'phpredis'], // (mixed): authentication information
-            'keyPrefix' => 'ssp_accounting:'
+            'keyPrefix' => 'ssp_profilepage:'
         ],
     ],
 
@@ -238,10 +237,10 @@ $config = [
     /**
      * Cron tags.
      *
-     * Job runner tag designates the cron tag to use when running accounting jobs. Make sure to add this tag to
+     * Job runner tag designates the cron tag to use when running Profile Page jobs. Make sure to add this tag to
      * the cron module configuration in case of the 'asynchronous' accounting processing type.
      */
-    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
+    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'profilepage_job_runner',
 
     /**
      * VersionedDataTracker data retention policy tag designates the cron tag to use for enforcing data retention
@@ -249,5 +248,21 @@ $config = [
      * from null.
      */
     ModuleConfiguration::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY =>
-        'accounting_tracker_data_retention_policy',
+        'profilepage_tracker_data_retention_policy',
+
+    /**
+     * Enable or disable 'action buttons'. Action buttons are displayed on 'Personal data' page, and can be used to
+     * provide, for example, links to relevant endpoint like to change a password, send email to support, etc.
+     *
+     * Note that you should override the action buttons Twig template using standard SimpleSAMLphp custom theming
+     * features: https://simplesamlphp.org/docs/stable/simplesamlphp-theming
+     *
+     * The path to the action buttons template file is:
+     * modules/profilepage/templates/user/includes/_action-buttons.twig.
+     * You can check the source of that file to see a sample dropdown, and a comment about the available variables.
+     *
+     * So, when creating a custom theme action buttons file, place it in:
+     * modules/{mymodule}/themes/{fancytheme}/profilepage/user/includes/_action-buttons.twig
+     */
+    ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => false,
 ];

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Bases;
+namespace SimpleSAML\Module\profilepage\Entities\Bases;
 
-use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
-use SimpleSAML\Module\accounting\Entities\Interfaces\ProviderInterface;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\AuthenticationProtocolInterface;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\ProviderInterface;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 
 abstract class AbstractProvider implements ProviderInterface
 {

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities;
+namespace SimpleSAML\Test\Module\profilepage\Entities;
 
-use SimpleSAML\Module\accounting\Entities\GenericJob;
+use SimpleSAML\Module\profilepage\Entities\GenericJob;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\GenericJob
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
+ * @covers \SimpleSAML\Module\profilepage\Entities\GenericJob
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractJob
  */
 class GenericJobTest extends TestCase
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Services;
+namespace SimpleSAML\Module\profilepage\Services;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Providers\Builders\DataProviderBuilder;
-use SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder;
-use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Providers\Builders\DataProviderBuilder;
+use SimpleSAML\Module\profilepage\Data\Trackers\Builders\DataTrackerBuilder;
+use SimpleSAML\Module\profilepage\Data\Trackers\Interfaces\DataTrackerInterface;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 class TrackerResolver
 {

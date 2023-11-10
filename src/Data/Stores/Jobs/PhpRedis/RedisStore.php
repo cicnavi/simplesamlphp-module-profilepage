@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Jobs\PhpRedis;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Jobs\PhpRedis;
 
 use Psr\Log\LoggerInterface;
 use Redis;
-use SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore;
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\JobsStoreInterface;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\Job;
-use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Stores\Bases\AbstractStore;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\JobsStoreInterface;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event\Job;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\JobInterface;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 use Throwable;
 
 class RedisStore extends AbstractStore implements JobsStoreInterface
@@ -66,7 +66,7 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
         }
 
         try {
-            $this->redis->setOption(Redis::OPT_PREFIX, $connectionParameters['keyPrefix'] ?? 'ssp_accounting:');
+            $this->redis->setOption(Redis::OPT_PREFIX, $connectionParameters['keyPrefix'] ?? 'ssp_profilepage:');
         } catch (Throwable $exception) {
             $message = sprintf('Could not set key prefix for Redis. Error was: %s', $exception->getMessage());
             $this->logger->error($message);

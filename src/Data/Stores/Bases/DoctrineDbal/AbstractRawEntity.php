@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
 use Throwable;
 
 /**

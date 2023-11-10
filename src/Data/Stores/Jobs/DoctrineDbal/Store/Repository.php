@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
 
 use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
-use SimpleSAML\Module\accounting\Entities\GenericJob;
-use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Module\profilepage\Entities\GenericJob;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\JobInterface;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
 use Throwable;
 
 class Repository

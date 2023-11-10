@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities;
+namespace SimpleSAML\Test\Module\profilepage\Entities;
 
-use SimpleSAML\Module\accounting\Entities\User;
+use SimpleSAML\Module\profilepage\Entities\User;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\User
+ * @covers \SimpleSAML\Module\profilepage\Entities\User
  */
 class UserTest extends TestCase
 {

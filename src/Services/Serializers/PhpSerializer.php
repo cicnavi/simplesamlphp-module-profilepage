@@ -1,8 +1,8 @@
 <?php
 
-namespace SimpleSAML\Module\accounting\Services\Serializers;
+namespace SimpleSAML\Module\profilepage\Services\Serializers;
 
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
 
 class PhpSerializer implements SerializerInterface
 {

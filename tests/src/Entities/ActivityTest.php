@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities;
+namespace SimpleSAML\Test\Module\profilepage\Entities;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Entities\Activity;
+use SimpleSAML\Module\profilepage\Entities\Activity;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2;
-use SimpleSAML\Module\accounting\Entities\Interfaces\ServiceProviderInterface;
-use SimpleSAML\Module\accounting\Entities\User;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Saml2;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\ServiceProviderInterface;
+use SimpleSAML\Module\profilepage\Entities\User;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Activity
+ * @covers \SimpleSAML\Module\profilepage\Entities\Activity
  */
 class ActivityTest extends TestCase
 {

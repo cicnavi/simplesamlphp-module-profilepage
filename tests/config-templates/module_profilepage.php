@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use SimpleSAML\Module\accounting\Data\Providers;
-use SimpleSAML\Module\accounting\Data\Stores;
-use SimpleSAML\Module\accounting\Data\Trackers;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\Serializers;
+use SimpleSAML\Module\profilepage\Data\Providers;
+use SimpleSAML\Module\profilepage\Data\Stores;
+use SimpleSAML\Module\profilepage\Data\Trackers;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\Serializers;
 
 $config = [
 
@@ -65,9 +65,9 @@ $config = [
     ModuleConfiguration::OPTION_TRACKER_DATA_RETENTION_POLICY => null,
 
     ModuleConfiguration::OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY =>
-        'accounting_tracker_data_retention_policy',
+        'profilepage_tracker_data_retention_policy',
 
-    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'accounting_job_runner',
+    ModuleConfiguration::OPTION_CRON_TAG_FOR_JOB_RUNNER => 'profilepage_job_runner',
 
     ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => true,
 

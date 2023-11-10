@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Migrations;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Migrations;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Migrations\CreateIdpTable;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Migrations\CreateIdpTable;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
-use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException\MigrationException;
+use SimpleSAML\Test\Module\profilepage\Constants\ConnectionParameters;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Migrations\CreateIdpTable
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Migrations\CreateIdpTable
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection
  */
 class CreateIdpTableTest extends TestCase
 {

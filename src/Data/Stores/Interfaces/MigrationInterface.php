@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Interfaces;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Interfaces;
 
 interface MigrationInterface
 {

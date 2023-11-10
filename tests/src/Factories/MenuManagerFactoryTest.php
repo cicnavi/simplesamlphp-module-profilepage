@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Factories;
+namespace SimpleSAML\Test\Module\profilepage\Factories;
 
-use SimpleSAML\Module\accounting\Factories\MenuManagerFactory;
+use SimpleSAML\Module\profilepage\Factories\MenuManagerFactory;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Services\MenuManager;
+use SimpleSAML\Module\profilepage\Services\MenuManager;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Factories\MenuManagerFactory
- * @uses \SimpleSAML\Module\accounting\Services\MenuManager
+ * @covers \SimpleSAML\Module\profilepage\Factories\MenuManagerFactory
+ * @uses \SimpleSAML\Module\profilepage\Services\MenuManager
  */
 class MenuManagerFactoryTest extends TestCase
 {

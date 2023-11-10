@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting;
+namespace SimpleSAML\Test\Module\profilepage;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Configuration;
-use SimpleSAML\Module\accounting\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider;
-use SimpleSAML\Module\accounting\Data\Stores;
-use SimpleSAML\Module\accounting\Data\Stores\Interfaces\JobsStoreInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
-use SimpleSAML\Module\accounting\Data\Trackers;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
+use SimpleSAML\Module\profilepage\Data\Providers\Activity\DoctrineDbal\VersionedDataProvider;
+use SimpleSAML\Module\profilepage\Data\Stores;
+use SimpleSAML\Module\profilepage\Data\Stores\Interfaces\JobsStoreInterface;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Module\profilepage\Data\Trackers;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer;
 use stdClass;
 
 /**
- * @covers \SimpleSAML\Module\accounting\ModuleConfiguration
+ * @covers \SimpleSAML\Module\profilepage\ModuleConfiguration
  */
 class ModuleConfigurationTest extends TestCase
 {
@@ -28,7 +28,7 @@ class ModuleConfigurationTest extends TestCase
     {
         parent::setUp();
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
-        $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
+        $this->moduleConfiguration = new ModuleConfiguration('module_profilepage.php');
     }
 
     public function testCanGetUnderlyingConfigurationInstance(): void
@@ -209,7 +209,7 @@ class ModuleConfigurationTest extends TestCase
     public function testCanGetCronTagForJobRunner(): void
     {
         $this->assertSame(
-            'accounting_job_runner',
+            'profilepage_job_runner',
             $this->moduleConfiguration->getCronTagForJobRunner()
         );
     }

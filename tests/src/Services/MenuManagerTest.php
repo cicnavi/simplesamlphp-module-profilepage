@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services;
+namespace SimpleSAML\Test\Module\profilepage\Services;
 
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Services\MenuManager;
+use SimpleSAML\Module\profilepage\Services\MenuManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\MenuManager
- * @uses \SimpleSAML\Module\accounting\Services\MenuManager\MenuItem
+ * @covers \SimpleSAML\Module\profilepage\Services\MenuManager
+ * @uses \SimpleSAML\Module\profilepage\Services\MenuManager\MenuItem
  */
 class MenuManagerTest extends TestCase
 {

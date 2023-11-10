@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Helpers;
+namespace SimpleSAML\Module\profilepage\Helpers;
 
 class Environment
 {

@@ -2,30 +2,30 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Http\Controllers\User;
+namespace SimpleSAML\Test\Module\profilepage\Http\Controllers\User;
 
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Auth\Simple;
 use SimpleSAML\Configuration;
-use SimpleSAML\Module\accounting\Data\Providers\Builders\DataProviderBuilder;
-use SimpleSAML\Module\accounting\Entities\User;
-use SimpleSAML\Module\accounting\Factories\FactoryManager;
-use SimpleSAML\Module\accounting\Factories\MenuManagerFactory;
-use SimpleSAML\Module\accounting\Factories\UserFactory;
-use SimpleSAML\Module\accounting\Http\Controllers\User\Profile;
+use SimpleSAML\Module\profilepage\Data\Providers\Builders\DataProviderBuilder;
+use SimpleSAML\Module\profilepage\Entities\User;
+use SimpleSAML\Module\profilepage\Factories\FactoryManager;
+use SimpleSAML\Module\profilepage\Factories\MenuManagerFactory;
+use SimpleSAML\Module\profilepage\Factories\UserFactory;
+use SimpleSAML\Module\profilepage\Http\Controllers\User\Profile;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\AlertsBag;
-use SimpleSAML\Module\accounting\Services\CsrfToken;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Services\MenuManager;
-use SimpleSAML\Module\accounting\Services\SspModuleManager;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\AlertsBag;
+use SimpleSAML\Module\profilepage\Services\CsrfToken;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\MenuManager;
+use SimpleSAML\Module\profilepage\Services\SspModuleManager;
 use SimpleSAML\Session;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Http\Controllers\User\Profile
+ * @covers \SimpleSAML\Module\profilepage\Http\Controllers\User\Profile
  */
 class ProfileTest extends TestCase
 {

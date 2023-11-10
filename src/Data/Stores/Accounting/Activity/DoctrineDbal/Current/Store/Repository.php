@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Current\Store;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Accounting\Activity\DoctrineDbal\Current\Store;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Psr\Log\LoggerInterface;
 // phpcs:ignore
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Traits\Repository\DeletableAuthenticationEventsTrait;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Repository as BaseRepository;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Activity\DoctrineDbal\Traits\Repository\DeletableAuthenticationEventsTrait;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Repository as BaseRepository;
 // phpcs:ignore
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\TableConstants as BaseTableConstants;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\TableConstants as BaseTableConstants;
 // phpcs:ignore
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants as VersionedBaseTableconstants;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\TableConstants as VersionedBaseTableconstants;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
 use Throwable;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\EntityTableConstants;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Activity\DoctrineDbal\EntityTableConstants;
 
 class Repository extends BaseRepository
 {

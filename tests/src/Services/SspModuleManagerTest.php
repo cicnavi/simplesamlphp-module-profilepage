@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services;
+namespace SimpleSAML\Test\Module\profilepage\Services;
 
 use Exception;
 use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Services\SspModuleManager;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\SspModuleManager;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\SspModuleManager
- * @uses \SimpleSAML\Module\accounting\SspModule\Oidc
+ * @covers \SimpleSAML\Module\profilepage\Services\SspModuleManager
+ * @uses \SimpleSAML\Module\profilepage\SspModule\Oidc
  */
 class SspModuleManagerTest extends TestCase
 {

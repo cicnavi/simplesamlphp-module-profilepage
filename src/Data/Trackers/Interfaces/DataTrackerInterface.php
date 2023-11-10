@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Trackers\Interfaces;
+namespace SimpleSAML\Module\profilepage\Data\Trackers\Interfaces;
 
 use DateInterval;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
-use SimpleSAML\Module\accounting\Interfaces\SetupableInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Interfaces\BuildableUsingModuleConfigurationInterface;
+use SimpleSAML\Module\profilepage\Interfaces\SetupableInterface;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 interface DataTrackerInterface extends BuildableUsingModuleConfigurationInterface, SetupableInterface
 {

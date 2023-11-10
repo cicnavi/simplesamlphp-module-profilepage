@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Oidc;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractState;
-use SimpleSAML\Module\accounting\Exceptions\StateException;
-use SimpleSAML\Module\accounting\Helpers\AuthenticationEventStateResolver;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event\State\Oidc;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event\State\Saml2;
+use SimpleSAML\Module\profilepage\Entities\Bases\AbstractState;
+use SimpleSAML\Module\profilepage\Exceptions\StateException;
+use SimpleSAML\Module\profilepage\Helpers\AuthenticationEventStateResolver;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\AuthenticationEventStateResolver
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Oidc
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
- * @uses \SimpleSAML\Module\accounting\Helpers\Network
+ * @covers \SimpleSAML\Module\profilepage\Helpers\AuthenticationEventStateResolver
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractState
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event\State\Saml2
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event\State\Oidc
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Network
  */
 class AuthenticationEventStateResolverTest extends TestCase
 {

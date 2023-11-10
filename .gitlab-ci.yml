@@ -33,7 +33,7 @@ test-81:
     - vendor/bin/psalm --clear-cache
     - composer run-script pre-commit
 
-# TODO mivanci remove when GEANT project finishes
+
 # Do some updates on the test deployment...
 niif-update:
   tags:
@@ -44,4 +44,4 @@ niif-update:
   #      when: manual
   script:
     - cd /var/www/simplesamlphp
-    - composer update -n cicnavi/simplesamlphp-module-accounting
+    - composer update -n cicnavi/simplesamlphp-module-profilepage

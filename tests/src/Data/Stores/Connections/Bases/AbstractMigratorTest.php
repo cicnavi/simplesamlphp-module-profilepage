@@ -2,36 +2,36 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Connections\Bases;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Connections\Bases;
 
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\TableConstants;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\Logger;
-use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\Bases\AbstractMigrator;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Migrator;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\TableConstants;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException\MigrationException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\Logger;
+use SimpleSAML\Test\Module\profilepage\Constants\ConnectionParameters;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator
- * @uses \SimpleSAML\Module\accounting\Helpers\Filesystem
- * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Connections\Bases\AbstractMigrator
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Filesystem
+ * @uses \SimpleSAML\Module\profilepage\ModuleConfiguration
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
  */
 class AbstractMigratorTest extends TestCase
 {
@@ -55,7 +55,7 @@ class AbstractMigratorTest extends TestCase
         $this->loggerServiceMock = $this->createMock(Logger::class);
 
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
-        $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
+        $this->moduleConfiguration = new ModuleConfiguration('module_profilepage.php');
     }
 
     /**

@@ -2,37 +2,37 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Trackers\Activity\DoctrineDbal;
+namespace SimpleSAML\Test\Module\profilepage\Data\Trackers\Activity\DoctrineDbal;
 
 use DateInterval;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Current\Store;
-use SimpleSAML\Module\accounting\Data\Trackers\Activity\DoctrineDbal\CurrentDataTracker;
+use SimpleSAML\Module\profilepage\Data\Stores\Accounting\Activity\DoctrineDbal\Current\Store;
+use SimpleSAML\Module\profilepage\Data\Trackers\Activity\DoctrineDbal\CurrentDataTracker;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
-use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
-use SimpleSAML\Module\accounting\Entities\Activity;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer;
+use SimpleSAML\Test\Module\profilepage\Constants\ConnectionParameters;
+use SimpleSAML\Module\profilepage\Entities\Activity;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Trackers\Activity\DoctrineDbal\CurrentDataTracker
- * @uses \SimpleSAML\Module\accounting\Data\Providers\Activity\DoctrineDbal\CurrentDataProvider
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Current\Store
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Activity\DoctrineDbal\Current\Store\Repository
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Repository
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
- * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
+ * @covers \SimpleSAML\Module\profilepage\Data\Trackers\Activity\DoctrineDbal\CurrentDataTracker
+ * @uses \SimpleSAML\Module\profilepage\Data\Providers\Activity\DoctrineDbal\CurrentDataProvider
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Accounting\Activity\DoctrineDbal\Current\Store
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Accounting\Activity\DoctrineDbal\Current\Store\Repository
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Accounting\Bases\DoctrineDbal\Current\Store\Repository
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Bases\AbstractStore
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal\AbstractStore
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\Bases\AbstractMigrator
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Factory
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\profilepage\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer
  */
 class CurrentDataTrackerTest extends TestCase
 {

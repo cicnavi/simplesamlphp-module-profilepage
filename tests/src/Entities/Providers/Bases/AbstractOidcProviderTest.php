@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Providers\Bases;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Providers\Bases;
 
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc;
-use SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractOidcProvider;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Oidc;
+use SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractOidcProvider;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Helpers\Arr;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Module\profilepage\Helpers\Arr;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractOidcProvider
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
+ * @covers \SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractOidcProvider
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractProvider
  */
 class AbstractOidcProviderTest extends TestCase
 {

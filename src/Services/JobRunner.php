@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Services;
+namespace SimpleSAML\Module\profilepage\Services;
 
 use Cicnavi\SimpleFileCache\SimpleFileCache;
 use DateInterval;
@@ -11,15 +11,15 @@ use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use SimpleSAML\Configuration as SspConfiguration;
-use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\Job;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\JobRunner\RateLimiter;
-use SimpleSAML\Module\accounting\Services\JobRunner\State;
+use SimpleSAML\Module\profilepage\Data\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\profilepage\Data\Trackers\Interfaces\DataTrackerInterface;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event\Job;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\JobRunner\RateLimiter;
+use SimpleSAML\Module\profilepage\Services\JobRunner\State;
 use Throwable;
 
 class JobRunner
@@ -31,7 +31,7 @@ class JobRunner
     protected CacheInterface $cache;
     protected State $state;
 
-    protected const CACHE_NAME = 'accounting-job-runner-cache';
+    protected const CACHE_NAME = 'profilepage-job-runner-cache';
     protected const CACHE_KEY_STATE = 'state';
 
     /**

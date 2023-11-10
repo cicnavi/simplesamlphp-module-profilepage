@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Bases\DoctrineDbal;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Bases\DoctrineDbal;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
-use SimpleSAML\Test\Module\accounting\Constants\DateTime;
+use SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
+use SimpleSAML\Test\Module\profilepage\Constants\DateTime;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity
  */
 class AbstractRawEntityTest extends TestCase
 {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
 use Exception;
-use SimpleSAML\Module\accounting\Helpers\SspModule;
+use SimpleSAML\Module\profilepage\Helpers\SspModule;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\SspModule
+ * @covers \SimpleSAML\Module\profilepage\Helpers\SspModule
  */
 class SspModuleTest extends TestCase
 {

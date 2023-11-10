@@ -2,55 +2,55 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
+namespace SimpleSAML\Test\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
 
 use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory;
-use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Repository;
-use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\TableConstants;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
-use SimpleSAML\Module\accounting\Entities\GenericJob;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\Logger;
-use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Factory;
+use SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Migrator;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Repository;
+use SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\TableConstants;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Entities\Bases\AbstractJob;
+use SimpleSAML\Module\profilepage\Entities\GenericJob;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException\MigrationException;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\Logger;
+use SimpleSAML\Test\Module\profilepage\Constants\ConnectionParameters;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Repository
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
- * @uses \SimpleSAML\Module\accounting\Helpers\Filesystem
- * @uses \SimpleSAML\Module\accounting\ModuleConfiguration
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\RawJob
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity
- * @uses \SimpleSAML\Module\accounting\Helpers\Network
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
- * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
- * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
- * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
+ * @covers \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Repository
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Connection
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractJob
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Filesystem
+ * @uses \SimpleSAML\Module\profilepage\ModuleConfiguration
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\Bases\AbstractMigrator
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Bases\AbstractMigration
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000000CreateJobTable
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Version20220601000100CreateJobFailedTable
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\RawJob
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event\Job
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store\Migrations\Bases\AbstractCreateJobsTable
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal\AbstractStore
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractState
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event\State\Saml2
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Network
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
+ * @uses \SimpleSAML\Module\profilepage\Data\Stores\Bases\AbstractStore
+ * @uses \SimpleSAML\Module\profilepage\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer
  */
 class RepositoryTest extends TestCase
 {
@@ -71,7 +71,7 @@ class RepositoryTest extends TestCase
     protected function setUp(): void
     {
         // Configuration directory is set by phpunit using php ENV setting feature (check phpunit.xml).
-        $this->moduleConfiguration = new ModuleConfiguration('module_accounting.php');
+        $this->moduleConfiguration = new ModuleConfiguration('module_profilepage.php');
         $this->connection = new Connection(ConnectionParameters::DBAL_SQLITE_MEMORY);
 
         $this->loggerServiceStub = $this->createStub(Logger::class);

@@ -1,12 +1,12 @@
 <?php
 
-namespace SimpleSAML\Test\Module\accounting\Services\Serializers;
+namespace SimpleSAML\Test\Module\profilepage\Services\Serializers;
 
-use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
+use SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
+ * @covers \SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer
  */
 class PhpSerializerTest extends TestCase
 {

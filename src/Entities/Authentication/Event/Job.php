@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Authentication\Event;
+namespace SimpleSAML\Module\profilepage\Entities\Authentication\Event;
 
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
+use SimpleSAML\Module\profilepage\Entities\Bases\AbstractJob;
 
 class Job extends AbstractJob
 {

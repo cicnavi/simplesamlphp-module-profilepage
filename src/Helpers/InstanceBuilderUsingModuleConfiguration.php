@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Helpers;
+namespace SimpleSAML\Module\profilepage\Helpers;
 
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\Interfaces\BuildableUsingModuleConfigurationInterface;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 use Throwable;
 
 use function sprintf;

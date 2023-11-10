@@ -1,7 +1,7 @@
-{# @var activityBag \SimpleSAML\Module\accounting\Entities\Activity\Bag #}
-{# @var connectedServiceProvider \SimpleSAML\Module\accounting\Entities\ConnectedServiceProvider #}
+{# @var activityBag \SimpleSAML\Module\profilepage\Entities\Activity\Bag #}
+{# @var connectedServiceProvider \SimpleSAML\Module\profilepage\Entities\ConnectedServiceProvider #}
 
-{% extends "@accounting/base.twig" %}
+{% extends "@profilepage/base.twig" %}
 
 {% set pagetitle = 'Activity'|trans %}
 
@@ -69,5 +69,5 @@
 
 {% block postload %}
     {{ parent() }}
-    {% include '@accounting/includes/_js-accordion.twig' %}
+    {% include '@profilepage/includes/_js-accordion.twig' %}
 {% endblock %}

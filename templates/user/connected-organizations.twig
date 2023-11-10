@@ -1,10 +1,10 @@
-{# @var connectedServiceProviderBag \SimpleSAML\Module\accounting\Entities\ConnectedService\Bag #}
-{# @var connectedServiceProvider \SimpleSAML\Module\accounting\Entities\ConnectedService #}
+{# @var connectedServiceProviderBag \SimpleSAML\Module\profilepage\Entities\ConnectedService\Bag #}
+{# @var connectedServiceProvider \SimpleSAML\Module\profilepage\Entities\ConnectedService #}
 {# @var accessTokensByClient array #}
 {# @var refreshTokensByClient array #}
 {# @var columnNames array #}
 
-{% extends "@accounting/base.twig" %}
+{% extends "@profilepage/base.twig" %}
 
 {% set pagetitle = 'Connected Organizations'|trans %}
 
@@ -12,7 +12,7 @@
 
 {% block content %}
     {% if actionButtonsEnabled %}
-        {% include "@accounting/user/includes/_action-buttons.twig" %}
+        {% include "@profilepage/user/includes/_action-buttons.twig" %}
     {% endif %}
     <table>
         <!-- fixed table header -->
@@ -25,7 +25,7 @@
         {% for connectedServiceProvider in connectedServiceProviderBag.getAll %}
             <tr id="connected-service-provider-{{ loop.index }}">
                 <td>
-                    <img src="{{ connectedServiceProvider.serviceProvider.logoUrl ?? asset('css/src/icons/no-image.svg', 'accounting') }}"
+                    <img src="{{ connectedServiceProvider.serviceProvider.logoUrl ?? asset('css/src/icons/no-image.svg', 'profilepage') }}"
                          width="30"
                          height="30"
                          loading="lazy"
@@ -39,7 +39,7 @@
                 <td class="dropdown-container" colspan="3">
                     <input type="checkbox" id="dropdown-toggle-{{ loop.index }}" class="dropdown-toggle">
                     <label class="dropdown-label" for="dropdown-toggle-{{ loop.index }}">
-                        <img src="{{ asset('css/src/icons/dropdown.svg', 'accounting') }}" alt="Dropdown icon">
+                        <img src="{{ asset('css/src/icons/dropdown.svg', 'profilepage') }}" alt="Dropdown icon">
                     </label>
                     <div class="dropdown-box" >
                         <strong>{{ columnNames.serviceDetails|trans }}</strong>
@@ -151,11 +151,11 @@
 
                 request.onload = function () {
                     if (this.status === 200) {
-                        accounting.removeElement(form.closest('tr'));
+                        profilepage.removeElement(form.closest('tr'));
                     } else {
                         const response = JSON.parse(this.responseText);
                         console.log(response);
-                        accounting.alert('{{ 'Oups, there was an error while trying to revoke token.'|trans }}');
+                        profilepage.alert('{{ 'Oups, there was an error while trying to revoke token.'|trans }}');
                     }
                 };
 

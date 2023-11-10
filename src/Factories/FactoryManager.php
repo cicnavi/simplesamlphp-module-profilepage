@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Factories;
+namespace SimpleSAML\Module\profilepage\Factories;
 
 class FactoryManager
 {

@@ -2,29 +2,29 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
-use SimpleSAML\Module\accounting\Entities\Interfaces\IdentityProviderInterface;
-use SimpleSAML\Module\accounting\Entities\Interfaces\ServiceProviderInterface;
-use SimpleSAML\Module\accounting\Entities\Providers\Identity;
-use SimpleSAML\Module\accounting\Entities\Providers\Service;
-use SimpleSAML\Module\accounting\Exceptions\MetadataException;
-use SimpleSAML\Module\accounting\Helpers\ProviderResolver;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event\State;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\IdentityProviderInterface;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\ServiceProviderInterface;
+use SimpleSAML\Module\profilepage\Entities\Providers\Identity;
+use SimpleSAML\Module\profilepage\Entities\Providers\Service;
+use SimpleSAML\Module\profilepage\Exceptions\MetadataException;
+use SimpleSAML\Module\profilepage\Helpers\ProviderResolver;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\ProviderResolver
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
- * @uses \SimpleSAML\Module\accounting\Entities\Providers\Identity\Saml2
- * @uses \SimpleSAML\Module\accounting\Entities\Providers\Identity\Oidc
- * @uses \SimpleSAML\Module\accounting\Entities\Providers\Service\Saml2
- * @uses \SimpleSAML\Module\accounting\Entities\Providers\Service\Oidc
- * @uses \SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractSaml2Provider
- * @uses \SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractOidcProvider
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Oidc
+ * @covers \SimpleSAML\Module\profilepage\Helpers\ProviderResolver
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractProvider
+ * @uses \SimpleSAML\Module\profilepage\Entities\Providers\Identity\Saml2
+ * @uses \SimpleSAML\Module\profilepage\Entities\Providers\Identity\Oidc
+ * @uses \SimpleSAML\Module\profilepage\Entities\Providers\Service\Saml2
+ * @uses \SimpleSAML\Module\profilepage\Entities\Providers\Service\Oidc
+ * @uses \SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractSaml2Provider
+ * @uses \SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractOidcProvider
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Saml2
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Oidc
  */
 class ProviderResolverTest extends TestCase
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal;
+namespace SimpleSAML\Module\profilepage\Data\Stores\Connections\DoctrineDbal;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 class Factory
 {

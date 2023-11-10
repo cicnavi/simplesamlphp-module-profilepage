@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Authentication\Event;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Authentication\Event;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event\Job;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event\Job;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Authentication\Event\Job
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractJob
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractState
- * @uses \SimpleSAML\Module\accounting\Entities\Authentication\Event\State\Saml2
- * @uses \SimpleSAML\Module\accounting\Helpers\Network
- * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
+ * @covers \SimpleSAML\Module\profilepage\Entities\Authentication\Event\Job
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractJob
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractState
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event\State\Saml2
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Network
+ * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
  */
 class JobTest extends TestCase
 {

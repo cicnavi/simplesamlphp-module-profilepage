@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Providers\Bases;
+namespace SimpleSAML\Module\profilepage\Entities\Providers\Bases;
 
-use SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider;
-use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
-use SimpleSAML\Module\accounting\Exceptions\MetadataException;
-use SimpleSAML\Module\accounting\Entities\Authentication;
+use SimpleSAML\Module\profilepage\Entities\Bases\AbstractProvider;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\AuthenticationProtocolInterface;
+use SimpleSAML\Module\profilepage\Exceptions\MetadataException;
+use SimpleSAML\Module\profilepage\Entities\Authentication;
 
 abstract class AbstractSaml2Provider extends AbstractProvider
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Authentication\Protocol;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Authentication\Protocol;
 
-use SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Saml2;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Authentication\Protocol\Saml2
+ * @covers \SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Saml2
  */
 class Saml2Test extends TestCase
 {

@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Services;
+namespace SimpleSAML\Test\Module\profilepage\Services;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Providers\Builders\DataProviderBuilder;
-use SimpleSAML\Module\accounting\Data\Providers\Interfaces\DataProviderInterface;
-use SimpleSAML\Module\accounting\Data\Trackers\Builders\DataTrackerBuilder;
-use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Services\TrackerResolver;
+use SimpleSAML\Module\profilepage\Data\Providers\Builders\DataProviderBuilder;
+use SimpleSAML\Module\profilepage\Data\Providers\Interfaces\DataProviderInterface;
+use SimpleSAML\Module\profilepage\Data\Trackers\Builders\DataTrackerBuilder;
+use SimpleSAML\Module\profilepage\Data\Trackers\Interfaces\DataTrackerInterface;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\TrackerResolver;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Services\TrackerResolver
+ * @covers \SimpleSAML\Module\profilepage\Services\TrackerResolver
  */
 class TrackerResolverTest extends TestCase
 {

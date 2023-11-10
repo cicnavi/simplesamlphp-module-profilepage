@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Entities\Bases;
+namespace SimpleSAML\Module\profilepage\Entities\Bases;
 
-use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
-use SimpleSAML\Module\accounting\Entities\Interfaces\StateInterface;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\AuthenticationProtocolInterface;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\StateInterface;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 use DateTimeImmutable;
-use SimpleSAML\Module\accounting\Traits\HasUserAttributesTrait;
+use SimpleSAML\Module\profilepage\Traits\HasUserAttributesTrait;
 use Throwable;
 
 abstract class AbstractState implements StateInterface

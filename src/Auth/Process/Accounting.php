@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Auth\Process;
+namespace SimpleSAML\Module\profilepage\Auth\Process;
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Auth\ProcessingFilter;
-use SimpleSAML\Module\accounting\Data\Stores\Builders\JobsStoreBuilder;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Module\accounting\Services\Logger;
-use SimpleSAML\Module\accounting\Services\TrackerResolver;
+use SimpleSAML\Module\profilepage\Data\Stores\Builders\JobsStoreBuilder;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Services\Logger;
+use SimpleSAML\Module\profilepage\Services\TrackerResolver;
 use Throwable;
 
 class Accounting extends ProcessingFilter

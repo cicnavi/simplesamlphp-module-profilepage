@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\ModuleConfiguration;
+namespace SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 final class ConnectionType
 {

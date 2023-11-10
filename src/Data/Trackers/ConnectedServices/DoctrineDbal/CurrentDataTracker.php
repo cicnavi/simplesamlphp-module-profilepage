@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Trackers\ConnectedServices\DoctrineDbal;
+namespace SimpleSAML\Module\profilepage\Data\Trackers\ConnectedServices\DoctrineDbal;
 
 use DateInterval;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Providers\ConnectedServices\DoctrineDbal\CurrentDataProvider;
-use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
-use SimpleSAML\Module\accounting\Entities\Authentication\Event;
-use SimpleSAML\Module\accounting\Exceptions\StoreException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Data\Providers\ConnectedServices\DoctrineDbal\CurrentDataProvider;
+use SimpleSAML\Module\profilepage\Data\Trackers\Interfaces\DataTrackerInterface;
+use SimpleSAML\Module\profilepage\Entities\Authentication\Event;
+use SimpleSAML\Module\profilepage\Exceptions\StoreException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 
 class CurrentDataTracker extends CurrentDataProvider implements DataTrackerInterface
 {

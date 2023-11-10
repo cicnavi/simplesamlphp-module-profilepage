@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Helpers\Routes;
+use SimpleSAML\Module\profilepage\Helpers\Routes;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
 use SimpleSAML\Utils\HTTP;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\Routes
- * @uses \SimpleSAML\Module\accounting\Helpers\Arr
+ * @covers \SimpleSAML\Module\profilepage\Helpers\Routes
+ * @uses \SimpleSAML\Module\profilepage\Helpers\Arr
  */
 class RoutesTest extends TestCase
 {

@@ -1,17 +1,17 @@
 <?php
 
-namespace SimpleSAML\Test\Module\accounting\Factories;
+namespace SimpleSAML\Test\Module\profilepage\Factories;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
-use SimpleSAML\Module\accounting\Factories\SerializerFactory;
+use SimpleSAML\Module\profilepage\Exceptions\InvalidConfigurationException;
+use SimpleSAML\Module\profilepage\Factories\SerializerFactory;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
+use SimpleSAML\Module\profilepage\Interfaces\SerializerInterface;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Factories\SerializerFactory
+ * @covers \SimpleSAML\Module\profilepage\Factories\SerializerFactory
  */
 class SerializerFactoryTest extends TestCase
 {
@@ -41,5 +41,4 @@ class SerializerFactoryTest extends TestCase
 
         $this->mocked()->build();
     }
-
 }

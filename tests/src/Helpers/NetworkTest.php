@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Helpers;
+namespace SimpleSAML\Test\Module\profilepage\Helpers;
 
-use SimpleSAML\Module\accounting\Helpers\Network;
+use SimpleSAML\Module\profilepage\Helpers\Network;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Helpers\Network
+ * @covers \SimpleSAML\Module\profilepage\Helpers\Network
  */
 class NetworkTest extends TestCase
 {

@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\Module\accounting\Entities\Providers\Bases;
+namespace SimpleSAML\Test\Module\profilepage\Entities\Providers\Bases;
 
 use PHPUnit\Framework\MockObject\Stub;
-use SimpleSAML\Module\accounting\Entities\Interfaces\AuthenticationProtocolInterface;
-use SimpleSAML\Module\accounting\Entities\Interfaces\ProviderInterface;
-use SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractSaml2Provider;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\AuthenticationProtocolInterface;
+use SimpleSAML\Module\profilepage\Entities\Interfaces\ProviderInterface;
+use SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractSaml2Provider;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Module\accounting\Exceptions\MetadataException;
-use SimpleSAML\Module\accounting\Helpers\Arr;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
-use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
+use SimpleSAML\Module\profilepage\Exceptions\MetadataException;
+use SimpleSAML\Module\profilepage\Helpers\Arr;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
+use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
 
 /**
- * @covers \SimpleSAML\Module\accounting\Entities\Providers\Bases\AbstractSaml2Provider
- * @uses \SimpleSAML\Module\accounting\Entities\Bases\AbstractProvider
+ * @covers \SimpleSAML\Module\profilepage\Entities\Providers\Bases\AbstractSaml2Provider
+ * @uses \SimpleSAML\Module\profilepage\Entities\Bases\AbstractProvider
  */
 class AbstractSaml2ProviderTest extends TestCase
 {

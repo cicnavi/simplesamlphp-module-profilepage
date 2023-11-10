@@ -4,16 +4,16 @@ services:
     autowire: true
     public: false
     bind:
-      Psr\Log\LoggerInterface: '@accounting.logger'
+      Psr\Log\LoggerInterface: '@profilepage.logger'
 
   # Services
-  SimpleSAML\Module\accounting\:
+  SimpleSAML\Module\profilepage\:
     resource: '../../src/*'
     exclude: '../../src/{Http/Controllers}'
   # Service aliases
-  accounting.logger:
-    class: SimpleSAML\Module\accounting\Services\Logger
+  profilepage.logger:
+    class: SimpleSAML\Module\profilepage\Services\Logger
   # Controllers
-  SimpleSAML\Module\accounting\Http\Controllers\:
+  SimpleSAML\Module\profilepage\Http\Controllers\:
     resource: '../../src/Http/Controllers/*'
     tags: ['controller.service_arguments']

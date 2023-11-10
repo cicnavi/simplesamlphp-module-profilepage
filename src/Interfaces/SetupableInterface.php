@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Interfaces;
+namespace SimpleSAML\Module\profilepage\Interfaces;
 
 interface SetupableInterface
 {

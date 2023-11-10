@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Module\accounting\Data\Providers\Builders;
+namespace SimpleSAML\Module\profilepage\Data\Providers\Builders;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Module\accounting\Data\Providers\Interfaces\ActivityInterface;
-use SimpleSAML\Module\accounting\Data\Providers\Interfaces\ConnectedServicesInterface;
-use SimpleSAML\Module\accounting\Data\Providers\Interfaces\DataProviderInterface;
-use SimpleSAML\Module\accounting\Exceptions\Exception;
-use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
-use SimpleSAML\Module\accounting\ModuleConfiguration;
-use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\profilepage\Data\Providers\Interfaces\ActivityInterface;
+use SimpleSAML\Module\profilepage\Data\Providers\Interfaces\ConnectedServicesInterface;
+use SimpleSAML\Module\profilepage\Data\Providers\Interfaces\DataProviderInterface;
+use SimpleSAML\Module\profilepage\Exceptions\Exception;
+use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\profilepage\ModuleConfiguration;
+use SimpleSAML\Module\profilepage\Services\HelpersManager;
 use Throwable;
 
 class DataProviderBuilder
