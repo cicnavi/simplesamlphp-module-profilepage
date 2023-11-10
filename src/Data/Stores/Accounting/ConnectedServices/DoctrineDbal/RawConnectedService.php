@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractRawEntity;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 
 class RawConnectedService extends AbstractRawEntity
 {
@@ -17,9 +18,9 @@ class RawConnectedService extends AbstractRawEntity
     protected array $serviceProviderMetadata;
     protected array $userAttributes;
 
-    public function __construct(array $rawRow, AbstractPlatform $abstractPlatform)
+    public function __construct(array $rawRow, AbstractPlatform $abstractPlatform, SerializerInterface $serializer)
     {
-        parent::__construct($rawRow, $abstractPlatform);
+        parent::__construct($rawRow, $abstractPlatform, $serializer);
 
         $this->numberOfAuthentications = (int)$rawRow[
         EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS
@@ -148,7 +149,7 @@ class RawConnectedService extends AbstractRawEntity
     protected function resolveServiceProviderMetadata(string $serializedMetadata): array
     {
         /** @psalm-suppress MixedAssignment - we check the type manually */
-        $metadata = unserialize($serializedMetadata);
+        $metadata = $this->serializer->undo($serializedMetadata);
 
         if (is_array($metadata)) {
             return $metadata;
@@ -161,7 +162,7 @@ class RawConnectedService extends AbstractRawEntity
     protected function resolveUserAttributes(string $serializedUserAttributes): array
     {
         /** @psalm-suppress MixedAssignment - we check the type manually */
-        $userAttributes = unserialize($serializedUserAttributes);
+        $userAttributes = $this->serializer->undo($serializedUserAttributes);
 
         if (is_array($userAttributes)) {
             return $userAttributes;

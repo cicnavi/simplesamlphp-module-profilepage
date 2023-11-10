@@ -12,6 +12,7 @@ use SimpleSAML\Module\accounting\Entities\Authentication\Event\Job;
 use SimpleSAML\Module\accounting\Entities\Interfaces\JobInterface;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use Throwable;
 
@@ -30,9 +31,10 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
         LoggerInterface $logger,
         string $connectionKey = null,
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
-        Redis $redis = null
+        Redis $redis = null,
+        SerializerInterface $serializer = null,
     ) {
-        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType);
+        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType, $serializer);
         $this->redis = $redis ?? new Redis();
         $connectionParameters = $this->getConnectionParameters();
 
@@ -80,7 +82,7 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
     {
         try {
             $listKey = $this->resolveListKeyForType(self::LIST_KEY_JOB, $job->getType());
-            $this->redis->rPush($listKey, serialize($job->getRawState()));
+            $this->redis->rPush($listKey, $this->serializer->do($job->getRawState()));
         } catch (Throwable $exception) {
             $message = sprintf('Could not add job to Redis list. Error was: %s', $exception->getMessage());
             $this->logger->error($message);
@@ -106,7 +108,7 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
         }
 
         /** @var array|false $rawState */
-        $rawState = unserialize($payload);
+        $rawState = $this->serializer->undo($payload);
 
         if (is_array($rawState)) {
             return new Job($rawState);
@@ -127,7 +129,7 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
     {
         try {
             $listKey = $this->resolveListKeyForType(self::LIST_KEY_JOB_FAILED, $job->getType());
-            $this->redis->rPush($listKey, serialize($job));
+            $this->redis->rPush($listKey, $this->serializer->do($job));
         } catch (Throwable $exception) {
             $message = sprintf('Could not mark job as failed. Error was: %s', $exception->getMessage());
             $this->logger->error($message);

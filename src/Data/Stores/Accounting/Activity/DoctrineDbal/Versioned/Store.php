@@ -14,6 +14,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Data\Stores\Interfaces\ActivityInterface;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 
@@ -33,7 +34,8 @@ class Store extends BaseStore implements ActivityInterface
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
         Factory $connectionFactory = null,
         HelpersManager $helpersManager = null,
-        Repository $repository = null
+        Repository $repository = null,
+        SerializerInterface $serializer = null,
     ) {
         parent::__construct(
             $moduleConfiguration,
@@ -42,7 +44,8 @@ class Store extends BaseStore implements ActivityInterface
             $connectionType,
             $connectionFactory,
             $helpersManager,
-            $repository
+            $repository,
+            $serializer,
         );
 
         $this->repository = $repository ?? new Repository($this->connection, $this->logger);

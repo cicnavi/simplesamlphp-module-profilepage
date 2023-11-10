@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 use SimpleSAML\Module\accounting\Entities\ConnectedService;
 
@@ -31,6 +32,8 @@ use SimpleSAML\Module\accounting\Entities\ConnectedService;
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator
+ * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
  */
 class CurrentDataTrackerTest extends TestCase
 {
@@ -52,6 +55,7 @@ class CurrentDataTrackerTest extends TestCase
         $this->moduleConfigurationStub = $this->createStub(ModuleConfiguration::class);
         $this->moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
+        $this->moduleConfigurationStub->method('getSerializerClass')->willReturn(PhpSerializer::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->store = $this->createMock(
             Store::class

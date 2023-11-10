@@ -13,6 +13,7 @@ use SimpleSAML\Module\accounting\Data\Trackers\Interfaces\DataTrackerInterface;
 use SimpleSAML\Module\accounting\Exceptions\InvalidConfigurationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration\AccountingProcessingType;
 use SimpleSAML\Module\accounting\ModuleConfiguration\ConnectionType;
+use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
 use Throwable;
 
 class ModuleConfiguration
@@ -40,6 +41,7 @@ class ModuleConfiguration
     public const OPTION_PROVIDER_FOR_CONNECTED_SERVICES = 'provider_for_connected_services';
     public const OPTION_PROVIDER_FOR_ACTIVITY = 'provider_for_activity';
     public const OPTION_ACTION_BUTTONS_ENABLED = 'action_buttons_enabled';
+    public const OPTION_SERIALIZER = '';
 
     /**
      * Contains configuration from module configuration file.
@@ -485,5 +487,15 @@ class ModuleConfiguration
     public function getActionButtonsEnabled(): bool
     {
         return $this->getConfiguration()->getBoolean(self::OPTION_ACTION_BUTTONS_ENABLED);
+    }
+
+    /**
+     * Serializer class which will be used to serialize data to make it storable. For example, this will be used when
+     * storing authentication events as jobs.
+     * Class must implement SimpleSAML\Module\accounting\Interfaces\SerializerInterface
+     */
+    public function getSerializerClass(): string
+    {
+        return $this->getConfiguration()->getOptionalString(self::OPTION_SERIALIZER, PhpSerializer::class);
     }
 }

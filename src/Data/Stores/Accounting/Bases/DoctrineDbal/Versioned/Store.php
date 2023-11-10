@@ -11,6 +11,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Bases\DoctrineDbal\AbstractStore;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory;
 use SimpleSAML\Module\accounting\Data\Stores\Interfaces\StoreInterface;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
 use Throwable;
@@ -32,9 +33,17 @@ class Store extends AbstractStore implements StoreInterface
         string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
         Factory $connectionFactory = null,
         HelpersManager $helpersManager = null,
-        Repository $repository = null
+        Repository $repository = null,
+        SerializerInterface $serializer = null,
     ) {
-        parent::__construct($moduleConfiguration, $logger, $connectionKey, $connectionType, $connectionFactory);
+        parent::__construct(
+            $moduleConfiguration,
+            $logger,
+            $connectionKey,
+            $connectionType,
+            $connectionFactory,
+            $serializer,
+        );
 
         $this->helpersManager = $helpersManager ?? new HelpersManager();
         $this->repository = $repository ?? new Repository($this->connection, $this->logger);
@@ -136,7 +145,7 @@ class Store extends AbstractStore implements StoreInterface
         try {
             $this->repository->insertIdpVersion(
                 $idpId,
-                serialize($hashDecoratedState->getState()->getIdentityProviderMetadata()),
+                $this->serializer->do($hashDecoratedState->getState()->getIdentityProviderMetadata()),
                 $idpMetadataArrayHashSha256
             );
         } catch (Throwable $exception) {
@@ -245,7 +254,7 @@ class Store extends AbstractStore implements StoreInterface
         try {
             $this->repository->insertSpVersion(
                 $spId,
-                serialize($hashDecoratedState->getState()->getServiceProviderMetadata()),
+                $this->serializer->do($hashDecoratedState->getState()->getServiceProviderMetadata()),
                 $spMetadataArrayHashSha256
             );
         } catch (Throwable $exception) {

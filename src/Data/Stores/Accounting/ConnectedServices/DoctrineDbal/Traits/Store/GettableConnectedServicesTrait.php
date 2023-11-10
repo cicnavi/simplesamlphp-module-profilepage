@@ -32,7 +32,7 @@ trait GettableConnectedServicesTrait
 
             /** @var array $result */
             foreach ($results as $result) {
-                $rawConnectedServiceProvider = new RawConnectedService($result, $databasePlatform);
+                $rawConnectedServiceProvider = new RawConnectedService($result, $databasePlatform, $this->serializer);
 
                 $serviceProvider = $this->helpersManager
                     ->getProviderResolver()

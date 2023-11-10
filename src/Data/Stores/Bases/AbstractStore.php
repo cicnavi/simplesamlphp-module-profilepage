@@ -6,13 +6,16 @@ namespace SimpleSAML\Module\accounting\Data\Stores\Bases;
 
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
+use SimpleSAML\Module\accounting\Factories\SerializerFactory;
 use SimpleSAML\Module\accounting\Interfaces\BuildableUsingModuleConfigurationInterface;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\Interfaces\SetupableInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 
 abstract class AbstractStore implements BuildableUsingModuleConfigurationInterface, SetupableInterface
 {
     protected string $connectionKey;
+    protected SerializerInterface $serializer;
 
     /**
      */
@@ -20,10 +23,13 @@ abstract class AbstractStore implements BuildableUsingModuleConfigurationInterfa
         protected ModuleConfiguration $moduleConfiguration,
         protected LoggerInterface $logger,
         string $connectionKey = null,
-        string $connectionType = ModuleConfiguration\ConnectionType::MASTER
+        string $connectionType = ModuleConfiguration\ConnectionType::MASTER,
+        SerializerInterface $serializer = null,
     ) {
         $this->connectionKey = $connectionKey ??
             $moduleConfiguration->getClassConnectionKey($this->getSelfClass(), $connectionType);
+
+        $this->serializer = $serializer ?? (new SerializerFactory($this->moduleConfiguration))->build();
     }
 
     /**

@@ -9,6 +9,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use Throwable;
 
 /**
@@ -16,8 +17,11 @@ use Throwable;
  */
 abstract class AbstractRawEntity
 {
-    public function __construct(protected array $rawRow, protected AbstractPlatform $abstractPlatform)
-    {
+    public function __construct(
+        protected array $rawRow,
+        protected AbstractPlatform $abstractPlatform,
+        protected SerializerInterface $serializer
+    ) {
         $this->validate($rawRow);
     }
 

@@ -14,6 +14,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
@@ -29,6 +30,8 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\Bases\AbstractMigrator
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
+ * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
  */
 class JobsStoreBuilderTest extends TestCase
 {
@@ -43,6 +46,7 @@ class JobsStoreBuilderTest extends TestCase
         $this->moduleConfigurationStub->method('getConnectionParameters')
             ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
         $this->moduleConfigurationStub->method('getJobsStoreClass')->willReturn(Store::class);
+        $this->moduleConfigurationStub->method('getSerializerClass')->willReturn(PhpSerializer::class);
 
         $this->loggerStub = $this->createStub(LoggerInterface::class);
 

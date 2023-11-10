@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
 
 use DateTimeImmutable;
 use Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
@@ -19,6 +20,7 @@ use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
@@ -47,6 +49,8 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Helpers\Network
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
+ * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
  */
 class RepositoryTest extends TestCase
 {
@@ -59,6 +63,7 @@ class RepositoryTest extends TestCase
     protected Stub $jobStub;
     protected Store $jobsStore;
     protected string $jobsTableName;
+    protected MockObject $serializerMock;
 
     /**
      * @throws StoreException
@@ -93,6 +98,14 @@ class RepositoryTest extends TestCase
         $this->jobsTableName = $this->connection->preparePrefixedTableName(
             TableConstants::TABLE_NAME_JOB
         );
+
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock->method('do')->will($this->returnCallback(
+            fn($argument) => serialize($argument)
+        ));
+        $this->serializerMock->method('undo')->will($this->returnCallback(
+            fn($argument) => unserialize($argument)
+        ));
     }
 
     /**
@@ -101,7 +114,12 @@ class RepositoryTest extends TestCase
      */
     public function testCanInsertAndGetJob(): void
     {
-        $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
+        $repository = new Repository(
+            $this->connection,
+            $this->jobsTableName,
+            $this->loggerServiceStub,
+            $this->serializerMock
+        );
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
 
@@ -117,7 +135,12 @@ class RepositoryTest extends TestCase
      */
     public function testInsertThrowsIfJobsStoreSetupNotRan(): void
     {
-        $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
+        $repository = new Repository(
+            $this->connection,
+            $this->jobsTableName,
+            $this->loggerServiceStub,
+            $this->serializerMock
+        );
         // Running setup will ensure that all migrations are ran.
         //$this->jobsStore->runSetup();
 
@@ -132,7 +155,12 @@ class RepositoryTest extends TestCase
      */
     public function testInsertThrowsForInvalidJobType(): void
     {
-        $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
+        $repository = new Repository(
+            $this->connection,
+            $this->jobsTableName,
+            $this->loggerServiceStub,
+            $this->serializerMock
+        );
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
 
@@ -152,7 +180,12 @@ class RepositoryTest extends TestCase
      */
     public function testGetNextThrowsIfJobsStoreSetupNotRan(): void
     {
-        $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
+        $repository = new Repository(
+            $this->connection,
+            $this->jobsTableName,
+            $this->loggerServiceStub,
+            $this->serializerMock
+        );
         // Running setup will ensure that all migrations are ran.
         //$this->jobsStore->runSetup();
 
@@ -167,7 +200,12 @@ class RepositoryTest extends TestCase
      */
     public function testGetNextThrowsForInvalidJobType(): void
     {
-        $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
+        $repository = new Repository(
+            $this->connection,
+            $this->jobsTableName,
+            $this->loggerServiceStub,
+            $this->serializerMock
+        );
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
 
@@ -190,7 +228,12 @@ class RepositoryTest extends TestCase
      */
     public function testCanDeleteJob(): void
     {
-        $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
+        $repository = new Repository(
+            $this->connection,
+            $this->jobsTableName,
+            $this->loggerServiceStub,
+            $this->serializerMock
+        );
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
 
@@ -213,7 +256,12 @@ class RepositoryTest extends TestCase
      */
     public function testDeleteThrowsWhenJobsStoreSetupNotRan(): void
     {
-        $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
+        $repository = new Repository(
+            $this->connection,
+            $this->jobsTableName,
+            $this->loggerServiceStub,
+            $this->serializerMock
+        );
         // Running setup will ensure that all migrations are ran.
         //$this->jobsStore->runSetup();
 
@@ -228,7 +276,12 @@ class RepositoryTest extends TestCase
      */
     public function testCanGetSpecificJobType(): void
     {
-        $repository = new Repository($this->connection, $this->jobsTableName, $this->loggerServiceStub);
+        $repository = new Repository(
+            $this->connection,
+            $this->jobsTableName,
+            $this->loggerServiceStub,
+            $this->serializerMock
+        );
         // Running setup will ensure that all migrations are ran.
         $this->jobsStore->runSetup();
 
@@ -247,6 +300,11 @@ class RepositoryTest extends TestCase
     {
         $this->expectException(StoreException::class);
 
-        new Repository($this->connection, 'invalid-table-name', $this->loggerServiceStub);
+        new Repository(
+            $this->connection,
+            'invalid-table-name',
+            $this->loggerServiceStub,
+            $this->serializerMock
+        );
     }
 }

@@ -14,6 +14,7 @@ use SimpleSAML\Module\accounting\Entities\Activity\Bag;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
+use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 
 /**
@@ -28,6 +29,8 @@ use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Factory
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Migrator
+ * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
  */
 class VersionedDataProviderTest extends TestCase
 {
@@ -51,6 +54,7 @@ class VersionedDataProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->moduleConfigurationMock = $this->createMock(ModuleConfiguration::class);
+        $this->moduleConfigurationMock->method('getSerializerClass')->willReturn(PhpSerializer::class);
         $connectionParams = ConnectionParameters::DBAL_SQLITE_MEMORY;
         $this->moduleConfigurationMock->method('getConnectionParameters')
             ->willReturn($connectionParams);
@@ -64,7 +68,7 @@ class VersionedDataProviderTest extends TestCase
     /**
      * @throws StoreException
      */
-    protected function prepareMockedInstance(): VersionedDataProvider
+    protected function mocked(): VersionedDataProvider
     {
         return new VersionedDataProvider(
             $this->moduleConfigurationMock,
@@ -79,7 +83,7 @@ class VersionedDataProviderTest extends TestCase
      */
     public function testCanCreateInstance(): void
     {
-        $this->assertInstanceOf(VersionedDataProvider::class, $this->prepareMockedInstance());
+        $this->assertInstanceOf(VersionedDataProvider::class, $this->mocked());
     }
 
     /**
@@ -100,7 +104,7 @@ class VersionedDataProviderTest extends TestCase
     {
         $this->storeMock->method('needsSetup')->willReturn(true);
 
-        $this->assertTrue($this->prepareMockedInstance()->needsSetup());
+        $this->assertTrue($this->mocked()->needsSetup());
     }
 
     /**
@@ -110,7 +114,7 @@ class VersionedDataProviderTest extends TestCase
     {
         $this->storeMock->method('needsSetup')->willReturn(false);
 
-        $this->assertFalse($this->prepareMockedInstance()->needsSetup());
+        $this->assertFalse($this->mocked()->needsSetup());
     }
 
     /**
@@ -122,7 +126,7 @@ class VersionedDataProviderTest extends TestCase
         $this->storeMock->method('needsSetup')->willReturn(false);
         $this->loggerMock->expects($this->once())->method('warning');
 
-        $this->prepareMockedInstance()->runSetup();
+        $this->mocked()->runSetup();
     }
 
     /**
@@ -134,7 +138,7 @@ class VersionedDataProviderTest extends TestCase
         $this->storeMock->method('needsSetup')->willReturn(true);
         $this->storeMock->expects($this->once())->method('runSetup');
 
-        $this->prepareMockedInstance()->runSetup();
+        $this->mocked()->runSetup();
     }
 
     /**
@@ -147,7 +151,7 @@ class VersionedDataProviderTest extends TestCase
             ->with('userId', 10, 0)
             ->willReturn($this->activityBagMock);
 
-        $this->prepareMockedInstance()->getActivity('userId', 10, 0);
+        $this->mocked()->getActivity('userId', 10, 0);
     }
 
     /**
@@ -157,7 +161,7 @@ class VersionedDataProviderTest extends TestCase
     {
         $this->assertInstanceOf(
             VersionedDataTracker::class,
-            $this->prepareMockedInstance()->getTracker()
+            $this->mocked()->getTracker()
         );
     }
 }

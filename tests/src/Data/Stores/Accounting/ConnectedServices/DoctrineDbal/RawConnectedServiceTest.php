@@ -6,10 +6,12 @@ namespace SimpleSAML\Test\Module\accounting\Data\Stores\Accounting\ConnectedServ
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\RawConnectedService;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Test\Module\accounting\Constants\DateTime;
 use SimpleSAML\Module\accounting\Data\Stores\Accounting\ConnectedServices\DoctrineDbal\EntityTableConstants;
 
@@ -36,6 +38,7 @@ class RawConnectedServiceTest extends TestCase
      */
     protected $abstractPlatformStub;
     protected string $dateTimeFormat;
+    protected MockObject $serializerMock;
 
     protected function setUp(): void
     {
@@ -60,13 +63,21 @@ class RawConnectedServiceTest extends TestCase
         $this->abstractPlatformStub = $this->createStub(AbstractPlatform::class);
         $this->abstractPlatformStub->method('getDateTimeFormatString')
             ->willReturn($this->dateTimeFormat);
+
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock->method('do')->willReturnCallback(
+            fn($argument) => serialize($argument)
+        );
+        $this->serializerMock->method('undo')->willReturnCallback(
+            fn($argument) => unserialize($argument)
+        );
     }
 
     public function testCanCreateInstance(): void
     {
         $this->assertInstanceOf(
             RawConnectedService::class,
-            new RawConnectedService($this->rawRow, $this->abstractPlatformStub)
+            new RawConnectedService($this->rawRow, $this->abstractPlatformStub, $this->serializerMock)
         );
     }
 
@@ -74,7 +85,8 @@ class RawConnectedServiceTest extends TestCase
     {
         $rawConnectedServiceProvider = new RawConnectedService(
             $this->rawRow,
-            $this->abstractPlatformStub
+            $this->abstractPlatformStub,
+            $this->serializerMock
         );
 
         $this->assertSame($this->numberOfAuthentications, $rawConnectedServiceProvider->getNumberOfAuthentications());
@@ -99,7 +111,7 @@ class RawConnectedServiceTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawConnectedService($rawRow, $this->abstractPlatformStub);
+        new RawConnectedService($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsIfNumberOfAuthenticationsNotNumeric(): void
@@ -109,7 +121,7 @@ class RawConnectedServiceTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawConnectedService($rawRow, $this->abstractPlatformStub);
+        new RawConnectedService($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsIfLastAuthenticationAtNotNumeric(): void
@@ -119,7 +131,7 @@ class RawConnectedServiceTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawConnectedService($rawRow, $this->abstractPlatformStub);
+        new RawConnectedService($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsIfFirstAuthenticationAtNotNumeric(): void
@@ -129,7 +141,7 @@ class RawConnectedServiceTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawConnectedService($rawRow, $this->abstractPlatformStub);
+        new RawConnectedService($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsIfSpMetadataNotString(): void
@@ -139,7 +151,7 @@ class RawConnectedServiceTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawConnectedService($rawRow, $this->abstractPlatformStub);
+        new RawConnectedService($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsIfUserAttributesNotString(): void
@@ -149,7 +161,7 @@ class RawConnectedServiceTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawConnectedService($rawRow, $this->abstractPlatformStub);
+        new RawConnectedService($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsIfSpMetadataNotValid(): void
@@ -159,7 +171,7 @@ class RawConnectedServiceTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawConnectedService($rawRow, $this->abstractPlatformStub);
+        new RawConnectedService($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsIfUserAttributesNotValid(): void
@@ -169,6 +181,6 @@ class RawConnectedServiceTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawConnectedService($rawRow, $this->abstractPlatformStub);
+        new RawConnectedService($rawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 }

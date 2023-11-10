@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store;
 use DateTimeImmutable;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\RawJob;
@@ -14,6 +15,7 @@ use SimpleSAML\Module\accounting\Data\Stores\Jobs\DoctrineDbal\Store\TableConsta
 use SimpleSAML\Module\accounting\Entities\Authentication\Event;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
 use SimpleSAML\Module\accounting\Exceptions\UnexpectedValueException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
 /**
@@ -30,6 +32,7 @@ class RawJobTest extends TestCase
     protected Event $authenticationEvent;
     protected array $validRawRow;
     protected Stub $abstractPlatformStub;
+    protected MockObject $serializerMock;
 
     protected function setUp(): void
     {
@@ -45,12 +48,17 @@ class RawJobTest extends TestCase
             TableConstants::COLUMN_NAME_TYPE => $this->authenticationEvent::class,
             TableConstants::COLUMN_NAME_CREATED_AT => 1645564942,
         ];
+
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock->method('undo')->will($this->returnCallback(
+            fn($argument) => unserialize($argument)
+        ));
     }
 
     public function testCanInstantiateValidRawJob(): void
     {
         $abstractPlatform = new SqlitePlatform();
-        $rawJob = new RawJob($this->validRawRow, $abstractPlatform);
+        $rawJob = new RawJob($this->validRawRow, $abstractPlatform, $this->serializerMock);
         $this->assertSame($rawJob->getId(), $this->validRawRow[TableConstants::COLUMN_NAME_ID]);
         $this->assertEquals(StateArrays::SAML2_FULL, $rawJob->getPayload());
         $this->assertSame($rawJob->getType(), $this->validRawRow[TableConstants::COLUMN_NAME_TYPE]);
@@ -64,7 +72,7 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
+        new RawJob($invalidRawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsOnNonNumericId(): void
@@ -74,7 +82,7 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
+        new RawJob($invalidRawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsOnNonStringPayload(): void
@@ -84,7 +92,7 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
+        new RawJob($invalidRawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsOnNonAbstractPayload(): void
@@ -94,7 +102,7 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
+        new RawJob($invalidRawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsOnNonStringType(): void
@@ -104,7 +112,7 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
+        new RawJob($invalidRawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 
     public function testThrowsOnNonNumericCreatedAt(): void
@@ -114,6 +122,6 @@ class RawJobTest extends TestCase
 
         $this->expectException(UnexpectedValueException::class);
 
-        new RawJob($invalidRawRow, $this->abstractPlatformStub);
+        new RawJob($invalidRawRow, $this->abstractPlatformStub, $this->serializerMock);
     }
 }

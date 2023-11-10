@@ -22,6 +22,7 @@ use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\HelpersManager;
+use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
@@ -52,6 +53,8 @@ use SimpleSAML\Module\accounting\Entities\Authentication\Event\State;
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Migrations\CreateUserTable
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Accounting\Bases\DoctrineDbal\Versioned\Store\Migrations\CreateUserVersionTable
  * @uses \SimpleSAML\Module\accounting\Helpers\Filesystem
+ * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
  */
 class StoreTest extends TestCase
 {
@@ -78,6 +81,7 @@ class StoreTest extends TestCase
             ->willReturn($connectionParams);
         $this->moduleConfigurationStub->method('getUserIdAttributeName')
             ->willReturn('hrEduPersonPersistentID');
+        $this->moduleConfigurationStub->method('getSerializerClass')->willReturn(PhpSerializer::class);
 
         $this->connection = new Connection($connectionParams);
 

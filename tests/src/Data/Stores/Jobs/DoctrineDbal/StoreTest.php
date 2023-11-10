@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\Module\accounting\Data\Stores\Jobs\DoctrineDbal;
 
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Module\accounting\Data\Stores\Connections\DoctrineDbal\Connection;
@@ -19,8 +20,10 @@ use SimpleSAML\Module\accounting\Entities\Bases\AbstractJob;
 use SimpleSAML\Module\accounting\Entities\GenericJob;
 use SimpleSAML\Module\accounting\Exceptions\StoreException;
 use SimpleSAML\Module\accounting\Exceptions\StoreException\MigrationException;
+use SimpleSAML\Module\accounting\Interfaces\SerializerInterface;
 use SimpleSAML\Module\accounting\ModuleConfiguration;
 use SimpleSAML\Module\accounting\Services\Logger;
+use SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer;
 use SimpleSAML\Test\Module\accounting\Constants\ConnectionParameters;
 use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
 
@@ -48,6 +51,8 @@ use SimpleSAML\Test\Module\accounting\Constants\StateArrays;
  * @uses \SimpleSAML\Module\accounting\Helpers\Network
  * @uses \SimpleSAML\Module\accounting\Services\HelpersManager
  * @uses \SimpleSAML\Module\accounting\Data\Stores\Bases\AbstractStore
+ * @uses \SimpleSAML\Module\accounting\Factories\SerializerFactory
+ * @uses \SimpleSAML\Module\accounting\Services\Serializers\PhpSerializer
  */
 class StoreTest extends TestCase
 {
@@ -161,6 +166,7 @@ class StoreTest extends TestCase
         $moduleConfiguration = $this->createStub(ModuleConfiguration::class);
         $moduleConfiguration->method('getConnectionParameters')
             ->willReturn(ConnectionParameters::DBAL_SQLITE_MEMORY);
+        $moduleConfiguration->method('getSerializerClass')->willReturn(PhpSerializer::class);
         $this->assertInstanceOf(Store::class, Store::build($moduleConfiguration, $this->loggerStub));
     }
 

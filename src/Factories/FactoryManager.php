@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Module\accounting\Factories;
 
-use SimpleSAML\Module\accounting\Services\MenuManager;
-
 class FactoryManager
 {
     protected static ?UserFactory $userFactory = null;
