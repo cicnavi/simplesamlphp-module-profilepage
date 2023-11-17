@@ -16,7 +16,7 @@ use function sprintf;
 
 class InstanceBuilderUsingModuleConfiguration
 {
-    public const BUILD_METHOD = 'build';
+    final public const BUILD_METHOD = 'build';
 
     /**
      * @param class-string $class

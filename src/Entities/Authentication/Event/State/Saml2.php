@@ -12,10 +12,10 @@ use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
 
 class Saml2 extends AbstractState
 {
-    public const KEY_IDENTITY_PROVIDER_METADATA = 'IdPMetadata';
-    public const KEY_SOURCE = 'Source';
-    public const KEY_SERVICE_PROVIDER_METADATA = 'SPMetadata';
-    public const KEY_DESTINATION = 'Destination';
+    final public const KEY_IDENTITY_PROVIDER_METADATA = 'IdPMetadata';
+    final public const KEY_SOURCE = 'Source';
+    final public const KEY_SERVICE_PROVIDER_METADATA = 'SPMetadata';
+    final public const KEY_DESTINATION = 'Destination';
 
     protected function resolveIdentityProviderMetadata(array $state): array
     {

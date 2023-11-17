@@ -46,7 +46,7 @@ class RawJobTest extends TestCase
             TableConstants::COLUMN_NAME_ID => 1,
             TableConstants::COLUMN_NAME_PAYLOAD => serialize(StateArrays::SAML2_FULL),
             TableConstants::COLUMN_NAME_TYPE => $this->authenticationEvent::class,
-            TableConstants::COLUMN_NAME_CREATED_AT => 1645564942,
+            TableConstants::COLUMN_NAME_CREATED_AT => 1_645_564_942,
         ];
 
         $this->serializerMock = $this->createMock(SerializerInterface::class);

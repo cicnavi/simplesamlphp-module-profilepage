@@ -6,14 +6,14 @@ namespace SimpleSAML\Module\profilepage\Data\Stores\Jobs\DoctrineDbal\Store;
 
 class TableConstants
 {
-    public const TABLE_NAME_JOB = 'job';
-    public const TABLE_NAME_JOB_FAILED = 'job_failed';
+    final public const TABLE_NAME_JOB = 'job';
+    final public const TABLE_NAME_JOB_FAILED = 'job_failed';
 
     // Both tables have same columns.
-    public const COLUMN_NAME_ID = 'id';
-    public const COLUMN_NAME_PAYLOAD = 'payload';
-    public const COLUMN_NAME_TYPE = 'type';
-    public const COLUMN_NAME_CREATED_AT = 'created_at';
+    final public const COLUMN_NAME_ID = 'id';
+    final public const COLUMN_NAME_PAYLOAD = 'payload';
+    final public const COLUMN_NAME_TYPE = 'type';
+    final public const COLUMN_NAME_CREATED_AT = 'created_at';
 
-    public const COLUMN_TYPE_LENGTH = 1024;
+    final public const COLUMN_TYPE_LENGTH = 1024;
 }

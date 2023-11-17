@@ -12,7 +12,7 @@ class CsrfToken
 {
     protected Session $session;
 
-    public const KEY = 'ssp-' . ModuleConfiguration::MODULE_NAME . '-csrf-token';
+    final public const KEY = 'ssp-' . ModuleConfiguration::MODULE_NAME . '-csrf-token';
     protected HelpersManager $helpersManager;
 
     /**

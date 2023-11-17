@@ -9,8 +9,8 @@ use DateTimeImmutable;
 
 class State
 {
-    public const MAX_NUMBER_OF_MESSAGES_TO_KEEP = 100;
-    public const DEFAULT_NUMBER_OF_MESSAGES_TO_KEEP = 10;
+    final public const MAX_NUMBER_OF_MESSAGES_TO_KEEP = 100;
+    final public const DEFAULT_NUMBER_OF_MESSAGES_TO_KEEP = 10;
     protected DateTimeImmutable $updatedAt;
     protected ?DateTimeImmutable $endedAt = null;
     protected int $successfulJobsProcessed = 0;

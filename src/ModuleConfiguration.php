@@ -18,30 +18,30 @@ use Throwable;
 
 class ModuleConfiguration
 {
-    public const MODULE_NAME = 'profilepage';
+    final public const MODULE_NAME = 'profilepage';
 
     /**
      * Default file name for module configuration. Can be overridden in constructor, for example, for testing purposes.
      */
-    public const FILE_NAME = 'module_profilepage.php';
+    final public const FILE_NAME = 'module_profilepage.php';
 
-    public const OPTION_USER_ID_ATTRIBUTE_NAME = 'user_id_attribute_name';
-    public const OPTION_DEFAULT_AUTHENTICATION_SOURCE = 'default_authentication_source';
-    public const OPTION_ACCOUNTING_PROCESSING_TYPE = 'accounting_processing_type';
-    public const OPTION_JOBS_STORE = 'jobs_store';
-    public const OPTION_ADDITIONAL_TRACKERS = 'additional_trackers';
-    public const OPTION_CONNECTIONS_AND_PARAMETERS = 'connections_and_parameters';
-    public const OPTION_CLASS_TO_CONNECTION_MAP = 'class_to_connection_map';
-    public const OPTION_CRON_TAG_FOR_JOB_RUNNER = 'cron_tag_for_job_runner';
-    public const OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME = 'job_runner_maximum_execution_time';
-    public const OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED =
+    final public const OPTION_USER_ID_ATTRIBUTE_NAME = 'user_id_attribute_name';
+    final public const OPTION_DEFAULT_AUTHENTICATION_SOURCE = 'default_authentication_source';
+    final public const OPTION_ACCOUNTING_PROCESSING_TYPE = 'accounting_processing_type';
+    final public const OPTION_JOBS_STORE = 'jobs_store';
+    final public const OPTION_ADDITIONAL_TRACKERS = 'additional_trackers';
+    final public const OPTION_CONNECTIONS_AND_PARAMETERS = 'connections_and_parameters';
+    final public const OPTION_CLASS_TO_CONNECTION_MAP = 'class_to_connection_map';
+    final public const OPTION_CRON_TAG_FOR_JOB_RUNNER = 'cron_tag_for_job_runner';
+    final public const OPTION_JOB_RUNNER_MAXIMUM_EXECUTION_TIME = 'job_runner_maximum_execution_time';
+    final public const OPTION_JOB_RUNNER_SHOULD_PAUSE_AFTER_NUMBER_OF_JOBS_PROCESSED =
         'job_runner_should_pause_after_number_of_jobs_processed';
-    public const OPTION_TRACKER_DATA_RETENTION_POLICY = 'tracker_data_retention_policy';
-    public const OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY = 'cron_tag_for_tracker_data_retention_policy';
-    public const OPTION_PROVIDER_FOR_CONNECTED_SERVICES = 'provider_for_connected_services';
-    public const OPTION_PROVIDER_FOR_ACTIVITY = 'provider_for_activity';
-    public const OPTION_ACTION_BUTTONS_ENABLED = 'action_buttons_enabled';
-    public const OPTION_SERIALIZER = '';
+    final public const OPTION_TRACKER_DATA_RETENTION_POLICY = 'tracker_data_retention_policy';
+    final public const OPTION_CRON_TAG_FOR_TRACKER_DATA_RETENTION_POLICY = 'cron_tag_for_tracker_data_retention_policy';
+    final public const OPTION_PROVIDER_FOR_CONNECTED_SERVICES = 'provider_for_connected_services';
+    final public const OPTION_PROVIDER_FOR_ACTIVITY = 'provider_for_activity';
+    final public const OPTION_ACTION_BUTTONS_ENABLED = 'action_buttons_enabled';
+    final public const OPTION_SERIALIZER = '';
 
     /**
      * Contains configuration from module configuration file.

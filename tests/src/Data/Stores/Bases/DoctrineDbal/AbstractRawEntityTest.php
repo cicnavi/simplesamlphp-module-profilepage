@@ -61,7 +61,7 @@ class AbstractRawEntityTest extends TestCase
             protected function validate(
                 array $rawRow
             ): void {
-                $this->resolveDateTimeImmutable(1696014686);
+                $this->resolveDateTimeImmutable(1_696_014_686);
             }
         };
 

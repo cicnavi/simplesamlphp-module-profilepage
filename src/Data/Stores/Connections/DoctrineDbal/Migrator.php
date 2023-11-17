@@ -21,11 +21,11 @@ use Throwable;
 
 class Migrator extends AbstractMigrator
 {
-    public const TABLE_NAME = 'migrations';
+    final public const TABLE_NAME = 'migrations';
 
-    public const COLUMN_NAME_ID = 'id';
-    public const COLUMN_NAME_VERSION = 'version';
-    public const COLUMN_NAME_CREATED_AT = 'created_at';
+    final public const COLUMN_NAME_ID = 'id';
+    final public const COLUMN_NAME_VERSION = 'version';
+    final public const COLUMN_NAME_CREATED_AT = 'created_at';
 
     protected AbstractSchemaManager $schemaManager;
     protected string $prefixedTableName;

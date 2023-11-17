@@ -11,7 +11,7 @@ use DateTimeZone;
 
 class DateTime
 {
-    public const FORMAT_MYSQL = 'Y-m-d H:i:s';
+    final public const FORMAT_MYSQL = 'Y-m-d H:i:s';
     /**
      * Convert date interval to seconds, interval being minimum 1 second.
      * @param DateInterval $dateInterval Minimum is 1 second.

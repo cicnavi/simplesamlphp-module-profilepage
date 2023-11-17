@@ -11,7 +11,7 @@ use SimpleSAML\Module\profilepage\Exceptions\InvalidConfigurationException;
 
 class Connection implements ConnectionInterface
 {
-    public const PARAMETER_TABLE_PREFIX = 'table_prefix';
+    final public const PARAMETER_TABLE_PREFIX = 'table_prefix';
 
     protected \Doctrine\DBAL\Connection $dbal;
     protected ?string $tablePrefix;

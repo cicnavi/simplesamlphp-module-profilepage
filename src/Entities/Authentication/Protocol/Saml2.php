@@ -8,8 +8,8 @@ use SimpleSAML\Module\profilepage\Entities\Interfaces\AuthenticationProtocolInte
 
 class Saml2 implements AuthenticationProtocolInterface
 {
-    public const DESIGNATION = 'SAML2';
-    public const ID = 1;
+    final public const DESIGNATION = 'SAML2';
+    final public const ID = 1;
 
     public function getDesignation(): string
     {
