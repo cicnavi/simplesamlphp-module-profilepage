@@ -8,8 +8,8 @@ use SimpleSAML\Module\profilepage\Entities\Interfaces\AuthenticationProtocolInte
 
 class Oidc implements AuthenticationProtocolInterface
 {
-    public const DESIGNATION = 'OIDC';
-    public const ID = 2;
+    final public const DESIGNATION = 'OIDC';
+    final public const ID = 2;
 
     public function getDesignation(): string
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\profilepage\Services\Serializers;
 
 use SimpleSAML\Module\profilepage\Services\Serializers\PhpSerializer;

@@ -43,8 +43,8 @@ class RawConnectedServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->numberOfAuthentications = 2;
-        $this->lastAuthenticationAt = 1645564942;
-        $this->firstAuthenticationAt = 1645564942;
+        $this->lastAuthenticationAt = 1_645_564_942;
+        $this->firstAuthenticationAt = 1_645_564_942;
         $this->serviceProviderMetadata = ['sp' => 'metadata'];
         $this->userAttributes = ['user' => 'attribute'];
         $this->rawRow = [

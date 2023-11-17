@@ -11,7 +11,7 @@ use SimpleSAML\Session;
 
 class AlertsBag
 {
-    public const SESSION_KEY = 'alerts';
+    final public const SESSION_KEY = 'alerts';
 
     public function __construct(protected Session $sspSession)
     {

@@ -11,14 +11,14 @@ use SimpleSAML\Module\profilepage\Entities\Authentication;
 
 abstract class AbstractSaml2Provider extends AbstractProvider
 {
-    public const METADATA_KEY_ENTITY_ID = 'entityid';
-    public const METADATA_KEY_NAME = 'name';
-    public const METADATA_KEY_DESCRIPTION = 'description';
-    public const METADATA_KEY_UI_INFO = 'UIInfo';
-    public const METADATA_KEY_UI_INFO_DESCRIPTION = 'Description';
-    public const METADATA_KEY_UI_INFO_DISPLAY_NAME = 'DisplayName';
-    public const METADATA_KEY_UI_INFO_LOGO = 'Logo';
-    public const METADATA_KEY_UI_INFO_LOGO_URL = 'url';
+    final public const METADATA_KEY_ENTITY_ID = 'entityid';
+    final public const METADATA_KEY_NAME = 'name';
+    final public const METADATA_KEY_DESCRIPTION = 'description';
+    final public const METADATA_KEY_UI_INFO = 'UIInfo';
+    final public const METADATA_KEY_UI_INFO_DESCRIPTION = 'Description';
+    final public const METADATA_KEY_UI_INFO_DISPLAY_NAME = 'DisplayName';
+    final public const METADATA_KEY_UI_INFO_LOGO = 'Logo';
+    final public const METADATA_KEY_UI_INFO_LOGO_URL = 'url';
 
     protected function getEntityInfoString(string $key, string $locale = self::DEFAULT_LOCALE): ?string
     {

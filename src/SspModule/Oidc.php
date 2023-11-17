@@ -17,8 +17,8 @@ use SimpleSAML\Module\oidc\Services\Container;
 
 class Oidc
 {
-    public const MODULE_NAME = 'oidc';
-    public const DEFAULT_LIMIT = 50;
+    final public const MODULE_NAME = 'oidc';
+    final public const DEFAULT_LIMIT = 50;
 
     protected LoggerInterface $logger;
     protected HelpersManager $helpersManager;

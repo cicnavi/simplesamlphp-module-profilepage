@@ -10,7 +10,7 @@ use SimpleSAML\Module\profilepage\Exceptions\MetadataException;
 
 class Oidc extends AbstractOidcProvider implements IdentityProviderInterface
 {
-    public const METADATA_KEY_ENTITY_ID = 'issuer';
+    final public const METADATA_KEY_ENTITY_ID = 'issuer';
 
     public function getName(string $locale = 'en'): ?string
     {

@@ -13,11 +13,11 @@ use SimpleSAML\Module\profilepage\Exceptions\UnexpectedValueException;
 
 class Oidc extends AbstractState
 {
-    public const KEY_OIDC = 'Oidc';
+    final public const KEY_OIDC = 'Oidc';
 
-    public const KEY_OPEN_ID_PROVIDER_METADATA = 'OpenIdProviderMetadata';
+    final public const KEY_OPEN_ID_PROVIDER_METADATA = 'OpenIdProviderMetadata';
 
-    public const KEY_RELYING_PARTY_METADATA = 'RelyingPartyMetadata';
+    final public const KEY_RELYING_PARTY_METADATA = 'RelyingPartyMetadata';
 
     protected function resolveIdentityProviderMetadata(array $state): array
     {

@@ -13,12 +13,12 @@ use function sprintf;
 
 class Routes
 {
-    public const PATH_ADMIN_CONFIGURATION_STATUS = 'admin/configuration/status';
+    final public const PATH_ADMIN_CONFIGURATION_STATUS = 'admin/configuration/status';
 
-    public const PATH_USER_PERSONAL_DATA = 'user/personal-data';
-    public const PATH_USER_OIDC_TOKENS = 'user/oidc-tokens';
-    public const QUERY_REDIRECT_TO_PATH = 'redirectTo';
-    public const PATH_LOGGED_OUT = 'logged-out';
+    final public const PATH_USER_PERSONAL_DATA = 'user/personal-data';
+    final public const PATH_USER_OIDC_TOKENS = 'user/oidc-tokens';
+    final public const QUERY_REDIRECT_TO_PATH = 'redirectTo';
+    final public const PATH_LOGGED_OUT = 'logged-out';
 
     protected HTTP $sspHttpUtils;
     protected Arr $arr;

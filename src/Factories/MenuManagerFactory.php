@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\profilepage\Factories;
 
 use SimpleSAML\Module\profilepage\Services\MenuManager;
