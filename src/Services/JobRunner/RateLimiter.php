@@ -9,8 +9,8 @@ use SimpleSAML\Module\profilepage\Services\HelpersManager;
 
 class RateLimiter
 {
-    public const DEFAULT_MAX_PAUSE_DURATION = 'PT10M';
-    public const DEFAULT_MAX_BACKOFF_PAUSE_DURATION = 'PT1M';
+    final public const DEFAULT_MAX_PAUSE_DURATION = 'PT10M';
+    final public const DEFAULT_MAX_BACKOFF_PAUSE_DURATION = 'PT1M';
 
     protected HelpersManager $helpersManager;
 

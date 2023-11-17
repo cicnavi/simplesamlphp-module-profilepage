@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Test\Module\profilepage\Factories;
 
 use PHPUnit\Framework\MockObject\MockObject;

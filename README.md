@@ -1,7 +1,5 @@
 [![Test](https://github.com/cicnavi/simplesamlphp-module-profilepage/actions/workflows/test.yml/badge.svg)](https://github.com/cicnavi/simplesamlphp-module-profilepage/actions/workflows/test.yml)
 
-
-
 # simplesamlphp-module-profilepage
 SimpleSAMLphp module providing user "Profile Page" and profilepage functionality using SimpleSAMLphp authentication
 processing filters feature.
@@ -27,7 +25,12 @@ track connected services and authentication events. Other trackers can be added 
   process using SimpleSAMLphp cron module
 
 ## Installation
-Module requires SimpleSAMLphp version 2 or higher.
+Version compatibility:
+
+| profilepage | SimpleSAMLphp |  PHP   | Note                        |
+|:------------|:--------------|:------:|-----------------------------|
+| v2.\*       | v2.1.\*       | \>=8.1 | Recommended                 |
+| v1.\*       | v2.0.\*       | \>=8.0 |                             |
 
 Module is installable using Composer:
 

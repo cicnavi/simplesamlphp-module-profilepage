@@ -6,5 +6,5 @@ namespace SimpleSAML\Test\Module\profilepage\Constants;
 
 class ConnectionParameters
 {
-    public const DBAL_SQLITE_MEMORY = ['driver' => 'pdo_sqlite', 'memory' => true,];
+    final public const DBAL_SQLITE_MEMORY = ['driver' => 'pdo_sqlite', 'memory' => true,];
 }

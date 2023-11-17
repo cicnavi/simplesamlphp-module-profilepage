@@ -23,7 +23,7 @@ class Store extends AbstractStore implements StoreInterface
     use VersionedStore\UserVersionResolvingTrait;
 
     protected HelpersManager $helpersManager;
-    private Repository $repository;
+    private readonly Repository $repository;
 
     /**
      * @throws StoreException

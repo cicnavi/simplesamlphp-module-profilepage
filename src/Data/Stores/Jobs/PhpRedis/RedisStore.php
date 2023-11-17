@@ -18,8 +18,8 @@ use Throwable;
 
 class RedisStore extends AbstractStore implements JobsStoreInterface
 {
-    public const LIST_KEY_JOB = 'job';
-    public const LIST_KEY_JOB_FAILED = 'job_failed';
+    final public const LIST_KEY_JOB = 'job';
+    final public const LIST_KEY_JOB_FAILED = 'job_failed';
 
     protected Redis $redis;
 

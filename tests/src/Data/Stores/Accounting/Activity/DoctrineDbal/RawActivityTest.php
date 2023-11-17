@@ -45,7 +45,7 @@ class RawActivityTest extends TestCase
     {
         $this->serviceProviderMetadata = ['sp' => 'metadata'];
         $this->userAttributes = ['user' => 'attribute'];
-        $this->happenedAt = 1645564942;
+        $this->happenedAt = 1_645_564_942;
         $this->clientIpAddress = '123.123.123.123';
         $this->authenticationProtocolDesignation = Saml2::DESIGNATION;
 

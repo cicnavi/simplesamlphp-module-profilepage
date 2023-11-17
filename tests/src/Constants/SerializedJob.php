@@ -8,7 +8,7 @@ use SimpleSAML\Module\profilepage\Entities\Authentication\Event\Job;
 
 class SerializedJob
 {
-    public const EVENT = [
+    final public const EVENT = [
         Job::class => 'TODO'
     ];
 }

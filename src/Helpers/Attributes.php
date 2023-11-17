@@ -9,7 +9,7 @@ class Attributes
     /**
      * Map files which translate attribute names to (more) user-friendly format.
      */
-    public const MAP_FILES_TO_NAME = ['facebook2name.php', 'linkedin2name.php', 'oid2name.php', 'openid2name.php',
+    final public const MAP_FILES_TO_NAME = ['facebook2name.php', 'linkedin2name.php', 'oid2name.php', 'openid2name.php',
         'removeurnprefix.php', 'twitter2name.php', 'urn2name.php', 'windowslive2name.php'];
 
     public function getMergedAttributeMapForFiles(string $sspBaseDirectory, array $mapFiles): array
