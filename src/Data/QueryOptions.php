@@ -1,23 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SimpleSAML\Module\profilepage\Data;
 
-use SimpleSAML\Module\profilepage\Data\QueryOptions\Filters\Bag;
+use SimpleSAML\Module\profilepage\Data\QueryOptions\Filter\Bag;
 
 class QueryOptions
 {
-    protected Bag $filtersBag;
-
     public function __construct(
-        protected ?int $maxResults = null,
-        protected int $firstResult = 0,
-        Bag $filtersBag = null
+        public readonly ?int $maxResults = null,
+        public readonly int $firstResult = 0,
+        public readonly Bag $filterBag = new Bag()
     ) {
-        $this->filtersBag = $filtersBag ?? new Bag();
-    }
-
-    public function getFiltersBag(): Bag
-    {
-        return $this->filtersBag;
     }
 }

@@ -1,7 +1,7 @@
 [![Test](https://github.com/cicnavi/simplesamlphp-module-profilepage/actions/workflows/test.yml/badge.svg)](https://github.com/cicnavi/simplesamlphp-module-profilepage/actions/workflows/test.yml)
 
 # simplesamlphp-module-profilepage
-SimpleSAMLphp module providing user "Profile Page" and profilepage functionality using SimpleSAMLphp authentication
+SimpleSAMLphp module providing user "Profile Page" and accounting functionality using SimpleSAMLphp authentication
 processing filters feature.
 
 ## Features

@@ -11,6 +11,8 @@ use SimpleSAML\Configuration as SspConfiguration;
 use SimpleSAML\Error\ConfigurationError;
 use SimpleSAML\Locale\Translate;
 use SimpleSAML\Module\profilepage\Data\Providers\Builders\DataProviderBuilder;
+use SimpleSAML\Module\profilepage\Data\QueryOptions\Filter;
+use SimpleSAML\Module\profilepage\Data\QueryOptions\Filter\Bag;
 use SimpleSAML\Module\profilepage\Entities\Activity;
 use SimpleSAML\Module\profilepage\Entities\Authentication\Protocol\Oidc;
 use SimpleSAML\Module\profilepage\Entities\ConnectedService;
@@ -336,6 +338,11 @@ class Profile
 
         $page = ($page = (int)$request->query->get('page', 1)) > 0 ? $page : 1;
 
+        $filters = $request->query->has('filtered') ? $this->prepareActivityFilterBag($request) : null;
+
+        // TODO mivanci Continue with creating and using QueryOptions
+        die(var_dump($filters));
+
         $maxResults = 10;
         $firstResult = ($page - 1) * $maxResults;
 
@@ -348,6 +355,25 @@ class Profile
         $template->data += compact('activityBag', 'page', 'maxResults', 'csvUrl', 'columnNames');
 
         return $template;
+    }
+
+    protected function prepareActivityFilterBag(Request $request): Bag
+    {
+        $validNames = [
+            'service',
+        ];
+
+        $filterBag = new Bag();
+
+        foreach ($validNames as $validName) {
+            if ($queryValue = $request->query->get($validName)) {
+                $filterBag->add(
+                    new Filter($validName, $queryValue, Filter\Operation::Like)
+                );
+            }
+        }
+
+        return $filterBag;
     }
 
     /**
