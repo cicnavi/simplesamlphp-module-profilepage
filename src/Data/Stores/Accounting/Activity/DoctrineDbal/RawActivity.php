@@ -25,12 +25,22 @@ class RawActivity extends AbstractRawEntity
     ) {
         parent::__construct($rawRow, $abstractPlatform, $serializer);
 
+        /**
+         * Data has been validated to have this shape.
+         * @var array{
+         *     sp_metadata: string,
+         *     user_attributes: string,
+         *     happened_at: numeric,
+         *     client_ip_address?: string,
+         *     authentication_protocol_designation?: string
+         * } $rawRow
+         */
         $this->serviceProviderMetadata = $this->resolveServiceProviderMetadata(
-            (string)$rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA]
+            $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_SP_METADATA]
         );
 
         $this->userAttributes = $this->resolveUserAttributes(
-            (string)$rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES]
+            $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_USER_ATTRIBUTES]
         );
 
         $this->happenedAt = $this->resolveDateTimeImmutable(
@@ -39,12 +49,12 @@ class RawActivity extends AbstractRawEntity
 
         $this->clientIpAddress = empty($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS]) ?
             null :
-            (string)$rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS];
+            $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_CLIENT_IP_ADDRESS];
 
         $this->authenticationProtocolDesignation =
             empty($rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION]) ?
             null :
-            (string)$rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION];
+            $rawRow[EntityTableConstants::ENTITY_ACTIVITY_COLUMN_NAME_AUTHENTICATION_PROTOCOL_DESIGNATION];
     }
 
     /**
@@ -89,6 +99,7 @@ class RawActivity extends AbstractRawEntity
 
     /**
      * @inheritDoc
+     * @psalm-suppress PossiblyUndefinedArrayOffset
      */
     protected function validate(array $rawRow): void
     {

@@ -212,7 +212,7 @@ class Profile
         $oidcProtocolDesignation = Oidc::DESIGNATION;
 
         // If oidc module is enabled, gather users access and refresh tokens for particular OIDC service providers.
-        if ($oidc->isEnabled()) {
+        if ($oidc?->isEnabled()) {
             // Filter out OIDC service providers and get their entity (client) IDs.
             $oidcClientIds = array_map(
                 fn(ConnectedService $connectedService) => $connectedService->getServiceProvider()->getEntityId(),
@@ -437,7 +437,7 @@ class Profile
 
 
         // If oidc module is not enabled, this route should not be called.
-        if (! $oidc->isEnabled()) {
+        if (! $oidc?->isEnabled()) {
             return new JsonResponse(['status' => 'error', 'message' => 'Not available.'], 404);
         }
 

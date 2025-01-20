@@ -10,8 +10,12 @@ use SimpleSAML\Logger as SspLogger;
 
 class Logger extends AbstractLogger
 {
-    public function log($level, $message, array $context = [], string $prefix = '(profilepage) '): void
-    {
+    public function log(
+        $level,
+        string|\Stringable $message,
+        array $context = [],
+        string $prefix = '(profilepage) '
+    ): void {
         $message = $prefix . $message;
 
         if (! empty($context)) {

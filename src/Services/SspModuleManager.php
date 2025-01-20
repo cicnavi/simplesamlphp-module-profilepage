@@ -26,8 +26,12 @@ class SspModuleManager
     /**
      * @throws Exception
      */
-    public function getOidc(): Oidc
+    public function getOidc(): ?Oidc
     {
+        if (!$this->helpersManager->getSspModule()->isEnabled(Oidc::MODULE_NAME)) {
+            return null;
+        }
+
         return self::$oidc ??= new Oidc(
             $this->logger,
             $this->helpersManager

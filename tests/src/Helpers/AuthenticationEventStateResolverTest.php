@@ -51,6 +51,7 @@ class AuthenticationEventStateResolverTest extends TestCase
 
         $stateArray = StateArrays::SAML2_FULL;
         unset($stateArray[Saml2::KEY_IDENTITY_PROVIDER_METADATA]);
+        unset($stateArray[Saml2::KEY_SOURCE]);
 
         $this->expectException(StateException::class);
 

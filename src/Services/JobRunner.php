@@ -524,7 +524,7 @@ class JobRunner
     /**
      * @throws Exception
      */
-    protected function handleInterrupt(int $signal): void
+    public function handleInterrupt(int $signal): void
     {
         $message = sprintf('Gracefully stopping job processing. Interrupt signal was %s.', $signal);
         $this->state->addStatusMessage($message);

@@ -19,33 +19,16 @@ class AuthenticationEventStateResolver
      */
     public function fromStateArray(array $state): StateInterface
     {
-        if (
-            ! array_key_exists(AbstractState::KEY_ATTRIBUTES, $state) ||
-            ! is_array($state[AbstractState::KEY_ATTRIBUTES])
-        ) {
-            throw new StateException('State array does not contain user attributes.');
-        }
-
-        if (
-            array_key_exists(Saml2::KEY_IDENTITY_PROVIDER_METADATA, $state) &&
-            is_array($state[Saml2::KEY_IDENTITY_PROVIDER_METADATA]) &&
-            array_key_exists(Saml2::KEY_SERVICE_PROVIDER_METADATA, $state) &&
-            is_array($state[Saml2::KEY_SERVICE_PROVIDER_METADATA])
-        ) {
-            // Authentication was done using SAML2 protocol...
+        try {
             return new Saml2($state);
+        } catch (\Throwable) {
+            // Not SAML2.
         }
 
-        $oidcRelatedState = (array)($state[Oidc::KEY_OIDC] ?? []);
-
-        if (
-            array_key_exists(Oidc::KEY_OPEN_ID_PROVIDER_METADATA, $oidcRelatedState) &&
-            is_array($oidcRelatedState[Oidc::KEY_OPEN_ID_PROVIDER_METADATA]) &&
-            array_key_exists(Oidc::KEY_RELYING_PARTY_METADATA, $oidcRelatedState) &&
-            is_array($oidcRelatedState[Oidc::KEY_RELYING_PARTY_METADATA])
-        ) {
-            // Authentication was done using OIDC protocol...
+        try {
             return new Oidc($state);
+        } catch (\Throwable) {
+            // Not OIDC.
         }
 
         throw new StateException('Can not resolve state instance for particular authentication protocol.');

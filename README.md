@@ -27,10 +27,10 @@ track connected services and authentication events. Other trackers can be added 
 ## Installation
 Version compatibility:
 
-| profilepage | SimpleSAMLphp |  PHP   | Note                        |
-|:------------|:--------------|:------:|-----------------------------|
-| v2.\*       | v2.1.\*       | \>=8.1 | Recommended                 |
-| v1.\*       | v2.0.\*       | \>=8.0 |                             |
+| profilepage | Tested SimpleSAMLphp |  PHP   | Note                        |
+|:------------|:---------------------|:------:|-----------------------------|
+| v2.\*       | v2.3.\*              | \>=8.1 | Recommended                 |
+| v1.\*       | v2.0.\*              | \>=8.0 |                             |
 
 Module is installable using Composer:
 

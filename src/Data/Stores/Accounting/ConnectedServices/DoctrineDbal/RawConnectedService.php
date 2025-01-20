@@ -22,6 +22,17 @@ class RawConnectedService extends AbstractRawEntity
     {
         parent::__construct($rawRow, $abstractPlatform, $serializer);
 
+        /**
+         * Data has been validated to have this shape.
+         * @var array{
+         *     number_of_authentications: numeric,
+         *     last_authentication_at: numeric,
+         *     first_authentication_at: numeric,
+         *     sp_metadata: string,
+         *     user_attributes: string,
+         * } $rawRow
+         */
+
         $this->numberOfAuthentications = (int)$rawRow[
         EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_NUMBER_OF_AUTHENTICATIONS
         ];
@@ -35,11 +46,11 @@ class RawConnectedService extends AbstractRawEntity
         );
 
         $this->serviceProviderMetadata = $this->resolveServiceProviderMetadata(
-            (string)$rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
+            $rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_SP_METADATA]
         );
 
         $this->userAttributes = $this->resolveUserAttributes(
-            (string)$rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
+            $rawRow[EntityTableConstants::ENTITY_CONNECTED_SERVICE_COLUMN_NAME_USER_ATTRIBUTES]
         );
     }
 
@@ -85,6 +96,7 @@ class RawConnectedService extends AbstractRawEntity
 
     /**
      * @inheritDoc
+     * @psalm-suppress PossiblyUndefinedArrayOffset
      */
     protected function validate(array $rawRow): void
     {

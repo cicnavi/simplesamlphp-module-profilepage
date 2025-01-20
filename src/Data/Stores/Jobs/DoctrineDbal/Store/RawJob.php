@@ -23,12 +23,24 @@ class RawJob extends AbstractRawEntity
     {
         parent::__construct($rawRow, $abstractPlatform, $serializer);
 
+        /**
+         * @var array{
+         *     id: numeric,
+         *     payload: string,
+         *     type: string,
+         *     created_at: numeric,
+         * } $rawRow
+         */
+
         $this->id = (int)$rawRow[TableConstants::COLUMN_NAME_ID];
-        $this->payload = $this->resolvePayload((string)$rawRow[TableConstants::COLUMN_NAME_PAYLOAD]);
-        $this->type = (string)$rawRow[TableConstants::COLUMN_NAME_TYPE];
+        $this->payload = $this->resolvePayload($rawRow[TableConstants::COLUMN_NAME_PAYLOAD]);
+        $this->type = $rawRow[TableConstants::COLUMN_NAME_TYPE];
         $this->createdAt = $this->resolveDateTimeImmutable((int)$rawRow[TableConstants::COLUMN_NAME_CREATED_AT]);
     }
 
+    /**
+     * @psalm-suppress PossiblyUndefinedArrayOffset
+     */
     protected function validate(array $rawRow): void
     {
         $columnsToCheck = [

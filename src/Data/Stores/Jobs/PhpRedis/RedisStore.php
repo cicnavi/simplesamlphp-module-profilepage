@@ -57,6 +57,7 @@ class RedisStore extends AbstractStore implements JobsStoreInterface
 
         try {
             if (isset($connectionParameters['auth'])) {
+                /** @psalm-suppress MixedArgument */
                 $this->redis->auth($connectionParameters['auth']);
             }
         } catch (Throwable $exception) {
