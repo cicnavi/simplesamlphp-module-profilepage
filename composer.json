@@ -28,7 +28,7 @@
         }
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "ext-pdo": "*",
         "ext-pdo_sqlite": "*",
         "composer-runtime-api": "^2.0",
