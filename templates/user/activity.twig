@@ -21,7 +21,7 @@
         {% for activity in activityBag.getAll %}
             <tr class="accordion">
                 <td>{{ activity.getHappenedAt|date() }}</td>
-                <td><span class="value">{{ activity.getServiceProvider.getName }}</span></td>
+                <td><span class="value">{{ activity.getServiceProvider.getName|default(activity.getServiceProvider.getEntityId)|e }}</span></td>
                 <td>
                     <span class="value">
                     {% for name in activity.getUser.getAttributes|keys %}

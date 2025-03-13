@@ -30,7 +30,7 @@
                          height="30"
                          loading="lazy"
                          alt="Service Logo"/>
-                    {{ connectedServiceProvider.getServiceProvider.getName|e }}
+                    {{ connectedServiceProvider.getServiceProvider.getName|default(connectedServiceProvider.getServiceProvider.getEntityId)|e }}
                 </td>
                 <td><span class="value">{{ connectedServiceProvider.getNumberOfAuthentications|e }}</span></td>
                 <td><span class="value">{{ connectedServiceProvider.getLastAuthenticationAt|date() }}</span></td>
