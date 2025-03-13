@@ -20,15 +20,15 @@ class AuthenticationEventStateResolver
     public function fromStateArray(array $state): StateInterface
     {
         try {
-            return new Saml2($state);
-        } catch (\Throwable) {
-            // Not SAML2.
-        }
-
-        try {
             return new Oidc($state);
         } catch (\Throwable) {
             // Not OIDC.
+        }
+
+        try {
+            return new Saml2($state);
+        } catch (\Throwable) {
+            // Not SAML2.
         }
 
         throw new StateException('Can not resolve state instance for particular authentication protocol.');
