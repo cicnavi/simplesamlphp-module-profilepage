@@ -35,7 +35,8 @@
         "doctrine/dbal": "^3",
         "psr/log": "^1|^2|^3",
         "simplesamlphp/composer-module-installer": "^1",
-        "cicnavi/simple-file-cache-php": "^3.0"
+        "cicnavi/simple-file-cache-php": "^3.0",
+        "guzzlehttp/guzzle": "^7"
     },
     "require-dev": {
         "vimeo/psalm": "^5",
@@ -43,7 +44,7 @@
         "squizlabs/php_codesniffer": "^3",
         "simplesamlphp/simplesamlphp": "2.3.*",
         "simplesamlphp/simplesamlphp-test-framework": "^1",
-        "simplesamlphp/simplesamlphp-module-oidc": "^5",
+        "simplesamlphp/simplesamlphp-module-oidc": "^6",
         "fakerphp/faker": "^1.22",
         "rector/rector": "^2"
     },

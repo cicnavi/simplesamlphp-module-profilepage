@@ -36,6 +36,7 @@ use SimpleSAML\Test\Module\profilepage\Constants\StateArrays;
  * @uses \SimpleSAML\Module\profilepage\Services\HelpersManager
  * @uses \SimpleSAML\Module\profilepage\Data\Providers\Builders\DataProviderBuilder
  * @uses \SimpleSAML\Module\profilepage\Services\TrackerResolver
+ * @uses \SimpleSAML\Module\profilepage\Entities\Authentication\Event\State\Oidc
  */
 class AccountingTest extends TestCase
 {

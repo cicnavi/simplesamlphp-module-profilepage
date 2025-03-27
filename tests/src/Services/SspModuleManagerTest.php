@@ -58,9 +58,11 @@ class SspModuleManagerTest extends TestCase
     {
         $this->sspModuleStub->method('isEnabled')->willReturn(true);
 
-        // By default, OIDC module will try to connect to the database, which we will not mock in module manager.
+        global $_SERVER;
+        $_SERVER['REQUEST_URI'] = '/uri';
+
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Database');
+        $this->expectExceptionMessage('OIDC');
 
         $this->sut()->getOidc();
     }
