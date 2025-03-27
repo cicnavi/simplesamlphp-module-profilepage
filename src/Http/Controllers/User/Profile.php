@@ -141,39 +141,45 @@ class Profile
             var_export($normalizedAttributes, true) ^ date('Ymd'),
         );
 
-        // We'll hardcode this, as this is for demo only.
-        $sphereonResponse = $this->httpClient->post(
-            $shpereonCredentialOffersUrl,
-            [
-                'json' => [
-                    "offerMode" => "VALUE",
-                    "credential_configuration_ids" => [
-                        "EduPersonCredential",
-                    ],
-                    "grants" => [
-                        "urn:ietf:params:oauth:grant-type:pre-authorized_code" => [
-                            "pre-authorized_code" => $preAuthCodeValue,
-                        ]
-                    ],
-                    "qrCodeOpts" => [],
-                    "credentialDataSupplierInput" => [
-                        "userId" => $normalizedAttributes["uid"] ?? 'N/A',
-                        "givenName" => $normalizedAttributes["givenName"] ?? 'N/A',
-                        "familyName" => $normalizedAttributes["sn"] ?? 'N/A',
-                        "affiliation" => $normalizedAttributes["eduPersonAffiliation"] ?? 'N/A',
-                        "organizationName" => $normalizedAttributes["o"] ?? 'N/A',
+        $decodedSphereonResponse = [];
+
+        try {
+            // We'll hardcode this, as this is for demo only.
+            $sphereonResponse = $this->httpClient->post(
+                $shpereonCredentialOffersUrl,
+                [
+                    'json' => [
+                        "offerMode" => "VALUE",
+                        "credential_configuration_ids" => [
+                            "EduPersonCredential",
+                        ],
+                        "grants" => [
+                            "urn:ietf:params:oauth:grant-type:pre-authorized_code" => [
+                                "pre-authorized_code" => $preAuthCodeValue,
+                            ]
+                        ],
+                        "qrCodeOpts" => [],
+                        "credentialDataSupplierInput" => [
+                            "userId" => $normalizedAttributes["uid"] ?? 'N/A',
+                            "givenName" => $normalizedAttributes["givenName"] ?? 'N/A',
+                            "familyName" => $normalizedAttributes["sn"] ?? 'N/A',
+                            "affiliation" => $normalizedAttributes["eduPersonAffiliation"] ?? 'N/A',
+                            "organizationName" => $normalizedAttributes["o"] ?? 'N/A',
+                        ],
                     ],
                 ],
-            ],
-        );
+            );
 
-        /** @var array $decodedSphereonResponse */
-        $decodedSphereonResponse = json_decode(
-            $sphereonResponse->getBody()->getContents(),
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
+            /** @var array $decodedSphereonResponse */
+            $decodedSphereonResponse = json_decode(
+                $sphereonResponse->getBody()->getContents(),
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+        } catch (\Throwable $exception) {
+            $this->logger->error('Sphereon error: ' . $exception->getMessage());
+        }
 
         $template = $this->resolveTemplate('profilepage:user/personal-data.twig');
         $template->data += compact(
