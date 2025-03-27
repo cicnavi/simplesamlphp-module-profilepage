@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Module\profilepage\Http\Controllers\User;
 
 use DateTimeInterface;
+use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Auth\Simple;
 use SimpleSAML\Configuration as SspConfiguration;
@@ -95,6 +96,7 @@ class Profile
         CsrfToken $csrfToken = null,
         AlertsBag $alertsBag = null,
         FactoryManager $factoryManager = null,
+        protected readonly Client $httpClient = new Client(),
     ) {
         $this->defaultAuthenticationSource = $moduleConfiguration->getDefaultAuthenticationSource();
         $this->authSimple = $authSimple ?? new Simple($this->defaultAuthenticationSource, $sspConfiguration, $session);
@@ -128,8 +130,58 @@ class Profile
         $columnNames = $this->getPersonalDataColumnNames();
         $csvUrl = 'personal-data/csv';
 
+        // TODO mivanci Delete if not necessary (Sphereon Credential Offer).
+        $shpereonCredentialOffersUrl =
+            ((string)$this->moduleConfiguration->get(ModuleConfiguration::OPTION_SPHEREON_BASE_URL)) .
+            'oid4vci/webapp/credential-offers';
+
+        // Just to have something to work with, as daily value based on all attributes.
+        $preAuthCodeValue = hash(
+            'sha256',
+            var_export($normalizedAttributes, true) ^ date('Ymd'),
+        );
+
+        // We'll hardcode this, as this is for demo only.
+        $sphereonResponse = $this->httpClient->post(
+            $shpereonCredentialOffersUrl,
+            [
+                'json' => [
+                    "offerMode" => "VALUE",
+                    "credential_configuration_ids" => [
+                        "EduPersonCredential",
+                    ],
+                    "grants" => [
+                        "urn:ietf:params:oauth:grant-type:pre-authorized_code" => [
+                            "pre-authorized_code" => $preAuthCodeValue,
+                        ]
+                    ],
+                    "qrCodeOpts" => [],
+                    "credentialDataSupplierInput" => [
+                        "userId" => $normalizedAttributes["uid"] ?? 'N/A',
+                        "givenName" => $normalizedAttributes["givenName"] ?? 'N/A',
+                        "familyName" => $normalizedAttributes["sn"] ?? 'N/A',
+                        "affiliation" => $normalizedAttributes["eduPersonAffiliation"] ?? 'N/A',
+                        "organizationName" => $normalizedAttributes["o"] ?? 'N/A',
+                    ],
+                ],
+            ],
+        );
+
+        /** @var array $decodedSphereonResponse */
+        $decodedSphereonResponse = json_decode(
+            $sphereonResponse->getBody()->getContents(),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+
         $template = $this->resolveTemplate('profilepage:user/personal-data.twig');
-        $template->data += compact('normalizedAttributes', 'columnNames', 'csvUrl');
+        $template->data += compact(
+            'normalizedAttributes',
+            'columnNames',
+            'csvUrl',
+            'decodedSphereonResponse',
+        );
 
         return $template;
     }

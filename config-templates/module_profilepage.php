@@ -265,4 +265,10 @@ $config = [
      * modules/{mymodule}/themes/{fancytheme}/profilepage/user/includes/_action-buttons.twig
      */
     ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => false,
+
+    /**
+     * TODO mivanci remove if not used in the end.
+     * For Sphereon Demo
+     */
+    ModuleConfiguration::OPTION_SPHEREON_BASE_URL => 'https://sphereon.local/',
 ];

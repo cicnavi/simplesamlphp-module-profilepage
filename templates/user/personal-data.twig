@@ -40,4 +40,10 @@
             </tr>
         {% endfor %}
     </table>
+
+    {% if decodedSphereonResponse.qrCodeDataUri %}
+        <br>
+        <p>{{ 'Get your verifiable credential by scanning the QR'|trans }}:</p>
+        <img src="{{ decodedSphereonResponse.qrCodeDataUri }}" alt="PreAuthzCode QR">
+    {% endif %}
 {% endblock %}

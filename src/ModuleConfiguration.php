@@ -42,6 +42,7 @@ class ModuleConfiguration
     final public const OPTION_PROVIDER_FOR_ACTIVITY = 'provider_for_activity';
     final public const OPTION_ACTION_BUTTONS_ENABLED = 'action_buttons_enabled';
     final public const OPTION_SERIALIZER = '';
+    final public const OPTION_SPHEREON_BASE_URL = 'sphereon_base_url';
 
     /**
      * Contains configuration from module configuration file.
