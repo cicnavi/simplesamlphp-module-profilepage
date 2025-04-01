@@ -67,10 +67,10 @@
                         </ul>
 
                         {% if connectedServiceProvider.serviceProvider.protocol.designation is same as oidcProtocolDesignation %}
-                            {% if accessTokensByClient is not empty and attribute(accessTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
+                            {% if accessTokensByClient is not empty and accessTokensByClient.(connectedServiceProvider.serviceProvider.entityId)|default %}
                                 <strong>{{ columnNames.accessTokens|trans }}</strong>
                                 <table>
-                                    {% for accessToken in attribute(accessTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
+                                    {% for accessToken in accessTokensByClient.(connectedServiceProvider.serviceProvider.entityId) %}
                                         <tr>
                                             <td>
                                                 <span class="value">{{ accessToken.id }}</span><br>
@@ -89,11 +89,11 @@
                                 </table>
                             {% endif %}
 
-                            {% if refreshTokensByClient is not empty and attribute(refreshTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
+                            {% if refreshTokensByClient is not empty and refreshTokensByClient.(connectedServiceProvider.serviceProvider.entityId)|default %}
                                 <br>
                                 <strong>{{ columnNames.refreshTokens|trans }}</strong>
                                 <table>
-                                    {% for refreshToken in attribute(refreshTokensByClient, connectedServiceProvider.serviceProvider.entityId) %}
+                                    {% for refreshToken in refreshTokensByClient.(connectedServiceProvider.serviceProvider.entityId) %}
                                         <tr>
                                             <td>
                                                 <span class="value">{{ refreshToken.id }}</span><br>
