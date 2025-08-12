@@ -38,7 +38,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @psalm-suppress UnusedClass Used as route controller.
  */
-class Profile
+class ProfileSphereonDemo
 {
     protected const KEY_ATTRIBUTE = 'attribute';
     protected const KEY_VALUES = 'values';
@@ -130,54 +130,62 @@ class Profile
         $columnNames = $this->getPersonalDataColumnNames();
         $csvUrl = 'personal-data/csv';
 
-        $credentialOfferUri = null;
+        $shpereonCredentialOffersUrl =
+            ((string)$this->moduleConfiguration->get(ModuleConfiguration::OPTION_SPHEREON_BASE_URL)) .
+            'oid4vci/webapp/credential-offers';
 
-        if ($this->moduleConfiguration->getVerifiableCredentialIssuanceEnabled()) {
-            $oidcModuleCredentialOfferUri = $this->moduleConfiguration->getOidcModuleCredentialOfferApiEndpoint();
-            $credentialConfigurationId = $this->moduleConfiguration->getCredentialConfigurationId();
-            $oidcModuleApiToken = $this->moduleConfiguration->getOidcModuleApiToken();
+        // Just to have something to work with, as daily value based on all attributes.
+        $preAuthCodeValue = hash(
+            'sha256',
+            var_export($normalizedAttributes, true) ^ date('Ymd'),
+        );
 
-            try {
-                // We'll hard-code this, as this is for demo only.
-                $response = $this->httpClient->request(
-                    'POST',
-                    $oidcModuleCredentialOfferUri,
-                    [
-                        'json' => [
-                            'credential_configuration_id' => $credentialConfigurationId,
-                            'user_attributes' => $normalizedAttributes,
+        $decodedSphereonResponse = [];
+
+        try {
+            // We'll hardcode this, as this is for demo only.
+            $sphereonResponse = $this->httpClient->post(
+                $shpereonCredentialOffersUrl,
+                [
+                    'json' => [
+                        "offerMode" => "VALUE",
+                        "credential_configuration_ids" => [
+                            "EduPersonCredential",
                         ],
-                        'headers' => [
-                            'Authorization' => 'Bearer ' . $oidcModuleApiToken,
-                            'Accept'        => 'application/json',
+                        "grants" => [
+                            "urn:ietf:params:oauth:grant-type:pre-authorized_code" => [
+                                "pre-authorized_code" => $preAuthCodeValue,
+                            ]
+                        ],
+                        "qrCodeOpts" => [],
+                        "credentialDataSupplierInput" => [
+                            "userId" => $normalizedAttributes["uid"] ?? 'N/A',
+                            "givenName" => $normalizedAttributes["givenName"] ?? 'N/A',
+                            "familyName" => $normalizedAttributes["sn"] ?? 'N/A',
+                            "affiliation" => $normalizedAttributes["eduPersonAffiliation"] ?? 'N/A',
+                            "organizationName" => $normalizedAttributes["o"] ?? 'N/A',
                         ],
                     ],
-                );
+                ],
+            );
 
-                /** @var array $decodedResponse */
-                $decodedResponse = json_decode(
-                    $response->getBody()->getContents(),
-                    true,
-                    512,
-                    JSON_THROW_ON_ERROR
-                );
-
-                $credentialOfferUri = (isset($decodedResponse['credential_offer_uri']) &&
-                    is_string($decodedResponse['credential_offer_uri'])) ? $decodedResponse['credential_offer_uri'] :
-                    null;
-            } catch (\Throwable $exception) {
-                $this->logger->error('Verifiable Credential Issuance error: ' . $exception->getMessage());
-            }
+            /** @var array $decodedSphereonResponse */
+            $decodedSphereonResponse = json_decode(
+                $sphereonResponse->getBody()->getContents(),
+                true,
+                512,
+                JSON_THROW_ON_ERROR
+            );
+        } catch (\Throwable $exception) {
+            $this->logger->error('Sphereon error: ' . $exception->getMessage());
         }
-
-
 
         $template = $this->resolveTemplate('profilepage:user/personal-data.twig');
         $template->data += compact(
             'normalizedAttributes',
             'columnNames',
             'csvUrl',
-            'credentialOfferUri',
+            'decodedSphereonResponse',
         );
 
         return $template;
@@ -623,7 +631,7 @@ class Profile
     }
 
     /**
-     * @param array<array<array-key, Stringable|null|scalar>> $data
+     * @param mixed[] $data
      * @throws Exception
      */
     protected function csvResponseFor(array $data, string $filename = 'data.csv'): Response

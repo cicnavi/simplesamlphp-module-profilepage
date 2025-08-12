@@ -251,7 +251,7 @@ $config = [
         'profilepage_tracker_data_retention_policy',
 
     /**
-     * Enable or disable 'action buttons'. Action buttons are displayed on 'Personal data' page, and can be used to
+     * Enable or disable 'action buttons'. Action buttons are displayed on the 'Personal Data' page and can be used to
      * provide, for example, links to relevant endpoint like to change a password, send email to support, etc.
      *
      * Note that you should override the action buttons Twig template using standard SimpleSAMLphp custom theming
@@ -265,6 +265,33 @@ $config = [
      * modules/{mymodule}/themes/{fancytheme}/profilepage/user/includes/_action-buttons.twig
      */
     ModuleConfiguration::OPTION_ACTION_BUTTONS_ENABLED => false,
+
+
+    /*******************************************************************************************************************
+     * Verifiable Credential Issuance related options.
+     ******************************************************************************************************************/
+
+    /**
+     * Enable or disable verifiable credential issuance. If enabled, the user will be presented with a QR code
+     * which can be scanned to issue a verifiable credential. The QR code is presented on the 'Personal Data' page.
+     */
+    ModuleConfiguration::OPTION_VERIFIABLE_CREDENTIAL_ISSUANCE_ENABLED => false,
+
+    /**
+     * OIDC Module API Endpoint for issuing verifiable credentials.
+     */
+    ModuleConfiguration::OPTION_OIDC_MODULE_CREDENTIAL_OFFER_API_ENDPOINT =>
+        'https://idp.example.org/module.php/oidc/api/vci/pre-authorized-credential-offer',
+
+    /**
+     * Token which can be used for authorization of HTTP requests to the OIDC Module API Endpoint.
+     */
+    ModuleConfiguration::OPTION_OIDC_MODULE_API_TOKEN => 'some-token',
+
+    /**
+     * Credential configuration ID which will be used for issuing verifiable credentials.
+     */
+    ModuleConfiguration::OPTION_CREDENTIAL_CONFIGURATION_ID => 'ResearchAndScholarshipCredentialDcSdJwt',
 
     /**
      * TODO mivanci remove if not used in the end.
