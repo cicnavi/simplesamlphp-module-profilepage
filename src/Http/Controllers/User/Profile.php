@@ -125,12 +125,14 @@ class Profile
      */
     public function personalData(): Response
     {
-        $normalizedAttributes = $this->normalizeUserAttributes($this->user->getAttributes());
+        $attributes = $this->user->getAttributes();
+        $normalizedAttributes = $this->normalizeUserAttributes($attributes);
 
         $columnNames = $this->getPersonalDataColumnNames();
         $csvUrl = 'personal-data/csv';
 
         $credentialOfferUri = null;
+        $credentialOfferQrUri = null;
 
         if ($this->moduleConfiguration->getVerifiableCredentialIssuanceEnabled()) {
             $oidcModuleCredentialOfferUri = $this->moduleConfiguration->getOidcModuleCredentialOfferApiEndpoint();
@@ -145,7 +147,7 @@ class Profile
                     [
                         'json' => [
                             'credential_configuration_id' => $credentialConfigurationId,
-                            'user_attributes' => $normalizedAttributes,
+                            'user_attributes' => $attributes,
                         ],
                         'headers' => [
                             'Authorization' => 'Bearer ' . $oidcModuleApiToken,
@@ -165,6 +167,11 @@ class Profile
                 $credentialOfferUri = (isset($decodedResponse['credential_offer_uri']) &&
                     is_string($decodedResponse['credential_offer_uri'])) ? $decodedResponse['credential_offer_uri'] :
                     null;
+                $credentialOfferQrUri = $credentialOfferUri ?
+                    'https://quickchart.io/qr?size=200&margin=1&text=' . urlencode($credentialOfferUri) :
+                    null;
+
+                $this->logger->info('Verifiable Credential Issuance response: ' . json_encode($decodedResponse));
             } catch (\Throwable $exception) {
                 $this->logger->error('Verifiable Credential Issuance error: ' . $exception->getMessage());
             }
@@ -178,6 +185,7 @@ class Profile
             'columnNames',
             'csvUrl',
             'credentialOfferUri',
+            'credentialOfferQrUri'
         );
 
         return $template;

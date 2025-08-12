@@ -41,10 +41,9 @@
         {% endfor %}
     </table>
 
-    {% if credentialOfferUri|default %}
+    {% if credentialOfferQrUri|default %}
         <br>
         <p>{{ 'Get your verifiable credential by scanning the QR'|trans }}:</p>
-        <p>{{ credentialOfferUri }}</p>
-        <img src="" alt="PreAuthZCode QR">
+        <img src="{{ credentialOfferQrUri }}" alt="PreAuthZCode QR">
     {% endif %}
 {% endblock %}
