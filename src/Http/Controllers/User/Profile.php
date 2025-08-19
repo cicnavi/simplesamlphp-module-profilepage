@@ -139,16 +139,28 @@ class Profile
             $credentialConfigurationId = $this->moduleConfiguration->getCredentialConfigurationId();
             $oidcModuleApiToken = $this->moduleConfiguration->getOidcModuleApiToken();
 
+            $requestData = [
+                'credential_configuration_id' => $credentialConfigurationId,
+                'user_attributes' => $attributes,
+            ];
+
+            if ($this->moduleConfiguration->getUseTransactionCodeProtectionForPreAuthorizedCode()) {
+                $requestData['use_tx_code'] = true;
+                if ($usersEmailAttributeName = $this->moduleConfiguration->getUsersEmailAttributeName()) {
+                    $requestData['users_email_attribute_name'] = $usersEmailAttributeName;
+                } else {
+                    // So that the Issuer can identify the email attribute from its own configuration.
+                    $requestData['authentication_source_id'] = $this->moduleConfiguration
+                        ->getDefaultAuthenticationSource();
+                }
+            }
+
             try {
-                // We'll hard-code this, as this is for demo only.
                 $response = $this->httpClient->request(
                     'POST',
                     $oidcModuleCredentialOfferUri,
                     [
-                        'json' => [
-                            'credential_configuration_id' => $credentialConfigurationId,
-                            'user_attributes' => $attributes,
-                        ],
+                        'json' => $requestData,
                         'headers' => [
                             'Authorization' => 'Bearer ' . $oidcModuleApiToken,
                             'Accept'        => 'application/json',

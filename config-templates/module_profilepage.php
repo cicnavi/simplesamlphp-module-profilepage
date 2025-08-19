@@ -286,12 +286,22 @@ $config = [
     /**
      * Token which can be used for authorization of HTTP requests to the OIDC Module API Endpoint.
      */
-    ModuleConfiguration::OPTION_OIDC_MODULE_API_TOKEN => 'some-token',
+    ModuleConfiguration::OPTION_OIDC_MODULE_API_TOKEN => 'some-strong-token-string',
 
     /**
      * Credential configuration ID which will be used for issuing verifiable credentials.
      */
     ModuleConfiguration::OPTION_CREDENTIAL_CONFIGURATION_ID => 'ResearchAndScholarshipCredentialDcSdJwt',
+
+    /**
+     * Enable or disable transaction code protection in case of credential issuance using pre-authorized code.
+     */
+    ModuleConfiguration::OPTION_USE_TRANSACTION_CODE_PROTECTION_FOR_PRE_AUTHORIZED_CODE => false,
+
+    /**
+     * (Optional) User's email attribute name. If not set, the default value set by the credential issuer will be used.
+     */
+    ModuleConfiguration::OPTION_USERS_EMAIL_ATTRIBUTE_NAME => null, // For example, 'mail'.
 
     /**
      * TODO mivanci remove if not used in the end.

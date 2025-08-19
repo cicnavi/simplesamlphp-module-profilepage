@@ -47,6 +47,8 @@ class ModuleConfiguration
     final public const OPTION_OIDC_MODULE_CREDENTIAL_OFFER_API_ENDPOINT = 'oidc_module_credential_offer_api_endpoint';
     final public const OPTION_OIDC_MODULE_API_TOKEN = 'oidc_module_api_token';
     final public const OPTION_CREDENTIAL_CONFIGURATION_ID = 'credential_configuration_id';
+    final public const OPTION_USE_TRANSACTION_CODE_PROTECTION_FOR_PRE_AUTHORIZED_CODE = 'use_transaction_code';
+    final public const OPTION_USERS_EMAIL_ATTRIBUTE_NAME = 'user_email_attribute_name';
 
     /**
      * Contains configuration from module configuration file.
@@ -523,5 +525,16 @@ class ModuleConfiguration
     public function getCredentialConfigurationId(): string
     {
         return $this->getConfiguration()->getString(self::OPTION_CREDENTIAL_CONFIGURATION_ID);
+    }
+
+    public function getUseTransactionCodeProtectionForPreAuthorizedCode(): bool
+    {
+        return $this->getConfiguration()
+            ->getOptionalBoolean(self::OPTION_USE_TRANSACTION_CODE_PROTECTION_FOR_PRE_AUTHORIZED_CODE, false);
+    }
+
+    public function getUsersEmailAttributeName(): ?string
+    {
+        return $this->getConfiguration()->getOptionalString(self::OPTION_USERS_EMAIL_ATTRIBUTE_NAME, null);
     }
 }
