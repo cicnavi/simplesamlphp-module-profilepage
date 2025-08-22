@@ -10,6 +10,14 @@
 
 {% set pageMenuItem = 'connected-organizations' %}
 
+{% block banner %}
+    <section id="banner">
+        <div>
+            {% trans %}The organizations you are connected with{% endtrans %}
+        </div>
+    </section>
+{% endblock %}
+
 {% block content %}
     {% if actionButtonsEnabled %}
         {% include "@profilepage/user/includes/_action-buttons.twig" %}

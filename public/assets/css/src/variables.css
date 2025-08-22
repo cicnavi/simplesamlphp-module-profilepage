@@ -1,0 +1,30 @@
+/* =============== */
+/*    Variables    */
+/* =============== */
+:root {
+  /* */
+  --bord-rad: 0.5em;
+
+  --button-bg-c: #4859B2;
+  --button-text-c: #ffffff;
+
+  --caption-bg-c: #F0F2F9;
+
+  --heading-text-c: #5B6186;
+  
+  --large-font-size: 24px;
+
+  --link-c: #4859B2;
+
+  /* --nav-bg-c: #F8F8FC; */
+  --nav-bg-c: #ececec;
+
+  --main-bg-c: #F5F5F5;
+  --main-font-family: Raleway;
+  --main-font-weight: 500;
+  --main-font-size: 18pt;
+  --main-text-c: #181E3C;
+
+  --table-border: #F0F2F9;
+  --table-font-size: 16pt;
+}
