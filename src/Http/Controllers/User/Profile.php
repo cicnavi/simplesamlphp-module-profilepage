@@ -137,10 +137,12 @@ class Profile
         if ($this->moduleConfiguration->getVerifiableCredentialIssuanceEnabled()) {
             $oidcModuleCredentialOfferUri = $this->moduleConfiguration->getOidcModuleCredentialOfferApiEndpoint();
             $credentialConfigurationId = $this->moduleConfiguration->getCredentialConfigurationId();
+            $grantType = $this->moduleConfiguration->getCredentialIssuanceGrantType();
             $oidcModuleApiToken = $this->moduleConfiguration->getOidcModuleApiToken();
 
             $requestData = [
                 'credential_configuration_id' => $credentialConfigurationId,
+                'grant_type' => $grantType,
                 'user_attributes' => $attributes,
             ];
 

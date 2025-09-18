@@ -49,6 +49,7 @@ class ModuleConfiguration
     final public const OPTION_CREDENTIAL_CONFIGURATION_ID = 'credential_configuration_id';
     final public const OPTION_USE_TRANSACTION_CODE_PROTECTION_FOR_PRE_AUTHORIZED_CODE = 'use_transaction_code';
     final public const OPTION_USERS_EMAIL_ATTRIBUTE_NAME = 'user_email_attribute_name';
+    final public const OPTION_CREDENTIAL_ISSUANCE_GRANT_TYPE = 'credential_issuance_grant_type';
 
     /**
      * Contains configuration from module configuration file.
@@ -525,6 +526,14 @@ class ModuleConfiguration
     public function getCredentialConfigurationId(): string
     {
         return $this->getConfiguration()->getString(self::OPTION_CREDENTIAL_CONFIGURATION_ID);
+    }
+
+    public function getCredentialIssuanceGrantType(): string
+    {
+        return $this->getConfiguration()->getOptionalString(
+            self::OPTION_CREDENTIAL_ISSUANCE_GRANT_TYPE,
+            'authorization_code'
+        );
     }
 
     public function getUseTransactionCodeProtectionForPreAuthorizedCode(): bool

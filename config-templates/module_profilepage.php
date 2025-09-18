@@ -281,7 +281,7 @@ $config = [
      * OIDC Module API Endpoint for issuing verifiable credentials.
      */
     ModuleConfiguration::OPTION_OIDC_MODULE_CREDENTIAL_OFFER_API_ENDPOINT =>
-        'https://idp.example.org/module.php/oidc/api/vci/pre-authorized-credential-offer',
+        'https://idp.example.org/module.php/oidc/api/vci/credential-offer',
 
     /**
      * Token which can be used for authorization of HTTP requests to the OIDC Module API Endpoint.
@@ -292,6 +292,15 @@ $config = [
      * Credential configuration ID which will be used for issuing verifiable credentials.
      */
     ModuleConfiguration::OPTION_CREDENTIAL_CONFIGURATION_ID => 'ResearchAndScholarshipCredentialDcSdJwt',
+
+    /**
+     * Grant Type used to issue verifiable credentials. Valid values are:
+     * 'authorization_code' - Authorization Code Grant
+     * 'urn:ietf:params:oauth:grant-type:pre-authorized_code' - Pre-Authorized Code Grant
+     *
+     * Default is 'authorization_code'.
+     */
+    ModuleConfiguration::OPTION_CREDENTIAL_ISSUANCE_GRANT_TYPE => 'authorization_code',
 
     /**
      * Enable or disable transaction code protection in case of credential issuance using pre-authorized code.
