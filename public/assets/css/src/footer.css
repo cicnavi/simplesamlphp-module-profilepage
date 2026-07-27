@@ -1,0 +1,47 @@
+footer {
+  background-color: var(--nav-bg-c);
+  box-shadow: 
+    rgba(0, 0, 0, 0.16) 0px -6px 6px, 
+    rgba(0, 0, 0, 0.23) 0px -6px 6px;
+  color: var(--heading-text-c);
+  grid-area: footer;
+  margin-top: 2em;
+  text-align: center;
+  width:100%;
+  z-index:999;
+}
+footer > div:first-child {
+  align-items: center;
+  display: grid;
+  grid-template-areas: 
+    "geant-section"
+    "eu-section";
+  grid-template-columns: 1fr;
+  padding: 1em 2em;
+}
+footer > div:first-child div {
+  margin: 1em 0;
+}
+footer > div:nth-child(2) {
+  margin: 1em 2em;
+}
+
+#idGeantSection {
+  display: block;
+  grid-area: geant-section;
+}
+#idGeantSection img {
+  width: 60%;
+}  
+
+#idEuSection {
+  display: block;
+  grid-area: eu-section;
+}
+#idEuSection img {
+  width: 80%;
+}
+
+#idCopyrightText {
+  font-size: 1.125rem;
+}

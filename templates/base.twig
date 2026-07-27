@@ -1,58 +1,109 @@
 <!DOCTYPE html>
 <html lang="{{ currentLanguage }}">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-{#    <meta name="viewport" content="initial-scale=1.0">#}
-{#    <meta http-equiv="X-UA-Compatible" content="IE=Edge">#}
-    <title>{{ pagetitle }}</title>
-    <link rel="stylesheet" href="{{ asset('css/src/default.css', 'profilepage') }}">
-    <link rel="icon" href="{{ asset("icons/favicon.ico") }}">
-    <meta name="robots" content="noindex, nofollow">
+    {# ====== #}
+    {#        #}
+    {# ====== #}
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        {# <meta name="viewport" content="initial-scale=1.0"> #}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {# <meta http-equiv="X-UA-Compatible" content="IE=Edge"> #}
+        <title>{{ pagetitle }}</title>
+        <link rel="stylesheet" href="{{ asset('css/src/default.css', 'profilepage') }}">
+        <link rel="icon" href="{{ asset("icons/favicon.ico") }}">
+        <meta name="robots" content="noindex, nofollow">
+    </head>
 
-</head>
-<body id="{{ templateId }}">
 
-{% include '@profilepage/includes/_header.twig' %}
 
-{% include '@profilepage/includes/_navigation.twig' %}
+    {# ====== #}
+    {#        #}
+    {# ====== #}
+    <body id="{{ templateId }}">
+        {# ====== #}
+        {#        #}
+        {# ====== #}
+        {% include '@profilepage/includes/_header.twig' %}
 
-{% block banner %}{% endblock %}
 
-<section id="main">
-    {% include '@profilepage/includes/_alerts.twig' %}
+        {# ====== #}
+        {#        #}
+        {# ====== #}
+        {% include '@profilepage/includes/_navigation.twig' %}
 
-    {% block content %}{% endblock %}
-</section>
 
-<footer>
-    <div>
-        {% trans %}
-        As part of the GÉANT 2020 Framework Partnership Agreement (FPA), the project receives funding from the European
-        Union’s Horizon 2020 research and innovation programme under Grant Agreement No. 856726 (GN4-3).
-        {% endtrans %}
-    </div>
-</footer>
+        {# ====== #}
+        {#        #}
+        {# ====== #}
+        {% block banner %}{% endblock %}
 
-<script>
-    const profilepage = {
-        alert: function (message) {
-            alert(message);
-        },
-        removeElement: function (element, speed = 500) {
-            const seconds = speed / 1000;
-            element.style.transition = "opacity " + seconds + "s ease";
-            element.style.opacity = 0;
-            setTimeout(function() {
-                element.parentNode.removeChild(element);
-            }, speed);
-        },
-        doPopup: function (popupId) {
-            const popup = document.getElementById(popupId);
-            popup.classList.toggle("show");
-        },
-    };
-</script>
 
-{% block tail %}{% endblock %}
-</body>
+        {# ====== #}
+        {#        #}
+        {# ====== #}
+        <section id="main">
+            {% include '@profilepage/includes/_alerts.twig' %}
+
+            {% block content %}{% endblock %}
+        </section>
+
+
+        {# ====== #}
+        {#        #}
+        {# ====== #}
+        {% include '@profilepage/includes/_footer.twig' %}
+        
+
+        {# ====== #}
+        {#        #}
+        {# ====== #}
+        <script>
+            const profilepage = {
+                alert: function (message) {
+                    alert(message);
+                },
+                removeElement: function (element, speed = 500) {
+                    const seconds = speed / 1000;
+                    element.style.transition = "opacity " + seconds + "s ease";
+                    element.style.opacity = 0;
+                    setTimeout(function() {
+                        element.parentNode.removeChild(element);
+                    }, speed);
+                },
+                doPopup: function (popupId) {
+                    const popup = document.getElementById(popupId);
+                    popup.classList.toggle("show");
+                },
+            };
+
+            {# ============================= #}
+            {#    Modal window activation    #}
+            {# ============================= #}
+            function doPopup(popupId) {
+                var popup = document.getElementById(popupId);
+                popup.classList.toggle("show");
+            }
+            function hidePopup(popupId) {
+                var popup = document.getElementById(popupId);
+                popup.classList.toggle("show");
+            }
+
+            {# ================= #}
+            {#    Data hiding    #}
+            {# ================= #}
+            function hideData() {
+                var elements = document.getElementsByClassName('confidentialdata');
+                for (var i = 0; i < elements.length; i++) {
+                    var opacity = window.getComputedStyle(elements[i]).opacity;
+                    if (opacity === "1") {
+                        elements[i].style.opacity = "0.1";
+                    } else {
+                        elements[i].style.opacity = "1";
+                    }
+                }
+            }  
+        </script>
+
+        {% block tail %}{% endblock %}
+    </body>
 </html>

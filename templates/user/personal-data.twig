@@ -1,22 +1,28 @@
-
 {% extends "@profilepage/base.twig" %}
 
 {% set pagetitle = 'Personal Data'|trans %}
 
 {% set pageMenuItem = 'personal-data' %}
 
+
+
 {% block banner %}
-    <section id="banner">
-        <div>
+    <section class="banner">
+        <h1>
             {% trans %}This is what we know about you...{% endtrans %}
-        </div>
+        </h1>
     </section>
 {% endblock %}
+
+
 
 {% block content %}
     {% if actionButtonsEnabled %}
         {% include "@profilepage/user/includes/_action-buttons.twig" %}
     {% endif %}
+
+    {% include "@profilepage/user/includes/_hide-data-button.twig" %}
+
     <table>
         <!-- fixed table header -->
         <tr>
@@ -28,16 +34,34 @@
             <tr>
                 <td>
                     {{ name|trans }}
-                    <div class="popup" onclick="profilepage.doPopup('popup-{{ name }}')">
+                    {# <div class="popup" onmouseover="profilepage.doPopup('popup-{{ name }}')">
                         <img src="{{ asset('css/src/icons/i.svg', 'profilepage') }}" alt="Info icon"/>
                         {% set helpId = 'help-attribute-' ~ name %}
                         <span class="popuptext" id="popup-{{ name }}">
                             {{ helpId|trans }}
                         </span>
+                    </div> #}
+                    <div class="popup" tabindex="0" onmouseover="doPopup('popup-{{ name }}')" 
+                         onmouseout="hidePopup('popup-{{ name }}')" onfocus="doPopup('popup-{{ name }}')"
+                         onclick="doPopup('popup-{{ name }}')">
+                        <img src="{{ asset('css/src/icons/i.svg', 'profilepage') }}" alt="Information tooltip icon"/>
+                        {% set helpId = 'help-attribute-' ~ name %}
+                        <span id="popup-{{ name }}" class="popuptext">
+                            {{ helpId|trans }}
+                        </span>
                     </div>
                 </td>
-                <td><span class="value">{{ value }}</span></td>
+
+                <td>
+                    <span class="value confidentialdata">{{ value }}</span>
+                </td>
             </tr>
         {% endfor %}
     </table>
+
+    {% if credentialOfferQrUri|default %}
+        <br>
+        <h2>{{ 'Get your verifiable credential by scanning the QR'|trans }}:</h2>
+        <img src="{{ credentialOfferQrUri }}" alt="PreAuthZCode QR">
+    {% endif %}
 {% endblock %}

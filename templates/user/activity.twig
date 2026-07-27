@@ -7,6 +7,14 @@
 
 {% set pageMenuItem = 'activity' %}
 
+{% block banner %}
+    <section class="banner">
+        <h1>
+            {% trans %}Your activity{% endtrans %}
+        </h1>
+    </section>
+{% endblock %}
+
 {% block content %}
     {% if actionButtonsEnabled %}
         {% include "@profilepage/user/includes/_action-buttons.twig" %}

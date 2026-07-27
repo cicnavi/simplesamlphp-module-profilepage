@@ -2,22 +2,47 @@
 {# @var menuItem \SimpleSAML\Module\profilepage\Services\MenuManager\MenuItem #}
 {# @var csrfToken \SimpleSAML\Module\profilepage\Services\CsrfToken #}
 
+
+
 <div id="nav">
-    <input type="checkbox" id="nav-toggle" class="nav-toggle">
-    <nav role="navigation" aria-label="XXX-pagedesc-XXX">
+    {# <input id="nav-toggle" type="checkbox" class="nav-toggle"> #}
+
+    <div id="logo">
+        <img src="{{ asset('css/src/icons/fppp-logo.svg', 'profilepage') }}" alt="Profile page logo"/>
+    </div>
+
+    <hr class="divider">
+    
+    <nav role="navigation" aria-label="Navigation">
         <ul>
             {% for menuItem in menuManager.items %}
-                <li>
-                    <a href="{{ menuItem.hrefPath }}">
-                        {% if menuItem.iconAssetPath %}
-                            <span class="navicon">
-                                <img src="{{ asset(menuItem.iconAssetPath, 'profilepage') }}"
-                                     alt="{{ menuItem.label|trans }} Icon"/>
-                            </span>
-                        {% endif %}
-                        <span class="navlabel">{{ menuItem.label|trans }}</span>
-                    </a>
-                </li>
+                {% if menuItem.label != 'Log out' %}
+                    <li>
+                        <a href="{{ menuItem.hrefPath }}">
+                            {% if menuItem.iconAssetPath %}
+                                <span class="navicon">
+                                    <img src="{{ asset(menuItem.iconAssetPath, 'profilepage') }}" alt="{{ menuItem.label|trans }} Icon"/>
+                                </span>
+                            {% endif %}
+                            <span class="navlabel">{{ menuItem.label|trans }}</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if menuItem.label == 'Log out' %}
+                    <hr class="divider">
+
+                    <li>
+                        <a href="{{ menuItem.hrefPath }}">
+                            {% if menuItem.iconAssetPath %}
+                                <span class="navicon">
+                                    <img src="{{ asset(menuItem.iconAssetPath, 'profilepage') }}" alt="{{ menuItem.label|trans }} Icon"/>
+                                </span>
+                            {% endif %}
+                            <span class="navlabel">{{ menuItem.label|trans }}</span>
+                        </a>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </nav>
